@@ -147,20 +147,26 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
           <Link underline="none" component={RouterLink} to="#">
             <AccountStyle>
               <Avatar alt="My Avatar" src="/static/mock-images/avatars/avatar_default.jpg" />
-              <Box sx={{ ml: 2 }}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{ color: 'text.primary', textOverflow: 'ellipsis' }}
-                >
+              <Box
+                sx={{
+                  ml: 2,
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'
+                }}
+              >
+                <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
                   5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                   Crust Network
                 </Typography>
               </Box>
             </AccountStyle>
           </Link>
         )}
+        <Box sx={{ display: 'block', displayPrint: 'none' }}>
+          5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q
+        </Box>
       </Stack>
 
       <NavSection navConfig={sidebarConfig} isShow={!isCollapse} />
