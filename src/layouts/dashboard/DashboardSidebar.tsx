@@ -164,9 +164,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
             </AccountStyle>
           </Link>
         )}
-        <Box sx={{ display: 'block', displayPrint: 'none' }}>
-          5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q
-        </Box>
       </Stack>
 
       <NavSection navConfig={sidebarConfig} isShow={!isCollapse} />
