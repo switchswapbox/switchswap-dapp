@@ -2,6 +2,7 @@
   "name": "@minimal/material-kit-react",
   "author": "minimals.cc",
   "version": "2.6.0",
+  "homepage": ".",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
