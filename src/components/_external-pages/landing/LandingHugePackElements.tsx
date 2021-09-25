@@ -160,7 +160,7 @@ export default function LandingHugePackElements() {
                 >
                   <img
                     alt={`screen ${index + 1}`}
-                    src={`/static/home/screen_${isLight ? 'light' : 'dark'}_${index + 1}.png`}
+                    src={`./static/home/screen_${isLight ? 'light' : 'dark'}_${index + 1}.png`}
                   />
                 </ScreenStyle>
               ))}

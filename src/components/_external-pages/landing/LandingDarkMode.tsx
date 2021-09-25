@@ -35,7 +35,7 @@ export default function LandingDarkMode() {
         <Box
           component="img"
           alt="image shape"
-          src="/static/home/shape.svg"
+          src="./static/home/shape.svg"
           sx={{
             top: 0,
             right: 0,
@@ -76,14 +76,14 @@ export default function LandingDarkMode() {
 
           <Grid item xs={12} md={7} sx={{ position: 'relative' }}>
             <MotionInView threshold={0.5} variants={varFadeInUp}>
-              <img alt="light mode" src="/static/home/lightmode.png" />
+              <img alt="light mode" src="./static/home/lightmode.png" />
             </MotionInView>
             <MotionInView
               threshold={0.5}
               variants={varFadeInDown}
               sx={{ top: 0, left: 0, position: 'absolute' }}
             >
-              <img alt="dark mode" src="/static/home/darkmode.png" />
+              <img alt="dark mode" src="./static/home/darkmode.png" />
             </MotionInView>
           </Grid>
         </Grid>

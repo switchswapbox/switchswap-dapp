@@ -6,7 +6,7 @@ import { varFadeInUp, MotionInView } from '../../animate';
 
 // ----------------------------------------------------------------------
 
-const IMG = [...Array(10)].map((_, index) => `/static/home/clean-${index + 1}.png`);
+const IMG = [...Array(10)].map((_, index) => `./static/home/clean-${index + 1}.png`);
 
 const RootStyle = styled('div')(({ theme }) => ({
   paddingTop: theme.spacing(15),

@@ -139,11 +139,11 @@ export default function LandingThemeColor() {
         </RadioGroup>
 
         <Box sx={{ position: 'relative' }}>
-          <Box component="img" src="/static/home/theme-color/grid.png" />
+          <Box component="img" src="./static/home/theme-color/grid.png" />
 
           <Box sx={{ position: 'absolute', top: 0 }}>
             <MotionInView variants={varFadeInUp}>
-              <img alt="screen" src={`/static/home/theme-color/screen-${themeColor}.png`} />
+              <img alt="screen" src={`./static/home/theme-color/screen-${themeColor}.png`} />
             </MotionInView>
           </Box>
 
@@ -153,7 +153,7 @@ export default function LandingThemeColor() {
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 8, repeat: Infinity }}
               >
-                <img alt="sidebar" src={`/static/home/theme-color/block1-${themeColor}.png`} />
+                <img alt="sidebar" src={`./static/home/theme-color/block1-${themeColor}.png`} />
               </motion.div>
             </MotionInView>
           </Box>
@@ -164,7 +164,7 @@ export default function LandingThemeColor() {
                 animate={{ y: [-5, 10, -5] }}
                 transition={{ duration: 8, repeat: Infinity }}
               >
-                <img alt="sidebar" src={`/static/home/theme-color/block2-${themeColor}.png`} />
+                <img alt="sidebar" src={`./static/home/theme-color/block2-${themeColor}.png`} />
               </motion.div>
             </MotionInView>
           </Box>
@@ -175,7 +175,7 @@ export default function LandingThemeColor() {
                 animate={{ y: [-25, 5, -25] }}
                 transition={{ duration: 10, repeat: Infinity }}
               >
-                <img alt="sidebar" src={`/static/home/theme-color/sidebar-${themeColor}.png`} />
+                <img alt="sidebar" src={`./static/home/theme-color/sidebar-${themeColor}.png`} />
               </motion.div>
             </MotionInView>
           </Box>
