@@ -12,7 +12,6 @@ import MenuPopover from '../../components/MenuPopover';
 
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
-
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -57,7 +56,7 @@ export default function AccountPopover() {
               height: '100%',
               borderRadius: '50%',
               position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72)
+              bgcolor: 'transparent'
             }
           })
         }}
