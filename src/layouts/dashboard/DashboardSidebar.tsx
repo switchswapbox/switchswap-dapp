@@ -109,9 +109,9 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const [uniqueIcon, setUniqueIcon] = useState();
+  const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img) => {
+    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);

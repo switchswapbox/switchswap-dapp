@@ -4,7 +4,6 @@ import messagCircleOutline from '@iconify/icons-eva/message-circle-outline';
 import externaLinkOutline from '@iconify/icons-eva/external-link-outline';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { alpha } from '@mui/material/styles';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
@@ -25,9 +24,9 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
 
-  const [uniqueIcon, setUniqueIcon] = useState();
+  const [uniqueIcon, setUniqueIcon] = useState<string>('');
   useEffect(() => {
-    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img) => {
+    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
