@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { alpha, styled } from '@mui/material/styles';
@@ -22,6 +22,8 @@ import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 
+import Identicons from '@nimiq/identicons';
+Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
@@ -107,6 +109,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  const [uniqueIcon, setUniqueIcon] = useState();
+  useEffect(() => {
+    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img) => {
+      setUniqueIcon(img);
+    });
+  }, []);
+
   const renderContent = (
     <Scrollbar
       sx={{
@@ -146,7 +155,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
         ) : (
           <Link underline="none" component={RouterLink} to="#">
             <AccountStyle>
-              <Avatar alt="My Avatar" src="/static/mock-images/avatars/avatar_default.jpg" />
+              <Avatar alt="My Avatar" src={uniqueIcon} />
               <Box
                 sx={{
                   ml: 2,

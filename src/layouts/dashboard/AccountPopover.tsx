@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import messagCircleOutline from '@iconify/icons-eva/message-circle-outline';
 import externaLinkOutline from '@iconify/icons-eva/external-link-outline';
 import { Link as RouterLink } from 'react-router-dom';
@@ -9,6 +9,9 @@ import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/materia
 // components
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
+
+import Identicons from '@nimiq/identicons';
+Identicons.svgPath = './static/identicons.min.svg';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +25,13 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+
+  const [uniqueIcon, setUniqueIcon] = useState();
+  useEffect(() => {
+    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img) => {
+      setUniqueIcon(img);
+    });
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -52,7 +62,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar alt="My Avatar" src="/static/mock-images/avatars/avatar_default.jpg" />
+        <Avatar alt="My Avatar" src={uniqueIcon} />
       </MIconButton>
 
       <MenuPopover

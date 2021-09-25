@@ -6,7 +6,6 @@ import useSettings from '../hooks/useSettings';
 import Page from '../components/Page';
 
 // ----------------------------------------------------------------------
-
 export default function Home() {
   const { themeStretch } = useSettings();
 
