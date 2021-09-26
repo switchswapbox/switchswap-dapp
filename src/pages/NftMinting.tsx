@@ -27,14 +27,14 @@ import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
 // ----------------------------------------------------------------------
 
 const withAuthorRegNFT = [
-  { name: 'With Author 1', image: './static/demo-nft/withAuthorReg/01.jpg' },
-  { name: 'With Author 2', image: './static/demo-nft/withAuthorReg/02.jpg' },
-  { name: 'With Author 3', image: './static/demo-nft/withAuthorReg/03.jpg' }
+  { name: 'With Author 1', image: './static/sample-nft/withAuthorReg/01.jpg' },
+  { name: 'With Author 2', image: './static/sample-nft/withAuthorReg/02.jpg' },
+  { name: 'With Author 3', image: './static/sample-nft/withAuthorReg/03.jpg' }
 ];
 const simplifiedNFT = [
-  { name: 'Simplified 1', image: './static/demo-nft/simplified/07.jpg' },
-  { name: 'Simplified 3', image: './static/demo-nft/simplified/01.png' },
-  { name: 'Simplified 2', image: './static/demo-nft/simplified/05.jpg' }
+  { name: 'Simplified 1', image: './static/sample-nft/simplified/07.jpg' },
+  { name: 'Simplified 3', image: './static/sample-nft/simplified/01.png' },
+  { name: 'Simplified 2', image: './static/sample-nft/simplified/05.jpg' }
 ];
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
