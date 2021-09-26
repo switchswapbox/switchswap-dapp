@@ -11,26 +11,31 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListItemAvatar,
   ListSubheader,
-  Avatar,
   ListItemSecondaryAction
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 
 import { Icon } from '@iconify/react';
-import SvgIconStyle from '../components/SvgIconStyle';
-import iconOk from '../assets/icons/crust.svg';
 // hooks
 import useSettings from '../hooks/useSettings';
 // components
 import Page from '../components/Page';
 import { Block } from '../components/Block';
 import MintingProcess from '../components/_dashboard/nftMinting/MintingProcess';
+import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
 // ----------------------------------------------------------------------
+
+const withAuthorRegNFT = [
+  { name: 'With Author 1', image: './static/demo-nft/withAuthorReg/01.jpg' },
+  { name: 'With Author 2', image: './static/demo-nft/withAuthorReg/02.jpg' },
+  { name: 'With Author 3', image: './static/demo-nft/withAuthorReg/03.jpg' }
+];
+const simplifiedNFT = [
+  { name: 'Simplified 1', image: './static/demo-nft/simplified/07.jpg' },
+  { name: 'Simplified 3', image: './static/demo-nft/simplified/01.png' },
+  { name: 'Simplified 2', image: './static/demo-nft/simplified/05.jpg' }
+];
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
   width: '100%',
@@ -52,6 +57,7 @@ export default function NftMinting() {
       setToggle(['withAuthorReg']);
     }
   };
+
   return (
     <Page title="NFT Minting">
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -143,7 +149,7 @@ export default function NftMinting() {
           </Grid>
           <Grid item xs={12} md={8}>
             <Block title="Requirements & Review">
-              <Grid container>
+              <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
                   <ListWrapperStyle>
                     <List subheader={<ListSubheader>Requirements</ListSubheader>}>
@@ -173,6 +179,23 @@ export default function NftMinting() {
                       </ListItemButton>
                     </List>
                   </ListWrapperStyle>
+                </Grid>
+                <Grid item xs={12} md={8}>
+                  <Grid
+                    sx={{
+                      display: toggle.indexOf('withAuthorReg') !== -1 ? 'block' : 'none'
+                    }}
+                  >
+                    <DemoNft NFT={withAuthorRegNFT} />
+                  </Grid>
+
+                  <Grid
+                    sx={{
+                      display: toggle.indexOf('simplified') !== -1 ? 'block' : 'none'
+                    }}
+                  >
+                    <DemoNft NFT={simplifiedNFT} />
+                  </Grid>
                 </Grid>
               </Grid>
             </Block>
