@@ -3,13 +3,14 @@ import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 //
 import { MHidden } from '../../components/@material-extend';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
-
+import ConnectWalletDialog from './ConnectWalletDialog';
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
@@ -64,6 +65,8 @@ export default function DashboardNavbar({ onOpenSidebar }: DashboardNavbarProps)
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
+          <ConnectWalletDialog />
+
           <AccountPopover />
         </Stack>
       </ToolbarStyle>
