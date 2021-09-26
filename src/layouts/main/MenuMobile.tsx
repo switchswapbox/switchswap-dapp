@@ -84,7 +84,7 @@ function MenuMobileItem({ item, isOpen, onOpen }: MenuMobileItemProps) {
                   backgroundPosition: 'center',
                   bgcolor: 'background.neutral',
                   backgroundRepeat: 'no-repeat',
-                  backgroundImage: 'url(/static/illustrations/illustration_dashboard.png)',
+                  backgroundImage: 'url(./static/illustrations/illustration_dashboard.png)',
                   '& > *:not(.MuiTouchRipple-root)': { display: 'none' }
                 },
                 '& .MuiListSubheader-root': {

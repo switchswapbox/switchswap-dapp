@@ -63,6 +63,16 @@ const PRIMARY_COLOR = [
     dark: '#B71833',
     darker: '#7A0930',
     contrastText: '#fff'
+  },
+  // CUSTOM
+  {
+    name: 'custom',
+    lighter: '#F4F6F8',
+    light: '#F4F6F8',
+    main: '#454F5B',
+    dark: '#212B36',
+    darker: '#161C24',
+    contrastText: '#fff'
   }
 ];
 
@@ -74,6 +84,7 @@ function SetColor(themeColor: ThemeColor) {
   const BLUE = PRIMARY_COLOR[3];
   const ORANGE = PRIMARY_COLOR[4];
   const RED = PRIMARY_COLOR[5];
+  const CUSTOM = PRIMARY_COLOR[6];
 
   switch (themeColor) {
     case 'purple':
@@ -91,6 +102,9 @@ function SetColor(themeColor: ThemeColor) {
     case 'red':
       color = RED;
       break;
+    case 'custom':
+      color = CUSTOM;
+      break;
     default:
       color = DEFAULT;
   }
@@ -100,7 +114,7 @@ function SetColor(themeColor: ThemeColor) {
 const initialState: SettingsContextProps = {
   themeMode: 'light',
   themeDirection: 'ltr',
-  themeColor: 'default',
+  themeColor: 'custom',
   themeStretch: false,
   onChangeMode: () => {},
   onChangeDirection: () => {},
@@ -120,7 +134,7 @@ function SettingsProvider({ children }: SettingsProviderProps) {
   const [settings, setSettings] = useLocalStorage('settings', {
     themeMode: 'light',
     themeDirection: 'ltr',
-    themeColor: 'default',
+    themeColor: 'custom',
     themeStretch: false
   });
 

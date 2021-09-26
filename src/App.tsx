@@ -19,7 +19,6 @@ export default function App() {
         <RtlLayout>
           <GlobalStyles />
           <ProgressBarStyle />
-          <Settings />
           <ScrollToTop />
           <Router />
         </RtlLayout>

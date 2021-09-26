@@ -69,9 +69,9 @@ export default function LandingHero() {
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
-        <HeroOverlayStyle alt="overlay" src="/static/overlay.svg" variants={varFadeIn} />
+        <HeroOverlayStyle alt="overlay" src="./static/overlay.svg" variants={varFadeIn} />
 
-        <HeroImgStyle alt="hero" src="/static/home/hero.png" variants={varFadeInUp} />
+        <HeroImgStyle alt="hero" src="./static/home/hero.png" variants={varFadeInUp} />
 
         <Container maxWidth="lg">
           <ContentStyle>
@@ -101,7 +101,7 @@ export default function LandingHero() {
             >
               <img
                 alt="sketch icon"
-                src="/static/home/ic_sketch_small.svg"
+                src="./static/home/ic_sketch_small.svg"
                 width={20}
                 height={20}
               />
@@ -133,12 +133,12 @@ export default function LandingHero() {
               spacing={1.5}
               justifyContent={{ xs: 'center', md: 'flex-start' }}
             >
-              <motion.img variants={varFadeInRight} src="/static/home/ic_sketch.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_figma.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_material.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_react.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_js.svg" />
-              <motion.img variants={varFadeInRight} src="/static/home/ic_ts.svg" />
+              <motion.img variants={varFadeInRight} src="./static/home/ic_sketch.svg" />
+              <motion.img variants={varFadeInRight} src="./static/home/ic_figma.svg" />
+              <motion.img variants={varFadeInRight} src="./static/home/ic_material.svg" />
+              <motion.img variants={varFadeInRight} src="./static/home/ic_react.svg" />
+              <motion.img variants={varFadeInRight} src="./static/home/ic_js.svg" />
+              <motion.img variants={varFadeInRight} src="./static/home/ic_ts.svg" />
             </Stack>
           </ContentStyle>
         </Container>

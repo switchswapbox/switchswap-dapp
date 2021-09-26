@@ -8,18 +8,18 @@ import { varFadeInUp, MotionInView, varFadeInDown } from '../../animate';
 
 const CARDS = [
   {
-    icon: '/static/icons/ic_design.svg',
+    icon: './static/icons/ic_design.svg',
     title: 'UI & UX Design',
     description:
       'The set is built on the principles of the atomic design system. It helps you to create projects fastest and easily customized packages for your projects.'
   },
   {
-    icon: '/static/icons/ic_code.svg',
+    icon: './static/icons/ic_code.svg',
     title: 'Development',
     description: 'Easy to customize and extend each component, saving you time and money.'
   },
   {
-    icon: '/static/brand/logo_single.svg',
+    icon: './static/brand/logo_single.svg',
     title: 'Branding',
     description: 'Consistent design in colors, fonts ... makes brand recognition easy.'
   }

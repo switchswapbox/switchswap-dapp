@@ -31,10 +31,10 @@ const PLANS = [...Array(3)].map((_, index) => ({
     'Commercial applications'
   ],
   icons: [
-    '/static/home/ic_sketch.svg',
-    '/static/home/ic_figma.svg',
-    '/static/home/ic_js.svg',
-    '/static/home/ic_ts.svg'
+    './static/home/ic_sketch.svg',
+    './static/home/ic_figma.svg',
+    './static/home/ic_js.svg',
+    './static/home/ic_ts.svg'
   ]
 }));
 
