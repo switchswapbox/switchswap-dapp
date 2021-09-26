@@ -10,7 +10,7 @@ export default function Home() {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Page One | Minimal-UI">
+    <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
