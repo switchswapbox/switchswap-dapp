@@ -27,14 +27,14 @@ import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
 // ----------------------------------------------------------------------
 
 const withAuthorRegNFT = [
-  { name: 'With Author 1', image: './static/demo-nft/withAuthorReg/01.jpg' },
-  { name: 'With Author 2', image: './static/demo-nft/withAuthorReg/02.jpg' },
-  { name: 'With Author 3', image: './static/demo-nft/withAuthorReg/03.jpg' }
+  { name: 'With Author 1', image: './static/sample-nft/withAuthorReg/01.jpg' },
+  { name: 'With Author 2', image: './static/sample-nft/withAuthorReg/02.jpg' },
+  { name: 'With Author 3', image: './static/sample-nft/withAuthorReg/03.jpg' }
 ];
 const simplifiedNFT = [
-  { name: 'Simplified 1', image: './static/demo-nft/simplified/07.jpg' },
-  { name: 'Simplified 3', image: './static/demo-nft/simplified/01.png' },
-  { name: 'Simplified 2', image: './static/demo-nft/simplified/05.jpg' }
+  { name: 'Simplified 1', image: './static/sample-nft/simplified/07.jpg' },
+  { name: 'Simplified 3', image: './static/sample-nft/simplified/01.png' },
+  { name: 'Simplified 2', image: './static/sample-nft/simplified/05.jpg' }
 ];
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
@@ -95,7 +95,11 @@ export default function NftMinting() {
                         <Icon icon="fxemoji:rocket" />
                       </SvgIcon>
                     </ListItemIcon>
-                    <ListItemText id="withAuthorReg" primary="With Author Registration" />
+                    <ListItemText
+                      id="withAuthorReg"
+                      primary="With Author Registration"
+                      sx={{ pr: 5 }}
+                    />
                     <ListItemSecondaryAction>
                       <Switch
                         edge="end"
@@ -113,7 +117,7 @@ export default function NftMinting() {
                         <Icon icon="emojione:small-airplane" />
                       </SvgIcon>
                     </ListItemIcon>
-                    <ListItemText id="simplified" primary="Simplified" />
+                    <ListItemText id="simplified" primary="Simplified" sx={{ pr: 5 }} />
                     <ListItemSecondaryAction>
                       <Switch
                         edge="end"
@@ -131,7 +135,7 @@ export default function NftMinting() {
                         <Icon icon="emojione:bullet-train" />
                       </SvgIcon>
                     </ListItemIcon>
-                    <ListItemText id="withoutNftCard" primary="Without NFT Card" />
+                    <ListItemText id="withoutNftCard" primary="Without NFT Card" sx={{ pr: 5 }} />
                     <ListItemSecondaryAction>
                       <Switch
                         edge="end"
