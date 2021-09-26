@@ -95,7 +95,11 @@ export default function NftMinting() {
                         <Icon icon="fxemoji:rocket" />
                       </SvgIcon>
                     </ListItemIcon>
-                    <ListItemText id="withAuthorReg" primary="With Author Registration" />
+                    <ListItemText
+                      id="withAuthorReg"
+                      primary="With Author Registration"
+                      sx={{ pr: 5 }}
+                    />
                     <ListItemSecondaryAction>
                       <Switch
                         edge="end"
@@ -113,7 +117,7 @@ export default function NftMinting() {
                         <Icon icon="emojione:small-airplane" />
                       </SvgIcon>
                     </ListItemIcon>
-                    <ListItemText id="simplified" primary="Simplified" />
+                    <ListItemText id="simplified" primary="Simplified" sx={{ pr: 5 }} />
                     <ListItemSecondaryAction>
                       <Switch
                         edge="end"
@@ -131,7 +135,7 @@ export default function NftMinting() {
                         <Icon icon="emojione:bullet-train" />
                       </SvgIcon>
                     </ListItemIcon>
-                    <ListItemText id="withoutNftCard" primary="Without NFT Card" />
+                    <ListItemText id="withoutNftCard" primary="Without NFT Card" sx={{ pr: 5 }} />
                     <ListItemSecondaryAction>
                       <Switch
                         edge="end"

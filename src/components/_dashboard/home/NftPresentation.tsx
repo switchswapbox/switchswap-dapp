@@ -1,34 +1,30 @@
 import Slider from 'react-slick';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Button, CardContent, Typography } from '@mui/material';
+import { useTheme, styled } from '@mui/material/styles';
+import { Box, Card, Button, CardContent } from '@mui/material';
 // utils
-import mockData from '../../../utils/mock-data';
-//
+
 import { CarouselControlsPaging1 } from '../../carousel';
 
 // ----------------------------------------------------------------------
-const NAMES = [
-  'Nike Air Max 97',
-  'Nike Zoom Gravity',
-  'Nike DBreak-Type',
-  'Kyrie Flytrap 3 EP Basketball Shoe',
-  'Nike Air Max Fusion Men'
-];
 
-const PRODUCTS = [...Array(5)].map((_, index) => ({
-  id: mockData.id(index),
-  name: NAMES[index],
-  image: mockData.image.product(index)
-}));
+const NFT = [
+  { id: '1', name: 'File identity paper', image: './static/sample-nft/simplified/07.jpg' },
+  {
+    id: '2',
+    name: 'NFT with author registration',
+    image: './static/sample-nft/withAuthorReg/02.jpg'
+  },
+  { id: '3', name: 'Simple file card', image: './static/sample-nft/simplified/01.png' }
+];
 
 const CarouselImgStyle = styled('img')(({ theme }) => ({
   width: '100%',
-  height: 280,
+  height: '100%',
   objectFit: 'cover',
   [theme.breakpoints.up('xl')]: {
-    height: 320
+    height: '100%'
   }
 }));
 
@@ -53,7 +49,7 @@ function CarouselItem({ item }: CarouselItemProps) {
           width: '100%',
           height: '100%',
           position: 'absolute',
-          bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72)
+          bgcolor: 'transparent'
         }}
       />
       <CardContent
@@ -66,21 +62,15 @@ function CarouselItem({ item }: CarouselItemProps) {
           color: 'common.white'
         }}
       >
-        <Typography variant="overline" sx={{ opacity: 0.48 }}>
-          New
-        </Typography>
-        <Typography noWrap variant="h5" sx={{ mt: 1, mb: 3 }}>
-          {name}
-        </Typography>
         <Button to="#" variant="contained" component={RouterLink}>
-          Buy Now
+          Learn More
         </Button>
       </CardContent>
     </Box>
   );
 }
 
-export default function HomeNftPresentation() {
+export default function NftPresentation() {
   const theme = useTheme();
 
   const settings = {
@@ -97,7 +87,7 @@ export default function HomeNftPresentation() {
   return (
     <Card>
       <Slider {...settings}>
-        {PRODUCTS.map((item) => (
+        {NFT.map((item) => (
           <CarouselItem key={item.name} item={item} />
         ))}
       </Slider>

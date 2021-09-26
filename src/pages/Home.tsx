@@ -4,13 +4,13 @@ import { Container, Grid, Typography, IconButton } from '@mui/material';
 
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
-import { useSnackbar, VariantType, SnackbarOrigin } from 'notistack';
+import { useSnackbar, VariantType } from 'notistack';
 
 // hooks
 import useSettings from '../hooks/useSettings';
 // components
 import Page from '../components/Page';
-import { HomeWelcome, HomeNftPresentation } from '../components/_dashboard/home';
+import { Welcome, NftPresentation } from '../components/_dashboard/home';
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
@@ -45,11 +45,11 @@ export default function Home() {
     <Page title="Home">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <HomeWelcome displayName="NFT Minter" />
+          <Grid item xs={12} md={6} lg={7}>
+            <Welcome displayName="NFT Minter" />
           </Grid>
-          <Grid item xs={12} md={4}>
-            <HomeNftPresentation />
+          <Grid item xs={12} md={6} lg={5}>
+            <NftPresentation />
           </Grid>
         </Grid>
       </Container>

@@ -1,2 +1,2 @@
-export { default as HomeWelcome } from './HomeWelcome';
-export { default as HomeNftPresentation } from './HomeNftPresentation';
+export { default as Welcome } from './Welcome';
+export { default as NftPresentation } from './NftPresentation';
