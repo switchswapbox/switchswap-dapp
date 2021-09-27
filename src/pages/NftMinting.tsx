@@ -33,7 +33,7 @@ import { Block } from '../components/Block';
 import MintingProcess from '../components/_dashboard/nftMinting/MintingProcess';
 import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
 
-import { CRUST_WALLET_WIKI, METAMASK_MATIC_URL } from '../assets/COMMON_VARIABLES';
+import { CRUST_WALLET_WIKI, METAMASK_SELECT_MATIC_URL } from '../assets/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 
 const withAuthorRegNFT = [
@@ -172,7 +172,7 @@ export default function NftMinting() {
                           <IconButton
                             edge="end"
                             aria-label="metamask"
-                            href={METAMASK_MATIC_URL}
+                            href={METAMASK_SELECT_MATIC_URL}
                             target="_blank"
                           >
                             <HelpOutlineIcon />

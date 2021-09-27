@@ -5,9 +5,11 @@ import { alpha, useTheme, styled } from '@mui/material/styles';
 import {
   Box,
   Card,
+  Alert,
   Link,
   Stack,
   Button,
+  IconButton,
   Dialog,
   SvgIcon,
   Typography,
@@ -17,6 +19,14 @@ import {
   DialogContent
 } from '@mui/material';
 import { Icon } from '@iconify/react';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
+import detectEthereumProvider from '@metamask/detect-provider';
+import {
+  CRUST_WALLET_WIKI,
+  METAMASK_SELECT_MATIC_URL,
+  INSTALL_METAMASK_URL
+} from '../../assets/COMMON_VARIABLES';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -30,6 +40,8 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 export default function MaxWidthDialog() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
+  const [isMaticSelected, setMaticSelected] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,6 +49,28 @@ export default function MaxWidthDialog() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const detectProvider = async () => {
+    const provider = await detectEthereumProvider();
+
+    if (provider) {
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      });
+
+      if (parseInt(chainId, 16) === 137) {
+        setMaticSelected(true);
+        const status = await provider.request({ method: 'eth_requestAccounts' });
+      } else {
+        setMetamaskInstalled(true);
+        setMaticSelected(false);
+        console.log('Select Matic');
+      }
+    } else {
+      setMetamaskInstalled(false);
+      console.log('Please install MetaMask!');
+    }
   };
 
   return (
@@ -81,13 +115,12 @@ export default function MaxWidthDialog() {
             </Card>
 
             <ButtonBase>
-              <Card variant="outlined" onClick={handleClose} sx={{ width: '100%' }}>
+              <Card variant="outlined" onClick={detectProvider} sx={{ width: '100%', p: 2 }}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
                   alignItems="flex-start"
                   spacing={2}
-                  sx={{ p: 2 }}
                 >
                   <Typography variant="subtitle1">Metamask</Typography>
                   <IconWrapperStyle
@@ -103,6 +136,33 @@ export default function MaxWidthDialog() {
                 </Stack>
               </Card>
             </ButtonBase>
+            <Alert
+              severity="error"
+              sx={{ width: '100%', display: isMetamaskInstalled ? 'none' : 'flex' }}
+              action={
+                <Button color="inherit" size="small" href={INSTALL_METAMASK_URL} target="_blank">
+                  LEARN
+                </Button>
+              }
+            >
+              Install Metamask!
+            </Alert>
+            <Alert
+              severity="warning"
+              sx={{ width: '100%', display: isMaticSelected ? 'none' : 'flex' }}
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  href={METAMASK_SELECT_MATIC_URL}
+                  target="_blank"
+                >
+                  LEARN
+                </Button>
+              }
+            >
+              Choose Polygon Network!
+            </Alert>
             <ButtonBase>
               <Card variant="outlined" sx={{ width: '100%' }}>
                 <Stack
