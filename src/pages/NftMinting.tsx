@@ -6,6 +6,8 @@ import {
   Box,
   SvgIcon,
   Grid,
+  Tooltip,
+  Zoom,
   IconButton,
   List,
   Switch,
@@ -221,7 +223,9 @@ export default function NftMinting() {
                         }}
                       >
                         <ListItemIcon>
-                          <ImageIcon />
+                          <Tooltip TransitionComponent={Zoom} title="File's type">
+                            <ImageIcon />
+                          </Tooltip>
                         </ListItemIcon>
                         <ListItemText id="blockchain" primary="Only for image" />
                       </ListItem>
@@ -231,7 +235,9 @@ export default function NftMinting() {
                         }}
                       >
                         <ListItemIcon>
-                          <DescriptionIcon />
+                          <Tooltip TransitionComponent={Zoom} title="File's type">
+                            <DescriptionIcon />
+                          </Tooltip>
                         </ListItemIcon>
                         <ListItemText id="blockchain" primary="All file extensions" />
                       </ListItem>
@@ -241,7 +247,9 @@ export default function NftMinting() {
                         }}
                       >
                         <ListItemIcon>
-                          <BookmarkAddedIcon />
+                          <Tooltip TransitionComponent={Zoom} title="Suggested uses">
+                            <BookmarkAddedIcon />
+                          </Tooltip>
                         </ListItemIcon>
                         <ListItemText id="blockchain" primary="Art, Intellectual Property" />
                       </ListItem>
@@ -251,7 +259,9 @@ export default function NftMinting() {
                         }}
                       >
                         <ListItemIcon>
-                          <BookmarkAddedIcon />
+                          <Tooltip TransitionComponent={Zoom} title="Suggested uses">
+                            <BookmarkAddedIcon />
+                          </Tooltip>
                         </ListItemIcon>
                         <ListItemText id="blockchain" primary="Anonymous Asset" />
                       </ListItem>
