@@ -84,6 +84,7 @@ export default function UploadMultiFile({
   const hasFile = files.length > 0;
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+    multiple: false,
     ...other
   });
 
