@@ -42,6 +42,7 @@ export default function MaxWidthDialog() {
   const [open, setOpen] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
+  const [isMetamaskConnected, setMetamaskConnected] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -53,22 +54,28 @@ export default function MaxWidthDialog() {
 
   const detectProvider = async () => {
     const provider = await detectEthereumProvider();
-
-    if (provider) {
+    console.log(provider);
+    if (provider && provider.isMetaMask) {
       const chainId = await provider.request({
         method: 'eth_chainId'
       });
 
       if (parseInt(chainId, 16) === 137) {
+        setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
+        console.log(status);
+        setMetamaskConnected(true);
       } else {
         setMetamaskInstalled(true);
         setMaticSelected(false);
+        setMetamaskConnected(false);
         console.log('Select Matic');
       }
     } else {
       setMetamaskInstalled(false);
+      setMetamaskConnected(false);
+      setMaticSelected(false);
       console.log('Please install MetaMask!');
     }
   };
@@ -162,6 +169,20 @@ export default function MaxWidthDialog() {
               }
             >
               Choose Polygon Network!
+            </Alert>
+            <Alert
+              icon={false}
+              severity="success"
+              sx={{
+                width: '100%',
+                wordWrap: 'break-word',
+                display: isMetamaskConnected ? 'flex' : 'none'
+              }}
+            >
+              Wallet is connected{'  '}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
             </Alert>
             <ButtonBase>
               <Card variant="outlined" sx={{ width: '100%' }}>
