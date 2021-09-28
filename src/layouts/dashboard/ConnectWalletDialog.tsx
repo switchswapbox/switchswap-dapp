@@ -80,6 +80,7 @@ export default function MaxWidthDialog() {
       return;
     }
     const allAccounts = await web3Accounts();
+    console.log(allAccounts);
   };
 
   return (
@@ -204,7 +205,7 @@ export default function MaxWidthDialog() {
                 </Button>
               }
             >
-              Install Metamask!
+              Install Crust Wallet!
             </Alert>
           </Stack>
         </DialogContent>
