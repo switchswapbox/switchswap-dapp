@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 
 // material
@@ -42,6 +42,13 @@ export default function MaxWidthDialog() {
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
+  const [isMetamaskConnected, setMetamaskConnected] = useState(false);
+
+  const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
+
+  useEffect(() => {
+    localStorage.setItem('metamaskAddr', metamaskAddr);
+  }, [metamaskAddr]);
 
   const handleClickOpen = () => {
     setOpen(true);
