@@ -9,7 +9,6 @@ import {
   Link,
   Stack,
   Button,
-  IconButton,
   Dialog,
   SvgIcon,
   Typography,
@@ -19,14 +18,9 @@ import {
   DialogContent
 } from '@mui/material';
 import { Icon } from '@iconify/react';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import detectEthereumProvider from '@metamask/detect-provider';
-import {
-  CRUST_WALLET_WIKI,
-  METAMASK_SELECT_MATIC_URL,
-  INSTALL_METAMASK_URL
-} from '../../assets/COMMON_VARIABLES';
+import { METAMASK_SELECT_MATIC_URL, INSTALL_METAMASK_URL } from '../../assets/COMMON_VARIABLES';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -54,7 +48,7 @@ export default function MaxWidthDialog() {
 
   const detectProvider = async () => {
     const provider = await detectEthereumProvider();
-    console.log(provider);
+    // console.log(provider);
     if (provider && provider.isMetaMask) {
       const chainId = await provider.request({
         method: 'eth_chainId'
@@ -64,19 +58,20 @@ export default function MaxWidthDialog() {
         setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
-        console.log(status);
+        // console.log(status);
+        // SET HOOK HERE
         setMetamaskConnected(true);
       } else {
         setMetamaskInstalled(true);
         setMaticSelected(false);
         setMetamaskConnected(false);
-        console.log('Select Matic');
+        // console.log('Select Matic');
       }
     } else {
       setMetamaskInstalled(false);
       setMetamaskConnected(false);
       setMaticSelected(false);
-      console.log('Please install MetaMask!');
+      // console.log('Please install MetaMask!');
     }
   };
 
