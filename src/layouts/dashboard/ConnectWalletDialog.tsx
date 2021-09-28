@@ -36,6 +36,7 @@ export default function MaxWidthDialog() {
   const [open, setOpen] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
+  // a dummy commit
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
 
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
