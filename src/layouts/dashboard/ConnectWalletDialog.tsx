@@ -67,16 +67,24 @@ export default function MaxWidthDialog() {
       });
 
       if (parseInt(chainId, 16) === 137) {
+        setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
+        setMetamaskAddr(status[0]);
+        // console.log(status);
+        // SET HOOK HERE
+        setMetamaskConnected(true);
       } else {
         setMetamaskInstalled(true);
         setMaticSelected(false);
-        console.log('Select Matic');
+        setMetamaskConnected(false);
+        // console.log('Select Matic');
       }
     } else {
       setMetamaskInstalled(false);
-      console.log('Please install MetaMask!');
+      setMetamaskConnected(false);
+      setMaticSelected(true);
+      // console.log('Please install MetaMask!');
     }
   };
 
@@ -179,6 +187,20 @@ export default function MaxWidthDialog() {
               }
             >
               Choose Polygon Network!
+            </Alert>
+            <Alert
+              icon={false}
+              severity="success"
+              sx={{
+                width: '100%',
+                wordWrap: 'break-word',
+                display: isMetamaskConnected ? 'flex' : 'none'
+              }}
+            >
+              Wallet is connected{'  '}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
             </Alert>
             <ButtonBase>
               <Card variant="outlined" onClick={handleConnect} sx={{ width: '100%' }}>
