@@ -6,8 +6,12 @@ import {
   Box,
   SvgIcon,
   Grid,
+  Tooltip,
+  Zoom,
+  IconButton,
   List,
   Switch,
+  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -15,6 +19,10 @@ import {
   ListItemSecondaryAction
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import DescriptionIcon from '@mui/icons-material/Description';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import ImageIcon from '@mui/icons-material/Image';
 
 import { Icon } from '@iconify/react';
 // hooks
@@ -24,6 +32,8 @@ import Page from '../components/Page';
 import { Block } from '../components/Block';
 import MintingProcess from '../components/_dashboard/nftMinting/MintingProcess';
 import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
+
+import { CRUST_WALLET_WIKI, METAMASK_SELECT_MATIC_URL } from '../assets/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 
 const withAuthorRegNFT = [
@@ -87,9 +97,9 @@ export default function NftMinting() {
                   </ListItemButton>
                 </List>
               </ListWrapperStyle>
-              <ListWrapperStyle sx={{ mt: 3 }}>
+              <ListWrapperStyle sx={{ mt: 2 }}>
                 <List subheader={<ListSubheader>NFT Type</ListSubheader>}>
-                  <ListItemButton>
+                  <ListItemButton onClick={handleToggle('withAuthorReg')}>
                     <ListItemIcon>
                       <SvgIcon>
                         <Icon icon="fxemoji:rocket" />
@@ -111,7 +121,7 @@ export default function NftMinting() {
                       />
                     </ListItemSecondaryAction>
                   </ListItemButton>
-                  <ListItemButton>
+                  <ListItemButton onClick={handleToggle('simplified')}>
                     <ListItemIcon>
                       <SvgIcon>
                         <Icon icon="emojione:small-airplane" />
@@ -129,7 +139,7 @@ export default function NftMinting() {
                       />
                     </ListItemSecondaryAction>
                   </ListItemButton>
-                  <ListItemButton>
+                  <ListItemButton onClick={handleToggle('withoutNftCard')}>
                     <ListItemIcon>
                       <SvgIcon>
                         <Icon icon="emojione:bullet-train" />
@@ -152,12 +162,23 @@ export default function NftMinting() {
             </Block>
           </Grid>
           <Grid item xs={12} md={8}>
-            <Block title="Requirements & Review">
+            <Block title="Requirements & Sample NFT">
               <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} xl={4} spacing={3}>
                   <ListWrapperStyle>
                     <List subheader={<ListSubheader>Requirements</ListSubheader>}>
-                      <ListItemButton>
+                      <ListItem
+                        secondaryAction={
+                          <IconButton
+                            edge="end"
+                            aria-label="metamask"
+                            href={METAMASK_SELECT_MATIC_URL}
+                            target="_blank"
+                          >
+                            <HelpOutlineIcon />
+                          </IconButton>
+                        }
+                      >
                         <ListItemIcon>
                           <Box
                             component="img"
@@ -166,8 +187,18 @@ export default function NftMinting() {
                           />
                         </ListItemIcon>
                         <ListItemText id="blockchain" primary="Metamask" />
-                      </ListItemButton>
-                      <ListItemButton
+                      </ListItem>
+                      <ListItem
+                        secondaryAction={
+                          <IconButton
+                            href={CRUST_WALLET_WIKI}
+                            target="_blank"
+                            edge="end"
+                            aria-label="crustwallet"
+                          >
+                            <HelpOutlineIcon />
+                          </IconButton>
+                        }
                         sx={{
                           display: toggle.indexOf('withAuthorReg') !== -1 ? 'flex' : 'none'
                         }}
@@ -180,11 +211,64 @@ export default function NftMinting() {
                           />
                         </ListItemIcon>
                         <ListItemText id="blockchain" primary="Crust Wallet" />
-                      </ListItemButton>
+                      </ListItem>
+                    </List>
+                  </ListWrapperStyle>
+
+                  <ListWrapperStyle sx={{ mt: 2 }}>
+                    <List subheader={<ListSubheader>Usage</ListSubheader>}>
+                      <ListItem
+                        sx={{
+                          display: toggle.indexOf('withoutNftCard') !== -1 ? 'flex' : 'none'
+                        }}
+                      >
+                        <ListItemIcon>
+                          <Tooltip TransitionComponent={Zoom} title="File's type">
+                            <ImageIcon />
+                          </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText id="blockchain" primary="Only for image" />
+                      </ListItem>
+                      <ListItem
+                        sx={{
+                          display: toggle.indexOf('withoutNftCard') !== -1 ? 'none' : 'flex'
+                        }}
+                      >
+                        <ListItemIcon>
+                          <Tooltip TransitionComponent={Zoom} title="File's type">
+                            <DescriptionIcon />
+                          </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText id="blockchain" primary="All file extensions" />
+                      </ListItem>
+                      <ListItem
+                        sx={{
+                          display: toggle.indexOf('withAuthorReg') !== -1 ? 'flex' : 'none'
+                        }}
+                      >
+                        <ListItemIcon>
+                          <Tooltip TransitionComponent={Zoom} title="Suggested uses">
+                            <BookmarkAddedIcon />
+                          </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText id="blockchain" primary="Art, Intellectual Property" />
+                      </ListItem>
+                      <ListItem
+                        sx={{
+                          display: toggle.indexOf('simplified') !== -1 ? 'flex' : 'none'
+                        }}
+                      >
+                        <ListItemIcon>
+                          <Tooltip TransitionComponent={Zoom} title="Suggested uses">
+                            <BookmarkAddedIcon />
+                          </Tooltip>
+                        </ListItemIcon>
+                        <ListItemText id="blockchain" primary="Anonymous Asset" />
+                      </ListItem>
                     </List>
                   </ListWrapperStyle>
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} xl={8}>
                   <Grid
                     sx={{
                       display: toggle.indexOf('withAuthorReg') !== -1 ? 'block' : 'none'
