@@ -9,7 +9,6 @@ import {
   Link,
   Stack,
   Button,
-  IconButton,
   Dialog,
   SvgIcon,
   Typography,
@@ -19,13 +18,13 @@ import {
   DialogContent
 } from '@mui/material';
 import { Icon } from '@iconify/react';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
-  CRUST_WALLET_WIKI,
   METAMASK_SELECT_MATIC_URL,
-  INSTALL_METAMASK_URL
+  INSTALL_METAMASK_URL,
+  CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
 
 // ----------------------------------------------------------------------
@@ -42,6 +41,7 @@ export default function MaxWidthDialog() {
   const [open, setOpen] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
+  const [isCrustInstalled, setCrustInstalled] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,6 +71,15 @@ export default function MaxWidthDialog() {
       setMetamaskInstalled(false);
       console.log('Please install MetaMask!');
     }
+  };
+
+  const handleConnect = async () => {
+    const extensions = await web3Enable('NFT Dapp');
+    if (extensions.length === 0) {
+      setCrustInstalled(false);
+      return;
+    }
+    const allAccounts = await web3Accounts();
   };
 
   return (
@@ -164,7 +173,7 @@ export default function MaxWidthDialog() {
               Choose Polygon Network!
             </Alert>
             <ButtonBase>
-              <Card variant="outlined" sx={{ width: '100%' }}>
+              <Card variant="outlined" onClick={handleConnect} sx={{ width: '100%' }}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -186,6 +195,17 @@ export default function MaxWidthDialog() {
                 </Stack>
               </Card>
             </ButtonBase>
+            <Alert
+              severity="error"
+              sx={{ width: '100%', display: isCrustInstalled ? 'none' : 'flex' }}
+              action={
+                <Button color="inherit" size="small" href={CRUST_WALLET_WIKI} target="_blank">
+                  LEARN
+                </Button>
+              }
+            >
+              Install Metamask!
+            </Alert>
           </Stack>
         </DialogContent>
         <DialogActions>

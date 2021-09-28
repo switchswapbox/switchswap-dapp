@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.18.0",
+    "@crustio/type-definitions": "^1.2.0",
     "@emotion/cache": "^11.4.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -63,6 +64,8 @@
     "@mui/utils": "^5.0.0",
     "@mui/x-data-grid": "^5.0.0-beta.1",
     "@nimiq/identicons": "^1.6.0",
+    "@polkadot/api": "^6.1.1",
+    "@polkadot/extension-dapp": "^0.40.3",
     "@react-pdf/renderer": "^2.0.19",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
