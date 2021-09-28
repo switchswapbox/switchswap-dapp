@@ -102,6 +102,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
+  const metamaskAddr = localStorage.getItem('metamaskAddr') || 'Hello World';
+
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();
@@ -111,7 +113,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
 
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img: string) => {
+    Identicons.toDataUrl(metamaskAddr).then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
@@ -164,10 +166,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
                 }}
               >
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
-                  5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q
+                  {metamaskAddr}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                  Crust Network
+                  Network Name
                 </Typography>
               </Box>
             </AccountStyle>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 
 // material
@@ -18,6 +18,7 @@ import {
   DialogContent
 } from '@mui/material';
 import { Icon } from '@iconify/react';
+<<<<<<< HEAD
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 
 import detectEthereumProvider from '@metamask/detect-provider';
@@ -26,6 +27,11 @@ import {
   INSTALL_METAMASK_URL,
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
+=======
+
+import detectEthereumProvider from '@metamask/detect-provider';
+import { METAMASK_SELECT_MATIC_URL, INSTALL_METAMASK_URL } from '../../assets/COMMON_VARIABLES';
+>>>>>>> e5219b44478597d8c0cb5fe505a4a3063ef29e7c
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -41,7 +47,17 @@ export default function MaxWidthDialog() {
   const [open, setOpen] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
+<<<<<<< HEAD
   const [isCrustInstalled, setCrustInstalled] = useState(true);
+=======
+  const [isMetamaskConnected, setMetamaskConnected] = useState(false);
+
+  const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
+
+  useEffect(() => {
+    localStorage.setItem('metamaskAddr', metamaskAddr);
+  }, [metamaskAddr]);
+>>>>>>> e5219b44478597d8c0cb5fe505a4a3063ef29e7c
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -53,23 +69,32 @@ export default function MaxWidthDialog() {
 
   const detectProvider = async () => {
     const provider = await detectEthereumProvider();
-
-    if (provider) {
+    // console.log(provider);
+    if (provider && provider.isMetaMask) {
       const chainId = await provider.request({
         method: 'eth_chainId'
       });
 
       if (parseInt(chainId, 16) === 137) {
+        setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
+
+        setMetamaskAddr(status[0]);
+        // console.log(status);
+        // SET HOOK HERE
+        setMetamaskConnected(true);
       } else {
         setMetamaskInstalled(true);
         setMaticSelected(false);
-        console.log('Select Matic');
+        setMetamaskConnected(false);
+        // console.log('Select Matic');
       }
     } else {
       setMetamaskInstalled(false);
-      console.log('Please install MetaMask!');
+      setMetamaskConnected(false);
+      setMaticSelected(true);
+      // console.log('Please install MetaMask!');
     }
   };
 
@@ -171,6 +196,20 @@ export default function MaxWidthDialog() {
               }
             >
               Choose Polygon Network!
+            </Alert>
+            <Alert
+              icon={false}
+              severity="success"
+              sx={{
+                width: '100%',
+                wordWrap: 'break-word',
+                display: isMetamaskConnected ? 'flex' : 'none'
+              }}
+            >
+              Wallet is connected{'  '}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
             </Alert>
             <ButtonBase>
               <Card variant="outlined" onClick={handleConnect} sx={{ width: '100%' }}>
