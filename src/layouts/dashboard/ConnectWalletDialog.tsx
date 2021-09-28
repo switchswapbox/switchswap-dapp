@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 
 // material
@@ -38,6 +38,12 @@ export default function MaxWidthDialog() {
   const [isMaticSelected, setMaticSelected] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
 
+  const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
+
+  useEffect(() => {
+    localStorage.setItem('metamaskAddr', metamaskAddr);
+  }, [metamaskAddr]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -58,6 +64,8 @@ export default function MaxWidthDialog() {
         setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
+
+        setMetamaskAddr(status[0]);
         // console.log(status);
         // SET HOOK HERE
         setMetamaskConnected(true);
@@ -70,7 +78,7 @@ export default function MaxWidthDialog() {
     } else {
       setMetamaskInstalled(false);
       setMetamaskConnected(false);
-      setMaticSelected(false);
+      setMaticSelected(true);
       // console.log('Please install MetaMask!');
     }
   };
