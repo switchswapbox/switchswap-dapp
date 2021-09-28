@@ -54,7 +54,7 @@ export default function MaxWidthDialog() {
 
   const detectProvider = async () => {
     const provider = await detectEthereumProvider();
-    // console.log(provider);
+
     if (provider && provider.isMetaMask) {
       const chainId = await provider.request({
         method: 'eth_chainId'
