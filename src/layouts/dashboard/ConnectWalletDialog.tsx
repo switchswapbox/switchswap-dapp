@@ -5,8 +5,9 @@ import { alpha, useTheme, styled } from '@mui/material/styles';
 import {
   Box,
   Card,
-  Alert,
+  List,
   Link,
+  Alert,
   Stack,
   Button,
   Dialog,
@@ -16,9 +17,13 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Divider,
-  MenuItem
+  ListItemButton,
+  ListItemText,
+  Collapse
 } from '@mui/material';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { Icon } from '@iconify/react';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
@@ -28,7 +33,6 @@ import {
   INSTALL_METAMASK_URL,
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
-import MenuPopover from 'components/MenuPopover';
 import { shortenAddress } from '../../utils/formatAddress';
 
 // ----------------------------------------------------------------------
@@ -42,7 +46,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 export default function MaxWidthDialog() {
   const theme = useTheme();
-  const anchorRefCrust = useRef(null);
   const [open, setOpen] = useState(false);
   const [openCrust, setOpenCrust] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
@@ -51,6 +54,7 @@ export default function MaxWidthDialog() {
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
   const [addressesCrust, setAddressesCrust] = useState<InjectedAccountWithMeta[]>([]);
   const [selectedAccountAddress, setselectedAccountAddress] = useState('');
+  const [isCrustWalletActive, setIsCrustWalletActive] = useState(false);
 
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
 
@@ -64,6 +68,7 @@ export default function MaxWidthDialog() {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenCrust(false);
   };
 
   const detectMetamask = async () => {
@@ -96,20 +101,25 @@ export default function MaxWidthDialog() {
     }
   };
 
-  const handleConnect = async () => {
-    const extensions = await web3Enable('NFT Dapp');
-    if (extensions.length === 0) {
-      setCrustInstalled(false);
-      return;
+  const handleConnectCrustWallet = async () => {
+    if (!openCrust) {
+      const extensions = await web3Enable('NFT Dapp');
+      if (extensions.length === 0) {
+        setCrustInstalled(false);
+        return;
+      }
+      const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+      setAddressesCrust([...allAccounts]);
+      setOpenCrust(true);
+    } else {
+      setOpenCrust(false);
     }
-    const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
-    setAddressesCrust([...allAccounts]);
-    setOpenCrust(true);
   };
 
-  const handleSelectAccount = (address: string) => {
+  const handleSelectAccountCrust = (address: string) => {
     setselectedAccountAddress(address);
     setOpenCrust(false);
+    setIsCrustWalletActive(true);
   };
 
   return (
@@ -216,13 +226,11 @@ export default function MaxWidthDialog() {
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
             </Alert>
-            <ButtonBase>
-              <Card
-                variant="outlined"
-                onClick={handleConnect}
-                sx={{ width: '100%' }}
-                ref={anchorRefCrust}
-              >
+            <List
+              sx={{ width: '100%', bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -242,59 +250,72 @@ export default function MaxWidthDialog() {
                     <Box component="img" src="./static/icons/shared/crust.svg" />
                   </IconWrapperStyle>
                 </Stack>
-                <Typography
-                  align="left"
-                  variant="body2"
-                  sx={{ color: 'text.secondary', px: 2.2, pb: 1 }}
-                  noWrap
-                >
-                  {selectedAccountAddress !== ''
-                    ? `Address: ${shortenAddress(selectedAccountAddress, 10)}`
-                    : ''}
-                </Typography>
-              </Card>
-            </ButtonBase>
-
-            <MenuPopover
-              open={openCrust}
-              onClose={() => setOpenCrust(false)}
-              anchorEl={anchorRefCrust.current}
-              sx={{ width: 400 }}
+              }
             >
-              <Box sx={{ my: 1.5, px: 2.5 }}>
-                <Typography variant="subtitle1" noWrap>
-                  Please select an account!
-                </Typography>
-              </Box>
-
-              <Divider sx={{ my: 1 }} />
-
-              {addressesCrust.map((account) => (
-                <MenuItem
-                  key={account.address}
-                  onClick={() => handleSelectAccount(account.address)}
-                  sx={{ typography: 'body2', py: 1, px: 2.5 }}
-                >
-                  <Box sx={{ width: '100%', minHeight: 40, py: 1, px: 1 }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-                      <Typography variant="subtitle2">
-                        {shortenAddress(account.address, 10)}
-                      </Typography>
-                      <IconWrapperStyle
-                        sx={{
-                          ...(1 < 0 && {
-                            color: 'error.main',
-                            bgcolor: alpha(theme.palette.error.main, 0.16)
-                          })
-                        }}
+              <ListItemButton onClick={handleConnectCrustWallet}>
+                <AccountBalanceWalletIcon color={isCrustWalletActive ? 'success' : 'primary'} />
+                <ListItemText
+                  primary={
+                    selectedAccountAddress === '' ? (
+                      <Typography
+                        align="left"
+                        variant="subtitle2"
+                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                        noWrap
                       >
-                        <Box component="img" src="./static/icons/shared/crust.svg" />
-                      </IconWrapperStyle>
-                    </Stack>
-                  </Box>
-                </MenuItem>
-              ))}
-            </MenuPopover>
+                        Select
+                      </Typography>
+                    ) : (
+                      <Typography
+                        align="left"
+                        variant="subtitle2"
+                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                        noWrap
+                      >
+                        {selectedAccountAddress !== ''
+                          ? `${shortenAddress(selectedAccountAddress, 10)}`
+                          : ''}
+                      </Typography>
+                    )
+                  }
+                />
+                {openCrust ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={openCrust} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {addressesCrust.map((account) => (
+                    <ListItemButton
+                      key={account.address}
+                      sx={{ pl: 4 }}
+                      onClick={() => handleSelectAccountCrust(account.address)}
+                    >
+                      <AccountBalanceWalletIcon color="primary" />
+                      <Box sx={{ width: '100%', minHeight: 30, py: 1, px: 1 }}>
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="flex-start"
+                        >
+                          <Typography variant="body2">
+                            {shortenAddress(account.address, 10)}
+                          </Typography>
+                          <IconWrapperStyle
+                            sx={{
+                              ...(1 < 0 && {
+                                color: 'error.main',
+                                bgcolor: alpha(theme.palette.error.main, 0.16)
+                              })
+                            }}
+                          >
+                            <Box component="img" src="./static/icons/shared/crust.svg" />
+                          </IconWrapperStyle>
+                        </Stack>
+                      </Box>
+                    </ListItemButton>
+                  ))}
+                </List>
+              </Collapse>
+            </List>
             <Alert
               severity="error"
               sx={{ width: '100%', display: isCrustInstalled ? 'none' : 'flex' }}
