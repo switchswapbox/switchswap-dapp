@@ -72,7 +72,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {metamaskAddr}
+            {`${metamaskAddr.substr(0, 5)}...${metamaskAddr.substr(
+              metamaskAddr.length - 5,
+              metamaskAddr.length
+            )}`}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             Network Name
