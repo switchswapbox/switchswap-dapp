@@ -166,7 +166,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
                 }}
               >
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
-                  {metamaskAddr}
+                  {`${metamaskAddr.substr(0, 5)}...${metamaskAddr.substr(
+                    metamaskAddr.length - 5,
+                    metamaskAddr.length
+                  )}`}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                   Network Name

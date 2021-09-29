@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 
 // material
@@ -18,7 +18,10 @@ import {
   DialogContent,
   ButtonGroup,
   ExtendButtonBase,
-  ButtonTypeMap
+  ButtonTypeMap,
+  Divider,
+  MenuItem,
+  CircularProgress
 } from '@mui/material';
 import { Icon } from '@iconify/react';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
@@ -31,6 +34,7 @@ import {
   INSTALL_METAMASK_URL,
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
+import MenuPopover from 'components/MenuPopover';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -43,12 +47,15 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 export default function MaxWidthDialog() {
   const theme = useTheme();
+  const anchorRefCrust = useRef(null);
   const [open, setOpen] = useState(false);
+  const [openCrust, setOpenCrust] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
   const [addressesCrust, setAddressesCrust] = useState<InjectedAccountWithMeta[]>([]);
+  const [signingCrust, setSigningCrust] = useState({});
 
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
 
@@ -102,39 +109,16 @@ export default function MaxWidthDialog() {
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
     setAddressesCrust([...allAccounts]);
-  };
-
-  const displayButtonSign = (account: InjectedAccountWithMeta): any => {
-    return (
-      <Card
-        key={account.address}
-        variant="outlined"
-        onClick={() => handleSignCrust(account.address)}
-        sx={{ width: '100%', minHeight: 40, py: 1, px: 2 }}
-      >
-        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-          <Typography variant="subtitle2">
-            {`${account.address.substr(0, 10)}...${account.address.substr(
-              account.address.length - 10,
-              account.address.length
-            )}`}
-          </Typography>
-          <IconWrapperStyle
-            sx={{
-              ...(1 < 0 && {
-                color: 'error.main',
-                bgcolor: alpha(theme.palette.error.main, 0.16)
-              })
-            }}
-          >
-            <Box component="img" src="./static/icons/shared/crust.svg" />
-          </IconWrapperStyle>
-        </Stack>
-      </Card>
-    );
+    setOpenCrust(true);
+    const addresses = allAccounts.map((account) => account.address);
+    console.log(addresses);
+    // const stateSigning = addresses.reduce((acc, curr) => ((acc[curr] = ''), acc), {});
+    // console.log(stateSigning);
+    setSigningCrust({ a: false });
   };
 
   const handleSignCrust = async (address: string) => {
+    setSigningCrust((prev) => ({ ...prev, address: true }));
     const injector = await web3FromAddress(address);
     const wsProvider = new WsProvider('wss://rpc.crust.network');
     const api = await ApiPromise.create({
@@ -150,6 +134,8 @@ export default function MaxWidthDialog() {
           console.log(`Completed`);
         }
       });
+    setSigningCrust((prev) => ({ ...prev, address: false }));
+    handleClose();
   };
 
   return (
@@ -256,38 +242,79 @@ export default function MaxWidthDialog() {
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
             </Alert>
-            <Stack direction="column" justifyContent="space-between" spacing={0.5}>
-              <ButtonBase>
-                <Card variant="outlined" onClick={handleConnect} sx={{ width: '100%' }}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
-                    spacing={2}
-                    sx={{ p: 2 }}
-                  >
-                    <Typography variant="subtitle1">Crust Network</Typography>
-                    <IconWrapperStyle
-                      sx={{
-                        ...(1 < 0 && {
-                          color: 'error.main',
-                          bgcolor: alpha(theme.palette.error.main, 0.16)
-                        })
-                      }}
-                    >
-                      <Box component="img" src="./static/icons/shared/crust.svg" />
-                    </IconWrapperStyle>
-                  </Stack>
-                </Card>
-              </ButtonBase>
-              <ButtonGroup
+            <ButtonBase>
+              <Card
                 variant="outlined"
-                aria-label="outlined button group"
-                orientation="vertical"
+                onClick={handleConnect}
+                sx={{ width: '100%' }}
+                ref={anchorRefCrust}
               >
-                {addressesCrust.map((address) => displayButtonSign(address))}
-              </ButtonGroup>
-            </Stack>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="flex-start"
+                  spacing={2}
+                  sx={{ p: 2 }}
+                >
+                  <Typography variant="subtitle1">Crust Network</Typography>
+                  <IconWrapperStyle
+                    sx={{
+                      ...(1 < 0 && {
+                        color: 'error.main',
+                        bgcolor: alpha(theme.palette.error.main, 0.16)
+                      })
+                    }}
+                  >
+                    <Box component="img" src="./static/icons/shared/crust.svg" />
+                  </IconWrapperStyle>
+                </Stack>
+              </Card>
+            </ButtonBase>
+
+            <MenuPopover
+              open={openCrust}
+              onClose={() => setOpenCrust(false)}
+              anchorEl={anchorRefCrust.current}
+              sx={{ width: 400 }}
+            >
+              <Box sx={{ my: 1.5, px: 2.5 }}>
+                <Typography variant="subtitle1" noWrap>
+                  Please select an account!
+                </Typography>
+              </Box>
+
+              <Divider sx={{ my: 1 }} />
+
+              {addressesCrust.map((account) => (
+                <MenuItem
+                  key={account.address}
+                  onClick={() => handleSignCrust(account.address)}
+                  sx={{ typography: 'body2', py: 1, px: 2.5 }}
+                >
+                  <Box sx={{ width: '100%', minHeight: 40, py: 1, px: 1 }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                      <Typography variant="subtitle2">
+                        {`${account.address.substr(0, 10)}...${account.address.substr(
+                          account.address.length - 10,
+                          account.address.length
+                        )}`}
+                      </Typography>
+                      <CircularProgress variant={signingCrust ? 'indeterminate' : 'determinate'} />
+                      <IconWrapperStyle
+                        sx={{
+                          ...(1 < 0 && {
+                            color: 'error.main',
+                            bgcolor: alpha(theme.palette.error.main, 0.16)
+                          })
+                        }}
+                      >
+                        <Box component="img" src="./static/icons/shared/crust.svg" />
+                      </IconWrapperStyle>
+                    </Stack>
+                  </Box>
+                </MenuItem>
+              ))}
+            </MenuPopover>
             <Alert
               severity="error"
               sx={{ width: '100%', display: isCrustInstalled ? 'none' : 'flex' }}
