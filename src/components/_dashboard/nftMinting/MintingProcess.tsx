@@ -17,6 +17,7 @@ import {
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
+import UploadSingleFile from './UploadSingleFile';
 
 import { create } from 'ipfs-http-client';
 import axios from 'axios';
@@ -84,6 +85,33 @@ export default function MintingProcess() {
     setActiveStep(0);
   };
 
+  const [file, setFile] = useState<File>();
+
+  // const handleDropSingleFile = useCallback((acceptedFiles) => {
+  //   const file = acceptedFiles[0];
+  //   if (file) {
+  //     setFile({
+  //       ...file,
+  //       preview: URL.createObjectURL(file)
+  //     });
+  //   }
+  // }, []);
+
+  // const uploadSingleFile = async () => {
+  //   try {
+  //     console.log(file);
+  //     // console.log(files[0]);
+  //     console.log('up file');
+  //     // const file = files[0];
+  //     const added = await ipfs.add(file);
+  //     console.log('added');
+  //     console.log(added);
+
+  //     // console.log(`cid v0 ${added.cid.toV0().toString()}`);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   // const handleDropMultiFile = useCallback(
   //   (acceptedFiles) => {
   //     setFiles(
@@ -99,6 +127,7 @@ export default function MintingProcess() {
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
+      console.log(acceptedFiles);
       setFiles(acceptedFiles.map((file: File) => file));
     },
     [setFiles]
@@ -183,7 +212,9 @@ export default function MintingProcess() {
             onRemove={handleRemove}
             onUploadFile={uploadFile}
           />
+          {/* <UploadSingleFile file={file} onDrop={handleDropSingleFile} /> */}
           <Box sx={{ display: 'flex', mt: 1 }}>
+            {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
               Back
             </Button>
