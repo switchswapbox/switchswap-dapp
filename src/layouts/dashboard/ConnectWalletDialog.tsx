@@ -18,8 +18,9 @@ import {
   DialogContent
 } from '@mui/material';
 import { Icon } from '@iconify/react';
-import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
-
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { typesBundleForPolkadot } from '@crustio/type-definitions';
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
   METAMASK_SELECT_MATIC_URL,
@@ -96,6 +97,22 @@ export default function MaxWidthDialog() {
     }
     const allAccounts = await web3Accounts();
     console.log(allAccounts);
+    const wsProvider = new WsProvider('wss://rpc.crust.network');
+    const api = await ApiPromise.create({
+      provider: wsProvider,
+      typesBundle: typesBundleForPolkadot
+    });
+
+    await api.isReady;
+    const account = allAccounts[0];
+    const injector = await web3FromAddress(account.address);
+    api.tx.market
+      .placeStorageOrder('QmY8BSGhCgRq4FKzqziEJW483gb3fpyB84NcaxXGXcUndh', 77463, 0.0, '')
+      .signAndSend(account.address, { signer: injector.signer }, (status) => {
+        if (status.isInBlock) {
+          console.log(`Completed`);
+        }
+      });
   };
 
   return (
