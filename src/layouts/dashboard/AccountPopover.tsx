@@ -9,6 +9,8 @@ import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/materia
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
 
+import { shortenAddress } from '../../utils/formatAddress';
+
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
@@ -72,10 +74,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {`${metamaskAddr.substr(0, 5)}...${metamaskAddr.substr(
-              metamaskAddr.length - 5,
-              metamaskAddr.length
-            )}`}
+            {shortenAddress(metamaskAddr, 5)}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             Network Name

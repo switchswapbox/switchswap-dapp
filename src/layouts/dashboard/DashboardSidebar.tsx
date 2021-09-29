@@ -21,6 +21,7 @@ import NavSection from '../../components/NavSection';
 //
 import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
+import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
@@ -166,10 +167,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
                 }}
               >
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
-                  {`${metamaskAddr.substr(0, 5)}...${metamaskAddr.substr(
-                    metamaskAddr.length - 5,
-                    metamaskAddr.length
-                  )}`}
+                  {shortenAddress(metamaskAddr, 5)}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                   Network Name

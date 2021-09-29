@@ -29,6 +29,7 @@ import {
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
 import MenuPopover from 'components/MenuPopover';
+import { shortenAddress } from '../../utils/formatAddress';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -49,7 +50,7 @@ export default function MaxWidthDialog() {
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
   const [addressesCrust, setAddressesCrust] = useState<InjectedAccountWithMeta[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState('');
+  const [selectedAccountAddress, setselectedAccountAddress] = useState('');
 
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
 
@@ -107,7 +108,7 @@ export default function MaxWidthDialog() {
   };
 
   const handleSelectAccount = (address: string) => {
-    setSelectedAccount(address);
+    setselectedAccountAddress(address);
     setOpenCrust(false);
   };
 
@@ -241,8 +242,15 @@ export default function MaxWidthDialog() {
                     <Box component="img" src="./static/icons/shared/crust.svg" />
                   </IconWrapperStyle>
                 </Stack>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                  {selectedAccount}
+                <Typography
+                  align="left"
+                  variant="body2"
+                  sx={{ color: 'text.secondary', px: 2.2, pb: 1 }}
+                  noWrap
+                >
+                  {selectedAccountAddress !== ''
+                    ? `Address: ${shortenAddress(selectedAccountAddress, 10)}`
+                    : ''}
                 </Typography>
               </Card>
             </ButtonBase>
@@ -270,10 +278,7 @@ export default function MaxWidthDialog() {
                   <Box sx={{ width: '100%', minHeight: 40, py: 1, px: 1 }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
                       <Typography variant="subtitle2">
-                        {`${account.address.substr(0, 10)}...${account.address.substr(
-                          account.address.length - 10,
-                          account.address.length
-                        )}`}
+                        {shortenAddress(account.address, 10)}
                       </Typography>
                       <IconWrapperStyle
                         sx={{
