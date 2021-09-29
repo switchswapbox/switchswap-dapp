@@ -109,7 +109,7 @@ export default function MaxWidthDialog() {
       <Card
         key={account.address}
         variant="outlined"
-        onClick={handleConnect}
+        onClick={() => handleSignCrust(account.address)}
         sx={{ width: '100%', minHeight: 40, py: 1, px: 2 }}
       >
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
@@ -134,36 +134,23 @@ export default function MaxWidthDialog() {
     );
   };
 
-  // const handleSignCrust = async () => {
-  //   const allAccounts = await web3Accounts();
-  //   const injectors = Promise.all(
-  //     allAccounts.map(async (account) => {
-  //       web3FromAddress(account.address);
-  //     })
-  //   );
-  //   const wsProvider = new WsProvider('wss://rpc.crust.network');
-  //   const api = await ApiPromise.create({
-  //     provider: wsProvider,
-  //     typesBundle: typesBundleForPolkadot
-  //   });
+  const handleSignCrust = async (address: string) => {
+    const injector = await web3FromAddress(address);
+    const wsProvider = new WsProvider('wss://rpc.crust.network');
+    const api = await ApiPromise.create({
+      provider: wsProvider,
+      typesBundle: typesBundleForPolkadot
+    });
 
-  //   await api.isReady;
-  //   return allAccounts.map((account, index) => {
-  //     <Button
-  //       onClick={() => {
-  //         //   api.tx.market
-  //         //     .placeStorageOrder('QmY8BSGhCgRq4FKzqziEJW483gb3fpyB84NcaxXGXcUndh', 77463, 0.0, '')
-  //         //     .signAndSend(account.address, { signer: injectors[index].signer }, (status) => {
-  //         //       if (status.isInBlock) {
-  //         //         console.log(`Completed`);
-  //         //       }
-  //         //     });
-  //       }}
-  //     >
-  //       {account.address}
-  //     </Button>;
-  //   });
-  // };
+    await api.isReady;
+    api.tx.market
+      .placeStorageOrder('QmY8BSGhCgRq4FKzqziEJW483gb3fpyB84NcaxXGXcUndh', 77463, 0.0, '')
+      .signAndSend(address, { signer: injector.signer }, (status) => {
+        if (status.isInBlock) {
+          console.log(`Completed`);
+        }
+      });
+  };
 
   return (
     <>
