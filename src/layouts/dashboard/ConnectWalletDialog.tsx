@@ -15,12 +15,16 @@ import {
   ButtonBase,
   DialogTitle,
   DialogActions,
-  DialogContent
+  DialogContent,
+  ButtonGroup,
+  ExtendButtonBase,
+  ButtonTypeMap
 } from '@mui/material';
 import { Icon } from '@iconify/react';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot } from '@crustio/type-definitions';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
   METAMASK_SELECT_MATIC_URL,
@@ -44,6 +48,7 @@ export default function MaxWidthDialog() {
   const [isMaticSelected, setMaticSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
+  const [addressesCrust, setAddressesCrust] = useState<InjectedAccountWithMeta[]>([]);
 
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
 
@@ -95,25 +100,70 @@ export default function MaxWidthDialog() {
       setCrustInstalled(false);
       return;
     }
-    const allAccounts = await web3Accounts();
-    console.log(allAccounts);
-    const wsProvider = new WsProvider('wss://rpc.crust.network');
-    const api = await ApiPromise.create({
-      provider: wsProvider,
-      typesBundle: typesBundleForPolkadot
-    });
-
-    await api.isReady;
-    const account = allAccounts[0];
-    const injector = await web3FromAddress(account.address);
-    api.tx.market
-      .placeStorageOrder('QmY8BSGhCgRq4FKzqziEJW483gb3fpyB84NcaxXGXcUndh', 77463, 0.0, '')
-      .signAndSend(account.address, { signer: injector.signer }, (status) => {
-        if (status.isInBlock) {
-          console.log(`Completed`);
-        }
-      });
+    const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+    setAddressesCrust([...allAccounts]);
   };
+
+  const displayButtonSign = (account: InjectedAccountWithMeta): any => {
+    return (
+      <Card
+        key={account.address}
+        variant="outlined"
+        onClick={handleConnect}
+        sx={{ width: '100%', minHeight: 40, py: 1, px: 2 }}
+      >
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+          <Typography variant="subtitle2">
+            {`${account.address.substr(0, 10)}...${account.address.substr(
+              account.address.length - 10,
+              account.address.length
+            )}`}
+          </Typography>
+          <IconWrapperStyle
+            sx={{
+              ...(1 < 0 && {
+                color: 'error.main',
+                bgcolor: alpha(theme.palette.error.main, 0.16)
+              })
+            }}
+          >
+            <Box component="img" src="./static/icons/shared/crust.svg" />
+          </IconWrapperStyle>
+        </Stack>
+      </Card>
+    );
+  };
+
+  // const handleSignCrust = async () => {
+  //   const allAccounts = await web3Accounts();
+  //   const injectors = Promise.all(
+  //     allAccounts.map(async (account) => {
+  //       web3FromAddress(account.address);
+  //     })
+  //   );
+  //   const wsProvider = new WsProvider('wss://rpc.crust.network');
+  //   const api = await ApiPromise.create({
+  //     provider: wsProvider,
+  //     typesBundle: typesBundleForPolkadot
+  //   });
+
+  //   await api.isReady;
+  //   return allAccounts.map((account, index) => {
+  //     <Button
+  //       onClick={() => {
+  //         //   api.tx.market
+  //         //     .placeStorageOrder('QmY8BSGhCgRq4FKzqziEJW483gb3fpyB84NcaxXGXcUndh', 77463, 0.0, '')
+  //         //     .signAndSend(account.address, { signer: injectors[index].signer }, (status) => {
+  //         //       if (status.isInBlock) {
+  //         //         console.log(`Completed`);
+  //         //       }
+  //         //     });
+  //       }}
+  //     >
+  //       {account.address}
+  //     </Button>;
+  //   });
+  // };
 
   return (
     <>
@@ -219,29 +269,38 @@ export default function MaxWidthDialog() {
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
             </Alert>
-            <ButtonBase>
-              <Card variant="outlined" onClick={handleConnect} sx={{ width: '100%' }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-start"
-                  spacing={2}
-                  sx={{ p: 2 }}
-                >
-                  <Typography variant="subtitle1">Crust Network</Typography>
-                  <IconWrapperStyle
-                    sx={{
-                      ...(1 < 0 && {
-                        color: 'error.main',
-                        bgcolor: alpha(theme.palette.error.main, 0.16)
-                      })
-                    }}
+            <Stack direction="column" justifyContent="space-between" spacing={0.5}>
+              <ButtonBase>
+                <Card variant="outlined" onClick={handleConnect} sx={{ width: '100%' }}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ p: 2 }}
                   >
-                    <Box component="img" src="./static/icons/shared/crust.svg" />
-                  </IconWrapperStyle>
-                </Stack>
-              </Card>
-            </ButtonBase>
+                    <Typography variant="subtitle1">Crust Network</Typography>
+                    <IconWrapperStyle
+                      sx={{
+                        ...(1 < 0 && {
+                          color: 'error.main',
+                          bgcolor: alpha(theme.palette.error.main, 0.16)
+                        })
+                      }}
+                    >
+                      <Box component="img" src="./static/icons/shared/crust.svg" />
+                    </IconWrapperStyle>
+                  </Stack>
+                </Card>
+              </ButtonBase>
+              <ButtonGroup
+                variant="outlined"
+                aria-label="outlined button group"
+                orientation="vertical"
+              >
+                {addressesCrust.map((address) => displayButtonSign(address))}
+              </ButtonGroup>
+            </Stack>
             <Alert
               severity="error"
               sx={{ width: '100%', display: isCrustInstalled ? 'none' : 'flex' }}
