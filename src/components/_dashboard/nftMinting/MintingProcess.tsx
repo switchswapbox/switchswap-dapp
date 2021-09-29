@@ -18,6 +18,24 @@ import {
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
 
+import { create } from 'ipfs-http-client';
+import axios from 'axios';
+
+const ipfsGateway = 'https://crustwebsites.net';
+const authHeader = Buffer.from(
+  // `pol-0x272a8f05d05d69b6d8261538b031ffac60ba0c8c:0xd25e6494e0ad7988815f07670d1a0133150b039a5a796efea50f72cde520731354fbf4fac099e81a346abf76d7d8f0fb7cabbfa3a17d5d2829d1a85aa607884e1c`
+  //  `sub-5EoX3ZVUSKbQHqkuvCWvintEnqeAXWdiMer6yP23EE9oajt5:0xe8a9fe4209d477cadfdba2ce5a4446c49589b39154a643fc9bfc6b55d35cdd15be8cf6d23ea84d441dd1226e2f05158a6f24a6a30cf051cab2d40788a6e89e0f`
+  //`pol-0x5a292ff2e5E4caA4A441c8DB3f7cE065Ad4753Bf:0xbd501da9f65de162ec010b57ca2bb7f6e17340911b320f3ebc8141fb0ea854c72e08f789c2efc07999d2e0f1c366b3ef72e7751644d87556306551b7f8b7983e1c`
+  //`pol-0x6d26C405BB919643AfA2c89e8A138d2015b3A62F:0x4eca77e960755e7eeb191073bfc46b05f3145c479279346322cf6f945dfb8af03f5a63237cc2d611b1381bbea8857b3e2bb44cea8cefd26f38a004fd7e9225a61b`
+  `pol-0x5a292ff2e5E4caA4A441c8DB3f7cE065Ad4753Bf:0xbd501da9f65de162ec010b57ca2bb7f6e17340911b320f3ebc8141fb0ea854c72e08f789c2efc07999d2e0f1c366b3ef72e7751644d87556306551b7f8b7983e1c`
+).toString('base64');
+
+const ipfs = create({
+  url: ipfsGateway + '/api/v0',
+  headers: {
+    authorization: 'Basic ' + authHeader
+  }
+});
 // ----------------------------------------------------------------------
 
 const steps = ['Upload File', 'Customize NFT Card', 'Upload Meta', 'Mint NFT'];
@@ -26,7 +44,7 @@ export default function MintingProcess() {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [preview, setPreview] = useState(false);
-  const [files, setFiles] = useState<(File | string)[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
 
   const isStepOptional = (step: number) => step === 1;
 
@@ -66,21 +84,43 @@ export default function MintingProcess() {
     setActiveStep(0);
   };
 
+  // const handleDropMultiFile = useCallback(
+  //   (acceptedFiles) => {
+  //     setFiles(
+  //       acceptedFiles.map((file: File) =>
+  //         Object.assign(file, {
+  //           preview: URL.createObjectURL(file)
+  //         })
+  //       )
+  //     );
+  //   },
+  //   [setFiles]
+  // );
+
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file: File) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
-      );
+      setFiles(acceptedFiles.map((file: File) => file));
     },
     [setFiles]
   );
 
-  const handleRemoveAll = () => {
-    setFiles([]);
+  // const handleRemoveAll = () => {
+  //   setFiles([]);
+  // };
+  const uploadFile = async () => {
+    try {
+      // console.log(files);
+      console.log(files[0]);
+      console.log('up file');
+      const file = files[0];
+      const added = await ipfs.add(file);
+      console.log('added');
+      console.log(added);
+
+      console.log(`cid v0 ${added.cid.toV0().toString()}`);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleRemove = (file: File | string) => {
@@ -141,7 +181,7 @@ export default function MintingProcess() {
             files={files}
             onDrop={handleDropMultiFile}
             onRemove={handleRemove}
-            onRemoveAll={handleRemoveAll}
+            onUploadFile={uploadFile}
           />
           <Box sx={{ display: 'flex', mt: 1 }}>
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>

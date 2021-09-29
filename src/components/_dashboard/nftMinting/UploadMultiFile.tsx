@@ -55,7 +55,7 @@ interface UploadMultiFileProps extends DropzoneOptions {
   files: (File | string)[];
   showPreview: boolean;
   onRemove: (file: File | string) => void;
-  onRemoveAll: VoidFunction;
+  onUploadFile: VoidFunction;
   sx?: SxProps<Theme>;
 }
 
@@ -77,7 +77,7 @@ export default function UploadMultiFile({
   showPreview = false,
   files,
   onRemove,
-  onRemoveAll,
+  onUploadFile,
   sx,
   ...other
 }: UploadMultiFileProps) {
@@ -239,10 +239,9 @@ export default function UploadMultiFile({
 
       {hasFile && (
         <Stack direction="row" justifyContent="flex-end">
-          <Button onClick={onRemoveAll} sx={{ mr: 1.5 }}>
-            Remove all
+          <Button onClick={onUploadFile} variant="contained">
+            Upload file
           </Button>
-          <Button variant="contained">Upload files</Button>
         </Stack>
       )}
     </Box>
