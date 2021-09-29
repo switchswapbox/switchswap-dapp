@@ -16,17 +16,11 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  ButtonGroup,
-  ExtendButtonBase,
-  ButtonTypeMap,
   Divider,
-  MenuItem,
-  CircularProgress
+  MenuItem
 } from '@mui/material';
 import { Icon } from '@iconify/react';
-import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
-import { ApiPromise, WsProvider } from '@polkadot/api';
-import { typesBundleForPolkadot } from '@crustio/type-definitions';
+import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
@@ -55,7 +49,7 @@ export default function MaxWidthDialog() {
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
   const [addressesCrust, setAddressesCrust] = useState<InjectedAccountWithMeta[]>([]);
-  const [signingCrust, setSigningCrust] = useState({});
+  const [selectedAccount, setSelectedAccount] = useState('');
 
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
 
@@ -110,32 +104,11 @@ export default function MaxWidthDialog() {
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
     setAddressesCrust([...allAccounts]);
     setOpenCrust(true);
-    const addresses = allAccounts.map((account) => account.address);
-    console.log(addresses);
-    // const stateSigning = addresses.reduce((acc, curr) => ((acc[curr] = ''), acc), {});
-    // console.log(stateSigning);
-    setSigningCrust({ a: false });
   };
 
-  const handleSignCrust = async (address: string) => {
-    setSigningCrust((prev) => ({ ...prev, address: true }));
-    const injector = await web3FromAddress(address);
-    const wsProvider = new WsProvider('wss://rpc.crust.network');
-    const api = await ApiPromise.create({
-      provider: wsProvider,
-      typesBundle: typesBundleForPolkadot
-    });
-
-    await api.isReady;
-    api.tx.market
-      .placeStorageOrder('QmY8BSGhCgRq4FKzqziEJW483gb3fpyB84NcaxXGXcUndh', 77463, 0.0, '')
-      .signAndSend(address, { signer: injector.signer }, (status) => {
-        if (status.isInBlock) {
-          console.log(`Completed`);
-        }
-      });
-    setSigningCrust((prev) => ({ ...prev, address: false }));
-    handleClose();
+  const handleSelectAccount = (address: string) => {
+    setSelectedAccount(address);
+    setOpenCrust(false);
   };
 
   return (
@@ -268,6 +241,9 @@ export default function MaxWidthDialog() {
                     <Box component="img" src="./static/icons/shared/crust.svg" />
                   </IconWrapperStyle>
                 </Stack>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                  {selectedAccount}
+                </Typography>
               </Card>
             </ButtonBase>
 
@@ -288,7 +264,7 @@ export default function MaxWidthDialog() {
               {addressesCrust.map((account) => (
                 <MenuItem
                   key={account.address}
-                  onClick={() => handleSignCrust(account.address)}
+                  onClick={() => handleSelectAccount(account.address)}
                   sx={{ typography: 'body2', py: 1, px: 2.5 }}
                 >
                   <Box sx={{ width: '100%', minHeight: 40, py: 1, px: 1 }}>
@@ -299,7 +275,6 @@ export default function MaxWidthDialog() {
                           account.address.length
                         )}`}
                       </Typography>
-                      <CircularProgress variant={signingCrust ? 'indeterminate' : 'determinate'} />
                       <IconWrapperStyle
                         sx={{
                           ...(1 < 0 && {
