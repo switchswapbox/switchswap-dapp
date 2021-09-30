@@ -110,7 +110,6 @@ export default function MaxWidthDialog() {
         setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
-        console.log(status);
         setselectedMetamaskAccount(status[0]);
         // console.log(status);
         // SET HOOK HERE
@@ -224,17 +223,20 @@ export default function MaxWidthDialog() {
               }
             >
               <ListItemButton onClick={handleConnectMetamaskWallet}>
-                <Stack direction="row">
-                  <AccountBalanceWalletIcon
-                    color={isMetamaskWalletActive ? 'success' : 'primary'}
-                  />
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <SvgIcon>
+                    <Icon
+                      icon="akar-icons:circle-check-fill"
+                      color={isMetamaskWalletActive ? '#5be584' : '#C4CDD5'}
+                    />
+                  </SvgIcon>
                   <ListItemText
                     primary={
                       selectedMetamaskAccount === '' ? (
                         <Typography
                           align="left"
                           variant="subtitle2"
-                          sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                          sx={{ color: 'text.primary' }}
                           noWrap
                         >
                           Connect
@@ -243,7 +245,7 @@ export default function MaxWidthDialog() {
                         <Typography
                           align="left"
                           variant="subtitle2"
-                          sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                          sx={{ color: 'text.primary' }}
                           noWrap
                         >
                           {selectedMetamaskAccount !== ''
@@ -327,9 +329,14 @@ export default function MaxWidthDialog() {
               }
             >
               <ListItemButton onClick={handleConnectCrustWallet}>
-                <Stack direction="row" justifyContent="space-between">
-                  <Stack direction="row" alignItems="center">
-                    <AccountBalanceWalletIcon color={isCrustWalletActive ? 'success' : 'primary'} />
+                <Stack direction="row" justifyContent="space-between" sx={{ width: '100%' }}>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <SvgIcon>
+                      <Icon
+                        icon="akar-icons:circle-check-fill"
+                        color={isCrustWalletActive ? '#5be584' : '#C4CDD5'}
+                      />
+                    </SvgIcon>
                     <ListItemText
                       primary={
                         selectedCrustAccount === '' ? (
@@ -367,26 +374,30 @@ export default function MaxWidthDialog() {
                       sx={{ pl: 4 }}
                       onClick={() => handleSelectAccountCrust(account.address)}
                     >
-                      <AccountBalanceWalletIcon color="primary" />
-                      <Box sx={{ width: '100%', minHeight: 30, py: 1, px: 1 }}>
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          alignItems="flex-start"
-                        >
-                          <Typography variant="body2">
-                            {shortenAddress(account.address, 10)}
-                          </Typography>
-                          <IconWrapperStyle
-                            sx={{
-                              ...(1 < 0 && {
-                                color: 'error.main',
-                                bgcolor: alpha(theme.palette.error.main, 0.16)
-                              })
-                            }}
-                          ></IconWrapperStyle>
-                        </Stack>
-                      </Box>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                        <SvgIcon>
+                          <Icon icon="akar-icons:circle-check-fill" color="#C4CDD5" />
+                        </SvgIcon>
+                        <Box sx={{ width: '100%' }}>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="flex-start"
+                          >
+                            <Typography variant="body2">
+                              {shortenAddress(account.address, 10)}
+                            </Typography>
+                            <IconWrapperStyle
+                              sx={{
+                                ...(1 < 0 && {
+                                  color: 'error.main',
+                                  bgcolor: alpha(theme.palette.error.main, 0.16)
+                                })
+                              }}
+                            ></IconWrapperStyle>
+                          </Stack>
+                        </Box>
+                      </Stack>
                     </ListItemButton>
                   ))}
                 </List>
