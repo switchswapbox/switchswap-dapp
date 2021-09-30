@@ -22,7 +22,7 @@ import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
-  METAMASK_SELECT_MATIC_URL,
+  METAMASK_SELECT_POLYGON_URL,
   INSTALL_METAMASK_URL,
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
@@ -40,7 +40,7 @@ export default function MaxWidthDialog() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
-  const [isMaticSelected, setMaticSelected] = useState(true);
+  const [ispolygonSelected, setPolygonSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
 
@@ -68,7 +68,7 @@ export default function MaxWidthDialog() {
 
       if (parseInt(chainId, 16) === 137) {
         setMetamaskInstalled(true);
-        setMaticSelected(true);
+        setPolygonSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
         setMetamaskAddr(status[0]);
         // console.log(status);
@@ -76,14 +76,14 @@ export default function MaxWidthDialog() {
         setMetamaskConnected(true);
       } else {
         setMetamaskInstalled(true);
-        setMaticSelected(false);
+        setPolygonSelected(false);
         setMetamaskConnected(false);
-        // console.log('Select Matic');
+        // console.log('Select Polygon');
       }
     } else {
       setMetamaskInstalled(false);
       setMetamaskConnected(false);
-      setMaticSelected(true);
+      setPolygonSelected(true);
       // console.log('Please install MetaMask!');
     }
   };
@@ -174,12 +174,12 @@ export default function MaxWidthDialog() {
             </Alert>
             <Alert
               severity="warning"
-              sx={{ width: '100%', display: isMaticSelected ? 'none' : 'flex' }}
+              sx={{ width: '100%', display: ispolygonSelected ? 'none' : 'flex' }}
               action={
                 <Button
                   color="inherit"
                   size="small"
-                  href={METAMASK_SELECT_MATIC_URL}
+                  href={METAMASK_SELECT_POLYGON_URL}
                   target="_blank"
                 >
                   LEARN

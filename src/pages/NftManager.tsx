@@ -41,7 +41,7 @@ export default function PageFive() {
         // });
       } else {
         setMetamask(true);
-        console.log('Select Matic');
+        console.log('Select Polygon');
       }
     } else {
       setMetamask(false);

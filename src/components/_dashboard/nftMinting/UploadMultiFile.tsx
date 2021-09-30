@@ -8,9 +8,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { alpha, Theme, styled } from '@mui/material/styles';
 import {
   Box,
+  Fab,
   List,
+  Grid,
+  Tooltip,
+  Zoom,
   Stack,
   Paper,
+  ButtonBase,
   Button,
   ListItem,
   Typography,
@@ -18,7 +23,11 @@ import {
   ListItemText,
   ListItemSecondaryAction
 } from '@mui/material';
+import AlarmIcon from '@mui/icons-material/Alarm';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
 import { SxProps } from '@mui/system';
+
 // utils
 import { fData } from '../../../utils/formatNumber';
 //
@@ -238,10 +247,61 @@ export default function UploadMultiFile({
       </List>
 
       {hasFile && (
-        <Stack direction="row" justifyContent="flex-end">
-          <Button onClick={onUploadFile} variant="contained">
-            Upload file
-          </Button>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{
+            my: 1,
+            py: 2,
+            px: 2,
+            borderRadius: 1,
+            border: (theme) => `solid 1px ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
+          }}
+        >
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="h6">Upload file</Typography>
+            <Tooltip
+              TransitionComponent={Zoom}
+              title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
+            >
+              <HelpOutlineIcon />
+            </Tooltip>
+          </Stack>
+
+          <Stack direction="row" spacing={3}>
+            <ButtonBase>
+              <Box component="img" src="./static/icons/shared/crust.svg" sx={{ height: '32px' }} />
+            </ButtonBase>
+            <ButtonBase>
+              <Box
+                component="img"
+                src="./static/icons/shared/polygon.svg"
+                sx={{ height: '32px' }}
+              />
+            </ButtonBase>
+            <ButtonBase>
+              <Box component="img" src="./static/icons/shared/solana.svg" sx={{ height: '32px' }} />
+            </ButtonBase>
+            <ButtonBase>
+              <Box
+                component="img"
+                src="./static/icons/shared/ethereum.svg"
+                sx={{ height: '32px' }}
+              />
+            </ButtonBase>
+            <ButtonBase>
+              <Box component="img" src="./static/icons/shared/near.svg" sx={{ height: '32px' }} />
+            </ButtonBase>
+            <ButtonBase>
+              <Box
+                component="img"
+                src="./static/icons/shared/avalanche.svg"
+                sx={{ height: '32px' }}
+              />
+            </ButtonBase>
+          </Stack>
         </Stack>
       )}
     </Box>
