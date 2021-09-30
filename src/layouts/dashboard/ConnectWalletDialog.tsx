@@ -224,32 +224,36 @@ export default function MaxWidthDialog() {
               }
             >
               <ListItemButton onClick={handleConnectMetamaskWallet}>
-                <AccountBalanceWalletIcon color={isMetamaskWalletActive ? 'success' : 'primary'} />
-                <ListItemText
-                  primary={
-                    selectedMetamaskAccount === '' ? (
-                      <Typography
-                        align="left"
-                        variant="subtitle2"
-                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
-                        noWrap
-                      >
-                        Connect
-                      </Typography>
-                    ) : (
-                      <Typography
-                        align="left"
-                        variant="subtitle2"
-                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
-                        noWrap
-                      >
-                        {selectedMetamaskAccount !== ''
-                          ? `${shortenAddress(selectedMetamaskAccount, 10)}`
-                          : ''}
-                      </Typography>
-                    )
-                  }
-                />
+                <Stack direction="row">
+                  <AccountBalanceWalletIcon
+                    color={isMetamaskWalletActive ? 'success' : 'primary'}
+                  />
+                  <ListItemText
+                    primary={
+                      selectedMetamaskAccount === '' ? (
+                        <Typography
+                          align="left"
+                          variant="subtitle2"
+                          sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                          noWrap
+                        >
+                          Connect
+                        </Typography>
+                      ) : (
+                        <Typography
+                          align="left"
+                          variant="subtitle2"
+                          sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                          noWrap
+                        >
+                          {selectedMetamaskAccount !== ''
+                            ? `${shortenAddress(selectedMetamaskAccount, 10)}`
+                            : ''}
+                        </Typography>
+                      )
+                    }
+                  />
+                </Stack>
               </ListItemButton>
             </List>
             <Alert
@@ -323,33 +327,37 @@ export default function MaxWidthDialog() {
               }
             >
               <ListItemButton onClick={handleConnectCrustWallet}>
-                <AccountBalanceWalletIcon color={isCrustWalletActive ? 'success' : 'primary'} />
-                <ListItemText
-                  primary={
-                    selectedCrustAccount === '' ? (
-                      <Typography
-                        align="left"
-                        variant="subtitle2"
-                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
-                        noWrap
-                      >
-                        Select
-                      </Typography>
-                    ) : (
-                      <Typography
-                        align="left"
-                        variant="subtitle2"
-                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
-                        noWrap
-                      >
-                        {selectedCrustAccount !== ''
-                          ? `${shortenAddress(selectedCrustAccount, 10)}`
-                          : ''}
-                      </Typography>
-                    )
-                  }
-                />
-                {openCrust ? <ExpandLess /> : <ExpandMore />}
+                <Stack direction="row" justifyContent="space-between">
+                  <Stack direction="row" alignItems="center">
+                    <AccountBalanceWalletIcon color={isCrustWalletActive ? 'success' : 'primary'} />
+                    <ListItemText
+                      primary={
+                        selectedCrustAccount === '' ? (
+                          <Typography
+                            align="left"
+                            variant="subtitle2"
+                            sx={{ color: 'text.primary' }}
+                            noWrap
+                          >
+                            Select
+                          </Typography>
+                        ) : (
+                          <Typography
+                            align="left"
+                            variant="subtitle2"
+                            sx={{ color: 'text.primary' }}
+                            noWrap
+                          >
+                            {selectedCrustAccount !== ''
+                              ? `${shortenAddress(selectedCrustAccount, 10)}`
+                              : ''}
+                          </Typography>
+                        )
+                      }
+                    />
+                  </Stack>
+                  {openCrust ? <ExpandLess /> : <ExpandMore />}
+                </Stack>
               </ListItemButton>
               <Collapse in={openCrust} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
@@ -376,9 +384,7 @@ export default function MaxWidthDialog() {
                                 bgcolor: alpha(theme.palette.error.main, 0.16)
                               })
                             }}
-                          >
-                            <Box component="img" src="./static/icons/shared/crust.svg" />
-                          </IconWrapperStyle>
+                          ></IconWrapperStyle>
                         </Stack>
                       </Box>
                     </ListItemButton>
