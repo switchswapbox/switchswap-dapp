@@ -52,10 +52,11 @@ export default function MaxWidthDialog() {
   const [isMaticSelected, setMaticSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
-  const [addressesCrust, setAddressesCrust] = useState<InjectedAccountWithMeta[]>([]);
-  const [selectedAccountAddress, setselectedAccountAddress] = useState('');
   const [isCrustWalletActive, setIsCrustWalletActive] = useState(false);
+  const [isMetamaskWalletActive, setIsMetamaskWalletActive] = useState(false);
 
+  const [crustAllAccounts, setcrustAllAccounts] = useState<InjectedAccountWithMeta[]>([]);
+  const [selectedCrustAccount, setselectedCrustAccount] = useState('');
   const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
 
   useEffect(() => {
@@ -69,6 +70,16 @@ export default function MaxWidthDialog() {
   const handleClose = () => {
     setOpen(false);
     setOpenCrust(false);
+  };
+
+  const handleActivateMetamask = () => {
+    setIsMetamaskWalletActive(true);
+    setIsCrustWalletActive(false);
+  };
+
+  const handleActivateCrust = () => {
+    setIsMetamaskWalletActive(false);
+    setIsCrustWalletActive(true);
   };
 
   const detectMetamask = async () => {
@@ -109,7 +120,7 @@ export default function MaxWidthDialog() {
         return;
       }
       const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
-      setAddressesCrust([...allAccounts]);
+      setcrustAllAccounts([...allAccounts]);
       setOpenCrust(true);
     } else {
       setOpenCrust(false);
@@ -117,9 +128,9 @@ export default function MaxWidthDialog() {
   };
 
   const handleSelectAccountCrust = (address: string) => {
-    setselectedAccountAddress(address);
+    setselectedCrustAccount(address);
     setOpenCrust(false);
-    setIsCrustWalletActive(true);
+    handleActivateCrust();
   };
 
   return (
@@ -134,11 +145,11 @@ export default function MaxWidthDialog() {
           </SvgIcon>
         }
       >
-        Connect
+        My wallet
       </Button>
 
       <Dialog open={open} maxWidth="xs" onClose={handleClose}>
-        <DialogTitle sx={{ pb: 1 }}>Connect to a wallet</DialogTitle>
+        <DialogTitle sx={{ pb: 1 }}>Wallet management</DialogTitle>
         <DialogContent>
           <Stack spacing={2} alignItems="stretch">
             <Card variant="outlined">
@@ -256,7 +267,7 @@ export default function MaxWidthDialog() {
                 <AccountBalanceWalletIcon color={isCrustWalletActive ? 'success' : 'primary'} />
                 <ListItemText
                   primary={
-                    selectedAccountAddress === '' ? (
+                    selectedCrustAccount === '' ? (
                       <Typography
                         align="left"
                         variant="subtitle2"
@@ -272,8 +283,8 @@ export default function MaxWidthDialog() {
                         sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
                         noWrap
                       >
-                        {selectedAccountAddress !== ''
-                          ? `${shortenAddress(selectedAccountAddress, 10)}`
+                        {selectedCrustAccount !== ''
+                          ? `${shortenAddress(selectedCrustAccount, 10)}`
                           : ''}
                       </Typography>
                     )
@@ -283,7 +294,7 @@ export default function MaxWidthDialog() {
               </ListItemButton>
               <Collapse in={openCrust} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {addressesCrust.map((account) => (
+                  {crustAllAccounts.map((account) => (
                     <ListItemButton
                       key={account.address}
                       sx={{ pl: 4 }}
