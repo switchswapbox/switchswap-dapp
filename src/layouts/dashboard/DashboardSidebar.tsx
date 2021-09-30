@@ -138,7 +138,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
 
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    Identicons.toDataUrl(selectedMetamaskAccount).then((img: string) => {
+    let addr = 'Hello World';
+    if (walletActive === 'metamask') {
+      addr = selectedMetamaskAccount;
+    } else if (walletActive === 'crust') {
+      addr = selectedCrustAccount;
+    }
+    Identicons.toDataUrl(addr).then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
