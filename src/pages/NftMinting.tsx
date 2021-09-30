@@ -33,7 +33,7 @@ import { Block } from '../components/Block';
 import MintingProcess from '../components/_dashboard/nftMinting/MintingProcess';
 import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
 
-import { CRUST_WALLET_WIKI, METAMASK_SELECT_MATIC_URL } from '../assets/COMMON_VARIABLES';
+import { CRUST_WALLET_WIKI, METAMASK_SELECT_POLYGON_URL } from '../assets/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 
 const withAuthorRegNFT = [
@@ -80,7 +80,7 @@ export default function NftMinting() {
                     <ListItemIcon>
                       <Box
                         component="img"
-                        src="./static/icons/shared/matic.svg"
+                        src="./static/icons/shared/polygon.svg"
                         sx={{ height: '24px' }}
                       />
                     </ListItemIcon>
@@ -172,7 +172,7 @@ export default function NftMinting() {
                           <IconButton
                             edge="end"
                             aria-label="metamask"
-                            href={METAMASK_SELECT_MATIC_URL}
+                            href={METAMASK_SELECT_POLYGON_URL}
                             target="_blank"
                           >
                             <HelpOutlineIcon />
@@ -290,7 +290,7 @@ export default function NftMinting() {
           </Grid>
           <Grid item xs={12}>
             <Block title="Generate NFT">
-              <MintingProcess />
+              <MintingProcess nftType={toggle[0]} />
             </Block>
           </Grid>
         </Grid>

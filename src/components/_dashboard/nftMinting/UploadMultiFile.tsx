@@ -8,17 +8,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { alpha, Theme, styled } from '@mui/material/styles';
 import {
   Box,
+  Fab,
   List,
+  Grid,
+  Tooltip,
+  Zoom,
   Stack,
   Paper,
+  ButtonBase,
   Button,
+  useMediaQuery,
   ListItem,
   Typography,
   ListItemIcon,
   ListItemText,
   ListItemSecondaryAction
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import AlarmIcon from '@mui/icons-material/Alarm';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Scrollbar from '../../Scrollbar';
+
 import { SxProps } from '@mui/system';
+
 // utils
 import { fData } from '../../../utils/formatNumber';
 //
@@ -55,7 +67,7 @@ interface UploadMultiFileProps extends DropzoneOptions {
   files: (File | string)[];
   showPreview: boolean;
   onRemove: (file: File | string) => void;
-  onRemoveAll: VoidFunction;
+  onUploadFile: VoidFunction;
   sx?: SxProps<Theme>;
 }
 
@@ -77,10 +89,13 @@ export default function UploadMultiFile({
   showPreview = false,
   files,
   onRemove,
-  onRemoveAll,
+  onUploadFile,
   sx,
   ...other
 }: UploadMultiFileProps) {
+  const theme = useTheme();
+  const medium = useMediaQuery(theme.breakpoints.up('md'));
+
   const hasFile = files.length > 0;
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
@@ -238,12 +253,83 @@ export default function UploadMultiFile({
       </List>
 
       {hasFile && (
-        <Stack direction="row" justifyContent="flex-end">
-          <Button onClick={onRemoveAll} sx={{ mr: 1.5 }}>
-            Remove all
-          </Button>
-          <Button variant="contained">Upload files</Button>
-        </Stack>
+        <Grid
+          container
+          sx={{
+            my: 1,
+            borderRadius: 1,
+            border: (theme) => `solid 1px ${theme.palette.divider}`,
+            bgcolor: 'background.paper'
+          }}
+        >
+          <Grid item xs={12} md={3}>
+            <Stack direction="row" sx={{ p: 2 }} alignItems="center" spacing={2}>
+              <Typography variant="h6">Upload file</Typography>
+              <Tooltip
+                TransitionComponent={Zoom}
+                title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
+              >
+                <HelpOutlineIcon />
+              </Tooltip>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} md={9}>
+            <Scrollbar>
+              <Stack
+                direction="row"
+                spacing={3}
+                sx={{
+                  p: 2,
+                  pt: medium ? 2 : 0,
+                  justifyContent: medium ? 'flex-end' : 'flex-start'
+                }}
+              >
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/crust.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase onClick={onUploadFile}>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/polygon.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/solana.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/ethereum.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/near.svg"
+                    sx={{ height: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/avalanche.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+              </Stack>
+            </Scrollbar>
+          </Grid>
+        </Grid>
       )}
     </Box>
   );

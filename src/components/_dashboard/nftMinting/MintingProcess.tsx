@@ -5,7 +5,9 @@ import {
   Card,
   Step,
   Paper,
+  SvgIcon,
   Button,
+  Stack,
   Switch,
   Stepper,
   StepLabel,
@@ -17,16 +19,29 @@ import {
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
+import UploadSingleFile from './UploadSingleFile';
+import detectEthereumProvider from '@metamask/detect-provider';
+import { ethers } from 'ethers';
+
+import { create } from 'ipfs-http-client';
+import axios from 'axios';
+import { Icon } from '@iconify/react';
+
+import { IPFS_GATEWAY_W3AUTH } from '../../../assets/COMMON_VARIABLES';
+const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
 // ----------------------------------------------------------------------
-
 const steps = ['Upload File', 'Customize NFT Card', 'Upload Meta', 'Mint NFT'];
 
-export default function MintingProcess() {
+type MintingProcessProps = {
+  nftType: string;
+};
+
+export default function MintingProcess({ nftType }: MintingProcessProps) {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [preview, setPreview] = useState(false);
-  const [files, setFiles] = useState<(File | string)[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
 
   const isStepOptional = (step: number) => step === 1;
 
@@ -66,21 +81,45 @@ export default function MintingProcess() {
     setActiveStep(0);
   };
 
+  const [file, setFile] = useState<File>();
+  const [uploadedCid, setUploadedCid] = useState('');
+
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file: File) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
-      );
+      setFiles(acceptedFiles.map((file: File) => file));
     },
     [setFiles]
   );
 
-  const handleRemoveAll = () => {
-    setFiles([]);
+  const uploadFileMetamask = async () => {
+    const provider = await detectEthereumProvider();
+    if (provider && provider.isMetaMask) {
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      });
+
+      if (parseInt(chainId, 16) === 137) {
+        // const account = await provider.request({ method: 'eth_requestAccounts' });
+        const providerEthers = new ethers.providers.Web3Provider(provider);
+        const signer = providerEthers.getSigner();
+        const addr = await signer.getAddress();
+        const signature = await signer.signMessage(addr);
+
+        const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
+        const ipfs = create({
+          url: ipfsGateway + '/api/v0',
+          headers: {
+            authorization: 'Basic ' + authHeader
+          }
+        });
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const added = await ipfs.add(reader.result as ArrayBuffer);
+          setUploadedCid(added.cid.toV0().toString());
+        };
+        reader.readAsArrayBuffer(files[0]);
+      }
+    }
   };
 
   const handleRemove = (file: File | string) => {
@@ -123,27 +162,53 @@ export default function MintingProcess() {
       ) : (
         <></>
       )}
-      {activeStep === 0 ? (
+      {activeStep === 0 && nftType === 'withoutNftCard' ? (
         <>
           <Box sx={{ display: 'flex', mt: 3 }}>
             <Typography variant="h6">Upload file to Crust Network</Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <FormControlLabel
+            {/* <FormControlLabel
               sx={{ m: 0 }}
               control={
                 <Switch checked={preview} onChange={(event) => setPreview(event.target.checked)} />
               }
               label="Show Preview"
-            />
+            /> */}
           </Box>
           <UploadMultiFile
             showPreview={preview}
             files={files}
             onDrop={handleDropMultiFile}
             onRemove={handleRemove}
-            onRemoveAll={handleRemoveAll}
+            onUploadFile={uploadFileMetamask}
           />
+          {uploadedCid !== '' && (
+            <Box
+              sx={{
+                my: 1,
+                px: 2,
+                py: 1,
+                borderRadius: 1,
+                border: (theme) => `solid 1px ${theme.palette.divider}`,
+                bgcolor: '#C8FACD'
+              }}
+            >
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <SvgIcon color="action">
+                  <Icon icon="icon-park:doc-success" color="white" />
+                </SvgIcon>
+                <Stack direction="column">
+                  <Typography variant="subtitle2">
+                    Uploaded successfully to Crust Network
+                  </Typography>
+                  <Typography variant="body2">CID: {uploadedCid}</Typography>
+                </Stack>
+              </Stack>
+            </Box>
+          )}
+          {/* <UploadSingleFile file={file} onDrop={handleDropSingleFile} /> */}
           <Box sx={{ display: 'flex', mt: 1 }}>
+            {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
               Back
             </Button>
@@ -151,6 +216,15 @@ export default function MintingProcess() {
             <Button variant="contained" onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
+          </Box>
+        </>
+      ) : activeStep === 0 ? (
+        <>
+          <Box sx={{ display: 'flex', mt: 3 }}>
+            <Typography variant="h6">
+              We currently support creating NFT without customized NFT card, you can try on that and
+              stay tune for other NFT types
+            </Typography>
           </Box>
         </>
       ) : (
