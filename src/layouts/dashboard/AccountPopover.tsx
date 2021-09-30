@@ -26,6 +26,8 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
+  const selectedCrustAccount = localStorage.getItem('selectedCrustAccount') || 'Hello World';
+  const walletActive = localStorage.getItem('walletActive') || '';
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
   useEffect(() => {
@@ -39,6 +41,28 @@ export default function AccountPopover() {
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const infoToDisplay = () => {
+    let addr = 'Hello world';
+    let walletName = 'No wallet available';
+    if (walletActive === 'metamask') {
+      addr = shortenAddress(selectedMetamaskAccount, 5);
+      walletName = 'Metamask Wallet';
+    } else if (walletActive === 'crust') {
+      addr = shortenAddress(selectedCrustAccount, 5);
+      walletName = 'Crust Wallet';
+    }
+    return (
+      <>
+        <Typography variant="subtitle1" noWrap>
+          {addr}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+          {walletName}
+        </Typography>
+      </>
+    );
   };
 
   return (
@@ -72,14 +96,7 @@ export default function AccountPopover() {
         anchorEl={anchorRef.current}
         sx={{ width: 220 }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle1" noWrap>
-            {shortenAddress(selectedMetamaskAccount, 5)}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            Network Name
-          </Typography>
-        </Box>
+        <Box sx={{ my: 1.5, px: 2.5 }}>{infoToDisplay()}</Box>
 
         <Divider sx={{ my: 1 }} />
 

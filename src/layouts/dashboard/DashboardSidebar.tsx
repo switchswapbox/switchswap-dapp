@@ -104,6 +104,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
     useCollapseDrawer();
 
   const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
+  const selectedCrustAccount = localStorage.getItem('selectedCrustAccount') || 'Hello World';
+  const walletActive = localStorage.getItem('walletActive') || '';
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -111,6 +113,28 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const infoToDisplay = () => {
+    let addr = 'Hello world';
+    let walletName = 'No wallet available';
+    if (walletActive === 'metamask') {
+      addr = shortenAddress(selectedMetamaskAccount, 5);
+      walletName = 'Metamask Wallet';
+    } else if (walletActive === 'crust') {
+      addr = shortenAddress(selectedCrustAccount, 5);
+      walletName = 'Crust Wallet';
+    }
+    return (
+      <>
+        <Typography variant="subtitle1" noWrap>
+          {addr}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+          {walletName}
+        </Typography>
+      </>
+    );
+  };
 
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
@@ -166,12 +190,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
                   overflow: 'hidden'
                 }}
               >
-                <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
-                  {shortenAddress(selectedMetamaskAccount, 5)}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                  Network Name
-                </Typography>
+                {infoToDisplay()}
               </Box>
             </AccountStyle>
           </Link>
