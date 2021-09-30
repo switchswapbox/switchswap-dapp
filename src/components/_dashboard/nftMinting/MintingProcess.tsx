@@ -37,8 +37,8 @@ const ipfs = create({
     authorization: 'Basic ' + authHeader
   }
 });
-// ----------------------------------------------------------------------
 
+// ----------------------------------------------------------------------
 const steps = ['Upload File', 'Customize NFT Card', 'Upload Meta', 'Mint NFT'];
 
 export default function MintingProcess() {
@@ -137,19 +137,36 @@ export default function MintingProcess() {
   //   setFiles([]);
   // };
   const uploadFile = async () => {
-    try {
-      // console.log(files);
-      console.log(files[0]);
-      console.log('up file');
-      const file = files[0];
-      const added = await ipfs.add(file);
+    // console.log(files);
+
+    console.log(files[0]);
+    console.log('up file');
+    const file = files[0];
+    const reader = new FileReader();
+    reader.onabort = () => console.log('file reading was aborted');
+    reader.onerror = () => console.log('file reading has failed');
+    reader.onload = async () => {
+      // Do whatever you want with the file contents
+      const binaryStr = reader.result;
+      console.log(binaryStr);
+      const added = await ipfs.add(reader.result as ArrayBuffer);
       console.log('added');
       console.log(added);
+    };
+    reader.readAsArrayBuffer(file);
+    //console.log(reader.result);
+    // const newFile: CustomFile = file;
+    console.log('new file');
 
-      console.log(`cid v0 ${added.cid.toV0().toString()}`);
-    } catch (e) {
-      console.log(e);
-    }
+    // delete file.path;
+    //const { path, ...fileWithoutPath } = file;
+    // const tempFile: File = {
+    //   lastModified: file.lastModified,
+    //   name: file.name,
+    //   size: file.size,
+    //   type: file.type
+    // };
+    //console.log(fileWithoutPath);
   };
 
   const handleRemove = (file: File | string) => {
