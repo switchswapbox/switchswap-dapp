@@ -5,7 +5,9 @@ import {
   Card,
   Step,
   Paper,
+  SvgIcon,
   Button,
+  Stack,
   Switch,
   Stepper,
   StepLabel,
@@ -23,6 +25,8 @@ import { ethers } from 'ethers';
 
 import { create } from 'ipfs-http-client';
 import axios from 'axios';
+import { Icon } from '@iconify/react';
+
 import { IPFS_GATEWAY_W3AUTH } from '../../../assets/COMMON_VARIABLES';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -96,10 +100,8 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       if (parseInt(chainId, 16) === 137) {
         // const account = await provider.request({ method: 'eth_requestAccounts' });
-        // console.log(account);
         const providerEthers = new ethers.providers.Web3Provider(provider);
         const signer = providerEthers.getSigner();
-        console.log(signer);
         const addr = await signer.getAddress();
         const signature = await signer.signMessage(addr);
 
@@ -110,11 +112,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             authorization: 'Basic ' + authHeader
           }
         });
-        console.log(signature);
         const reader = new FileReader();
         reader.onload = async () => {
           const added = await ipfs.add(reader.result as ArrayBuffer);
-          console.log(added.cid.toV0().toString());
+          setUploadedCid(added.cid.toV0().toString());
         };
         reader.readAsArrayBuffer(files[0]);
       }
@@ -181,6 +182,30 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             onRemove={handleRemove}
             onUploadFile={uploadFileMetamask}
           />
+          {uploadedCid !== '' && (
+            <Box
+              sx={{
+                my: 1,
+                px: 2,
+                py: 1,
+                borderRadius: 1,
+                border: (theme) => `solid 1px ${theme.palette.divider}`,
+                bgcolor: '#C8FACD'
+              }}
+            >
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <SvgIcon color="action">
+                  <Icon icon="icon-park:doc-success" color="white" />
+                </SvgIcon>
+                <Stack direction="column">
+                  <Typography variant="subtitle2">
+                    Uploaded successfully to Crust Network
+                  </Typography>
+                  <Typography variant="body2">CID: {uploadedCid}</Typography>
+                </Stack>
+              </Stack>
+            </Box>
+          )}
           {/* <UploadSingleFile file={file} onDrop={handleDropSingleFile} /> */}
           <Box sx={{ display: 'flex', mt: 1 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}

@@ -15,7 +15,7 @@ export default function PageFive() {
   // WARNING: Use useSth to prevent re-create for each render
   const detectProvider = async () => {
     const provider = await detectEthereumProvider();
-    if (provider) {
+    if (provider && provider.isMetaMask) {
       // From now on, this should always be true:
       // provider === window.ethereum
 
