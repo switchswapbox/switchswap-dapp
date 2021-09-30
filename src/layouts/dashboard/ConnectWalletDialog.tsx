@@ -46,7 +46,10 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 export default function MaxWidthDialog() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [displayMessage, setDisplayMessage] = useState({ metamask: false, crust: false });
+  const [displayMessageAccSelected, setDisplayMessageAccSelected] = useState({
+    metamask: false,
+    crust: false
+  });
   const [openCrust, setOpenCrust] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
@@ -82,7 +85,7 @@ export default function MaxWidthDialog() {
   const handleClose = () => {
     setOpen(false);
     setOpenCrust(false);
-    setDisplayMessage({ metamask: false, crust: false });
+    setDisplayMessageAccSelected({ metamask: false, crust: false });
   };
 
   const handleActivateMetamask = () => {
@@ -97,9 +100,7 @@ export default function MaxWidthDialog() {
 
   const handleConnectMetamaskWallet = async () => {
     const provider = await detectEthereumProvider();
-    setDisplayMessage((prev) => {
-      return { ...prev, crust: false };
-    });
+    setDisplayMessageAccSelected({ metamask: false, crust: false });
     if (provider && provider.isMetaMask) {
       const chainId = await provider.request({
         method: 'eth_chainId'
@@ -114,9 +115,7 @@ export default function MaxWidthDialog() {
         // console.log(status);
         // SET HOOK HERE
         setMetamaskConnected(true);
-        setDisplayMessage((prev) => {
-          return { ...prev, metamask: true };
-        });
+        setDisplayMessageAccSelected({ metamask: true, crust: false });
         handleActivateMetamask();
       } else {
         setMetamaskInstalled(true);
@@ -133,9 +132,7 @@ export default function MaxWidthDialog() {
   };
 
   const handleConnectCrustWallet = async () => {
-    setDisplayMessage((prev) => {
-      return { metamask: false, crust: false };
-    });
+    setDisplayMessageAccSelected({ metamask: false, crust: false });
     if (!openCrust) {
       const extensions = await web3Enable('NFT Dapp');
       if (extensions.length === 0) {
@@ -154,9 +151,7 @@ export default function MaxWidthDialog() {
     setselectedCrustAccount(address);
     setOpenCrust(false);
     handleActivateCrust();
-    setDisplayMessage((prev) => {
-      return { metamask: false, crust: true };
-    });
+    setDisplayMessageAccSelected({ metamask: false, crust: true });
   };
 
   return (
@@ -290,7 +285,7 @@ export default function MaxWidthDialog() {
               sx={{
                 width: '100%',
                 wordWrap: 'break-word',
-                display: displayMessage.metamask ? 'flex' : 'none'
+                display: displayMessageAccSelected.metamask ? 'flex' : 'none'
               }}
             >
               Metamask Wallet is selected by default{'  '}
@@ -408,7 +403,7 @@ export default function MaxWidthDialog() {
               sx={{
                 width: '100%',
                 wordWrap: 'break-word',
-                display: displayMessage.crust ? 'flex' : 'none'
+                display: displayMessageAccSelected.crust ? 'flex' : 'none'
               }}
             >
               Crust Wallet is selected by default{'  '}
