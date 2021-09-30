@@ -25,11 +25,11 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const metamaskAddr = localStorage.getItem('metamaskAddr') || 'Hello World';
+  const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
   useEffect(() => {
-    Identicons.toDataUrl(metamaskAddr).then((img: string) => {
+    Identicons.toDataUrl(selectedMetamaskAccount).then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
@@ -74,7 +74,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {shortenAddress(metamaskAddr, 5)}
+            {shortenAddress(selectedMetamaskAccount, 5)}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             Network Name

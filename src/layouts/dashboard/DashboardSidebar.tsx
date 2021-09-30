@@ -103,7 +103,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const metamaskAddr = localStorage.getItem('metamaskAddr') || 'Hello World';
+  const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -114,7 +114,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
 
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    Identicons.toDataUrl(metamaskAddr).then((img: string) => {
+    Identicons.toDataUrl(selectedMetamaskAccount).then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
@@ -167,7 +167,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
                 }}
               >
                 <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
-                  {shortenAddress(metamaskAddr, 5)}
+                  {shortenAddress(selectedMetamaskAccount, 5)}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
                   Network Name

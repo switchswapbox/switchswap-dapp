@@ -13,7 +13,6 @@ import {
   Dialog,
   SvgIcon,
   Typography,
-  ButtonBase,
   DialogTitle,
   DialogActions,
   DialogContent,
@@ -47,21 +46,34 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 export default function MaxWidthDialog() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [displayMessage, setDisplayMessage] = useState({ metamask: false, crust: false });
   const [openCrust, setOpenCrust] = useState(false);
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [isMaticSelected, setMaticSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
   const [isMetamaskConnected, setMetamaskConnected] = useState(false);
-  const [isCrustWalletActive, setIsCrustWalletActive] = useState(false);
-  const [isMetamaskWalletActive, setIsMetamaskWalletActive] = useState(false);
-
-  const [crustAllAccounts, setcrustAllAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [selectedCrustAccount, setselectedCrustAccount] = useState('');
-  const [metamaskAddr, setMetamaskAddr] = useState(localStorage.getItem('metamaskAddr') || '');
+  const walletActive = localStorage.getItem('walletActive');
+  const [isCrustWalletActive, setIsCrustWalletActive] = useState(walletActive === 'crust');
+  const [isMetamaskWalletActive, setIsMetamaskWalletActive] = useState(walletActive === 'metamask');
+  const [crustAllAccounts, setCrustAllAccounts] = useState<InjectedAccountWithMeta[]>([]);
+  const [selectedCrustAccount, setselectedCrustAccount] = useState(
+    localStorage.getItem('selectedCrustAccount') || ''
+  );
+  const [selectedMetamaskAccount, setselectedMetamaskAccount] = useState(
+    localStorage.getItem('selectedMetamaskAccount') || ''
+  );
 
   useEffect(() => {
-    localStorage.setItem('metamaskAddr', metamaskAddr);
-  }, [metamaskAddr]);
+    localStorage.setItem('selectedMetamaskAccount', selectedMetamaskAccount);
+  }, [selectedMetamaskAccount]);
+
+  useEffect(() => {
+    localStorage.setItem('selectedCrustAccount', selectedCrustAccount);
+  }, [selectedCrustAccount]);
+
+  useEffect(() => {
+    localStorage.setItem('walletActive', isMetamaskWalletActive ? 'metamask' : 'crust');
+  }, [isMetamaskWalletActive]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -70,6 +82,7 @@ export default function MaxWidthDialog() {
   const handleClose = () => {
     setOpen(false);
     setOpenCrust(false);
+    setDisplayMessage({ metamask: false, crust: false });
   };
 
   const handleActivateMetamask = () => {
@@ -82,9 +95,11 @@ export default function MaxWidthDialog() {
     setIsCrustWalletActive(true);
   };
 
-  const detectMetamask = async () => {
+  const handleConnectMetamaskWallet = async () => {
     const provider = await detectEthereumProvider();
-
+    setDisplayMessage((prev) => {
+      return { ...prev, crust: false };
+    });
     if (provider && provider.isMetaMask) {
       const chainId = await provider.request({
         method: 'eth_chainId'
@@ -94,10 +109,15 @@ export default function MaxWidthDialog() {
         setMetamaskInstalled(true);
         setMaticSelected(true);
         const status = await provider.request({ method: 'eth_requestAccounts' });
-        setMetamaskAddr(status[0]);
+        console.log(status);
+        setselectedMetamaskAccount(status[0]);
         // console.log(status);
         // SET HOOK HERE
         setMetamaskConnected(true);
+        setDisplayMessage((prev) => {
+          return { ...prev, metamask: true };
+        });
+        handleActivateMetamask();
       } else {
         setMetamaskInstalled(true);
         setMaticSelected(false);
@@ -113,6 +133,9 @@ export default function MaxWidthDialog() {
   };
 
   const handleConnectCrustWallet = async () => {
+    setDisplayMessage((prev) => {
+      return { metamask: false, crust: false };
+    });
     if (!openCrust) {
       const extensions = await web3Enable('NFT Dapp');
       if (extensions.length === 0) {
@@ -120,7 +143,7 @@ export default function MaxWidthDialog() {
         return;
       }
       const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
-      setcrustAllAccounts([...allAccounts]);
+      setCrustAllAccounts([...allAccounts]);
       setOpenCrust(true);
     } else {
       setOpenCrust(false);
@@ -131,6 +154,9 @@ export default function MaxWidthDialog() {
     setselectedCrustAccount(address);
     setOpenCrust(false);
     handleActivateCrust();
+    setDisplayMessage((prev) => {
+      return { metamask: false, crust: true };
+    });
   };
 
   return (
@@ -173,14 +199,20 @@ export default function MaxWidthDialog() {
                 </Typography>
               </Stack>
             </Card>
-
-            <ButtonBase>
-              <Card variant="outlined" onClick={detectMetamask} sx={{ width: '100%', p: 2 }}>
+            {/* //////////////////////////////////////////////////////////////////////////////////
+            Metamask management
+            ////////////////////////////////////////////////////////////////////////////////// */}
+            <List
+              sx={{ width: '100%', bgcolor: 'background.paper' }}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
                 <Stack
                   direction="row"
                   justifyContent="space-between"
                   alignItems="flex-start"
                   spacing={2}
+                  sx={{ p: 2 }}
                 >
                   <Typography variant="subtitle1">Metamask</Typography>
                   <IconWrapperStyle
@@ -194,8 +226,37 @@ export default function MaxWidthDialog() {
                     <Box component="img" src="./static/icons/shared/metamask.svg" />
                   </IconWrapperStyle>
                 </Stack>
-              </Card>
-            </ButtonBase>
+              }
+            >
+              <ListItemButton onClick={handleConnectMetamaskWallet}>
+                <AccountBalanceWalletIcon color={isMetamaskWalletActive ? 'success' : 'primary'} />
+                <ListItemText
+                  primary={
+                    selectedMetamaskAccount === '' ? (
+                      <Typography
+                        align="left"
+                        variant="subtitle2"
+                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                        noWrap
+                      >
+                        Connect
+                      </Typography>
+                    ) : (
+                      <Typography
+                        align="left"
+                        variant="subtitle2"
+                        sx={{ color: 'text.primary', px: 2.2, pb: 1 }}
+                        noWrap
+                      >
+                        {selectedMetamaskAccount !== ''
+                          ? `${shortenAddress(selectedMetamaskAccount, 10)}`
+                          : ''}
+                      </Typography>
+                    )
+                  }
+                />
+              </ListItemButton>
+            </List>
             <Alert
               severity="error"
               sx={{ width: '100%', display: isMetamaskInstalled ? 'none' : 'flex' }}
@@ -229,14 +290,17 @@ export default function MaxWidthDialog() {
               sx={{
                 width: '100%',
                 wordWrap: 'break-word',
-                display: isMetamaskConnected ? 'flex' : 'none'
+                display: displayMessage.metamask ? 'flex' : 'none'
               }}
             >
-              Wallet is connected{'  '}
+              Metamask Wallet is selected by default{'  '}
               <SvgIcon>
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
             </Alert>
+            {/* //////////////////////////////////////////////////////////////////////////////////
+            Crust management
+            ////////////////////////////////////////////////////////////////////////////////// */}
             <List
               sx={{ width: '100%', bgcolor: 'background.paper' }}
               component="nav"
@@ -337,6 +401,20 @@ export default function MaxWidthDialog() {
               }
             >
               Install Crust Wallet!
+            </Alert>
+            <Alert
+              icon={false}
+              severity="success"
+              sx={{
+                width: '100%',
+                wordWrap: 'break-word',
+                display: displayMessage.crust ? 'flex' : 'none'
+              }}
+            >
+              Crust Wallet is selected by default{'  '}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
             </Alert>
           </Stack>
         </DialogContent>
