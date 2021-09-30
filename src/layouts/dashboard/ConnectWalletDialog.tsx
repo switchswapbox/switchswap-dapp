@@ -32,7 +32,7 @@ import {
   INSTALL_METAMASK_URL,
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
-import { shortenAddress } from '../../utils/formatAddress';
+import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -356,7 +356,10 @@ export default function MaxWidthDialog() {
                             noWrap
                           >
                             {selectedCrustAccount !== ''
-                              ? `${shortenAddress(selectedCrustAccount, 10)}`
+                              ? `${shortenAddress(
+                                  getCrustMainnetAddress(selectedCrustAccount),
+                                  10
+                                )}`
                               : ''}
                           </Typography>
                         )
@@ -372,7 +375,9 @@ export default function MaxWidthDialog() {
                     <ListItemButton
                       key={account.address}
                       sx={{ pl: 4 }}
-                      onClick={() => handleSelectAccountCrust(account.address)}
+                      onClick={() =>
+                        handleSelectAccountCrust(getCrustMainnetAddress(account.address))
+                      }
                     >
                       <Stack direction="row" alignItems="center" spacing={2}>
                         <SvgIcon>
@@ -385,7 +390,7 @@ export default function MaxWidthDialog() {
                             alignItems="flex-start"
                           >
                             <Typography variant="body2">
-                              {shortenAddress(account.address, 10)}
+                              {shortenAddress(getCrustMainnetAddress(account.address), 10)}
                             </Typography>
                             <IconWrapperStyle
                               sx={{
