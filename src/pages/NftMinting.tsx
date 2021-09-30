@@ -290,7 +290,7 @@ export default function NftMinting() {
           </Grid>
           <Grid item xs={12}>
             <Block title="Generate NFT">
-              <MintingProcess />
+              <MintingProcess nftType={toggle[0]} />
             </Block>
           </Grid>
         </Grid>

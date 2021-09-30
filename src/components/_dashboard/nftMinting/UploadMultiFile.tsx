@@ -17,14 +17,17 @@ import {
   Paper,
   ButtonBase,
   Button,
+  useMediaQuery,
   ListItem,
   Typography,
   ListItemIcon,
   ListItemText,
   ListItemSecondaryAction
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import AlarmIcon from '@mui/icons-material/Alarm';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Scrollbar from '../../Scrollbar';
 
 import { SxProps } from '@mui/system';
 
@@ -90,6 +93,9 @@ export default function UploadMultiFile({
   sx,
   ...other
 }: UploadMultiFileProps) {
+  const theme = useTheme();
+  const medium = useMediaQuery(theme.breakpoints.up('md'));
+
   const hasFile = files.length > 0;
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
@@ -247,62 +253,83 @@ export default function UploadMultiFile({
       </List>
 
       {hasFile && (
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+        <Grid
+          container
           sx={{
             my: 1,
-            py: 2,
-            px: 2,
             borderRadius: 1,
             border: (theme) => `solid 1px ${theme.palette.divider}`,
             bgcolor: 'background.paper'
           }}
         >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="h6">Upload file</Typography>
-            <Tooltip
-              TransitionComponent={Zoom}
-              title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
-            >
-              <HelpOutlineIcon />
-            </Tooltip>
-          </Stack>
-
-          <Stack direction="row" spacing={3}>
-            <ButtonBase>
-              <Box component="img" src="./static/icons/shared/crust.svg" sx={{ height: '32px' }} />
-            </ButtonBase>
-            <ButtonBase>
-              <Box
-                component="img"
-                src="./static/icons/shared/polygon.svg"
-                sx={{ height: '32px' }}
-              />
-            </ButtonBase>
-            <ButtonBase>
-              <Box component="img" src="./static/icons/shared/solana.svg" sx={{ height: '32px' }} />
-            </ButtonBase>
-            <ButtonBase>
-              <Box
-                component="img"
-                src="./static/icons/shared/ethereum.svg"
-                sx={{ height: '32px' }}
-              />
-            </ButtonBase>
-            <ButtonBase>
-              <Box component="img" src="./static/icons/shared/near.svg" sx={{ height: '32px' }} />
-            </ButtonBase>
-            <ButtonBase>
-              <Box
-                component="img"
-                src="./static/icons/shared/avalanche.svg"
-                sx={{ height: '32px' }}
-              />
-            </ButtonBase>
-          </Stack>
-        </Stack>
+          <Grid item xs={12} md={3}>
+            <Stack direction="row" sx={{ p: 2 }} alignItems="center" spacing={2}>
+              <Typography variant="h6">Upload file</Typography>
+              <Tooltip
+                TransitionComponent={Zoom}
+                title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
+              >
+                <HelpOutlineIcon />
+              </Tooltip>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} md={9}>
+            <Scrollbar>
+              <Stack
+                direction="row"
+                spacing={3}
+                sx={{
+                  p: 2,
+                  pt: medium ? 2 : 0,
+                  justifyContent: medium ? 'flex-end' : 'flex-start'
+                }}
+              >
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/crust.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase onClick={onUploadFile}>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/polygon.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/solana.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/ethereum.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/near.svg"
+                    sx={{ height: '32px' }}
+                  />
+                </ButtonBase>
+                <ButtonBase>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/avalanche.svg"
+                    sx={{ height: '32px', minWidth: '32px' }}
+                  />
+                </ButtonBase>
+              </Stack>
+            </Scrollbar>
+          </Grid>
+        </Grid>
       )}
     </Box>
   );
