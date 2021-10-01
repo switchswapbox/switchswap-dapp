@@ -4,10 +4,17 @@ import {
   Box,
   Card,
   Step,
+  Divider,
   Paper,
+  Zoom,
   SvgIcon,
   Button,
   Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
+  Grid,
   Switch,
   Stepper,
   StepLabel,
@@ -17,6 +24,8 @@ import {
   LinearProgress,
   FormControlLabel
 } from '@mui/material';
+
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -48,9 +57,14 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const [preview, setPreview] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const isStepOptional = (step: number) => step === 1;
+  const isStepOptional = (step: number) => false;
 
   const isStepSkipped = (step: number) => skipped.has(step);
+
+  const [alignment, setAlignment] = useState<string | null>('crust');
+  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+    setAlignment(newAlignment);
+  };
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -87,6 +101,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const [file, setFile] = useState<File>();
+  const [stepOneNotDone, setStepOneNotDone] = useState(true);
   const [uploadedCid, setUploadedCid] = useState('');
   const [isFileUploading, setFileUploading] = useState(false);
   const handleDropMultiFile = useCallback(
@@ -108,7 +123,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     reader.onload = async () => {
       const added = await ipfs.add(reader.result as ArrayBuffer);
       setUploadedCid(added.cid.toV0().toString());
-      setFileUploading(false);
+      setStepOneNotDone(false);
     };
     reader.readAsArrayBuffer(files[0]);
   };
@@ -129,6 +144,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         const added = await ipfs.add(reader.result as ArrayBuffer);
         setUploadedCid(added.cid.toV0().toString());
         setFileUploading(false);
+        setStepOneNotDone(false);
         resolve({ cid: added.cid.toV0().toString(), name: files[0].name });
       };
       reader.readAsArrayBuffer(files[0]);
@@ -223,9 +239,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       .catch((error) => {
         console.log(error);
       });
-    // console.log(signature);
-    // console.log(`crustAccountIndex ${crustAccountIndex}`);
-    // console.log(allAccounts);
   };
 
   const handleRemove = (file: File | string) => {
@@ -340,8 +353,90 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       )}
       {activeStep === 1 ? (
         <>
-          <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
-            <Typography sx={{ my: 1 }}> Step {activeStep + 1}</Typography>
+          <Paper sx={{ p: 3, my: 3, minHeight: 120 }}>
+            <Stack spacing={3}>
+              <TextField fullWidth placeholder="My NFT Name" label="Name" />
+              <TextField rows={4} fullWidth multiline label="Description" defaultValue="" />
+            </Stack>
+            <Divider sx={{ my: 2 }} />
+            <Grid
+              container
+              sx={{
+                my: 1,
+                // borderRadius: 1,
+                // border: (theme) => `solid 1px ${theme.palette.divider}`,
+                bgcolor: 'background.paper'
+              }}
+            >
+              <Grid item xs={12} md={3}>
+                <Stack direction="row" sx={{ p: 2 }} alignItems="center" spacing={2}>
+                  <Typography variant="h6">Upload file</Typography>
+                  <Tooltip
+                    TransitionComponent={Zoom}
+                    title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
+                  >
+                    <HelpOutlineIcon />
+                  </Tooltip>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <Stack
+                  direction="row"
+                  sx={{ p: 1, width: '100%' }}
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  spacing={2}
+                >
+                  <Scrollbar>
+                    <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
+                      <ToggleButton value="crust" sx={{ minWidth: '56px' }}>
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/crust.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                      <ToggleButton value="polygon" sx={{ minWidth: '56px' }}>
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/polygon.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                      <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/solana.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                      <ToggleButton value="ethereum" sx={{ minWidth: '56px' }} disabled>
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/ethereum.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                      <ToggleButton value="near" sx={{ minWidth: '56px' }} disabled>
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/near.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                      <ToggleButton value="avalanche" sx={{ minWidth: '56px' }} disabled>
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/avalanche.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  </Scrollbar>
+                </Stack>
+              </Grid>
+            </Grid>
+            <Divider sx={{ my: 2 }} />
           </Paper>
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>

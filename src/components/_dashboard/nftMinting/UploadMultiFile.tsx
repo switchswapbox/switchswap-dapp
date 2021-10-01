@@ -279,7 +279,7 @@ export default function UploadMultiFile({
 
       {hasFile && (
         <>
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 3 }} />
 
           <Grid
             container
@@ -291,7 +291,7 @@ export default function UploadMultiFile({
             }}
           >
             <Grid item xs={12} md={3}>
-              <Stack direction="row" sx={{ p: 2 }} alignItems="center" spacing={2}>
+              <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography variant="h6">Upload file</Typography>
                 <Tooltip
                   TransitionComponent={Zoom}
@@ -304,9 +304,9 @@ export default function UploadMultiFile({
             <Grid item xs={12} md={9}>
               <Stack
                 direction="row"
-                sx={{ p: 1, width: '100%' }}
+                sx={{ p: 0, width: '100%' }}
                 alignItems="center"
-                justifyContent="flex-end"
+                justifyContent="center"
                 spacing={2}
               >
                 <Scrollbar>
