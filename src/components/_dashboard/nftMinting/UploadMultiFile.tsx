@@ -85,7 +85,7 @@ interface UploadMultiFileProps extends DropzoneOptions {
   files: (File | string)[];
   showPreview: boolean;
   onRemove: (file: File | string) => void;
-  onUploadFile: VoidFunction;
+  onUploadFile: any;
   isFileUploading: boolean;
   sx?: SxProps<Theme>;
 }
@@ -301,51 +301,60 @@ export default function UploadMultiFile({
                 </Tooltip>
               </Stack>
             </Grid>
-            <Grid item xs={12} md={9} sx={{ pl: 0 }}>
+            <Grid item xs={12} md={9}>
               <Stack
                 direction="row"
+                sx={{ p: 1, width: '100%' }}
                 alignItems="center"
-                justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
-                sx={{ width: '100%', height: '100%' }}
+                justifyContent="flex-end"
+                spacing={2}
               >
                 <Scrollbar>
                   <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-                    <ToggleButton value="crust" sx={{ minWidth: '56px' }}>
+                    <ToggleButton
+                      value="crust"
+                      sx={{ minWidth: '56px' }}
+                      onClick={onUploadFile.uploadFileCrust}
+                    >
                       <Box
                         component="img"
                         src="./static/icons/shared/crust.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
-                    <ToggleButton value="polygon" sx={{ minWidth: '56px' }} onClick={onUploadFile}>
+                    <ToggleButton
+                      value="polygon"
+                      sx={{ minWidth: '56px' }}
+                      onClick={onUploadFile.uploadFileMetamask}
+                    >
                       <Box
                         component="img"
                         src="./static/icons/shared/polygon.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
-                    <ToggleButton value="solana" sx={{ minWidth: '56px' }}>
+                    <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
                       <Box
                         component="img"
                         src="./static/icons/shared/solana.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
-                    <ToggleButton value="ethereum" sx={{ minWidth: '56px' }}>
+                    <ToggleButton value="ethereum" sx={{ minWidth: '56px' }} disabled>
                       <Box
                         component="img"
                         src="./static/icons/shared/ethereum.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
-                    <ToggleButton value="near" sx={{ minWidth: '56px' }}>
+                    <ToggleButton value="near" sx={{ minWidth: '56px' }} disabled>
                       <Box
                         component="img"
                         src="./static/icons/shared/near.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
-                    <ToggleButton value="avalanche" sx={{ minWidth: '56px' }}>
+                    <ToggleButton value="avalanche" sx={{ minWidth: '56px' }} disabled>
                       <Box
                         component="img"
                         src="./static/icons/shared/avalanche.svg"

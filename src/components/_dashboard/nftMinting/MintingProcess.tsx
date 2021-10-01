@@ -23,14 +23,18 @@ import UploadMultiFile from './UploadMultiFile';
 import UploadSingleFile from './UploadSingleFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
+import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
+import { stringToHex } from '@polkadot/util';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
 import { create } from 'ipfs-http-client';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
 
-import { IPFS_GATEWAY_W3AUTH } from '../../../assets/COMMON_VARIABLES';
+import { IPFS_GATEWAY_W3AUTH, IPFS_PINNING_SERVICE_W3AUTH } from '../../../assets/COMMON_VARIABLES';
+import { lte } from 'lodash';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
-
+const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
 const steps = ['Upload File', 'Customize NFT Card', 'Upload Meta', 'Mint NFT'];
 
@@ -92,6 +96,62 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     [setFiles]
   );
 
+  const uploadFileW3Gateway = (authHeader: string) => {
+    setFileUploading(true);
+    const ipfs = create({
+      url: ipfsGateway + '/api/v0',
+      headers: {
+        authorization: 'Basic ' + authHeader
+      }
+    });
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const added = await ipfs.add(reader.result as ArrayBuffer);
+      setUploadedCid(added.cid.toV0().toString());
+      setFileUploading(false);
+    };
+    reader.readAsArrayBuffer(files[0]);
+  };
+
+  function uploadFileW3GatewayPromise(authHeader: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      setFileUploading(true);
+      const ipfs = create({
+        url: ipfsGateway + '/api/v0',
+        headers: {
+          authorization: 'Basic ' + authHeader
+        }
+      });
+      const reader = new FileReader();
+      reader.onabort = () => reject('file reading was aborted');
+      reader.onerror = () => reject('file reading has failed');
+      reader.onload = async () => {
+        const added = await ipfs.add(reader.result as ArrayBuffer);
+        setUploadedCid(added.cid.toV0().toString());
+        setFileUploading(false);
+        resolve({ cid: added.cid.toV0().toString(), name: files[0].name });
+      };
+      reader.readAsArrayBuffer(files[0]);
+    });
+  }
+
+  const pinFileW3Crust = async (authHeader: string, cid: string, name: string) => {
+    const result = await axios.post(
+      ipfsPinningService + '/pins',
+      {
+        cid,
+        name
+      },
+      {
+        headers: {
+          authorization: 'Bearer ' + authHeader,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    console.log(result);
+  };
+
   const uploadFileMetamask = async () => {
     const provider = await detectEthereumProvider();
     if (provider && provider.isMetaMask) {
@@ -100,29 +160,72 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
-        // const account = await provider.request({ method: 'eth_requestAccounts' });
+        const accounts = await provider.request({ method: 'eth_requestAccounts' });
+
         const providerEthers = new ethers.providers.Web3Provider(provider);
+
         const signer = providerEthers.getSigner();
         const addr = await signer.getAddress();
         const signature = await signer.signMessage(addr);
 
-        setFileUploading(true);
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
-        const ipfs = create({
-          url: ipfsGateway + '/api/v0',
-          headers: {
-            authorization: 'Basic ' + authHeader
-          }
-        });
-        const reader = new FileReader();
-        reader.onload = async () => {
-          const added = await ipfs.add(reader.result as ArrayBuffer);
-          setUploadedCid(added.cid.toV0().toString());
-          setFileUploading(false);
-        };
-        reader.readAsArrayBuffer(files[0]);
+
+        uploadFileW3GatewayPromise(authHeader)
+          .then((uploadedFileInfo) => {
+            pinFileW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }
+  };
+
+  const uploadFileCrust = async () => {
+    console.log('helllo');
+    const extensions = await web3Enable('NFT Dapp');
+    if (extensions.length === 0) {
+      return;
+    }
+    const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+
+    let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
+
+    crustAccountIndex =
+      crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
+
+    const account = allAccounts[crustAccountIndex];
+
+    const injector = await web3FromSource(account.meta.source);
+
+    const signRaw = injector?.signer?.signRaw;
+
+    // console.log(account.address);
+    let signature = '';
+    if (!!signRaw) {
+      // after making sure that signRaw is defined
+      // we can use it to sign our message
+      signature = (
+        await signRaw({
+          address: account.address,
+          data: stringToHex(account.address),
+          type: 'bytes'
+        })
+      ).signature;
+    }
+
+    const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
+
+    uploadFileW3GatewayPromise(authHeader)
+      .then((uploadedFileInfo) => {
+        pinFileW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // console.log(signature);
+    // console.log(`crustAccountIndex ${crustAccountIndex}`);
+    // console.log(allAccounts);
   };
 
   const handleRemove = (file: File | string) => {
@@ -183,7 +286,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             files={files}
             onDrop={handleDropMultiFile}
             onRemove={handleRemove}
-            onUploadFile={uploadFileMetamask}
+            onUploadFile={{ uploadFileMetamask, uploadFileCrust }}
             isFileUploading={isFileUploading}
           />
 
@@ -200,7 +303,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             >
               <Stack direction="row" alignItems="center" spacing={2}>
                 <SvgIcon color="action">
-                  <Icon icon="icon-park:doc-success" color="white" />
+                  <Icon icon="teenyicons:certificate-outline" color="black" />
                 </SvgIcon>
                 <Stack direction="column">
                   <Typography variant="subtitle2">
