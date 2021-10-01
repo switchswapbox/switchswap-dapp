@@ -54,7 +54,7 @@ const ListWrapperStyle = styled(Paper)(({ theme }) => ({
 
 export default function NftMinting() {
   const { themeStretch } = useSettings();
-  const [toggle, setToggle] = useState(['withAuthorReg']);
+  const [toggle, setToggle] = useState(['withoutNftCard']);
 
   const handleToggle = (value: string) => () => {
     const currentIndex = toggle.indexOf(value);

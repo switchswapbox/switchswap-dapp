@@ -14,6 +14,7 @@ import {
   CardContent,
   Typography,
   CardHeader,
+  LinearProgress,
   FormControlLabel
 } from '@mui/material';
 
@@ -83,7 +84,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const [file, setFile] = useState<File>();
   const [uploadedCid, setUploadedCid] = useState('');
-
+  const [isFileUploading, setFileUploading] = useState(false);
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
       setFiles(acceptedFiles.map((file: File) => file));
@@ -105,6 +106,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         const addr = await signer.getAddress();
         const signature = await signer.signMessage(addr);
 
+        setFileUploading(true);
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
         const ipfs = create({
           url: ipfsGateway + '/api/v0',
@@ -116,6 +118,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         reader.onload = async () => {
           const added = await ipfs.add(reader.result as ArrayBuffer);
           setUploadedCid(added.cid.toV0().toString());
+          setFileUploading(false);
         };
         reader.readAsArrayBuffer(files[0]);
       }
@@ -181,7 +184,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             onDrop={handleDropMultiFile}
             onRemove={handleRemove}
             onUploadFile={uploadFileMetamask}
+            isFileUploading={isFileUploading}
           />
+
           {uploadedCid !== '' && (
             <Box
               sx={{
