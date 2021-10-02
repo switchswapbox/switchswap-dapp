@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { alpha, styled } from '@mui/material/styles';
@@ -15,12 +16,14 @@ import {
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
+import { InfoAccountWallet } from '../../redux/reducer';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
 import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
+
 import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
@@ -103,9 +106,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
-  const selectedCrustAccount = localStorage.getItem('selectedCrustAccount') || 'Hello World';
-  const walletActive = localStorage.getItem('walletActive') || '';
+  const selectedAccountAddress = useSelector((state: InfoAccountWallet) => {
+    return state.accountAddress;
+  });
+  const selectedNetworkName = useSelector((state: InfoAccountWallet) => {
+    return state.networkName;
+  });
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -115,22 +121,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   }, [pathname]);
 
   const infoToDisplay = () => {
-    let addr = 'Hello world';
-    let walletName = 'No wallet available';
-    if (walletActive === 'metamask') {
-      addr = shortenAddress(selectedMetamaskAccount, 5);
-      walletName = 'Metamask Wallet';
-    } else if (walletActive === 'crust') {
-      addr = shortenAddress(selectedCrustAccount, 5);
-      walletName = 'Crust Wallet';
-    }
     return (
       <>
         <Typography variant="subtitle1" noWrap>
-          {addr}
+          {shortenAddress(selectedAccountAddress, 5)}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {walletName}
+          {selectedNetworkName}
         </Typography>
       </>
     );
@@ -138,16 +135,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
 
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    let addr = 'Hello World';
-    if (walletActive === 'metamask') {
-      addr = selectedMetamaskAccount;
-    } else if (walletActive === 'crust') {
-      addr = selectedCrustAccount;
-    }
-    Identicons.toDataUrl(addr).then((img: string) => {
+    Identicons.toDataUrl(
+      selectedAccountAddress === '' ? 'Hello World' : selectedAccountAddress
+    ).then((img: string) => {
       setUniqueIcon(img);
     });
-  }, []);
+  }, [selectedAccountAddress]);
 
   const renderContent = (
     <Scrollbar
