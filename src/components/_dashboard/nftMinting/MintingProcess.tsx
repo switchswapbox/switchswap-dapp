@@ -382,12 +382,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               <Grid item xs={12} md={9}>
                 <Stack
                   direction="row"
-                  sx={{ p: 1, width: '100%' }}
                   alignItems="center"
-                  justifyContent="flex-end"
-                  spacing={2}
+                  justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
+                  sx={{ p: 1 }}
                 >
-                  <Scrollbar>
+                  <Scrollbar sx={{ maxWidth: '331px' }}>
                     <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
                       <ToggleButton value="crust" sx={{ minWidth: '56px' }}>
                         <Box
