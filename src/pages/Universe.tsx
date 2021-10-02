@@ -12,6 +12,7 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
+import ComingSoon from 'components/ComingSoon';
 // ----------------------------------------------------------------------
 const CountdownStyle = styled('div')({
   display: 'flex',
@@ -42,54 +43,10 @@ const SOCIALS = [
 
 export default function Universe() {
   const { themeStretch } = useSettings();
-  const countdown = useCountdown(new Date('11/01/2021 21:30'));
   return (
     <Page title="Univere Gallery">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
-          <Typography variant="h3" paragraph sx={{ my: 5 }}>
-            Coming Soon!
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            We are currently working hard on this page!
-          </Typography>
-
-          <CountdownStyle>
-            <div>
-              <Typography variant="h2">{countdown.days}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
-            </div>
-
-            <SeparatorStyle variant="h2">:</SeparatorStyle>
-
-            <div>
-              <Typography variant="h2">{countdown.hours}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
-            </div>
-
-            <SeparatorStyle variant="h2">:</SeparatorStyle>
-
-            <div>
-              <Typography variant="h2">{countdown.minutes}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
-            </div>
-
-            <SeparatorStyle variant="h2">:</SeparatorStyle>
-
-            <div>
-              <Typography variant="h2">{countdown.seconds}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
-            </div>
-          </CountdownStyle>
-
-          <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
-            {SOCIALS.map((social) => (
-              <Tooltip key={social.name} title={social.name}>
-                <MIconButton>{social.icon}</MIconButton>
-              </Tooltip>
-            ))}
-          </Box>
-        </Box>
+        <ComingSoon />
       </Container>
     </Page>
   );
