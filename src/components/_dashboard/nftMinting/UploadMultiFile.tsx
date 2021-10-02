@@ -306,7 +306,7 @@ export default function UploadMultiFile({
                 direction="row"
                 sx={{ p: 0, width: '100%' }}
                 alignItems="center"
-                justifyContent="center"
+                justifyContent="flex-end"
                 spacing={2}
               >
                 <Scrollbar>
