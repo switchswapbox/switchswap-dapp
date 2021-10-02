@@ -14,13 +14,14 @@ import { Welcome, NftPresentation } from '../components/_dashboard/home';
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
-  const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
-  useEffect(() => {
-    if (!isWarningNotIssueToken) {
-      onSnackbarClose('info');
-      sessionStorage.setItem('notIssueToken', 'true');
-    }
-  }, []);
+
+  // const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
+  // useEffect(() => {
+  //   if (!isWarningNotIssueToken) {
+  //     onSnackbarClose('info');
+  //     sessionStorage.setItem('notIssueToken', 'true');
+  //   }
+  // }, []);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const onSnackbarClose = (color: VariantType) => {
