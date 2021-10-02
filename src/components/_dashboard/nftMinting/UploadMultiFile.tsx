@@ -87,6 +87,7 @@ interface UploadMultiFileProps extends DropzoneOptions {
   onRemove: (file: File | string) => void;
   onUploadFile: any;
   isFileUploading: boolean;
+  stepOneNotDone: boolean;
   sx?: SxProps<Theme>;
 }
 
@@ -110,6 +111,7 @@ export default function UploadMultiFile({
   onRemove,
   onUploadFile,
   isFileUploading,
+  stepOneNotDone,
   sx,
   ...other
 }: UploadMultiFileProps) {
@@ -313,12 +315,13 @@ export default function UploadMultiFile({
                 justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
                 spacing={2}
               >
-                <Scrollbar>
+                <Scrollbar sx={{ maxWidth: '331px' }}>
                   <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
                     <ToggleButton
                       value="crust"
                       sx={{ minWidth: '56px' }}
                       onClick={onUploadFile.uploadFileCrust}
+                      disabled={!stepOneNotDone}
                     >
                       <Box
                         component="img"
@@ -330,6 +333,7 @@ export default function UploadMultiFile({
                       value="polygon"
                       sx={{ minWidth: '56px' }}
                       onClick={onUploadFile.uploadFileMetamask}
+                      disabled={!stepOneNotDone}
                     >
                       <Box
                         component="img"

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 // material
 import {
   Box,
@@ -26,6 +26,7 @@ import {
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Label from '../../Label';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -121,9 +122,12 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const [stepOneNotDone, setStepOneNotDone] = useState(true);
   const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
   const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
+  const [metadataCid, setMetadataCid] = useState('');
 
   const [isFileUploading, setFileUploading] = useState(false);
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+
+  const [srcImage, setSrcImage] = useState('');
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
@@ -131,6 +135,21 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     },
     [setFiles]
   );
+
+  const loadImg = () => {
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      setSrcImage(reader.result as string);
+    };
+    reader.readAsDataURL(files[0]);
+  };
+
+  useEffect(() => {
+    if (files[0]) {
+      loadImg();
+    }
+  }, [files[0]]);
 
   function uploadFileW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -155,7 +174,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     });
   }
 
-  const pinFileW3Crust = async (authHeader: string, cid: string, name: string) => {
+  const pinW3Crust = async (authHeader: string, cid: string, name: string) => {
     const result = await axios.post(
       ipfsPinningService + '/pins',
       {
@@ -192,7 +211,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
         uploadFileW3GatewayPromise(authHeader)
           .then((uploadedFileInfo) => {
-            pinFileW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
+            pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
           })
           .catch((error) => {
             console.log(error);
@@ -220,10 +239,13 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ipfs.add(JSON.stringify(metadata)).then((added) => {
         setStepTwoNotDone(false);
         setMetadataUploading(false);
-        resolve('');
+        setStepTwoNotDone(false);
+        setMetadataCid(added.cid.toV0().toString());
+        resolve({ cid: added.cid.toV0().toString(), size: added.size });
       });
     });
   }
+
   const uploadMetadataMetamask = async () => {
     const provider = await detectEthereumProvider();
     if (provider && provider.isMetaMask) {
@@ -243,15 +265,19 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
 
-        console.log(nameNft);
-        console.log(descNft);
-        uploadMetadataW3GatewayPromise(authHeader);
+        uploadMetadataW3GatewayPromise(authHeader)
+          .then((metadataInfo) => {
+            console.log(metadataInfo);
+            pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }
   };
 
   const uploadFileCrust = async () => {
-    console.log('helllo');
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
       return;
@@ -287,7 +313,51 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     uploadFileW3GatewayPromise(authHeader)
       .then((uploadedFileInfo) => {
-        pinFileW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
+        pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const uploadMetadataCrust = async () => {
+    const extensions = await web3Enable('NFT Dapp');
+    if (extensions.length === 0) {
+      return;
+    }
+    const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+
+    let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
+
+    crustAccountIndex =
+      crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
+
+    const account = allAccounts[crustAccountIndex];
+
+    const injector = await web3FromSource(account.meta.source);
+
+    const signRaw = injector?.signer?.signRaw;
+
+    // console.log(account.address);
+    let signature = '';
+    if (!!signRaw) {
+      // after making sure that signRaw is defined
+      // we can use it to sign our message
+      signature = (
+        await signRaw({
+          address: account.address,
+          data: stringToHex(account.address),
+          type: 'bytes'
+        })
+      ).signature;
+    }
+
+    const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
+
+    uploadMetadataW3GatewayPromise(authHeader)
+      .then((metadataInfo) => {
+        // console.log(metadataInfo);
+        pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
       })
       .catch((error) => {
         console.log(error);
@@ -354,6 +424,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             onRemove={handleRemove}
             onUploadFile={{ uploadFileMetamask, uploadFileCrust }}
             isFileUploading={isFileUploading}
+            stepOneNotDone={stepOneNotDone}
           />
 
           {uploadedCid.cid !== '' && (
@@ -387,7 +458,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               Back
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button variant="contained" onClick={handleNext}>
+            <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
@@ -404,27 +475,63 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+
       {activeStep === 1 ? (
         <>
-          <Stack spacing={3} sx={{ mt: 5 }}>
-            <TextField
-              fullWidth
-              placeholder="My NFT Name"
-              label="Name"
-              defaultValue={nameNft}
-              onChange={handleNameNftInputChange}
-              disabled={!stepTwoNotDone}
-            />
-            <TextField
-              rows={4}
-              fullWidth
-              multiline
-              label="Description"
-              defaultValue={descNft}
-              onChange={handleDescNftInputChange}
-              disabled={!stepTwoNotDone}
-            />
-          </Stack>
+          <Grid container spacing={3} sx={{ pt: 5 }}>
+            <Grid item xs={12} md={6} lg={7}>
+              {/* <ProductDetailsCarousel product={product} /> */}
+              <Stack alignItems="center" justifyContent="center">
+                <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={6} lg={5}>
+              <Label variant="ghost" color="warning" sx={{ textTransform: 'uppercase' }}>
+                Creating Metadata
+              </Label>
+              <Typography
+                variant="h5"
+                paragraph
+                sx={{
+                  mt: 2,
+                  mb: 0
+                }}
+              >
+                Title<span style={{ color: 'red' }}>*</span>
+              </Typography>
+              <TextField
+                fullWidth
+                variant="standard"
+                multiline
+                type="string"
+                autoFocus
+                required={true}
+                defaultValue={nameNft}
+                onChange={handleNameNftInputChange}
+                disabled={!stepTwoNotDone}
+              />
+
+              <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                  Description
+                </Typography>
+              </Box>
+
+              <TextField
+                rows={4}
+                fullWidth
+                variant="standard"
+                multiline
+                size="small"
+                placeholder="Enter what is so cool about my NFT"
+                type="string"
+                defaultValue={descNft}
+                onChange={handleDescNftInputChange}
+                disabled={!stepTwoNotDone}
+              />
+            </Grid>
+          </Grid>
+
           {isMetadataUploading ? (
             <LinearProgress color="info" sx={{ my: 3 }} />
           ) : (
@@ -458,7 +565,12 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               >
                 <Scrollbar sx={{ maxWidth: '331px' }}>
                   <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-                    <ToggleButton value="crust" sx={{ minWidth: '56px' }}>
+                    <ToggleButton
+                      value="crust"
+                      sx={{ minWidth: '56px' }}
+                      onClick={uploadMetadataCrust}
+                      disabled={!stepTwoNotDone}
+                    >
                       <Box
                         component="img"
                         src="./static/icons/shared/crust.svg"
@@ -469,6 +581,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                       value="polygon"
                       sx={{ minWidth: '56px' }}
                       onClick={uploadMetadataMetamask}
+                      disabled={!stepTwoNotDone}
                     >
                       <Box
                         component="img"
@@ -514,6 +627,30 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           ) : (
             <Divider sx={{ my: 3 }} />
           )}
+          {metadataCid !== '' && (
+            <Box
+              sx={{
+                my: 1,
+                px: 2,
+                py: 1,
+                borderRadius: 1,
+                border: (theme) => `solid 1px ${theme.palette.divider}`,
+                bgcolor: '#C8FACD'
+              }}
+            >
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <SvgIcon color="action">
+                  <Icon icon="teenyicons:certificate-outline" color="black" />
+                </SvgIcon>
+                <Stack direction="column">
+                  <Typography variant="subtitle2">
+                    Uploaded successfully to Crust Network
+                  </Typography>
+                  <Typography variant="body2">CID: {metadataCid}</Typography>
+                </Stack>
+              </Stack>
+            </Box>
+          )}
 
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
@@ -525,7 +662,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 Skip
               </Button>
             )}
-            <Button variant="contained" onClick={handleNext}>
+            <Button variant="contained" onClick={handleNext} disabled={stepTwoNotDone}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
@@ -536,9 +673,125 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       {activeStep === 2 ? (
         <>
-          <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
-            <Typography sx={{ my: 1 }}> Step {activeStep + 1}</Typography>
-          </Paper>
+          <Grid container spacing={3} sx={{ pt: 5 }}>
+            <Grid item xs={12} md={6} lg={7}>
+              {/* <ProductDetailsCarousel product={product} /> */}
+              <Stack alignItems="center" justifyContent="center">
+                <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={6} lg={5}>
+              <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+                Minting NFT
+              </Label>
+              <Typography
+                variant="h5"
+                paragraph
+                sx={{
+                  mt: 2,
+                  mb: 0
+                }}
+              >
+                {nameNft}
+              </Typography>
+
+              <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                  {descNft}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+
+          {isMetadataUploading ? (
+            <LinearProgress color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
+          <Grid
+            container
+            sx={{
+              // borderRadius: 1,
+              // border: (theme) => `solid 1px ${theme.palette.divider}`,
+              bgcolor: 'background.paper'
+            }}
+            spacing={1}
+          >
+            <Grid item xs={12} md={3}>
+              <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
+                <Typography variant="h6">Mint NFT</Typography>
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="You must have a small amount of token in your wallet"
+                >
+                  <HelpOutlineIcon />
+                </Tooltip>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={9}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
+              >
+                <Button
+                  size="large"
+                  type="button"
+                  color="warning"
+                  variant="contained"
+                  startIcon={
+                    <Box
+                      component="img"
+                      src="./static/icons/shared/polygon.svg"
+                      sx={{ height: '24px', width: '32px' }}
+                    />
+                  }
+                  sx={{ whiteSpace: 'nowrap' }}
+                >
+                  Mint NFT
+                </Button>
+              </Stack>
+            </Grid>
+          </Grid>
+          {isMetadataUploading ? (
+            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
+
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent={{ xs: 'center' }}
+            sx={{ pb: 3 }}
+          >
+            <Scrollbar>
+              <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
+                <ToggleButton value="etherscan" sx={{ minWidth: '56px' }}>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/etherscan.svg"
+                    sx={{ height: '24px', width: '32px' }}
+                  />
+                </ToggleButton>
+                <ToggleButton value="opensea" sx={{ minWidth: '56px' }}>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/opensea.svg"
+                    sx={{ height: '24px', width: '32px' }}
+                  />
+                </ToggleButton>
+                <ToggleButton value="switchswap" sx={{ minWidth: '56px' }} disabled>
+                  <Box
+                    component="img"
+                    src="./static/icons/shared/switchswap.svg"
+                    sx={{ height: '24px', width: '32px' }}
+                  />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Scrollbar>
+          </Stack>
+
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
               Back
