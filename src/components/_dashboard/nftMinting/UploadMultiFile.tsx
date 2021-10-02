@@ -284,14 +284,14 @@ export default function UploadMultiFile({
           <Grid
             container
             sx={{
-              my: 1,
               // borderRadius: 1,
               // border: (theme) => `solid 1px ${theme.palette.divider}`,
               bgcolor: 'background.paper'
             }}
+            spacing={1}
           >
             <Grid item xs={12} md={3}>
-              <Stack direction="row" alignItems="center" spacing={2}>
+              <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
                 <Typography variant="h6">Upload file</Typography>
                 <Tooltip
                   TransitionComponent={Zoom}
@@ -306,7 +306,7 @@ export default function UploadMultiFile({
                 direction="row"
                 sx={{ p: 0, width: '100%' }}
                 alignItems="center"
-                justifyContent="flex-end"
+                justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
                 spacing={2}
               >
                 <Scrollbar>
@@ -367,7 +367,7 @@ export default function UploadMultiFile({
             </Grid>
           </Grid>
 
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 3 }} />
         </>
       )}
     </Box>

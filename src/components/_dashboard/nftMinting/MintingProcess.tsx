@@ -123,6 +123,8 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
 
   const [isFileUploading, setFileUploading] = useState(false);
+  const [isMetadataUploading, setMetadataUploading] = useState(false);
+
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
       setFiles(acceptedFiles.map((file: File) => file));
@@ -201,7 +203,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   function uploadMetadataW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      setFileUploading(true);
+      setMetadataUploading(true);
       const ipfs = create({
         url: ipfsGateway + '/api/v0',
         headers: {
@@ -217,6 +219,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       };
       ipfs.add(JSON.stringify(metadata)).then((added) => {
         setStepTwoNotDone(false);
+        setMetadataUploading(false);
         resolve('');
       });
     });
@@ -333,7 +336,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       )}
       {activeStep === 0 && nftType === 'withoutNftCard' ? (
         <>
-          <Box sx={{ display: 'flex', mt: 3 }}>
+          <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
             <Typography variant="h6">Upload file to Crust Network</Typography>
             <Box sx={{ flexGrow: 1 }} />
             {/* <FormControlLabel
@@ -378,7 +381,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             </Box>
           )}
           {/* <UploadSingleFile file={file} onDrop={handleDropSingleFile} /> */}
-          <Box sx={{ display: 'flex', mt: 1 }}>
+          <Box sx={{ display: 'flex', mt: 2 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
               Back
@@ -403,109 +406,106 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       )}
       {activeStep === 1 ? (
         <>
-          <Paper sx={{ p: 3, my: 3, minHeight: 120 }}>
-            <Stack spacing={3}>
-              <TextField
-                fullWidth
-                placeholder="My NFT Name"
-                label="Name"
-                defaultValue={nameNft}
-                onChange={handleNameNftInputChange}
-                disabled={!stepTwoNotDone}
-              />
-              <TextField
-                rows={4}
-                fullWidth
-                multiline
-                label="Description"
-                defaultValue={descNft}
-                onChange={handleDescNftInputChange}
-                disabled={!stepTwoNotDone}
-              />
-            </Stack>
-            <Divider sx={{ my: 2 }} />
-            <Grid
-              container
-              sx={{
-                my: 1,
-                // borderRadius: 1,
-                // border: (theme) => `solid 1px ${theme.palette.divider}`,
-                bgcolor: 'background.paper'
-              }}
-            >
-              <Grid item xs={12} md={3}>
-                <Stack direction="row" sx={{ p: 2 }} alignItems="center" spacing={2}>
-                  <Typography variant="h6">Upload file</Typography>
-                  <Tooltip
-                    TransitionComponent={Zoom}
-                    title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
-                  >
-                    <HelpOutlineIcon />
-                  </Tooltip>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} md={9}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
-                  sx={{ p: 1 }}
+          <Stack spacing={3} sx={{ mt: 5 }}>
+            <TextField
+              fullWidth
+              placeholder="My NFT Name"
+              label="Name"
+              defaultValue={nameNft}
+              onChange={handleNameNftInputChange}
+              disabled={!stepTwoNotDone}
+            />
+            <TextField
+              rows={4}
+              fullWidth
+              multiline
+              label="Description"
+              defaultValue={descNft}
+              onChange={handleDescNftInputChange}
+              disabled={!stepTwoNotDone}
+            />
+          </Stack>
+          <Divider sx={{ my: 3 }} />
+          <Grid
+            container
+            sx={{
+              // borderRadius: 1,
+              // border: (theme) => `solid 1px ${theme.palette.divider}`,
+              bgcolor: 'background.paper'
+            }}
+            spacing={1}
+          >
+            <Grid item xs={12} md={3}>
+              <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
+                <Typography variant="h6">Upload file</Typography>
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
                 >
-                  <Scrollbar sx={{ maxWidth: '331px' }}>
-                    <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-                      <ToggleButton value="crust" sx={{ minWidth: '56px' }}>
-                        <Box
-                          component="img"
-                          src="./static/icons/shared/crust.svg"
-                          sx={{ height: '24px', width: '32px' }}
-                        />
-                      </ToggleButton>
-                      <ToggleButton
-                        value="polygon"
-                        sx={{ minWidth: '56px' }}
-                        onClick={uploadMetadataMetamask}
-                      >
-                        <Box
-                          component="img"
-                          src="./static/icons/shared/polygon.svg"
-                          sx={{ height: '24px', width: '32px' }}
-                        />
-                      </ToggleButton>
-                      <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
-                        <Box
-                          component="img"
-                          src="./static/icons/shared/solana.svg"
-                          sx={{ height: '24px', width: '32px' }}
-                        />
-                      </ToggleButton>
-                      <ToggleButton value="ethereum" sx={{ minWidth: '56px' }} disabled>
-                        <Box
-                          component="img"
-                          src="./static/icons/shared/ethereum.svg"
-                          sx={{ height: '24px', width: '32px' }}
-                        />
-                      </ToggleButton>
-                      <ToggleButton value="near" sx={{ minWidth: '56px' }} disabled>
-                        <Box
-                          component="img"
-                          src="./static/icons/shared/near.svg"
-                          sx={{ height: '24px', width: '32px' }}
-                        />
-                      </ToggleButton>
-                      <ToggleButton value="avalanche" sx={{ minWidth: '56px' }} disabled>
-                        <Box
-                          component="img"
-                          src="./static/icons/shared/avalanche.svg"
-                          sx={{ height: '24px', width: '32px' }}
-                        />
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </Scrollbar>
-                </Stack>
-              </Grid>
+                  <HelpOutlineIcon />
+                </Tooltip>
+              </Stack>
             </Grid>
-            <Divider sx={{ my: 2 }} />
-          </Paper>
+            <Grid item xs={12} md={9}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
+              >
+                <Scrollbar sx={{ maxWidth: '331px' }}>
+                  <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
+                    <ToggleButton value="crust" sx={{ minWidth: '56px' }}>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/crust.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton
+                      value="polygon"
+                      sx={{ minWidth: '56px' }}
+                      onClick={uploadMetadataMetamask}
+                    >
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/polygon.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/solana.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="ethereum" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/ethereum.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="near" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/near.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="avalanche" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/avalanche.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Scrollbar>
+              </Stack>
+            </Grid>
+          </Grid>
+          <Divider sx={{ my: 3 }} />
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
               Back
