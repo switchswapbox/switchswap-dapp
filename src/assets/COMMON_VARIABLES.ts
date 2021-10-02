@@ -5,9 +5,12 @@ const INSTALL_METAMASK_URL = 'https://docs.polygon.technology/docs/develop/metam
 
 const IPFS_GATEWAY_W3AUTH = ['https://crustwebsites.net'];
 
+const IPFS_PINNING_SERVICE_W3AUTH = ['https://pin.crustcode.com/psa'];
+
 export {
   CRUST_WALLET_WIKI,
   METAMASK_SELECT_POLYGON_URL,
   INSTALL_METAMASK_URL,
-  IPFS_GATEWAY_W3AUTH
+  IPFS_GATEWAY_W3AUTH,
+  IPFS_PINNING_SERVICE_W3AUTH
 };

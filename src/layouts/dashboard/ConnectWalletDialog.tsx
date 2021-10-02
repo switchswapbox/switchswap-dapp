@@ -146,8 +146,9 @@ export default function MaxWidthDialog() {
     }
   };
 
-  const handleSelectAccountCrust = (address: string) => {
+  const handleSelectAccountCrust = (address: string, index: number) => {
     setselectedCrustAccount(address);
+    localStorage.setItem('selectedAccountCrustIndex', index.toString());
     setOpenCrust(false);
     handleActivateCrust();
     setDisplayMessageAccSelected({ metamask: false, crust: true });
@@ -371,12 +372,12 @@ export default function MaxWidthDialog() {
               </ListItemButton>
               <Collapse in={openCrust} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                  {crustAllAccounts.map((account) => (
+                  {crustAllAccounts.map((account, index) => (
                     <ListItemButton
                       key={account.address}
                       sx={{ pl: 4 }}
                       onClick={() =>
-                        handleSelectAccountCrust(getCrustMainnetAddress(account.address))
+                        handleSelectAccountCrust(getCrustMainnetAddress(account.address), index)
                       }
                     >
                       <Stack direction="row" alignItems="center" spacing={2}>
