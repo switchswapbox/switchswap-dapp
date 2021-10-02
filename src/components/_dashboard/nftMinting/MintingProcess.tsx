@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 // material
 import {
   Box,
@@ -45,13 +45,30 @@ import { lte } from 'lodash';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
-const steps = ['Upload File', 'Customize NFT Card', 'Upload Meta', 'Mint NFT'];
+const steps = ['Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 type MintingProcessProps = {
   nftType: string;
 };
 
+type FileInfoType = {
+  name: string;
+  cid: string;
+  size: number;
+};
+
 export default function MintingProcess({ nftType }: MintingProcessProps) {
+  const [nameNft, setNameNft] = useState('');
+  const [descNft, setDescNft] = useState('');
+
+  const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNameNft(event.target.value);
+  };
+
+  const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescNft(event.target.value);
+  };
+
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const [preview, setPreview] = useState(false);
@@ -102,7 +119,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const [file, setFile] = useState<File>();
   const [stepOneNotDone, setStepOneNotDone] = useState(true);
-  const [uploadedCid, setUploadedCid] = useState('');
+  const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
+  const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
+
   const [isFileUploading, setFileUploading] = useState(false);
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
@@ -110,23 +129,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     },
     [setFiles]
   );
-
-  const uploadFileW3Gateway = (authHeader: string) => {
-    setFileUploading(true);
-    const ipfs = create({
-      url: ipfsGateway + '/api/v0',
-      headers: {
-        authorization: 'Basic ' + authHeader
-      }
-    });
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const added = await ipfs.add(reader.result as ArrayBuffer);
-      setUploadedCid(added.cid.toV0().toString());
-      setStepOneNotDone(false);
-    };
-    reader.readAsArrayBuffer(files[0]);
-  };
 
   function uploadFileW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -142,7 +144,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       reader.onerror = () => reject('file reading has failed');
       reader.onload = async () => {
         const added = await ipfs.add(reader.result as ArrayBuffer);
-        setUploadedCid(added.cid.toV0().toString());
+        setUploadedCid({ cid: added.cid.toV0().toString(), size: added.size, name: files[0].name });
         setFileUploading(false);
         setStepOneNotDone(false);
         resolve({ cid: added.cid.toV0().toString(), name: files[0].name });
@@ -193,6 +195,54 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           .catch((error) => {
             console.log(error);
           });
+      }
+    }
+  };
+
+  function uploadMetadataW3GatewayPromise(authHeader: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      setFileUploading(true);
+      const ipfs = create({
+        url: ipfsGateway + '/api/v0',
+        headers: {
+          authorization: 'Basic ' + authHeader
+        }
+      });
+      const metadata = {
+        name: nameNft,
+        description: descNft,
+        image: `https://ipfs.io/ipfs/${uploadedCid.cid}`,
+        fileName: uploadedCid.name,
+        size: uploadedCid.size
+      };
+      ipfs.add(JSON.stringify(metadata)).then((added) => {
+        setStepTwoNotDone(false);
+        resolve('');
+      });
+    });
+  }
+  const uploadMetadataMetamask = async () => {
+    const provider = await detectEthereumProvider();
+    if (provider && provider.isMetaMask) {
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      });
+
+      if (parseInt(chainId, 16) === 137) {
+        console.log('starting');
+        const accounts = await provider.request({ method: 'eth_requestAccounts' });
+
+        const providerEthers = new ethers.providers.Web3Provider(provider);
+
+        const signer = providerEthers.getSigner();
+        const addr = await signer.getAddress();
+        const signature = await signer.signMessage(addr);
+
+        const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
+
+        console.log(nameNft);
+        console.log(descNft);
+        uploadMetadataW3GatewayPromise(authHeader);
       }
     }
   };
@@ -303,7 +353,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             isFileUploading={isFileUploading}
           />
 
-          {uploadedCid !== '' && (
+          {uploadedCid.cid !== '' && (
             <Box
               sx={{
                 my: 1,
@@ -322,7 +372,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   <Typography variant="subtitle2">
                     Uploaded successfully to Crust Network
                   </Typography>
-                  <Typography variant="body2">CID: {uploadedCid}</Typography>
+                  <Typography variant="body2">CID: {uploadedCid.cid}</Typography>
                 </Stack>
               </Stack>
             </Box>
@@ -355,8 +405,23 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         <>
           <Paper sx={{ p: 3, my: 3, minHeight: 120 }}>
             <Stack spacing={3}>
-              <TextField fullWidth placeholder="My NFT Name" label="Name" />
-              <TextField rows={4} fullWidth multiline label="Description" defaultValue="" />
+              <TextField
+                fullWidth
+                placeholder="My NFT Name"
+                label="Name"
+                defaultValue={nameNft}
+                onChange={handleNameNftInputChange}
+                disabled={!stepTwoNotDone}
+              />
+              <TextField
+                rows={4}
+                fullWidth
+                multiline
+                label="Description"
+                defaultValue={descNft}
+                onChange={handleDescNftInputChange}
+                disabled={!stepTwoNotDone}
+              />
             </Stack>
             <Divider sx={{ my: 2 }} />
             <Grid
@@ -396,7 +461,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                           sx={{ height: '24px', width: '32px' }}
                         />
                       </ToggleButton>
-                      <ToggleButton value="polygon" sx={{ minWidth: '56px' }}>
+                      <ToggleButton
+                        value="polygon"
+                        sx={{ minWidth: '56px' }}
+                        onClick={uploadMetadataMetamask}
+                      >
                         <Box
                           component="img"
                           src="./static/icons/shared/polygon.svg"
@@ -456,30 +525,8 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+
       {activeStep === 2 ? (
-        <>
-          <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
-            <Typography sx={{ my: 1 }}> Step {activeStep + 1}</Typography>
-          </Paper>
-          <Box sx={{ display: 'flex' }}>
-            <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-              Back
-            </Button>
-            <Box sx={{ flexGrow: 1 }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-            <Button variant="contained" onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </Box>
-        </>
-      ) : (
-        <></>
-      )}
-      {activeStep === 3 ? (
         <>
           <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
             <Typography sx={{ my: 1 }}> Step {activeStep + 1}</Typography>
