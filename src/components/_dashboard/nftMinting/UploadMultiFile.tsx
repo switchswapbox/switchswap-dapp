@@ -192,7 +192,7 @@ export default function UploadMultiFile({
           </Typography>
         </Box>
       </DropZoneStyle>
-      {isFileUploading && <LinearProgress color="info" />}
+
       {fileRejections.length > 0 && <ShowRejectionItems />}
 
       <List disablePadding sx={{ ...(hasFile && { my: 3 }) }}>
@@ -279,7 +279,11 @@ export default function UploadMultiFile({
 
       {hasFile && (
         <>
-          <Divider sx={{ my: 3 }} />
+          {isFileUploading ? (
+            <LinearProgress color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
 
           <Grid
             container
@@ -367,7 +371,11 @@ export default function UploadMultiFile({
             </Grid>
           </Grid>
 
-          <Divider sx={{ my: 3 }} />
+          {isFileUploading ? (
+            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
         </>
       )}
     </Box>

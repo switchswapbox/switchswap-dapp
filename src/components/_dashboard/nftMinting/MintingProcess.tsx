@@ -381,9 +381,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             </Box>
           )}
           {/* <UploadSingleFile file={file} onDrop={handleDropSingleFile} /> */}
-          <Box sx={{ display: 'flex', mt: 2 }}>
+          <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
-            <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+            <Button color="inherit" disabled={activeStep === 0} onClick={handleBack}>
               Back
             </Button>
             <Box sx={{ flexGrow: 1 }} />
@@ -425,7 +425,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               disabled={!stepTwoNotDone}
             />
           </Stack>
-          <Divider sx={{ my: 3 }} />
+          {isMetadataUploading ? (
+            <LinearProgress color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
           <Grid
             container
             sx={{
@@ -437,7 +441,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           >
             <Grid item xs={12} md={3}>
               <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
-                <Typography variant="h6">Upload file</Typography>
+                <Typography variant="h6">Upload Metadata</Typography>
                 <Tooltip
                   TransitionComponent={Zoom}
                   title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
@@ -505,7 +509,12 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </Stack>
             </Grid>
           </Grid>
-          <Divider sx={{ my: 3 }} />
+          {isMetadataUploading ? (
+            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
+
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
               Back
