@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import messagCircleOutline from '@iconify/icons-eva/message-circle-outline';
 import externaLinkOutline from '@iconify/icons-eva/external-link-outline';
 import { Link as RouterLink } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
+import { InfoAccountWallet } from '../../redux/reducer';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
@@ -25,19 +27,16 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
-  const selectedCrustAccount = localStorage.getItem('selectedCrustAccount') || 'Hello World';
-  const walletActive = localStorage.getItem('walletActive') || '';
+  const selectedAccountAddress = useSelector((state: InfoAccountWallet) => {
+    return state.accountAddress;
+  });
+  const selectedNetworkName = useSelector((state: InfoAccountWallet) => {
+    return state.networkName;
+  });
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
   useEffect(() => {
-    let addr = 'Hello World';
-    if (walletActive === 'metamask') {
-      addr = selectedMetamaskAccount;
-    } else if (walletActive === 'crust') {
-      addr = selectedCrustAccount;
-    }
-    Identicons.toDataUrl(addr).then((img: string) => {
+    Identicons.toDataUrl(selectedAccountAddress).then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
@@ -50,22 +49,13 @@ export default function AccountPopover() {
   };
 
   const infoToDisplay = () => {
-    let addr = 'Hello world';
-    let walletName = 'No wallet available';
-    if (walletActive === 'metamask') {
-      addr = shortenAddress(selectedMetamaskAccount, 5);
-      walletName = 'Metamask Wallet';
-    } else if (walletActive === 'crust') {
-      addr = shortenAddress(selectedCrustAccount, 5);
-      walletName = 'Crust Wallet';
-    }
     return (
       <>
         <Typography variant="subtitle1" noWrap>
-          {addr}
+          {selectedAccountAddress}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {walletName}
+          {selectedNetworkName}
         </Typography>
       </>
     );

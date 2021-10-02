@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { alpha, useTheme, styled } from '@mui/material/styles';
 
 // material
@@ -22,7 +23,6 @@ import {
 } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { Icon } from '@iconify/react';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
@@ -33,6 +33,7 @@ import {
   CRUST_WALLET_WIKI
 } from '../../assets/COMMON_VARIABLES';
 import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
+import { changeAccountWallet } from '../../redux/reducer';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -46,6 +47,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 export default function MaxWidthDialog() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const [displayMessageAccSelected, setDisplayMessageAccSelected] = useState({
     metamask: false,
     crust: false
@@ -66,12 +68,37 @@ export default function MaxWidthDialog() {
     localStorage.getItem('selectedMetamaskAccount') || ''
   );
 
+  dispatch(
+    changeAccountWallet({
+      accountAddress:
+        walletActive === 'metamask'
+          ? selectedMetamaskAccount
+          : walletActive === 'crust'
+          ? selectedCrustAccount
+          : '',
+      networkName:
+        walletActive === 'metamask' ? 'Metamask' : walletActive === 'crust' ? 'Crust Wallet' : ''
+    })
+  );
+
   useEffect(() => {
     localStorage.setItem('selectedMetamaskAccount', selectedMetamaskAccount);
+    dispatch(
+      changeAccountWallet({
+        accountAddress: selectedMetamaskAccount,
+        networkName: 'Metamask'
+      })
+    );
   }, [selectedMetamaskAccount]);
 
   useEffect(() => {
     localStorage.setItem('selectedCrustAccount', selectedCrustAccount);
+    dispatch(
+      changeAccountWallet({
+        accountAddress: selectedCrustAccount,
+        networkName: 'Crust Wallet'
+      })
+    );
   }, [selectedCrustAccount]);
 
   useEffect(() => {
