@@ -127,6 +127,7 @@ export default function UploadMultiFile({
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     multiple: false,
+    accept: 'image/jpeg, image/png',
     ...other
   });
 
@@ -182,7 +183,7 @@ export default function UploadMultiFile({
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drop files here or click&nbsp;
+            Drop file here or click&nbsp;
             <Typography
               variant="body2"
               component="span"

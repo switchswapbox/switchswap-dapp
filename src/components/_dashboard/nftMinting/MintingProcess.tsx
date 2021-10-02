@@ -763,33 +763,31 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             direction="row"
             alignItems="center"
             justifyContent={{ xs: 'center' }}
-            sx={{ pb: 3 }}
+            sx={{ pb: 3, width: '100%' }}
           >
-            <Scrollbar>
-              <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-                <ToggleButton value="etherscan" sx={{ minWidth: '56px' }}>
-                  <Box
-                    component="img"
-                    src="./static/icons/shared/etherscan.svg"
-                    sx={{ height: '24px', width: '32px' }}
-                  />
-                </ToggleButton>
-                <ToggleButton value="opensea" sx={{ minWidth: '56px' }}>
-                  <Box
-                    component="img"
-                    src="./static/icons/shared/opensea.svg"
-                    sx={{ height: '24px', width: '32px' }}
-                  />
-                </ToggleButton>
-                <ToggleButton value="switchswap" sx={{ minWidth: '56px' }} disabled>
-                  <Box
-                    component="img"
-                    src="./static/icons/shared/switchswap.svg"
-                    sx={{ height: '24px', width: '32px' }}
-                  />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Scrollbar>
+            <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
+              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }}>
+                <Box
+                  component="img"
+                  src="./static/icons/shared/etherscan.svg"
+                  sx={{ height: '24px', width: '32px' }}
+                />
+              </ToggleButton>
+              <ToggleButton value="opensea" sx={{ minWidth: '56px' }}>
+                <Box
+                  component="img"
+                  src="./static/icons/shared/opensea.svg"
+                  sx={{ height: '24px', width: '32px' }}
+                />
+              </ToggleButton>
+              <ToggleButton value="switchswap" sx={{ minWidth: '56px' }} disabled>
+                <Box
+                  component="img"
+                  src="./static/icons/shared/switchswap.svg"
+                  sx={{ height: '24px', width: '32px' }}
+                />
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Stack>
 
           <Box sx={{ display: 'flex' }}>
