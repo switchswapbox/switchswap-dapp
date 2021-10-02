@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { isString } from 'lodash';
 import { Icon } from '@iconify/react';
 import { useDropzone, DropzoneOptions } from 'react-dropzone';
@@ -8,17 +9,46 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { alpha, Theme, styled } from '@mui/material/styles';
 import {
   Box,
+  Fab,
   List,
+  Grid,
+  Tooltip,
+  Zoom,
+  Divider,
   Stack,
   Paper,
+  ButtonBase,
   Button,
+  useMediaQuery,
+  ToggleButtonGroup,
+  ToggleButton,
   ListItem,
   Typography,
   ListItemIcon,
+  LinearProgress,
   ListItemText,
   ListItemSecondaryAction
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import AlarmIcon from '@mui/icons-material/Alarm';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import Scrollbar from '../../Scrollbar';
+import CheckIcon from '@mui/icons-material/Check';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
+import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
+import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
+
 import { SxProps } from '@mui/system';
+
 // utils
 import { fData } from '../../../utils/formatNumber';
 //
@@ -55,7 +85,8 @@ interface UploadMultiFileProps extends DropzoneOptions {
   files: (File | string)[];
   showPreview: boolean;
   onRemove: (file: File | string) => void;
-  onRemoveAll: VoidFunction;
+  onUploadFile: any;
+  isFileUploading: boolean;
   sx?: SxProps<Theme>;
 }
 
@@ -77,13 +108,23 @@ export default function UploadMultiFile({
   showPreview = false,
   files,
   onRemove,
-  onRemoveAll,
+  onUploadFile,
+  isFileUploading,
   sx,
   ...other
 }: UploadMultiFileProps) {
+  const theme = useTheme();
+  const medium = useMediaQuery(theme.breakpoints.up('md'));
+
   const hasFile = files.length > 0;
 
+  const [alignment, setAlignment] = useState<string | null>('crust');
+  const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
+    setAlignment(newAlignment);
+  };
+
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+    multiple: false,
     ...other
   });
 
@@ -237,12 +278,105 @@ export default function UploadMultiFile({
       </List>
 
       {hasFile && (
-        <Stack direction="row" justifyContent="flex-end">
-          <Button onClick={onRemoveAll} sx={{ mr: 1.5 }}>
-            Remove all
-          </Button>
-          <Button variant="contained">Upload files</Button>
-        </Stack>
+        <>
+          {isFileUploading ? (
+            <LinearProgress color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
+
+          <Grid
+            container
+            sx={{
+              // borderRadius: 1,
+              // border: (theme) => `solid 1px ${theme.palette.divider}`,
+              bgcolor: 'background.paper'
+            }}
+            spacing={1}
+          >
+            <Grid item xs={12} md={3}>
+              <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
+                <Typography variant="h6">Upload file</Typography>
+                <Tooltip
+                  TransitionComponent={Zoom}
+                  title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
+                >
+                  <HelpOutlineIcon />
+                </Tooltip>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={9}>
+              <Stack
+                direction="row"
+                sx={{ p: 0, width: '100%' }}
+                alignItems="center"
+                justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
+                spacing={2}
+              >
+                <Scrollbar>
+                  <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
+                    <ToggleButton
+                      value="crust"
+                      sx={{ minWidth: '56px' }}
+                      onClick={onUploadFile.uploadFileCrust}
+                    >
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/crust.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton
+                      value="polygon"
+                      sx={{ minWidth: '56px' }}
+                      onClick={onUploadFile.uploadFileMetamask}
+                    >
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/polygon.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/solana.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="ethereum" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/ethereum.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="near" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/near.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton value="avalanche" sx={{ minWidth: '56px' }} disabled>
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/avalanche.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Scrollbar>
+              </Stack>
+            </Grid>
+          </Grid>
+
+          {isFileUploading ? (
+            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
+        </>
       )}
     </Box>
   );

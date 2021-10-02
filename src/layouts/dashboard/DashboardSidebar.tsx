@@ -21,6 +21,7 @@ import NavSection from '../../components/NavSection';
 //
 import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
+import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
@@ -102,6 +103,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
+  const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || 'Hello World';
+  const selectedCrustAccount = localStorage.getItem('selectedCrustAccount') || 'Hello World';
+  const walletActive = localStorage.getItem('walletActive') || '';
+
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();
@@ -109,9 +114,37 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  const infoToDisplay = () => {
+    let addr = 'Hello world';
+    let walletName = 'No wallet available';
+    if (walletActive === 'metamask') {
+      addr = shortenAddress(selectedMetamaskAccount, 5);
+      walletName = 'Metamask Wallet';
+    } else if (walletActive === 'crust') {
+      addr = shortenAddress(selectedCrustAccount, 5);
+      walletName = 'Crust Wallet';
+    }
+    return (
+      <>
+        <Typography variant="subtitle1" noWrap>
+          {addr}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+          {walletName}
+        </Typography>
+      </>
+    );
+  };
+
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    Identicons.toDataUrl('5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q').then((img: string) => {
+    let addr = 'Hello World';
+    if (walletActive === 'metamask') {
+      addr = selectedMetamaskAccount;
+    } else if (walletActive === 'crust') {
+      addr = selectedCrustAccount;
+    }
+    Identicons.toDataUrl(addr).then((img: string) => {
       setUniqueIcon(img);
     });
   }, []);
@@ -163,12 +196,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
                   overflow: 'hidden'
                 }}
               >
-                <Typography variant="subtitle2" sx={{ color: 'text.primary' }} noWrap>
-                  5C5QrSsW6Qgv32Gfqp7QFWqtKaxXz46GesUupg5SQTVsZT7q
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                  Crust Network
-                </Typography>
+                {infoToDisplay()}
               </Box>
             </AccountStyle>
           </Link>
