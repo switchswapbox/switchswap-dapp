@@ -36,10 +36,12 @@ export default function AccountPopover() {
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
   useEffect(() => {
-    Identicons.toDataUrl(selectedAccountAddress).then((img: string) => {
+    Identicons.toDataUrl(
+      selectedAccountAddress === '' ? 'Hello World' : selectedAccountAddress
+    ).then((img: string) => {
       setUniqueIcon(img);
     });
-  }, []);
+  }, [selectedAccountAddress]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -52,7 +54,7 @@ export default function AccountPopover() {
     return (
       <>
         <Typography variant="subtitle1" noWrap>
-          {selectedAccountAddress}
+          {shortenAddress(selectedAccountAddress, 5)}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
           {selectedNetworkName}
