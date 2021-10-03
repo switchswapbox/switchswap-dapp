@@ -233,13 +233,22 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         fileName: uploadedCid.name,
         size: uploadedCid.size
       };
-      ipfs.add(JSON.stringify(metadata)).then((added) => {
-        setStepTwoNotDone(false);
-        setMetadataUploading(false);
-        setStepTwoNotDone(false);
-        setMetadataCid(added.cid.toV0().toString());
-        resolve({ cid: added.cid.toV0().toString(), size: added.size });
-      });
+      console.log('adding ipfs');
+      console.log(JSON.stringify(metadata));
+      ipfs
+        .add(JSON.stringify(metadata))
+        .then((added) => {
+          console.log(added);
+          setStepTwoNotDone(false);
+          setMetadataUploading(false);
+          setStepTwoNotDone(false);
+          setMetadataCid(added.cid.toV0().toString());
+          resolve({ cid: added.cid.toV0().toString(), size: added.size });
+        })
+        .catch((error) => {
+          console.log(error);
+          reject('reject');
+        });
     });
   }
 
@@ -264,6 +273,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
         uploadMetadataW3GatewayPromise(authHeader)
           .then((metadataInfo) => {
+            console.log('metadataInfometadataInfometadataInfometadataInfometadataInfo');
             console.log(metadataInfo);
             pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
           })
@@ -381,7 +391,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         const web3 = new Web3(window.ethereum as any);
         const contract = await new web3.eth.Contract(ABI, contractAddress);
         contract.methods
-          .mintDataNTF(addr, `ipfs://${uploadedCid.cid}`, `ipfs://${uploadedCid.cid}`, 'null')
+          .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
           .send({ from: addr })
           .then(console.log('success'))
           .catch((error: any) => console.log(error));
