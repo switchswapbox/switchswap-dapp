@@ -82,6 +82,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     setAlignment(newAlignment);
   };
   const [transactionHash, setTransactionHash] = useState('');
+  const [nftMinted, setNftMinted] = useState(false);
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -397,6 +398,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           .send({ from: addr })
           .once('transactionHash', async (txhash: string) => {
             setTransactionHash(txhash);
+          })
+          .once('receipt', (receipt: any) => {
+            setNftMinted(true);
           })
           .catch((error: any) => console.log(error));
       }
@@ -802,14 +806,16 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           <Grid item xs={12} md={6}>
             <Alert
               icon={false}
-              severity="info"
+              severity={nftMinted ? 'success' : 'info'}
               sx={{
                 width: '100%',
                 wordWrap: 'break-word',
                 display: transactionHash !== '' ? 'flex' : 'none'
               }}
             >
-              {`Your NFT is minted with transaction hash: ${transactionHash} `}
+              {nftMinted
+                ? `Your NFT is minted with transaction hash: ${transactionHash} `
+                : `Your request of minting NFT is in progress with transaction hash: ${transactionHash} `}
               <SvgIcon>
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
