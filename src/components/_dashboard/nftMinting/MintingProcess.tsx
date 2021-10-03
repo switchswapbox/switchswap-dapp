@@ -232,7 +232,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       const metadata = {
         name: nameNft,
         description: descNft,
-        image: `https://ipfs.io/ipfs/${uploadedCid.cid}`,
+        image: `ipfs://${uploadedCid.cid}`,
         fileName: uploadedCid.name,
         size: uploadedCid.size
       };
