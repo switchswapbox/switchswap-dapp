@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 // material
 import {
   Box,
-  Card,
   Step,
   Divider,
   Paper,
@@ -15,18 +14,15 @@ import {
   ToggleButtonGroup,
   Tooltip,
   Grid,
-  Switch,
   Stepper,
   StepLabel,
-  CardContent,
   Typography,
-  CardHeader,
-  LinearProgress,
-  FormControlLabel
+  LinearProgress
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from '../../Label';
+import Web3 from 'web3';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -41,8 +37,9 @@ import { create } from 'ipfs-http-client';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
 
+import { ABI } from '../../../utils/abi';
+import { contractAddress } from '../../../utils/contractAddress';
 import { IPFS_GATEWAY_W3AUTH, IPFS_PINNING_SERVICE_W3AUTH } from '../../../assets/COMMON_VARIABLES';
-import { lte } from 'lodash';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -369,6 +366,29 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     setFiles(filteredItems);
   };
 
+  async function mintDataNTF() {
+    const provider = await detectEthereumProvider();
+    if (provider && provider.isMetaMask) {
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      });
+
+      if (parseInt(chainId, 16) === 137) {
+        console.log('starting');
+        const providerEthers = new ethers.providers.Web3Provider(provider);
+        const signer = providerEthers.getSigner();
+        const addr = await signer.getAddress();
+        const web3 = new Web3(window.ethereum as any);
+        const contract = await new web3.eth.Contract(ABI, contractAddress);
+        contract.methods
+          .mintDataNTF(addr, `ipfs://${uploadedCid.cid}`, `ipfs://${uploadedCid.cid}`, 'null')
+          .send({ from: addr })
+          .then(console.log('success'))
+          .catch((error: any) => console.log(error));
+      }
+    }
+  }
+
   return (
     <>
       <Scrollbar>
@@ -404,6 +424,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 0
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
       {activeStep === 0 && nftType === 'withoutNftCard' ? (
         <>
           <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
@@ -475,6 +498,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 1
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
       {activeStep === 1 ? (
         <>
@@ -671,6 +698,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         <></>
       )}
 
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 2
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+
       {activeStep === 2 ? (
         <>
           <Grid container spacing={3} sx={{ pt: 5 }}>
@@ -739,6 +770,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   type="button"
                   color="warning"
                   variant="contained"
+                  onClick={mintDataNTF}
                   startIcon={
                     <Box
                       component="img"
