@@ -127,7 +127,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
           {shortenAddress(selectedAccountAddress, 5)}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {selectedNetworkName}
+          {selectedAccountAddress === '' ? 'Hello World' : selectedNetworkName}
         </Typography>
       </>
     );
@@ -173,11 +173,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
         </Stack>
 
         {isCollapse ? (
-          <Avatar
-            alt="My Avatar"
-            src="/static/mock-images/avatars/avatar_default.jpg"
-            sx={{ mx: 'auto', mb: 2 }}
-          />
+          <Avatar alt="My Avatar" src={uniqueIcon} sx={{ mx: 'auto', mb: 2 }} />
         ) : (
           <Link underline="none" component={RouterLink} to="#">
             <AccountStyle>
