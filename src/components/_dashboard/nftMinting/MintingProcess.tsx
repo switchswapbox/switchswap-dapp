@@ -15,6 +15,7 @@ import {
   ToggleButtonGroup,
   Tooltip,
   Grid,
+  IconButton,
   Switch,
   Stepper,
   StepLabel,
@@ -27,6 +28,8 @@ import {
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from '../../Label';
+import { useSnackbar, VariantType } from 'notistack';
+import closeFill from '@iconify/icons-eva/close-fill';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -68,6 +71,28 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDescNft(event.target.value);
+  };
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const onSnackbarClose = (color: VariantType, text: string) => {
+    enqueueSnackbar(
+      <div>
+        <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
+          {color}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {text}
+        </Typography>
+      </div>,
+      {
+        variant: color,
+        action: (key) => (
+          <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} width={24} height={24} />
+          </IconButton>
+        )
+      }
+    );
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -216,7 +241,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           .catch((error) => {
             console.log(error);
           });
+      } else {
+        onSnackbarClose('warning', 'Please select Polygon Network from Metamask');
       }
+    } else {
+      onSnackbarClose('warning', 'Please install Metamask');
     }
   };
 
@@ -254,7 +283,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
-        console.log('starting');
         const accounts = await provider.request({ method: 'eth_requestAccounts' });
 
         const providerEthers = new ethers.providers.Web3Provider(provider);
@@ -273,7 +301,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           .catch((error) => {
             console.log(error);
           });
+      } else {
+        onSnackbarClose('warning', 'Please select Polygon Network from Metamask');
       }
+    } else {
+      onSnackbarClose('warning', 'Please install Metamask');
     }
   };
 
