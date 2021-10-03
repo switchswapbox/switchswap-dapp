@@ -312,6 +312,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const uploadFileCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
+      onSnackbarClose('warning', 'Please install Crust Wallet');
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -340,7 +341,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         })
       ).signature;
     }
-
     const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
 
     uploadFileW3GatewayPromise(authHeader)
@@ -355,6 +355,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const uploadMetadataCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
+      onSnackbarClose('warning', 'Please install Crust Wallet');
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
