@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 // material
 import {
   Box,
-  Card,
   Step,
   Divider,
   Paper,
@@ -19,17 +18,17 @@ import {
   Switch,
   Stepper,
   StepLabel,
-  CardContent,
   Typography,
-  CardHeader,
   LinearProgress,
-  FormControlLabel
+  Alert
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from '../../Label';
 import { useSnackbar, VariantType } from 'notistack';
 import closeFill from '@iconify/icons-eva/close-fill';
+import Web3 from 'web3';
+import Web3Eth from 'web3-eth';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -44,8 +43,9 @@ import { create } from 'ipfs-http-client';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
 
+import { ABI } from '../../../utils/abi';
+import { contractAddress } from '../../../utils/contractAddress';
 import { IPFS_GATEWAY_W3AUTH, IPFS_PINNING_SERVICE_W3AUTH } from '../../../assets/COMMON_VARIABLES';
-import { lte } from 'lodash';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -151,6 +151,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const [isFileUploading, setFileUploading] = useState(false);
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+  const [transactionHash, setTransactionHash] = useState('');
+  const [isMinting, setMinting] = useState(false);
+  const [nftMinted, setNftMinted] = useState(false);
+  const [tokenID, setTokenID] = useState(0);
 
   const [srcImage, setSrcImage] = useState('');
 
@@ -213,7 +217,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         }
       }
     );
-    console.log(result);
   };
 
   const uploadFileMetamask = async () => {
@@ -265,13 +268,19 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         fileName: uploadedCid.name,
         size: uploadedCid.size
       };
-      ipfs.add(JSON.stringify(metadata)).then((added) => {
-        setStepTwoNotDone(false);
-        setMetadataUploading(false);
-        setStepTwoNotDone(false);
-        setMetadataCid(added.cid.toV0().toString());
-        resolve({ cid: added.cid.toV0().toString(), size: added.size });
-      });
+      ipfs
+        .add(JSON.stringify(metadata))
+        .then((added) => {
+          console.log(added);
+          setStepTwoNotDone(false);
+          setMetadataUploading(false);
+          setStepTwoNotDone(false);
+          setMetadataCid(added.cid.toV0().toString());
+          resolve({ cid: added.cid.toV0().toString(), size: added.size });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
   }
 
@@ -295,7 +304,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
         uploadMetadataW3GatewayPromise(authHeader)
           .then((metadataInfo) => {
-            console.log(metadataInfo);
             pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
           })
           .catch((error) => {
@@ -328,7 +336,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     const signRaw = injector?.signer?.signRaw;
 
-    // console.log(account.address);
     let signature = '';
     if (!!signRaw) {
       // after making sure that signRaw is defined
@@ -371,7 +378,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     const signRaw = injector?.signer?.signRaw;
 
-    // console.log(account.address);
     let signature = '';
     if (!!signRaw) {
       // after making sure that signRaw is defined
@@ -389,7 +395,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     uploadMetadataW3GatewayPromise(authHeader)
       .then((metadataInfo) => {
-        // console.log(metadataInfo);
         pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
       })
       .catch((error) => {
@@ -401,6 +406,43 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     const filteredItems = files.filter((_file) => _file !== file);
     setFiles(filteredItems);
   };
+
+  async function mintDataNTF() {
+    const provider = await detectEthereumProvider();
+    if (provider && provider.isMetaMask) {
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      });
+
+      if (parseInt(chainId, 16) === 137) {
+        setMinting(true);
+        const providerEthers = new ethers.providers.Web3Provider(provider);
+        const signer = providerEthers.getSigner();
+        const addr = await signer.getAddress();
+        const web3 = new Web3(window.ethereum as any);
+        const contract = await new web3.eth.Contract(ABI, contractAddress);
+        contract.methods
+          .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
+          .send({ from: addr })
+          .once('transactionHash', (txhash: string) => {
+            setTransactionHash(txhash);
+          })
+          .once('receipt', (receipt: any) => {
+            setMinting(false);
+            setNftMinted(true);
+            setTokenID(receipt.events.Transfer.returnValues.tokenId);
+          })
+          .catch((error: any) => {
+            console.log(error);
+            setMinting(false);
+          });
+      }
+    }
+  }
+
+  async function handleOpenSeaLink() {
+    window.open(`https://opensea.io/assets/matic/${contractAddress}/${tokenID}`);
+  }
 
   return (
     <>
@@ -437,6 +479,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 0
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
       {activeStep === 0 && nftType === 'withoutNftCard' ? (
         <>
           <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
@@ -508,6 +553,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 1
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
       {activeStep === 1 ? (
         <>
@@ -704,6 +753,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         <></>
       )}
 
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 2
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+
       {activeStep === 2 ? (
         <>
           <Grid container spacing={3} sx={{ pt: 5 }}>
@@ -736,11 +789,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             </Grid>
           </Grid>
 
-          {isMetadataUploading ? (
-            <LinearProgress color="info" sx={{ my: 3 }} />
-          ) : (
-            <Divider sx={{ my: 3 }} />
-          )}
+          {isMinting ? <LinearProgress color="info" sx={{ my: 3 }} /> : <Divider sx={{ my: 3 }} />}
           <Grid
             container
             sx={{
@@ -772,6 +821,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   type="button"
                   color="warning"
                   variant="contained"
+                  onClick={mintDataNTF}
                   startIcon={
                     <Box
                       component="img"
@@ -786,12 +836,30 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </Stack>
             </Grid>
           </Grid>
-          {isMetadataUploading ? (
+          <Grid item xs={12} md={6}>
+            <Alert
+              icon={false}
+              severity={nftMinted ? 'success' : 'info'}
+              sx={{
+                width: '100%',
+                wordWrap: 'break-word',
+                display: transactionHash !== '' ? 'flex' : 'none'
+              }}
+            >
+              {nftMinted
+                ? `Your NFT is minted with transaction hash: ${transactionHash} `
+                : `Your request of minting NFT is in progress with transaction hash: ${transactionHash} `}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
+            </Alert>
+          </Grid>
+
+          {isMinting ? (
             <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
           ) : (
             <Divider sx={{ my: 3 }} />
           )}
-
           <Stack
             direction="row"
             alignItems="center"
@@ -799,14 +867,19 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             sx={{ pb: 3, width: '100%' }}
           >
             <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }}>
+              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }} disabled={true}>
                 <Box
                   component="img"
                   src="./static/icons/shared/etherscan.svg"
                   sx={{ height: '24px', width: '32px' }}
                 />
               </ToggleButton>
-              <ToggleButton value="opensea" sx={{ minWidth: '56px' }}>
+              <ToggleButton
+                value="opensea"
+                sx={{ minWidth: '56px' }}
+                disabled={tokenID === 0 ? true : false}
+                onClick={handleOpenSeaLink}
+              >
                 <Box
                   component="img"
                   src="./static/icons/shared/opensea.svg"
