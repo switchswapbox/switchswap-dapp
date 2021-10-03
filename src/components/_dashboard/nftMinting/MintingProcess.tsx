@@ -834,14 +834,21 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             sx={{ pb: 3, width: '100%' }}
           >
             <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }}>
+              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }} disabled={true}>
                 <Box
                   component="img"
                   src="./static/icons/shared/etherscan.svg"
                   sx={{ height: '24px', width: '32px' }}
                 />
               </ToggleButton>
-              <ToggleButton value="opensea" sx={{ minWidth: '56px' }}>
+              <ToggleButton
+                value="opensea"
+                sx={{ minWidth: '56px' }}
+                disabled={nftMinted ? false : true}
+                onClick={() => {
+                  window.open('http://google.com');
+                }}
+              >
                 <Box
                   component="img"
                   src="./static/icons/shared/opensea.svg"
