@@ -24,6 +24,7 @@ import {
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from '../../Label';
 import Web3 from 'web3';
+import Web3Eth from 'web3-eth';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -83,6 +84,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
   const [transactionHash, setTransactionHash] = useState('');
   const [nftMinted, setNftMinted] = useState(false);
+  const [tokenID, setTokenID] = useState(0);
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -126,6 +128,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const [isFileUploading, setFileUploading] = useState(false);
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+  const [isMinting, setMinting] = useState(false);
+  const [isLinksGenerating, setLinksGenerating] = useState(false);
+  const [isLinksGenerated, setLinksGenerated] = useState(false);
 
   const [srcImage, setSrcImage] = useState('');
 
@@ -188,7 +193,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         }
       }
     );
-    console.log(result);
   };
 
   const uploadFileMetamask = async () => {
@@ -236,8 +240,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         fileName: uploadedCid.name,
         size: uploadedCid.size
       };
-      console.log('adding ipfs');
-      console.log(JSON.stringify(metadata));
       ipfs
         .add(JSON.stringify(metadata))
         .then((added) => {
@@ -250,7 +252,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         })
         .catch((error) => {
           console.log(error);
-          reject('reject');
         });
     });
   }
@@ -263,7 +264,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
-        console.log('starting');
         const accounts = await provider.request({ method: 'eth_requestAccounts' });
 
         const providerEthers = new ethers.providers.Web3Provider(provider);
@@ -276,8 +276,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
         uploadMetadataW3GatewayPromise(authHeader)
           .then((metadataInfo) => {
-            console.log('metadataInfometadataInfometadataInfometadataInfometadataInfo');
-            console.log(metadataInfo);
             pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
           })
           .catch((error) => {
@@ -305,7 +303,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     const signRaw = injector?.signer?.signRaw;
 
-    // console.log(account.address);
     let signature = '';
     if (!!signRaw) {
       // after making sure that signRaw is defined
@@ -348,7 +345,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     const signRaw = injector?.signer?.signRaw;
 
-    // console.log(account.address);
     let signature = '';
     if (!!signRaw) {
       // after making sure that signRaw is defined
@@ -366,7 +362,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     uploadMetadataW3GatewayPromise(authHeader)
       .then((metadataInfo) => {
-        // console.log(metadataInfo);
         pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
       })
       .catch((error) => {
@@ -387,7 +382,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
-        console.log('starting');
+        setMinting(true);
         const providerEthers = new ethers.providers.Web3Provider(provider);
         const signer = providerEthers.getSigner();
         const addr = await signer.getAddress();
@@ -400,11 +395,37 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             setTransactionHash(txhash);
           })
           .once('receipt', (receipt: any) => {
+            setMinting(false);
             setNftMinted(true);
           })
-          .catch((error: any) => console.log(error));
+          .catch((error: any) => {
+            console.log(error);
+            setMinting(false);
+          });
       }
     }
+  }
+
+  async function getURI(transactionHash: string) {
+    setLinksGenerating(true);
+    const web3 = new Web3(window.ethereum as any);
+    web3.eth
+      .getTransactionReceipt(transactionHash)
+      .then((data) => {
+        let logs = data.logs;
+        console.log(logs);
+        setTokenID(web3.utils.hexToNumber(logs[0].topics[3]));
+        setLinksGenerated(true);
+      })
+      .catch((error) => console.log(error));
+    setLinksGenerating(false);
+  }
+
+  async function handleOpenSeaLink(transactionHash: string) {
+    if (transactionHash !== '') {
+      await getURI(transactionHash);
+    }
+    window.open(`https://opensea.io/assets/matic/${contractAddress}/${tokenID}`);
   }
 
   return (
@@ -752,11 +773,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             </Grid>
           </Grid>
 
-          {isMetadataUploading ? (
-            <LinearProgress color="info" sx={{ my: 3 }} />
-          ) : (
-            <Divider sx={{ my: 3 }} />
-          )}
+          {isMinting ? <LinearProgress color="info" sx={{ my: 3 }} /> : <Divider sx={{ my: 3 }} />}
           <Grid
             container
             sx={{
@@ -821,7 +838,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </SvgIcon>
             </Alert>
           </Grid>
-          {isMetadataUploading ? (
+          {isMinting ? (
+            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
+          ) : isLinksGenerating ? (
             <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
           ) : (
             <Divider sx={{ my: 3 }} />
@@ -844,10 +863,8 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               <ToggleButton
                 value="opensea"
                 sx={{ minWidth: '56px' }}
-                disabled={nftMinted ? false : true}
-                onClick={() => {
-                  window.open('http://google.com');
-                }}
+                disabled={isLinksGenerated}
+                onClick={() => handleOpenSeaLink(transactionHash)}
               >
                 <Box
                   component="img"
@@ -864,6 +881,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
+          {isLinksGenerating ? (
+            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
+          ) : (
+            <Divider sx={{ my: 3 }} />
+          )}
 
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
