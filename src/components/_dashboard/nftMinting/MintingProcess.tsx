@@ -82,9 +82,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
     setAlignment(newAlignment);
   };
-  const [transactionHash, setTransactionHash] = useState('');
-  const [nftMinted, setNftMinted] = useState(false);
-  const [tokenID, setTokenID] = useState(0);
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -128,9 +125,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const [isFileUploading, setFileUploading] = useState(false);
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+  const [transactionHash, setTransactionHash] = useState('');
   const [isMinting, setMinting] = useState(false);
-  const [isLinksGenerating, setLinksGenerating] = useState(false);
-  const [isLinksGenerated, setLinksGenerated] = useState(false);
+  const [nftMinted, setNftMinted] = useState(false);
+  const [tokenID, setTokenID] = useState(0);
 
   const [srcImage, setSrcImage] = useState('');
 
@@ -391,12 +389,13 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         contract.methods
           .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
           .send({ from: addr })
-          .once('transactionHash', async (txhash: string) => {
+          .once('transactionHash', (txhash: string) => {
             setTransactionHash(txhash);
           })
           .once('receipt', (receipt: any) => {
             setMinting(false);
             setNftMinted(true);
+            setTokenID(receipt.events.Transfer.returnValues.tokenId);
           })
           .catch((error: any) => {
             console.log(error);
@@ -406,25 +405,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     }
   }
 
-  async function getURI(transactionHash: string) {
-    setLinksGenerating(true);
-    const web3 = new Web3(window.ethereum as any);
-    web3.eth
-      .getTransactionReceipt(transactionHash)
-      .then((data) => {
-        let logs = data.logs;
-        console.log(logs);
-        setTokenID(web3.utils.hexToNumber(logs[0].topics[3]));
-        setLinksGenerated(true);
-      })
-      .catch((error) => console.log(error));
-    setLinksGenerating(false);
-  }
-
-  async function handleOpenSeaLink(transactionHash: string) {
-    if (transactionHash !== '') {
-      await getURI(transactionHash);
-    }
+  async function handleOpenSeaLink() {
     window.open(`https://opensea.io/assets/matic/${contractAddress}/${tokenID}`);
   }
 
@@ -838,14 +819,12 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </SvgIcon>
             </Alert>
           </Grid>
+
           {isMinting ? (
-            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
-          ) : isLinksGenerating ? (
             <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
           ) : (
             <Divider sx={{ my: 3 }} />
           )}
-
           <Stack
             direction="row"
             alignItems="center"
@@ -863,8 +842,8 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               <ToggleButton
                 value="opensea"
                 sx={{ minWidth: '56px' }}
-                disabled={isLinksGenerated}
-                onClick={() => handleOpenSeaLink(transactionHash)}
+                disabled={tokenID === 0 ? true : false}
+                onClick={handleOpenSeaLink}
               >
                 <Box
                   component="img"
@@ -881,11 +860,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
-          {isLinksGenerating ? (
-            <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
-          ) : (
-            <Divider sx={{ my: 3 }} />
-          )}
 
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
