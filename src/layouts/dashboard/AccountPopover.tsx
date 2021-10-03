@@ -57,7 +57,7 @@ export default function AccountPopover() {
           {shortenAddress(selectedAccountAddress, 5)}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {selectedNetworkName}
+          {selectedAccountAddress === '' ? 'Hello World' : selectedNetworkName}
         </Typography>
       </>
     );
