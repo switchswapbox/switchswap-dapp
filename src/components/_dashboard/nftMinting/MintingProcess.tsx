@@ -17,7 +17,8 @@ import {
   Stepper,
   StepLabel,
   Typography,
-  LinearProgress
+  LinearProgress,
+  Alert
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -80,6 +81,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
     setAlignment(newAlignment);
   };
+  const [transactionHash, setTransactionHash] = useState('');
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -393,7 +395,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         contract.methods
           .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
           .send({ from: addr })
-          .then(console.log('success'))
+          .once('transactionHash', async (txhash: string) => {
+            setTransactionHash(txhash);
+          })
           .catch((error: any) => console.log(error));
       }
     }
@@ -794,6 +798,22 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 </Button>
               </Stack>
             </Grid>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Alert
+              icon={false}
+              severity="info"
+              sx={{
+                width: '100%',
+                wordWrap: 'break-word',
+                display: transactionHash !== '' ? 'flex' : 'none'
+              }}
+            >
+              {`Your NFT is minted with transaction hash: ${transactionHash} `}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
+            </Alert>
           </Grid>
           {isMetadataUploading ? (
             <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
