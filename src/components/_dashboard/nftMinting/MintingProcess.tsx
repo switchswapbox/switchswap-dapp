@@ -424,20 +424,17 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           .then((tx: any) => {
             setTransactionHash(tx.hash);
             providerEthers.waitForTransaction(tx.hash).then(() => {
-              console.log(tx);
               setMinting(false);
               setNftMinted(true);
+              providerEthers.getTransactionReceipt(tx.hash).then((receipt: any) => {
+                setTokenID(parseInt(receipt.logs[0].topics[3], 16));
+              });
             });
           })
           .catch((error: any) => {
             console.log(error);
             setMinting(false);
           });
-        // .once('receipt', (receipt: any) => {
-        //   setMinting(false);
-        //   setNftMinted(true);
-        //   setTokenID(receipt.events.Transfer.returnValues.tokenId);
-        // })
       }
     }
   }
