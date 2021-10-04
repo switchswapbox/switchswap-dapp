@@ -27,8 +27,6 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from '../../Label';
 import { useSnackbar, VariantType } from 'notistack';
 import closeFill from '@iconify/icons-eva/close-fill';
-import Web3 from 'web3';
-import Web3Eth from 'web3-eth';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
@@ -419,23 +417,27 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         const providerEthers = new ethers.providers.Web3Provider(provider);
         const signer = providerEthers.getSigner();
         const addr = await signer.getAddress();
-        const web3 = new Web3(window.ethereum as any);
-        const contract = await new web3.eth.Contract(ABI, contractAddress);
-        contract.methods
+        const contract = new ethers.Contract(contractAddress, ABI, providerEthers);
+        const signedContract = contract.connect(signer);
+        signedContract
           .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
-          .send({ from: addr })
-          .once('transactionHash', (txhash: string) => {
-            setTransactionHash(txhash);
-          })
-          .once('receipt', (receipt: any) => {
-            setMinting(false);
-            setNftMinted(true);
-            setTokenID(receipt.events.Transfer.returnValues.tokenId);
+          .then((tx: any) => {
+            setTransactionHash(tx.hash);
+            providerEthers.waitForTransaction(tx.hash).then(() => {
+              console.log(tx);
+              setMinting(false);
+              setNftMinted(true);
+            });
           })
           .catch((error: any) => {
             console.log(error);
             setMinting(false);
           });
+        // .once('receipt', (receipt: any) => {
+        //   setMinting(false);
+        //   setNftMinted(true);
+        //   setTokenID(receipt.events.Transfer.returnValues.tokenId);
+        // })
       }
     }
   }
