@@ -14,7 +14,8 @@ const ICONS = {
   gallery: getIcon('ic_kanban'),
   nftMinting: getIcon('ic_analytics'),
   nftManager: getIcon('ic_banking'),
-  learnMore: getIcon('ic_chat')
+  learnMore: getIcon('ic_chat'),
+  funBox: getIcon('ic_calendar')
 };
 
 const sidebarConfig = [
@@ -29,7 +30,8 @@ const sidebarConfig = [
         children: [{ title: 'Universe', path: PATH_DASHBOARD.gallery.universe }]
       },
       { title: 'D-NFT Minting', path: PATH_DASHBOARD.app.nftMinting, icon: ICONS.nftMinting },
-      { title: 'NFT Manager', path: PATH_DASHBOARD.app.nftManager, icon: ICONS.nftManager }
+      { title: 'NFT Manager', path: PATH_DASHBOARD.app.nftManager, icon: ICONS.nftManager },
+      { title: 'Funbox', path: PATH_DASHBOARD.app.funBox, icon: ICONS.funBox }
     ]
   },
   {
