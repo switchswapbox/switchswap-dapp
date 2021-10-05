@@ -439,10 +439,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     }
   }
 
-  async function handleOpenSeaLink() {
-    window.open(`https://opensea.io/assets/matic/${contractAddress}/${tokenID}`);
-  }
-
   return (
     <>
       <Scrollbar>
@@ -464,6 +460,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           })}
         </Stepper>
       </Scrollbar>
+
       {activeStep === steps.length ? (
         <>
           <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
@@ -523,7 +520,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   <Typography variant="subtitle2">
                     Uploaded successfully to Crust Network
                   </Typography>
-                  <Typography variant="body2">CID: {uploadedCid.cid}</Typography>
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+                    CID: {uploadedCid.cid}
+                  </Typography>
                 </Stack>
               </Stack>
             </Box>
@@ -727,7 +726,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   <Typography variant="subtitle2">
                     Uploaded successfully to Crust Network
                   </Typography>
-                  <Typography variant="body2">CID: {metadataCid}</Typography>
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+                    CID: {metadataCid}
+                  </Typography>
                 </Stack>
               </Stack>
             </Box>
@@ -835,14 +836,13 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </Stack>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sx={{ pt: 3, display: transactionHash !== '' ? 'flex' : 'none' }}>
             <Alert
               icon={false}
               severity={nftMinted ? 'success' : 'info'}
               sx={{
                 width: '100%',
-                wordWrap: 'break-word',
-                display: transactionHash !== '' ? 'flex' : 'none'
+                wordBreak: 'break-word'
               }}
             >
               {nftMinted
@@ -863,32 +863,34 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             direction="row"
             alignItems="center"
             justifyContent={{ xs: 'center' }}
-            sx={{ pb: 3, width: '100%' }}
+            sx={{ pb: 3, width: '100%', display: transactionHash === '' ? 'none' : 'flex' }}
           >
             <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }} disabled={true}>
+              <ToggleButton
+                value="etherscan"
+                sx={{ minWidth: '56px', display: transactionHash === '' ? 'none' : 'flex' }}
+                href={transactionHash !== '' ? `https://polygonscan.com/tx/${transactionHash}` : ''}
+                target="_blank"
+              >
                 <Box
                   component="img"
-                  src="./static/icons/shared/etherscan.svg"
+                  src="./static/icons/shared/polygon-white.svg"
                   sx={{ height: '24px', width: '32px' }}
                 />
               </ToggleButton>
               <ToggleButton
                 value="opensea"
-                sx={{ minWidth: '56px' }}
-                disabled={tokenID === 0 ? true : false}
-                onClick={handleOpenSeaLink}
+                sx={{ minWidth: '56px', display: tokenID === 0 ? 'none' : 'flex' }}
+                href={
+                  tokenID !== 0
+                    ? `https://opensea.io/assets/matic/${contractAddress}/${tokenID}`
+                    : ''
+                }
+                target="_blank"
               >
                 <Box
                   component="img"
                   src="./static/icons/shared/opensea.svg"
-                  sx={{ height: '24px', width: '32px' }}
-                />
-              </ToggleButton>
-              <ToggleButton value="switchswap" sx={{ minWidth: '56px' }} disabled>
-                <Box
-                  component="img"
-                  src="./static/icons/shared/switchswap.svg"
                   sx={{ height: '24px', width: '32px' }}
                 />
               </ToggleButton>
@@ -905,7 +907,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 Skip
               </Button>
             )}
-            <Button variant="contained" onClick={handleNext}>
+            <Button
+              variant="contained"
+              onClick={handleNext}
+              sx={{ display: activeStep === steps.length - 1 ? 'none' : 'flex' }}
+            >
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
