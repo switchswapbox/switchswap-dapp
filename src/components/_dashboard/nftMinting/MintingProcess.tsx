@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 // material
 import {
   Box,
-  Card,
   Step,
   Divider,
   Paper,
@@ -19,11 +18,9 @@ import {
   Switch,
   Stepper,
   StepLabel,
-  CardContent,
   Typography,
-  CardHeader,
   LinearProgress,
-  FormControlLabel
+  Alert
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -44,8 +41,9 @@ import { create } from 'ipfs-http-client';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
 
+import { ABI } from '../../../utils/abi';
+import { contractAddress } from '../../../utils/contractAddress';
 import { IPFS_GATEWAY_W3AUTH, IPFS_PINNING_SERVICE_W3AUTH } from '../../../assets/COMMON_VARIABLES';
-import { lte } from 'lodash';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -151,6 +149,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
   const [isFileUploading, setFileUploading] = useState(false);
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+  const [transactionHash, setTransactionHash] = useState('');
+  const [isMinting, setMinting] = useState(false);
+  const [nftMinted, setNftMinted] = useState(false);
+  const [tokenID, setTokenID] = useState(0);
 
   const [srcImage, setSrcImage] = useState('');
 
@@ -213,7 +215,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         }
       }
     );
-    console.log(result);
   };
 
   const uploadFileMetamask = async () => {
@@ -265,13 +266,19 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
         fileName: uploadedCid.name,
         size: uploadedCid.size
       };
-      ipfs.add(JSON.stringify(metadata)).then((added) => {
-        setStepTwoNotDone(false);
-        setMetadataUploading(false);
-        setStepTwoNotDone(false);
-        setMetadataCid(added.cid.toV0().toString());
-        resolve({ cid: added.cid.toV0().toString(), size: added.size });
-      });
+      ipfs
+        .add(JSON.stringify(metadata))
+        .then((added) => {
+          console.log(added);
+          setStepTwoNotDone(false);
+          setMetadataUploading(false);
+          setStepTwoNotDone(false);
+          setMetadataCid(added.cid.toV0().toString());
+          resolve({ cid: added.cid.toV0().toString(), size: added.size });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
   }
 
@@ -295,7 +302,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
         uploadMetadataW3GatewayPromise(authHeader)
           .then((metadataInfo) => {
-            console.log(metadataInfo);
             pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
           })
           .catch((error) => {
@@ -328,7 +334,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     const signRaw = injector?.signer?.signRaw;
 
-    // console.log(account.address);
     let signature = '';
     if (!!signRaw) {
       // after making sure that signRaw is defined
@@ -371,7 +376,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     const signRaw = injector?.signer?.signRaw;
 
-    // console.log(account.address);
     let signature = '';
     if (!!signRaw) {
       // after making sure that signRaw is defined
@@ -389,7 +393,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
     uploadMetadataW3GatewayPromise(authHeader)
       .then((metadataInfo) => {
-        // console.log(metadataInfo);
         pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
       })
       .catch((error) => {
@@ -401,6 +404,40 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     const filteredItems = files.filter((_file) => _file !== file);
     setFiles(filteredItems);
   };
+
+  async function mintDataNTF() {
+    const provider = await detectEthereumProvider();
+    if (provider && provider.isMetaMask) {
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      });
+
+      if (parseInt(chainId, 16) === 137) {
+        setMinting(true);
+        const providerEthers = new ethers.providers.Web3Provider(provider);
+        const signer = providerEthers.getSigner();
+        const addr = await signer.getAddress();
+        const contract = new ethers.Contract(contractAddress, ABI, providerEthers);
+        const signedContract = contract.connect(signer);
+        signedContract
+          .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
+          .then((tx: any) => {
+            setTransactionHash(tx.hash);
+            providerEthers.waitForTransaction(tx.hash).then(() => {
+              setMinting(false);
+              setNftMinted(true);
+              providerEthers.getTransactionReceipt(tx.hash).then((receipt: any) => {
+                setTokenID(parseInt(receipt.logs[0].topics[3], 16));
+              });
+            });
+          })
+          .catch((error: any) => {
+            console.log(error);
+            setMinting(false);
+          });
+      }
+    }
+  }
 
   return (
     <>
@@ -423,6 +460,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
           })}
         </Stepper>
       </Scrollbar>
+
       {activeStep === steps.length ? (
         <>
           <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
@@ -437,6 +475,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 0
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
       {activeStep === 0 && nftType === 'withoutNftCard' ? (
         <>
           <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
@@ -479,7 +520,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   <Typography variant="subtitle2">
                     Uploaded successfully to Crust Network
                   </Typography>
-                  <Typography variant="body2">CID: {uploadedCid.cid}</Typography>
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+                    CID: {uploadedCid.cid}
+                  </Typography>
                 </Stack>
               </Stack>
             </Box>
@@ -508,6 +551,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 1
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
       {activeStep === 1 ? (
         <>
@@ -679,7 +726,9 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   <Typography variant="subtitle2">
                     Uploaded successfully to Crust Network
                   </Typography>
-                  <Typography variant="body2">CID: {metadataCid}</Typography>
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+                    CID: {metadataCid}
+                  </Typography>
                 </Stack>
               </Stack>
             </Box>
@@ -703,6 +752,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
+
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 2
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
       {activeStep === 2 ? (
         <>
@@ -736,11 +789,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             </Grid>
           </Grid>
 
-          {isMetadataUploading ? (
-            <LinearProgress color="info" sx={{ my: 3 }} />
-          ) : (
-            <Divider sx={{ my: 3 }} />
-          )}
+          {isMinting ? <LinearProgress color="info" sx={{ my: 3 }} /> : <Divider sx={{ my: 3 }} />}
           <Grid
             container
             sx={{
@@ -772,6 +821,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                   type="button"
                   color="warning"
                   variant="contained"
+                  onClick={mintDataNTF}
                   startIcon={
                     <Box
                       component="img"
@@ -786,37 +836,61 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </Stack>
             </Grid>
           </Grid>
-          {isMetadataUploading ? (
+          <Grid item xs={12} sx={{ pt: 3, display: transactionHash !== '' ? 'flex' : 'none' }}>
+            <Alert
+              icon={false}
+              severity={nftMinted ? 'success' : 'info'}
+              sx={{
+                width: '100%',
+                wordBreak: 'break-word'
+              }}
+            >
+              {nftMinted
+                ? `Your NFT is minted with transaction hash: ${transactionHash} `
+                : `Your request of minting NFT is in progress with transaction hash: ${transactionHash} `}
+              <SvgIcon>
+                <Icon icon="fxemoji:rocket" />
+              </SvgIcon>
+            </Alert>
+          </Grid>
+
+          {isMinting ? (
             <LinearProgress variant="query" color="info" sx={{ my: 3 }} />
           ) : (
             <Divider sx={{ my: 3 }} />
           )}
-
           <Stack
             direction="row"
             alignItems="center"
             justifyContent={{ xs: 'center' }}
-            sx={{ pb: 3, width: '100%' }}
+            sx={{ pb: 3, width: '100%', display: transactionHash === '' ? 'none' : 'flex' }}
           >
             <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-              <ToggleButton value="etherscan" sx={{ minWidth: '56px' }}>
+              <ToggleButton
+                value="etherscan"
+                sx={{ minWidth: '56px', display: transactionHash === '' ? 'none' : 'flex' }}
+                href={transactionHash !== '' ? `https://polygonscan.com/tx/${transactionHash}` : ''}
+                target="_blank"
+              >
                 <Box
                   component="img"
-                  src="./static/icons/shared/etherscan.svg"
+                  src="./static/icons/shared/polygon-white.svg"
                   sx={{ height: '24px', width: '32px' }}
                 />
               </ToggleButton>
-              <ToggleButton value="opensea" sx={{ minWidth: '56px' }}>
+              <ToggleButton
+                value="opensea"
+                sx={{ minWidth: '56px', display: tokenID === 0 ? 'none' : 'flex' }}
+                href={
+                  tokenID !== 0
+                    ? `https://opensea.io/assets/matic/${contractAddress}/${tokenID}`
+                    : ''
+                }
+                target="_blank"
+              >
                 <Box
                   component="img"
                   src="./static/icons/shared/opensea.svg"
-                  sx={{ height: '24px', width: '32px' }}
-                />
-              </ToggleButton>
-              <ToggleButton value="switchswap" sx={{ minWidth: '56px' }} disabled>
-                <Box
-                  component="img"
-                  src="./static/icons/shared/switchswap.svg"
                   sx={{ height: '24px', width: '32px' }}
                 />
               </ToggleButton>
@@ -833,7 +907,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 Skip
               </Button>
             )}
-            <Button variant="contained" onClick={handleNext}>
+            <Button
+              variant="contained"
+              onClick={handleNext}
+              sx={{ display: activeStep === steps.length - 1 ? 'none' : 'flex' }}
+            >
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
