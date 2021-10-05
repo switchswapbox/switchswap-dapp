@@ -11,7 +11,7 @@ export default function LearnMore() {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Page Four">
+    <Page title="Learn More">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <ComingSoon />
       </Container>

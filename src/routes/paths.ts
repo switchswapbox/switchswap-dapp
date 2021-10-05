@@ -13,7 +13,8 @@ export const PATH_DASHBOARD = {
   app: {
     homepage: path(ROOTS_DASHBOARD, '/home'),
     nftMinting: path(ROOTS_DASHBOARD, '/nft-minting'),
-    nftManager: path(ROOTS_DASHBOARD, '/nft-manager')
+    nftManager: path(ROOTS_DASHBOARD, '/nft-manager'),
+    funBox: path(ROOTS_DASHBOARD, '/fun-box')
   },
   gallery: {
     root: path(ROOTS_DASHBOARD, '/gallery'),
