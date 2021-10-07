@@ -30,7 +30,6 @@ import closeFill from '@iconify/icons-eva/close-fill';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
-import UploadSingleFile from './UploadSingleFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
@@ -43,7 +42,13 @@ import { Icon } from '@iconify/react';
 
 import { ABI } from '../../../utils/abi';
 import { contractAddress } from '../../../utils/contractAddress';
-import { IPFS_GATEWAY_W3AUTH, IPFS_PINNING_SERVICE_W3AUTH } from '../../../assets/COMMON_VARIABLES';
+import {
+  IPFS_GATEWAY_W3AUTH,
+  IPFS_PINNING_SERVICE_W3AUTH,
+  CRUST_WALLET_WIKI,
+  METAMASK_SELECT_POLYGON_URL,
+  INSTALL_METAMASK_URL
+} from '../../../assets/COMMON_VARIABLES';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -72,25 +77,27 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const onSnackbarClose = (color: VariantType, text: string) => {
-    enqueueSnackbar(
-      <div>
-        <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-          {color}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {text}
-        </Typography>
-      </div>,
-      {
-        variant: color,
-        action: (key) => (
+  const onSnackbarAction = (color: VariantType, text: string, url?: string) => {
+    enqueueSnackbar(text, {
+      variant: color,
+      action: (key) => (
+        <>
+          {url && (
+            <Button
+              size="small"
+              color={color !== 'default' ? color : 'primary'}
+              href={url}
+              target="_blank"
+            >
+              Learn
+            </Button>
+          )}
           <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
             <Icon icon={closeFill} width={24} height={24} />
           </IconButton>
-        )
-      }
-    );
+        </>
+      )
+    });
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -243,10 +250,14 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             console.log(error);
           });
       } else {
-        onSnackbarClose('warning', 'Please select Polygon Network from Metamask');
+        onSnackbarAction(
+          'warning',
+          'Please select Polygon Network from Metamask',
+          METAMASK_SELECT_POLYGON_URL
+        );
       }
     } else {
-      onSnackbarClose('warning', 'Please install Metamask');
+      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
     }
   };
 
@@ -308,17 +319,21 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             console.log(error);
           });
       } else {
-        onSnackbarClose('warning', 'Please select Polygon Network from Metamask');
+        onSnackbarAction(
+          'warning',
+          'Please select Polygon Network from Metamask',
+          METAMASK_SELECT_POLYGON_URL
+        );
       }
     } else {
-      onSnackbarClose('warning', 'Please install Metamask');
+      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
     }
   };
 
   const uploadFileCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarClose('warning', 'Please install Crust Wallet');
+      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -360,7 +375,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const uploadMetadataCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarClose('warning', 'Please install Crust Wallet');
+      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
