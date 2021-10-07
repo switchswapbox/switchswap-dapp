@@ -20,7 +20,8 @@ import {
   StepLabel,
   Typography,
   LinearProgress,
-  Alert
+  Alert,
+  Card
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -49,6 +50,8 @@ import {
   METAMASK_SELECT_POLYGON_URL,
   INSTALL_METAMASK_URL
 } from '../../../assets/COMMON_VARIABLES';
+import NftCardsCarousel from './NftCardsCarousel';
+import ProductDetailsSummary from './ProductDetailsSummary';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -149,7 +152,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const [file, setFile] = useState<File>();
-  const [stepOneNotDone, setStepOneNotDone] = useState(true);
+  const [stepOneNotDone, setStepOneNotDone] = useState(false);
   const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
   const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
   const [metadataCid, setMetadataCid] = useState('');
@@ -454,6 +457,19 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     }
   }
 
+  const nftCards = {
+    images: [
+      './static/sample-nft/simplified/01.png',
+      './static/sample-nft/simplified/02.png',
+      './static/sample-nft/simplified/03.png',
+      './static/sample-nft/simplified/04.png',
+      './static/sample-nft/simplified/01.png',
+      './static/sample-nft/simplified/02.png',
+      './static/sample-nft/simplified/03.png',
+      './static/sample-nft/simplified/04.png'
+    ]
+  };
+
   return (
     <>
       <Scrollbar>
@@ -573,6 +589,16 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       {activeStep === 1 ? (
         <>
+          <>
+            <Grid container spacing={3} sx={{ pt: 5 }}>
+              <Grid item xs={12} md={6} lg={7}>
+                <NftCardsCarousel nftCards={nftCards} />
+              </Grid>
+              <Grid item xs={12} md={6} lg={5}>
+                {/* <ProductDetailsSummary product={product} cart={checkout.cart} /> */}
+              </Grid>
+            </Grid>
+          </>
           <Grid container spacing={3} sx={{ pt: 5 }}>
             <Grid item xs={12} md={6} lg={7}>
               {/* <ProductDetailsCarousel product={product} /> */}

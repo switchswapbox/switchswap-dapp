@@ -5,6 +5,9 @@ import 'simplebar/src/simplebar.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+// lightbox
+import 'react-image-lightbox/style.css';
+
 import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
