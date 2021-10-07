@@ -51,7 +51,7 @@ import {
   INSTALL_METAMASK_URL
 } from '../../../assets/COMMON_VARIABLES';
 import NftCardsCarousel from './NftCardsCarousel';
-import ProductDetailsSummary from './ProductDetailsSummary';
+import MetadataSummary from './MetadataSummary';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -65,6 +65,19 @@ type FileInfoType = {
   name: string;
   cid: string;
   size: number;
+};
+
+const nftCards = {
+  images: [
+    './static/sample-nft/simplified/01.png',
+    './static/sample-nft/simplified/02.png',
+    './static/sample-nft/simplified/03.png',
+    './static/sample-nft/simplified/04.png',
+    './static/sample-nft/simplified/01.png',
+    './static/sample-nft/simplified/02.png',
+    './static/sample-nft/simplified/03.png',
+    './static/sample-nft/simplified/04.png'
+  ]
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {
@@ -457,19 +470,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     }
   }
 
-  const nftCards = {
-    images: [
-      './static/sample-nft/simplified/01.png',
-      './static/sample-nft/simplified/02.png',
-      './static/sample-nft/simplified/03.png',
-      './static/sample-nft/simplified/04.png',
-      './static/sample-nft/simplified/01.png',
-      './static/sample-nft/simplified/02.png',
-      './static/sample-nft/simplified/03.png',
-      './static/sample-nft/simplified/04.png'
-    ]
-  };
-
   return (
     <>
       <Scrollbar>
@@ -595,13 +595,12 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 <NftCardsCarousel nftCards={nftCards} />
               </Grid>
               <Grid item xs={12} md={6} lg={5}>
-                {/* <ProductDetailsSummary product={product} cart={checkout.cart} /> */}
+                <MetadataSummary product={null} />
               </Grid>
             </Grid>
           </>
           <Grid container spacing={3} sx={{ pt: 5 }}>
             <Grid item xs={12} md={6} lg={7}>
-              {/* <ProductDetailsCarousel product={product} /> */}
               <Stack alignItems="center" justifyContent="center">
                 <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
               </Stack>
