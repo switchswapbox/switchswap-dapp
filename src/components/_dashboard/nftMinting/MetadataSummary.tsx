@@ -54,12 +54,7 @@ const SOCIALS = [
   }
 ];
 
-const RootStyle = styled('div')(({ theme }) => ({
-  padding: theme.spacing(3),
-  [theme.breakpoints.up(1368)]: {
-    padding: theme.spacing(5, 8)
-  }
-}));
+const RootStyle = styled('div')(({ theme }) => ({}));
 
 // ----------------------------------------------------------------------
 
@@ -291,7 +286,6 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
     name,
     sizes,
     price,
-    cover,
     status,
     colors,
     available,
@@ -313,56 +307,39 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
     <RootStyle {...other}>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Label
-            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-            color={inventoryType === 'in_stock' ? 'success' : 'error'}
-            sx={{ textTransform: 'uppercase' }}
-          >
-            {sentenceCase(inventoryType || '')}
-          </Label>
-
-          <Typography
-            variant="overline"
-            sx={{
-              mt: 2,
-              mb: 1,
-              display: 'block',
-              color: status === 'sale' ? 'error.main' : 'info.main'
-            }}
-          >
-            {status}
-          </Typography>
-
           <Typography variant="h5" paragraph>
             {name}
           </Typography>
 
-          <Box sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
-            <Rating value={totalRating} precision={0.1} readOnly />
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              ({fShortenNumber(totalReview)}
-              reviews)
-            </Typography>
-          </Box>
-
-          <Typography variant="h4" sx={{ mb: 3 }}>
-            <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-              {priceSale && fCurrency(priceSale)}
-            </Box>
-            &nbsp;{fCurrency(price)}
+          <Typography variant="body1" sx={{ color: 'text.secondary', mb: 1 }}>
+            Description
           </Typography>
+
+          <TextField
+            rows={3}
+            fullWidth
+            variant="standard"
+            multiline
+            autoFocus
+            size="small"
+            placeholder="Enter what is so cool about my NFT"
+            type="string"
+          />
 
           <Divider sx={{ borderStyle: 'dashed' }} />
 
+          <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 2 }}>
+            FILE QR CODE
+          </Label>
           <Box
             sx={{
-              my: 3,
+              my: 2,
               display: 'flex',
               justifyContent: 'space-between'
             }}
           >
             <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-              Color
+              QR Code Style
             </Typography>
             <ColorSinglePicker
               {...getFieldProps('color')}
@@ -384,25 +361,13 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
             }}
           >
             <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-              Size
+              Middle Icon
             </Typography>
             <TextField
               select
               size="small"
               {...getFieldProps('size')}
               SelectProps={{ native: true }}
-              FormHelperTextProps={{
-                sx: {
-                  textAlign: 'right',
-                  margin: 0,
-                  mt: 1
-                }
-              }}
-              helperText={
-                <Link href="#" underline="always" color="text.primary">
-                  Size Chart
-                </Link>
-              }
             >
               {sizes.map((size: string) => (
                 <option key={size} value={size}>
@@ -414,64 +379,54 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
 
           <Box
             sx={{
+              my: 2,
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+              Anchor Point Color
+            </Typography>
+            <ColorSinglePicker
+              {...getFieldProps('color')}
+              colors={colors}
+              sx={{
+                ...(colors.length > 4 && {
+                  maxWidth: 144,
+                  justifyContent: 'flex-end'
+                })
+              }}
+            />
+          </Box>
+
+          <Box
+            sx={{
               mb: 3,
               display: 'flex',
               justifyContent: 'space-between'
             }}
           >
             <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-              Quantity
+              Middle Icon
             </Typography>
-
-            <div>
-              <Incrementer name="quantity" available={available} />
-              <Typography
-                variant="caption"
-                sx={{
-                  mt: 1,
-                  display: 'block',
-                  textAlign: 'right',
-                  color: 'text.secondary'
-                }}
-              >
-                Available: {available}
-              </Typography>
-            </div>
+            <TextField
+              select
+              size="small"
+              {...getFieldProps('size')}
+              SelectProps={{ native: true }}
+            >
+              {sizes.map((size: string) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </TextField>
           </Box>
 
           <Divider sx={{ borderStyle: 'dashed' }} />
-
-          <Box sx={{ mt: 5 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  fullWidth
-                  size="large"
-                  type="button"
-                  color="warning"
-                  variant="contained"
-                  startIcon={<Icon icon={roundAddShoppingCart} />}
-                  sx={{ whiteSpace: 'nowrap' }}
-                >
-                  Add to Cart
-                </Button>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Button fullWidth size="large" type="submit" variant="contained">
-                  Buy Now
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-
-          <Box sx={{ mt: 3, textAlign: 'center' }}>
-            {SOCIALS.map((social) => (
-              <Tooltip key={social.name} title={social.name}>
-                <MIconButton>{social.icon}</MIconButton>
-              </Tooltip>
-            ))}
-          </Box>
+          <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 2 }}>
+            AUTHOR QR CODE
+          </Label>
         </Form>
       </FormikProvider>
     </RootStyle>

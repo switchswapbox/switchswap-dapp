@@ -138,7 +138,7 @@ export default function NftCardsCarousel({ nftCards }: NftCardsCarouselProps) {
 
   return (
     <RootStyle>
-      <Box sx={{ p: 1 }}>
+      <Box>
         <Box
           sx={{
             zIndex: 0,

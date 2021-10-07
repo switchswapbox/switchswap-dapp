@@ -15,13 +15,11 @@ import {
   Tooltip,
   Grid,
   IconButton,
-  Switch,
   Stepper,
   StepLabel,
   Typography,
   LinearProgress,
-  Alert,
-  Card
+  Alert
 } from '@mui/material';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -624,7 +622,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 variant="standard"
                 multiline
                 type="string"
-                autoFocus
                 required={true}
                 defaultValue={nameNft}
                 onChange={handleNameNftInputChange}
@@ -638,7 +635,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </Box>
 
               <TextField
-                rows={4}
+                rows={3}
                 fullWidth
                 variant="standard"
                 multiline
