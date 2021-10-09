@@ -9,7 +9,6 @@ import ScrollToTop from './components/ScrollToTop';
 import { ProgressBarStyle } from './components/LoadingScreen';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 import NotistackProvider from './components/NotistackProvider';
-import { Provider } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
