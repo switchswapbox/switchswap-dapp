@@ -15,7 +15,6 @@ import {
   Tooltip,
   Grid,
   IconButton,
-  Switch,
   Stepper,
   StepLabel,
   Typography,
@@ -30,7 +29,6 @@ import closeFill from '@iconify/icons-eva/close-fill';
 
 import Scrollbar from '../../Scrollbar';
 import UploadMultiFile from './UploadMultiFile';
-import UploadSingleFile from './UploadSingleFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
@@ -43,7 +41,15 @@ import { Icon } from '@iconify/react';
 
 import { ABI } from '../../../utils/abi';
 import { contractAddress } from '../../../utils/contractAddress';
-import { IPFS_GATEWAY_W3AUTH, IPFS_PINNING_SERVICE_W3AUTH } from '../../../assets/COMMON_VARIABLES';
+import {
+  IPFS_GATEWAY_W3AUTH,
+  IPFS_PINNING_SERVICE_W3AUTH,
+  CRUST_WALLET_WIKI,
+  METAMASK_SELECT_POLYGON_URL,
+  INSTALL_METAMASK_URL
+} from '../../../assets/COMMON_VARIABLES';
+import NftCardsCarousel from './NftCardsCarousel';
+import MetadataSummary from './MetadataSummary';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -59,6 +65,19 @@ type FileInfoType = {
   size: number;
 };
 
+const nftCards = {
+  images: [
+    './static/sample-nft/simplified/01.png',
+    './static/sample-nft/simplified/02.png',
+    './static/sample-nft/simplified/03.png',
+    './static/sample-nft/simplified/04.png',
+    './static/sample-nft/simplified/01.png',
+    './static/sample-nft/simplified/02.png',
+    './static/sample-nft/simplified/03.png',
+    './static/sample-nft/simplified/04.png'
+  ]
+};
+
 export default function MintingProcess({ nftType }: MintingProcessProps) {
   const [nameNft, setNameNft] = useState('');
   const [descNft, setDescNft] = useState('');
@@ -72,25 +91,27 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const onSnackbarClose = (color: VariantType, text: string) => {
-    enqueueSnackbar(
-      <div>
-        <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-          {color}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {text}
-        </Typography>
-      </div>,
-      {
-        variant: color,
-        action: (key) => (
+  const onSnackbarAction = (color: VariantType, text: string, url?: string) => {
+    enqueueSnackbar(text, {
+      variant: color,
+      action: (key) => (
+        <>
+          {url && (
+            <Button
+              size="small"
+              color={color !== 'default' ? color : 'primary'}
+              href={url}
+              target="_blank"
+            >
+              Learn
+            </Button>
+          )}
           <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
             <Icon icon={closeFill} width={24} height={24} />
           </IconButton>
-        )
-      }
-    );
+        </>
+      )
+    });
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -142,7 +163,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const [file, setFile] = useState<File>();
-  const [stepOneNotDone, setStepOneNotDone] = useState(true);
+  const [stepOneNotDone, setStepOneNotDone] = useState(false);
   const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
   const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
   const [metadataCid, setMetadataCid] = useState('');
@@ -243,10 +264,14 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             console.log(error);
           });
       } else {
-        onSnackbarClose('warning', 'Please select Polygon Network from Metamask');
+        onSnackbarAction(
+          'warning',
+          'Please select Polygon Network from Metamask',
+          METAMASK_SELECT_POLYGON_URL
+        );
       }
     } else {
-      onSnackbarClose('warning', 'Please install Metamask');
+      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
     }
   };
 
@@ -308,17 +333,21 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             console.log(error);
           });
       } else {
-        onSnackbarClose('warning', 'Please select Polygon Network from Metamask');
+        onSnackbarAction(
+          'warning',
+          'Please select Polygon Network from Metamask',
+          METAMASK_SELECT_POLYGON_URL
+        );
       }
     } else {
-      onSnackbarClose('warning', 'Please install Metamask');
+      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
     }
   };
 
   const uploadFileCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarClose('warning', 'Please install Crust Wallet');
+      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -360,7 +389,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const uploadMetadataCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarClose('warning', 'Please install Crust Wallet');
+      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -558,9 +587,18 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       {activeStep === 1 ? (
         <>
+          {/* <>
+            <Grid container spacing={3} sx={{ pt: 5 }}>
+              <Grid item xs={12} md={6} lg={7}>
+                <NftCardsCarousel nftCards={nftCards} />
+              </Grid>
+              <Grid item xs={12} md={6} lg={5}>
+                <MetadataSummary product={null} />
+              </Grid>
+            </Grid>
+          </> */}
           <Grid container spacing={3} sx={{ pt: 5 }}>
             <Grid item xs={12} md={6} lg={7}>
-              {/* <ProductDetailsCarousel product={product} /> */}
               <Stack alignItems="center" justifyContent="center">
                 <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
               </Stack>
@@ -584,7 +622,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 variant="standard"
                 multiline
                 type="string"
-                autoFocus
                 required={true}
                 defaultValue={nameNft}
                 onChange={handleNameNftInputChange}
@@ -598,7 +635,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               </Box>
 
               <TextField
-                rows={4}
+                rows={3}
                 fullWidth
                 variant="standard"
                 multiline
