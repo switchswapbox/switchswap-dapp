@@ -587,7 +587,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       {activeStep === 1 ? (
         <>
-          <>
+          {/* <>
             <Grid container spacing={3} sx={{ pt: 5 }}>
               <Grid item xs={12} md={6} lg={7}>
                 <NftCardsCarousel nftCards={nftCards} />
@@ -596,7 +596,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 <MetadataSummary product={null} />
               </Grid>
             </Grid>
-          </>
+          </> */}
           <Grid container spacing={3} sx={{ pt: 5 }}>
             <Grid item xs={12} md={6} lg={7}>
               <Stack alignItems="center" justifyContent="center">
