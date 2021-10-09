@@ -19,18 +19,22 @@ import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
 
+import store from './redux/store';
 // ----------------------------------------------------------------------
 
 ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       <SettingsProvider>
-        <CollapseDrawerProvider>
-          <Router>
-            <App />
-          </Router>
-        </CollapseDrawerProvider>
+        <Provider store={store}>
+          <CollapseDrawerProvider>
+            <Router>
+              <App />
+            </Router>
+          </CollapseDrawerProvider>
+        </Provider>
       </SettingsProvider>
     </HelmetProvider>
   </StrictMode>,

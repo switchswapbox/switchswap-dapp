@@ -10,7 +10,6 @@ import { ProgressBarStyle } from './components/LoadingScreen';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 import NotistackProvider from './components/NotistackProvider';
 import { Provider } from 'react-redux';
-import store from './redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -20,12 +19,10 @@ export default function App() {
       <ThemePrimaryColor>
         <RtlLayout>
           <NotistackProvider>
-            <Provider store={store}>
-              <GlobalStyles />
-              <ProgressBarStyle />
-              <ScrollToTop />
-              <Router />
-            </Provider>
+            <GlobalStyles />
+            <ProgressBarStyle />
+            <ScrollToTop />
+            <Router />
           </NotistackProvider>
         </RtlLayout>
       </ThemePrimaryColor>
