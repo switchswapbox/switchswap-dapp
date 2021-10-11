@@ -9,20 +9,16 @@ import {
   Stack,
   Alert,
   Button,
-  IconButton,
   Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { Icon } from '@iconify/react';
 // hooks
 import useSettings from '../hooks/useSettings';
 // components
 import Page from '../components/Page';
-import ReactHookForm from 'components/_dashboard/funBox/ReactHookForm';
-import FaucetForm from 'components/_dashboard/funBox/FaucetForm';
+import FaucetHookForm from 'components/_dashboard/funBox/FaucetHookForm';
 import { Tweet } from 'react-twitter-widgets';
-import useCountdown from '../hooks/useCountdown';
 
 // ----------------------------------------------------------------------
 
@@ -54,28 +50,28 @@ function CountDown({ timeLeftInSeconds }: { timeLeftInSeconds: number }) {
   return (
     <CountdownStyle>
       <div>
-        <Typography variant="h2">{days}</Typography>
+        <Typography variant="h3">{days}</Typography>
         <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
       </div>
 
-      <SeparatorStyle variant="h2">:</SeparatorStyle>
+      <SeparatorStyle variant="h3">:</SeparatorStyle>
 
       <div>
-        <Typography variant="h2">{hours}</Typography>
+        <Typography variant="h3">{hours}</Typography>
         <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
       </div>
 
-      <SeparatorStyle variant="h2">:</SeparatorStyle>
+      <SeparatorStyle variant="h3">:</SeparatorStyle>
 
       <div>
-        <Typography variant="h2">{minutes}</Typography>
+        <Typography variant="h3">{minutes}</Typography>
         <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
       </div>
 
-      <SeparatorStyle variant="h2">:</SeparatorStyle>
+      <SeparatorStyle variant="h3">:</SeparatorStyle>
 
       <div>
-        <Typography variant="h2">{seconds}</Typography>
+        <Typography variant="h3">{seconds}</Typography>
         <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
       </div>
     </CountdownStyle>
@@ -94,7 +90,7 @@ export default function CruFaucet() {
     txHash: null
   });
 
-  const [dedicatedTimeleft, setDedicatedTimeleft] = useState(500);
+  const [dedicatedTimeleft, setDedicatedTimeleft] = useState(0);
 
   useEffect(() => {
     console.log(`timeLeftInSeconds ${response.timeLeftInSeconds}`);
@@ -106,40 +102,53 @@ export default function CruFaucet() {
   return (
     <Page title="Learn More">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={5}>
+        <Grid container spacing={5} justifyContent="center">
           <Grid item xs={12} sm={6}>
             <Card sx={{ position: 'static' }}>
               <CardHeader title="$CRU faucet" />
               <CardContent>
-                <ReactHookForm setTweetId={setTweetId} setResponse={setResponse} token="CRU" />
-                {/* <FaucetForm /> */}
+                <FaucetHookForm setTweetId={setTweetId} setResponse={setResponse} token="CRU" />
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            sx={{ display: tweetId !== '' || response.statusCode !== -1 ? 'block' : 'none' }}
+          >
             <Card sx={{ position: 'static' }}>
               <CardHeader title="Status" />
               <CardContent>
-                <Stack sx={{ display: tweetId !== '' ? 'flex' : 'none', mt: '-10px' }}>
-                  <Tweet tweetId={tweetId} />
+                <Stack sx={{ mt: '-10px' }}>
+                  <Stack sx={{ display: tweetId !== '' ? 'flex' : 'none' }}>
+                    <Tweet tweetId={tweetId} />
+                  </Stack>
                   <Alert
                     variant="outlined"
-                    severity="success"
+                    severity={response.statusCode === 0 ? 'success' : 'warning'}
+                    sx={{ display: response.statusCode === -1 ? 'none' : 'flex', mt: 1 }}
                     action={
-                      <IconButton
-                        color="primary"
-                        aria-label="crust explorer"
+                      <Button
+                        size="small"
+                        variant="outlined"
                         href={`https://crust.subscan.io/extrinsic/${response.txHash}`}
                         target="_blank"
+                        sx={{ display: response.statusCode === 0 ? 'flex' : 'none' }}
                       >
-                        <Icon icon="akar-icons:link-out" />
-                      </IconButton>
+                        Subscan
+                      </Button>
                     }
                   >
                     {response.message}
                   </Alert>
-                  <Stack>
-                    <Typography variant="h2">Try again in</Typography>
+                  <Stack
+                    justifyContent="center"
+                    sx={{ display: response.statusCode === 1 ? 'flex' : 'none', mt: 1 }}
+                  >
+                    <Typography variant="h3" align="center">
+                      Try again in
+                    </Typography>
                     <CountDown timeLeftInSeconds={dedicatedTimeleft} />
                   </Stack>
                 </Stack>

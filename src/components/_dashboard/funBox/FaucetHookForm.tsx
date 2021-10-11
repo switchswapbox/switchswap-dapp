@@ -25,13 +25,13 @@ const FormSchema = Yup.object().shape({
   tweetUrl: Yup.string().required('Tweet URL is required').url('Not an URL')
 });
 
-type FaucetFormProps = {
+type FaucetHookFormProps = {
   token: string;
   setTweetId: React.Dispatch<React.SetStateAction<string>>;
   setResponse: React.Dispatch<React.SetStateAction<ResponseFaucetRequest>>;
 };
 
-export default function FaucetForm({ token, setTweetId, setResponse }: FaucetFormProps) {
+export default function FaucetHookForm({ token, setTweetId, setResponse }: FaucetHookFormProps) {
   const defaultValues = {
     address: '',
     token,
@@ -64,11 +64,7 @@ export default function FaucetForm({ token, setTweetId, setResponse }: FaucetFor
   const onSubmit = async (data: FormValuesProps) => {
     console.log(data);
     // await new Promise((resolve) => setTimeout(resolve, 500));
-    const result = await axios.post('https://token-faucet.herokuapp.com/get-faucet', {
-      tweetUrl: 'https://twitter.com/switchswapbox/status/1440795467747520517?s=20',
-      address: 'cTJebFxafy1iqk7NGgMyYw7iRH2egKp8geqnnHsZMrf2Q9vTs',
-      token: 'CRU'
-    });
+    const result = await axios.post('https://token-faucet.herokuapp.com/get-faucet', data);
     setResponse(result.data);
     console.log(result.data);
 
