@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-
+import axios from 'axios';
 // material
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -23,36 +24,42 @@ const FormSchema = Yup.object().shape({
   tweetUrl: Yup.string().required('Tweet URL is required').url('Not an URL')
 });
 
-export default function ReactHookForm() {
+type FaucetFormProps = { token: string };
+
+export default function FaucetForm({ token }: FaucetFormProps) {
   const defaultValues = {
     address: '',
-    token: 'CRU',
+    token,
     tweetUrl: ''
   };
 
   const {
     reset,
+    watch,
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isDirty }
+    formState: { isSubmitting, isDirty }
   } = useForm<FormValuesProps>({
     mode: 'onTouched',
     resolver: yupResolver(FormSchema),
     defaultValues
   });
 
+  const watchingUrl = watch('tweetUrl');
+
+  useEffect(() => {
+    console.log(watchingUrl);
+  }, [watchingUrl]);
+
   const onSubmit = async (data: FormValuesProps) => {
     console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    alert(
-      JSON.stringify(
-        {
-          ...data
-        },
-        null,
-        2
-      )
-    );
+    // await new Promise((resolve) => setTimeout(resolve, 500));
+    const result = await axios.post('https://token-faucet.herokuapp.com/get-faucet', {
+      tweetUrl: 'https://twitter.com/switchswapbox/status/1440795467747520517?s=20',
+      address: 'cTJebFxafy1iqk7NGgMyYw7iRH2egKp8geqnnHsZMrf2Q9vTs',
+      token: 'CRU'
+    });
+
     reset();
   };
 
