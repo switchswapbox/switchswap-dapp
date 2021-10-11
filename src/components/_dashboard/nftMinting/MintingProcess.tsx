@@ -50,6 +50,10 @@ import {
 } from '../../../assets/COMMON_VARIABLES';
 import NftCardsCarousel from './NftCardsCarousel';
 import MetadataSummary from './MetadataSummary';
+import svg1 from '../../../utils/svg-data/svg1';
+import svg2 from '../../../utils/svg-data/svg2';
+import svg3 from '../../../utils/svg-data/svg3';
+import svg4 from '../../../utils/svg-data/svg4';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -66,16 +70,7 @@ type FileInfoType = {
 };
 
 const nftCards = {
-  images: [
-    './static/sample-nft/simplified/01.png',
-    './static/sample-nft/simplified/02.png',
-    './static/sample-nft/simplified/03.png',
-    './static/sample-nft/simplified/04.png',
-    './static/sample-nft/simplified/01.png',
-    './static/sample-nft/simplified/02.png',
-    './static/sample-nft/simplified/03.png',
-    './static/sample-nft/simplified/04.png'
-  ]
+  images: [svg1, svg2, svg3, svg4]
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {
@@ -587,7 +582,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       {activeStep === 1 ? (
         <>
-          {/* <>
+          <>
             <Grid container spacing={3} sx={{ pt: 5 }}>
               <Grid item xs={12} md={6} lg={7}>
                 <NftCardsCarousel nftCards={nftCards} />
@@ -596,7 +591,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
                 <MetadataSummary product={null} />
               </Grid>
             </Grid>
-          </> */}
+          </>
           <Grid container spacing={3} sx={{ pt: 5 }}>
             <Grid item xs={12} md={6} lg={7}>
               <Stack alignItems="center" justifyContent="center">

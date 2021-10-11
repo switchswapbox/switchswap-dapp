@@ -7,6 +7,8 @@ import { Box } from '@mui/material';
 //
 import LightboxModal from './LightboxModal';
 import { CarouselControlsArrowsIndex } from '../../carousel';
+import { QRNormal } from 'react-qrbtf';
+import { ArgsProps } from '../../../utils/svg-data/svgArgs';
 
 // ----------------------------------------------------------------------
 
@@ -82,9 +84,24 @@ function ThumbnailItem({ item }: { item: string }) {
 }
 
 type NftCardsCarouselProps = {
-  nftCards: { images: string[] };
+  nftCards: { images: (({ qrcode, others }: ArgsProps) => JSX.Element)[] };
 };
 
+const CreateQRCode = () => {
+  return (
+    <QRNormal
+      value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
+      className="my-qrcode"
+      styles={{ svg: { width: '300px' } }}
+      type="round"
+      size={50}
+      opacity={70}
+      posType="planet"
+      otherColor="#33CCCC"
+      posColor="#009999"
+    />
+  );
+};
 export default function NftCardsCarousel({ nftCards }: NftCardsCarouselProps) {
   const [openLightbox, setOpenLightbox] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
@@ -94,7 +111,7 @@ export default function NftCardsCarousel({ nftCards }: NftCardsCarouselProps) {
   const [nav2, setNav2] = useState<Slider>();
   const slider1 = useRef<Slider | null>(null);
   const slider2 = useRef<Slider | null>(null);
-  const imagesLightbox = nftCards.images.map((_image) => _image);
+  const imagesLightbox = nftCards.images.map((_image, index) => JSON.stringify(_image));
 
   const handleOpenLightbox = (url: string) => {
     const selectedImage = findIndex(imagesLightbox, (index) => index === url);
@@ -148,8 +165,16 @@ export default function NftCardsCarousel({ nftCards }: NftCardsCarouselProps) {
           }}
         >
           <Slider {...settings1} asNavFor={nav2} ref={slider1}>
-            {nftCards.images.map((item) => (
-              <LargeItem key={item} item={item} onOpenLightbox={handleOpenLightbox} />
+            {nftCards.images.map((Component, index: number) => (
+              <Box
+                key={index}
+                sx={{
+                  width: 600,
+                  height: 300
+                }}
+              >
+                <Component qrcode={CreateQRCode()} />
+              </Box>
             ))}
           </Slider>
           <CarouselControlsArrowsIndex
@@ -190,19 +215,19 @@ export default function NftCardsCarousel({ nftCards }: NftCardsCarouselProps) {
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
-          {nftCards.images.map((item) => (
-            <ThumbnailItem key={item} item={item} />
+          {nftCards.images.map((Component, index: number) => (
+            <Component key={index} qrcode={CreateQRCode()} />
           ))}
         </Slider>
       </Box>
 
-      <LightboxModal
+      {/* <LightboxModal
         images={imagesLightbox}
         photoIndex={selectedImage}
         setPhotoIndex={setSelectedImage}
         isOpen={openLightbox}
         onClose={() => setOpenLightbox(false)}
-      />
+      /> */}
     </RootStyle>
   );
 }
