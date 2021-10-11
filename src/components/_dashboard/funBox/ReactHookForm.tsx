@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -6,6 +6,7 @@ import axios from 'axios';
 // material
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { ResponseFaucetRequest } from '../../../pages/CruFaucet';
 
 // ----------------------------------------------------------------------
 
@@ -24,9 +25,13 @@ const FormSchema = Yup.object().shape({
   tweetUrl: Yup.string().required('Tweet URL is required').url('Not an URL')
 });
 
-type FaucetFormProps = { token: string };
+type FaucetFormProps = {
+  token: string;
+  setTweetId: React.Dispatch<React.SetStateAction<string>>;
+  setResponse: React.Dispatch<React.SetStateAction<ResponseFaucetRequest>>;
+};
 
-export default function FaucetForm({ token }: FaucetFormProps) {
+export default function FaucetForm({ token, setTweetId, setResponse }: FaucetFormProps) {
   const defaultValues = {
     address: '',
     token,
@@ -48,7 +53,12 @@ export default function FaucetForm({ token }: FaucetFormProps) {
   const watchingUrl = watch('tweetUrl');
 
   useEffect(() => {
-    console.log(watchingUrl);
+    const tweetIdReg = /\/status\/([0-9]+)/;
+    const searchTweetId = watchingUrl.match(tweetIdReg);
+
+    if (searchTweetId && searchTweetId[1]) {
+      setTweetId(searchTweetId[1]);
+    }
   }, [watchingUrl]);
 
   const onSubmit = async (data: FormValuesProps) => {
@@ -59,6 +69,8 @@ export default function FaucetForm({ token }: FaucetFormProps) {
       address: 'cTJebFxafy1iqk7NGgMyYw7iRH2egKp8geqnnHsZMrf2Q9vTs',
       token: 'CRU'
     });
+    setResponse(result.data);
+    console.log(result.data);
 
     reset();
   };
