@@ -22,5 +22,9 @@ export const PATH_DASHBOARD = {
   },
   about: {
     learnMore: path(ROOTS_DASHBOARD, '/learn-more')
+  },
+  funbox: {
+    cruFaucet: path(ROOTS_DASHBOARD, '/funbox/cru-faucet'),
+    maticFaucet: path(ROOTS_DASHBOARD, '/funbox/matic-faucet')
   }
 };

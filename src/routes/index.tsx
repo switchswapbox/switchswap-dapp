@@ -36,7 +36,6 @@ const Loadable = (Component: any) => (props: any) => {
 
 export default function Router() {
   return useRoutes([
-    // Dashboard Routes
     {
       path: '/',
       element: <DashboardLayout />,
@@ -52,7 +51,13 @@ export default function Router() {
         },
         { path: 'nft-minting', element: <NftMinting /> },
         { path: 'nft-manager', element: <NftManager /> },
-        { path: 'fun-box', element: <FunBox /> },
+        {
+          path: 'fun-box',
+          children: [
+            { path: '/fun-box', element: <FunBox /> },
+            { path: '/fun-box/cru-faucet', element: <CruFaucet /> }
+          ]
+        },
         {
           path: 'learn-more',
           element: <LearnMore />
@@ -86,6 +91,7 @@ const Universe = Loadable(lazy(() => import('../pages/Universe')));
 const NftMinting = Loadable(lazy(() => import('../pages/NftMinting')));
 const NftManager = Loadable(lazy(() => import('../pages/NftManager')));
 const FunBox = Loadable(lazy(() => import('../pages/FunBox')));
+const CruFaucet = Loadable(lazy(() => import('../pages/CruFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 // Main

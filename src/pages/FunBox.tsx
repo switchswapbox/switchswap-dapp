@@ -24,7 +24,11 @@ export default function FunBox() {
           </Grid>
           <Grid container spacing={3}>
             {[
-              { name: '$CRU Faucet', href: '#', icon: './static/components/checkbox.png' },
+              {
+                name: '$CRU Faucet',
+                href: '/fun-box/cru-faucet',
+                icon: './static/components/checkbox.png'
+              },
               { name: '$MATIC Faucet', href: '#', icon: './static/components/color.png' },
               { name: "File's health monitor", href: '#', icon: './static/components/rating.png' }
             ].map((item) => (
