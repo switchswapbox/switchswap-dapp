@@ -57,8 +57,7 @@ export default function MaxWidthDialog() {
   const [isMetamaskInstalled, setMetamaskInstalled] = useState(true);
   const [ispolygonSelected, setPolygonSelected] = useState(true);
   const [isCrustInstalled, setCrustInstalled] = useState(true);
-  const [isMetamaskConnected, setMetamaskConnected] = useState(false);
-  const walletActive = localStorage.getItem('walletActive');
+  const walletActive = localStorage.getItem('walletActive') || '';
   const [isCrustWalletActive, setIsCrustWalletActive] = useState(walletActive === 'crust');
   const [isMetamaskWalletActive, setIsMetamaskWalletActive] = useState(walletActive === 'metamask');
   const [crustAllAccounts, setCrustAllAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -69,42 +68,26 @@ export default function MaxWidthDialog() {
     localStorage.getItem('selectedMetamaskAccount') || ''
   );
 
-  dispatch(
-    changeAccountWallet({
-      accountAddress:
-        walletActive === 'metamask'
+  const updateInfoWallet = () => {
+    dispatch(
+      changeAccountWallet({
+        accountAddress: isMetamaskWalletActive
           ? selectedMetamaskAccount
-          : walletActive === 'crust'
+          : isCrustWalletActive
           ? selectedCrustAccount
           : '',
-      networkName:
-        walletActive === 'metamask' ? 'Metamask' : walletActive === 'crust' ? 'Crust Wallet' : ''
-    })
-  );
-
-  useEffect(() => {
-    localStorage.setItem('selectedMetamaskAccount', selectedMetamaskAccount);
-    dispatch(
-      changeAccountWallet({
-        accountAddress: selectedMetamaskAccount,
-        networkName: 'Metamask'
+        networkName:
+          walletActive === 'metamask' ? 'Metamask' : walletActive === 'crust' ? 'Crust Wallet' : ''
       })
     );
-  }, [selectedMetamaskAccount]);
-
-  useEffect(() => {
-    localStorage.setItem('selectedCrustAccount', selectedCrustAccount);
-    dispatch(
-      changeAccountWallet({
-        accountAddress: selectedCrustAccount,
-        networkName: 'Crust Wallet'
-      })
-    );
-  }, [selectedCrustAccount]);
+  };
 
   useEffect(() => {
     localStorage.setItem('walletActive', isMetamaskWalletActive ? 'metamask' : 'crust');
-  }, [isMetamaskWalletActive]);
+    localStorage.setItem('selectedMetamaskAccount', selectedMetamaskAccount);
+    localStorage.setItem('selectedCrustAccount', selectedCrustAccount);
+    updateInfoWallet();
+  }, [selectedMetamaskAccount, selectedCrustAccount, isMetamaskWalletActive]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -141,18 +124,15 @@ export default function MaxWidthDialog() {
         setselectedMetamaskAccount(status[0]);
         // console.log(status);
         // SET HOOK HERE
-        setMetamaskConnected(true);
         setDisplayMessageAccSelected({ metamask: true, crust: false });
         handleActivateMetamask();
       } else {
         setMetamaskInstalled(true);
         setPolygonSelected(false);
-        setMetamaskConnected(false);
         // console.log('Select Polygon');
       }
     } else {
       setMetamaskInstalled(false);
-      setMetamaskConnected(false);
       setPolygonSelected(true);
       // console.log('Please install MetaMask!');
     }
