@@ -29,14 +29,18 @@ export default function FunBox() {
                 href: '/fun-box/cru-faucet',
                 icon: './static/components/checkbox.png'
               },
-              { name: '$MATIC Faucet', href: '#', icon: './static/components/color.png' },
-              { name: "File's health monitor", href: '#', icon: './static/components/rating.png' }
+              {
+                name: '$MATIC Faucet',
+                href: '/fun-box/matic-faucet',
+                icon: './static/components/color.png'
+              }
+              // { name: "File's health monitor", href: '#', icon: './static/components/rating.png' }
             ].map((item) => (
               <ComponentCard key={item.name} item={item} />
             ))}
           </Grid>
         </Grid>
-        <Grid>
+        {/* <Grid>
           <Grid item xs={12} sx={{ pb: 2 }}>
             <Typography variant="h5" paragraph>
               Switchswap Box
@@ -61,7 +65,7 @@ export default function FunBox() {
               <ComponentCard key={item.name} item={item} />
             ))}
           </Grid>
-        </Grid>
+        </Grid> */}
       </Container>
     </Page>
   );

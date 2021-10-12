@@ -55,7 +55,8 @@ export default function Router() {
           path: 'fun-box',
           children: [
             { path: '/fun-box', element: <FunBox /> },
-            { path: '/fun-box/cru-faucet', element: <CruFaucet /> }
+            { path: '/fun-box/cru-faucet', element: <CruFaucet /> },
+            { path: '/fun-box/matic-faucet', element: <MaticFaucet /> }
           ]
         },
         {
@@ -92,6 +93,7 @@ const NftMinting = Loadable(lazy(() => import('../pages/NftMinting')));
 const NftManager = Loadable(lazy(() => import('../pages/NftManager')));
 const FunBox = Loadable(lazy(() => import('../pages/FunBox')));
 const CruFaucet = Loadable(lazy(() => import('../pages/CruFaucet')));
+const MaticFaucet = Loadable(lazy(() => import('../pages/MaticFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 // Main
