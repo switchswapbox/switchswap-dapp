@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Typography, Button, Card, CardContent, CardProps } from '@mui/material';
+import { Typography, Button, Card, CardContent, CardProps, Popover, Box } from '@mui/material';
 import { DocIllustration } from '../../../assets';
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,14 @@ interface HomeWelcomeProps extends CardProps {
 }
 
 export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
+  const [click, setCLick] = useState<HTMLButtonElement | null>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCLick(event.currentTarget);
+  };
+  const handleClose = () => {
+    setCLick(null);
+  };
+
   return (
     <RootStyle>
       <CardContent
@@ -44,9 +53,28 @@ export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
           Everything is decentralized here!
         </Typography>
 
-        <Button variant="contained" to="#" component={RouterLink}>
+        <Button variant="contained" onClick={handleClick}>
           Learn More
         </Button>
+        <Popover
+          open={Boolean(click)}
+          anchorEl={click}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+        >
+          <Box sx={{ p: 2, maxWidth: 280 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              We are working hard on this page. Stay tuned!
+            </Typography>
+          </Box>
+        </Popover>
       </CardContent>
 
       <DocIllustration

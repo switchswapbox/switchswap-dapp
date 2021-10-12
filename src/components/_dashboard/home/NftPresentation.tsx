@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import Slider from 'react-slick';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Button, CardContent } from '@mui/material';
+import { Box, Card, Button, CardContent, Popover, Typography } from '@mui/material';
 // utils
 
 import { CarouselControlsPaging1 } from '../../carousel';
@@ -39,6 +40,13 @@ type CarouselItemProps = {
 
 function CarouselItem({ item }: CarouselItemProps) {
   const { image, name } = item;
+  const [click, setCLick] = useState<HTMLButtonElement | null>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCLick(event.currentTarget);
+  };
+  const handleClose = () => {
+    setCLick(null);
+  };
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -62,9 +70,31 @@ function CarouselItem({ item }: CarouselItemProps) {
           color: 'common.white'
         }}
       >
-        <Button to="#" variant="contained" component={RouterLink}>
+        {/* <Button to="#" variant="contained" component={RouterLink}>
+          Learn More
+        </Button> */}
+        <Button variant="contained" onClick={handleClick}>
           Learn More
         </Button>
+        <Popover
+          open={Boolean(click)}
+          anchorEl={click}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+        >
+          <Box sx={{ p: 2, maxWidth: 280 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              We are working hard on this page. Stay tuned!
+            </Typography>
+          </Box>
+        </Popover>
       </CardContent>
     </Box>
   );
