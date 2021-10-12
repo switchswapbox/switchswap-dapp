@@ -95,7 +95,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
               #polygon
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
-              Or using Quick Tweet with prewrite tweet
+              Or using Quick Tweet with pre-written tweet
             </Typography>
             <Button
               variant="contained"
