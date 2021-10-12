@@ -4,10 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
 // material
-import { Stack, TextField } from '@mui/material';
+import { Stack, TextField, Button, Divider, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ResponseFaucetRequest } from '../../../pages/CruFaucet';
-
+import { Icon } from '@iconify/react';
 // ----------------------------------------------------------------------
 
 type FormValuesProps = {
@@ -87,6 +87,25 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
               />
             )}
           />
+          <Divider />
+          <Stack>
+            <Typography variant="subtitle1">Tweet requirements:</Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
+              The tweet must has the following keywords: #web3, #ipfs, #switchswap, #crustnetwork,
+              #polygon
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
+              Or using Quick Tweet with prewrite tweet
+            </Typography>
+            <Button
+              variant="contained"
+              href="https://twitter.com/intent/tweet?text=Mint%20your%20decentralized%20NFT%20freely%20on%20switchswap%0A%23web3%20%23ipfs%20%23switchswap%20%23crustnetwork%20%23polygon%0Ahttps%3A//switchswap.io"
+              target="_blank"
+              startIcon={<Icon icon="logos:twitter" />}
+            >
+              Quick tweet
+            </Button>
+          </Stack>
 
           <Controller
             name="tweetUrl"
