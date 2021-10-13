@@ -76,8 +76,7 @@ export default function MaxWidthDialog() {
           : isCrustWalletActive
           ? selectedCrustAccount
           : '',
-        networkName:
-          walletActive === 'metamask' ? 'Metamask' : walletActive === 'crust' ? 'Crust Wallet' : ''
+        networkName: isMetamaskWalletActive ? 'Polygon' : isCrustWalletActive ? 'Crust' : ''
       })
     );
   };
