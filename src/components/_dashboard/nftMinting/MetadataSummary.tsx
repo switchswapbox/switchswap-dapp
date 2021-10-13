@@ -5,6 +5,9 @@ import { Box, Divider, TextField, Typography } from '@mui/material';
 
 import Label from '../../Label';
 import ColorSinglePicker from './ColorSinglePicker';
+import { useState } from 'react';
+import { changeQRCard } from '../../../redux/reducerCustomizeQRCard';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -30,10 +33,11 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
       '#94D82D',
       '#FFC107'
     ],
-    icons: ['Crust', 'Switchswap']
+    icons: ['Crust', 'Switchswap'],
+    layouts: ['svg1', 'svg2', 'svg3', 'svg4']
   };
 
-  const { name, icons, colors } = productX;
+  const { name, icons, colors, layouts } = productX;
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -42,6 +46,15 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
   });
 
   const { getFieldProps, handleSubmit } = formik;
+  const dispatch = useDispatch();
+
+  const handleSelectLayout = (event: any) => {
+    dispatch(
+      changeQRCard({
+        layout: event.target.value
+      })
+    );
+  };
 
   return (
     <RootStyle {...other}>
@@ -71,6 +84,31 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
           <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 2 }}>
             FILE QR CODE
           </Label>
+          <Box
+            sx={{
+              mb: 3,
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+              Layout
+            </Typography>
+            <TextField
+              select
+              size="small"
+              {...getFieldProps('layout')}
+              SelectProps={{ native: true }}
+              onChange={handleSelectLayout}
+            >
+              {layouts.map((layout: string) => (
+                <option key={layout} value={layout}>
+                  {layout}
+                </option>
+              ))}
+            </TextField>
+          </Box>
+
           <Box
             sx={{
               my: 2,

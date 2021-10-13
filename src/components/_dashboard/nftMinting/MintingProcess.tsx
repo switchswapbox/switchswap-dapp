@@ -69,8 +69,18 @@ type FileInfoType = {
   size: number;
 };
 
-const nftCards = {
-  images: [svg1, svg2, svg3, svg4]
+type nftCardsType = {
+  svg1: any;
+  svg2: any;
+  svg3: any;
+  svg4: any;
+};
+
+const nftCards: nftCardsType = {
+  svg1: svg1,
+  svg2: svg2,
+  svg3: svg3,
+  svg4: svg4
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {

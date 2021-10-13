@@ -16,7 +16,7 @@ import {
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
-import { InfoAccountWallet } from '../../redux/reducer';
+import { InfoAccountWallet } from '../../redux/reducerSelectAccount';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -106,11 +106,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const selectedAccountAddress = useSelector((state: InfoAccountWallet) => {
-    return state.accountAddress;
+  const selectedAccountAddress = useSelector((state: any) => {
+    return state.accountReducer.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: InfoAccountWallet) => {
-    return state.networkName;
+  const selectedNetworkName = useSelector((state: any) => {
+    return state.accountReducer.networkName;
   });
 
   useEffect(() => {

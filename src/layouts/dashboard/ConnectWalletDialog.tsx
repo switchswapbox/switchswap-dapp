@@ -34,7 +34,7 @@ import {
 } from '../../assets/COMMON_VARIABLES';
 
 import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
-import { changeAccountWallet } from '../../redux/reducer';
+import { changeAccountWallet } from '../../redux/reducerSelectAccount';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({

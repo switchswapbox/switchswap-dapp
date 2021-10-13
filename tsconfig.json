@@ -20,10 +20,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/utils/svg-data/svg1.js",
-    "src/utils/svg-data/svg1.js"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

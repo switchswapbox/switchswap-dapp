@@ -8,7 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
-import { InfoAccountWallet } from '../../redux/reducer';
+import { InfoAccountWallet } from '../../redux/reducerSelectAccount';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
@@ -27,11 +27,11 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const selectedAccountAddress = useSelector((state: InfoAccountWallet) => {
-    return state.accountAddress;
+  const selectedAccountAddress = useSelector((state: any) => {
+    return state.accountReducer.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: InfoAccountWallet) => {
-    return state.networkName;
+  const selectedNetworkName = useSelector((state: any) => {
+    return state.accountReducer.networkName;
   });
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
