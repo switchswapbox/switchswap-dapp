@@ -14,6 +14,7 @@ import MenuPopover from '../../components/MenuPopover';
 import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
+import { IRootState } from 'redux/all';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
@@ -27,10 +28,10 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const selectedAccountAddress = useSelector((state: any) => {
+  const selectedAccountAddress = useSelector((state: IRootState) => {
     return state.accountReducer.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: any) => {
+  const selectedNetworkName = useSelector((state: IRootState) => {
     return state.accountReducer.networkName;
   });
 

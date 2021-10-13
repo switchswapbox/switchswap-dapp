@@ -21,3 +21,5 @@ const rootReducers: Reducer<
 });
 
 export default rootReducers;
+
+export type IRootState = ReturnType<typeof rootReducers>;
