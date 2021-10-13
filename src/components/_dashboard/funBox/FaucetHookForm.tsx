@@ -81,7 +81,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                label="Address"
+                label="Wallet address"
                 error={Boolean(error)}
                 helperText={error?.message}
               />
@@ -89,10 +89,10 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
           />
           <Divider />
           <Stack>
-            <Typography variant="subtitle1">Tweet requirements:</Typography>
+            <Typography variant="h6">Tweet requirements</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
-              The tweet must has the following keywords: #web3, #ipfs, #switchswap, #crustnetwork,
-              #polygon
+              Write your own tweet including the following keywords: #web3, #ipfs, #switchswap,
+              #crustnetwork, #polygon
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
               Or using Quick Tweet with pre-written tweet

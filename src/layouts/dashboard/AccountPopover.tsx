@@ -17,13 +17,6 @@ import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
-const MENU_OPTIONS = [
-  { label: 'Explorer', icon: externaLinkOutline, linkTo: '/' },
-  { label: 'Support', icon: messagCircleOutline, linkTo: '/' }
-];
-
-// ----------------------------------------------------------------------
-
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -98,27 +91,49 @@ export default function AccountPopover() {
 
         <Divider sx={{ my: 1 }} />
 
-        {MENU_OPTIONS.map((option) => (
-          <MenuItem
-            key={option.label}
-            to={option.linkTo}
-            component={RouterLink}
-            onClick={handleClose}
-            sx={{ typography: 'body2', py: 1, px: 2.5 }}
-          >
-            <Box
-              component={Icon}
-              icon={option.icon}
-              sx={{
-                mr: 2,
-                width: 24,
-                height: 24
-              }}
-            />
+        <MenuItem
+          key="Explorer"
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+          onClick={() => {
+            if (selectedNetworkName === 'Crust') {
+              window.open('https://crust.subscan.io/', '_blank');
+            }
+            if (selectedNetworkName === 'Polygon') {
+              window.open('https://polygonscan.com/', '_blank');
+            }
+            setOpen(false);
+          }}
+        >
+          <Box
+            component={Icon}
+            icon={externaLinkOutline}
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          />
+          Explorer
+        </MenuItem>
 
-            {option.label}
-          </MenuItem>
-        ))}
+        <MenuItem
+          key="Support"
+          to="#"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            component={Icon}
+            icon={messagCircleOutline}
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          />
+          Support
+        </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button fullWidth color="inherit" variant="outlined">
