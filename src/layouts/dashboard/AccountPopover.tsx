@@ -8,13 +8,12 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
-import { InfoAccountWallet } from '../../redux/reducerSelectAccount';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
-import { IRootState } from 'redux/all';
+import { IRootState } from 'reduxStore';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 

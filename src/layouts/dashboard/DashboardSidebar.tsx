@@ -26,7 +26,7 @@ import sidebarConfig from './SidebarConfig';
 import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
-import { IRootState } from 'redux/all';
+import { IRootState } from 'reduxStore';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 

@@ -5,7 +5,7 @@ import { Box, Divider, TextField, Typography } from '@mui/material';
 
 import Label from '../../Label';
 import ColorSinglePicker from './ColorSinglePicker';
-import { changeQRCard } from '../../../redux/reducerCustomizeQRCard';
+import { changeQRCard } from '../../../reduxStore/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
 import React from 'react';
 

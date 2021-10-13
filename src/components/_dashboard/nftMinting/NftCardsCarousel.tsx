@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 //
 import { QRNormal } from 'react-qrbtf';
 import { useSelector } from 'react-redux';
-import { IRootState } from 'redux/all';
+import { IRootState } from 'reduxStore';
 
 // ----------------------------------------------------------------------
 
