@@ -95,10 +95,10 @@ export default function AccountPopover() {
           key="Explorer"
           sx={{ typography: 'body2', py: 1, px: 2.5 }}
           onClick={() => {
-            if (selectedNetworkName === 'Crust Wallet') {
+            if (selectedNetworkName === 'Crust') {
               window.open('https://crust.subscan.io/', '_blank');
             }
-            if (selectedNetworkName === 'Metamask') {
+            if (selectedNetworkName === 'Polygon') {
               window.open('https://polygonscan.com/', '_blank');
             }
             setOpen(false);
