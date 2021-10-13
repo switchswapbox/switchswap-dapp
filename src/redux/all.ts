@@ -1,8 +1,21 @@
-import { combineReducers } from 'redux';
+import { CombinedState, combineReducers, Reducer } from 'redux';
 import { InfoQRCard, qrCardReducer } from './reducerCustomizeQRCard';
 import { accountReducer, InfoAccountWallet } from './reducerSelectAccount';
 
-const rootReducers: any = combineReducers({
+const rootReducers: Reducer<
+  CombinedState<{
+    qrCardReducer: InfoQRCard;
+    accountReducer: InfoAccountWallet;
+  }>,
+  | {
+      type: string;
+      infoQRCard: InfoQRCard;
+    }
+  | {
+      type: string;
+      infoAccountWallet: InfoAccountWallet;
+    }
+> = combineReducers({
   qrCardReducer,
   accountReducer
 });

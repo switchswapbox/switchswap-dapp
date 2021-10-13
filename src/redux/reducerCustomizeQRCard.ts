@@ -1,4 +1,4 @@
-const CUSTOMIZE_QR_CARD = 'CUSTOMIZE_QR_CARD';
+export const CUSTOMIZE_QR_CARD = 'CUSTOMIZE_QR_CARD';
 
 export interface InfoQRCard {
   layout: string;

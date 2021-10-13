@@ -1,4 +1,4 @@
-const CHANGE_ACCOUNT_WALLET = 'CHANGE_ACCOUNT_WALLET';
+export const CHANGE_ACCOUNT_WALLET = 'CHANGE_ACCOUNT_WALLET';
 
 export interface InfoAccountWallet {
   accountAddress: string;
