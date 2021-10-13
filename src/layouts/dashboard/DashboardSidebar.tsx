@@ -16,7 +16,6 @@ import {
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
-import { InfoAccountWallet } from '../../redux/reducerSelectAccount';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';

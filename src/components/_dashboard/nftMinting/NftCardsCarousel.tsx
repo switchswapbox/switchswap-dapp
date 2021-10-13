@@ -1,19 +1,12 @@
-import Slider from 'react-slick';
-import { findIndex } from 'lodash';
-import { useState, useRef, useEffect } from 'react';
 // material
-import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 //
-import LightboxModal from './LightboxModal';
-import { CarouselControlsArrowsIndex } from '../../carousel';
 import { QRNormal } from 'react-qrbtf';
-import { ArgsProps } from '../../../utils/svg-data/svgArgs';
 import { useSelector } from 'react-redux';
+import { IRootState } from 'redux/all';
 
 // ----------------------------------------------------------------------
-
-const THUMB_SIZE = 64;
 
 const RootStyle = styled('div')(({ theme }) => ({
   '& .slick-slide': {
@@ -22,67 +15,7 @@ const RootStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-const ThumbWrapperStyle = styled('div')(({ theme }) => ({
-  cursor: 'pointer',
-  width: THUMB_SIZE,
-  overflow: 'hidden',
-  height: THUMB_SIZE,
-  position: 'relative',
-  margin: theme.spacing(0, 1),
-  borderRadius: theme.shape.borderRadiusSm,
-  '&:hover': {
-    opacity: 0.72,
-    transition: theme.transitions.create('opacity')
-  },
-  '& .isActive': {
-    top: 0,
-    zIndex: 9,
-    opacity: 0,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    borderRadius: theme.shape.borderRadiusSm,
-    border: `solid 3px ${theme.palette.primary.main}`,
-    backgroundColor: alpha(theme.palette.grey[900], 0.48)
-  }
-}));
-
-const LargeImgStyle = styled('img')(({ theme }) => ({
-  top: 0,
-  width: '100%',
-  objectFit: 'cover',
-  position: 'absolute'
-}));
-
-const ThumbImgStyle = styled('img')(({ theme }) => ({
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover'
-}));
-
 // ----------------------------------------------------------------------
-
-type LargeItemProps = {
-  item: string;
-  onOpenLightbox: (value: string) => void;
-};
-
-function LargeItem({ item, onOpenLightbox }: LargeItemProps) {
-  return (
-    <Box sx={{ cursor: 'zoom-in', paddingTop: '60.42%', position: 'relative' }}>
-      <LargeImgStyle alt="large image" src={item} onClick={() => onOpenLightbox(item)} />
-    </Box>
-  );
-}
-
-function ThumbnailItem({ item }: { item: string }) {
-  return (
-    <ThumbWrapperStyle>
-      <Box className="isActive" />
-      <ThumbImgStyle alt="thumb image" src={item} />
-    </ThumbWrapperStyle>
-  );
-}
 
 const CreateQRCode = () => {
   return (
@@ -100,7 +33,7 @@ const CreateQRCode = () => {
   );
 };
 export default function NftCardsCarousel({ nftCards }: any) {
-  const svgType = useSelector((state: any) => {
+  const svgType = useSelector((state: IRootState) => {
     return state.qrCardReducer.layout;
   });
   const SVGComponent = nftCards[svgType];
