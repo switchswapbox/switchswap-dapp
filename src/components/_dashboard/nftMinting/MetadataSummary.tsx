@@ -7,6 +7,7 @@ import Label from '../../Label';
 import ColorSinglePicker from './ColorSinglePicker';
 import { changeQRCard } from '../../../redux/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
+import React from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
   const { getFieldProps, handleSubmit } = formik;
   const dispatch = useDispatch();
 
-  const handleSelectLayout = (event: any) => {
+  const handleSelectLayout = (event: React.ChangeEvent<{ value: string }>) => {
     dispatch(
       changeQRCard({
         layout: event.target.value
