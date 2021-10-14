@@ -60,25 +60,6 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
     <RootStyle {...other}>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Typography variant="h5" paragraph>
-            {name}
-          </Typography>
-
-          <Typography variant="body1" sx={{ color: 'text.secondary', mb: 1 }}>
-            Description
-          </Typography>
-
-          <TextField
-            rows={3}
-            fullWidth
-            variant="standard"
-            multiline
-            autoFocus
-            size="small"
-            placeholder="Enter what is so cool about my NFT"
-            type="string"
-          />
-
           <Divider sx={{ borderStyle: 'dashed' }} />
 
           <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 2 }}>

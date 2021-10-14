@@ -1,3 +1,4 @@
+import { Typography, Box, Grid } from '@mui/material';
 import * as React from 'react';
 import { ArgsProps } from './svgArgs';
 
@@ -141,7 +142,7 @@ function SvgComponent({ qrcode, others }: ArgsProps) {
           <foreignObject x="50" y="100" width="300" height="300">
             {qrcode}
           </foreignObject>
-          <text
+          {/* <text
             transform="translate(468.11 154.3)"
             fontFamily="OCRAExtended,OCR A Extended"
             fontSize={20}
@@ -154,7 +155,14 @@ function SvgComponent({ qrcode, others }: ArgsProps) {
             <tspan x={18.12} y={44}>
               {'the full image'}
             </tspan>
-          </text>
+          </text> */}
+          <foreignObject x="395" y="110" width="270" height="100">
+            <Grid container alignItems="center" height="100%">
+              <Typography align="center" variant="body1" sx={{ fontSize: 16 }}>
+                My beautiful cat, scan QR code to see scan QR code to see
+              </Typography>
+            </Grid>
+          </foreignObject>
           <text
             transform="translate(418.97 273.69)"
             fontSize={12}

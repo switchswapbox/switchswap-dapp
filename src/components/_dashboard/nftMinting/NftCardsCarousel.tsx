@@ -20,7 +20,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 const CreateQRCode = () => {
   return (
     <QRNormal
-      value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
+      value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH5465465465465465465465465465"
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
       type="round"
