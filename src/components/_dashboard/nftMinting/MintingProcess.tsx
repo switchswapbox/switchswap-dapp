@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 // material
 import {
   Box,
@@ -34,6 +35,7 @@ import { ethers } from 'ethers';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { stringToHex } from '@polkadot/util';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { changeCardTitle, changeQRCard } from '../../../reduxStore/reducerCustomizeQRCard';
 
 import { create } from 'ipfs-http-client';
 import axios from 'axios';
@@ -86,9 +88,15 @@ const nftCards: nftCardsType = {
 export default function MintingProcess({ nftType }: MintingProcessProps) {
   const [nameNft, setNameNft] = useState('');
   const [descNft, setDescNft] = useState('');
+  const dispatch = useDispatch();
 
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameNft(event.target.value);
+    dispatch(
+      changeCardTitle({
+        title: event.target.value
+      })
+    );
   };
 
   const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -592,65 +600,65 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
 
       {activeStep === 1 ? (
         <>
-          <>
-            <Grid container spacing={3} sx={{ pt: 5 }}>
-              <Grid item xs={12} md={6} lg={7}>
-                <NftCardsCarousel nftCards={nftCards} />
-              </Grid>
-              <Grid item xs={12} md={6} lg={5}>
-                <MetadataSummary product={null} />
-              </Grid>
-            </Grid>
-          </>
           <Grid container spacing={3} sx={{ pt: 5 }}>
-            <Grid item xs={12} md={6} lg={7}>
+            <Grid item xs={12}>
               <Stack alignItems="center" justifyContent="center">
                 <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
               </Stack>
             </Grid>
-            <Grid item xs={12} md={6} lg={5}>
-              <Label variant="ghost" color="warning" sx={{ textTransform: 'uppercase' }}>
-                Creating Metadata
-              </Label>
-              <Typography
-                variant="h5"
-                paragraph
-                sx={{
-                  mt: 2,
-                  mb: 0
-                }}
-              >
-                Title<span style={{ color: 'red' }}>*</span>
-              </Typography>
-              <TextField
-                fullWidth
-                variant="standard"
-                multiline
-                type="string"
-                required={true}
-                defaultValue={nameNft}
-                onChange={handleNameNftInputChange}
-                disabled={!stepTwoNotDone}
-              />
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12} lg={7}>
+                <NftCardsCarousel nftCards={nftCards} />
+              </Grid>
+              <Grid container xs={12} md={12} lg={5}>
+                <Grid item xs={12}>
+                  <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+                    Creating Metadata
+                  </Label>
+                  <Typography
+                    variant="h5"
+                    paragraph
+                    sx={{
+                      mt: 2,
+                      mb: 0
+                    }}
+                  >
+                    Title<span style={{ color: 'red' }}>*</span>
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    variant="standard"
+                    multiline
+                    type="string"
+                    required={true}
+                    defaultValue={nameNft}
+                    onChange={handleNameNftInputChange}
+                    disabled={!stepTwoNotDone}
+                  />
 
-              <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                  Description
-                </Typography>
-              </Box>
+                  <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                      Description
+                    </Typography>
+                  </Box>
 
-              <TextField
-                rows={3}
-                fullWidth
-                variant="standard"
-                multiline
-                size="small"
-                placeholder="Enter what is so cool about my NFT"
-                type="string"
-                defaultValue={descNft}
-                onChange={handleDescNftInputChange}
-                disabled={!stepTwoNotDone}
-              />
+                  <TextField
+                    rows={3}
+                    fullWidth
+                    variant="standard"
+                    multiline
+                    size="small"
+                    placeholder="Enter what is so cool about my NFT"
+                    type="string"
+                    defaultValue={descNft}
+                    onChange={handleDescNftInputChange}
+                    disabled={!stepTwoNotDone}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <MetadataSummary product={null} />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
 

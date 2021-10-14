@@ -36,11 +36,14 @@ export default function NftCardsCarousel({ nftCards }: any) {
   const svgType = useSelector((state: IRootState) => {
     return state.qrCardReducer.layout;
   });
-  const SVGComponent = nftCards[svgType];
+  const cardTitle = useSelector((state: IRootState) => {
+    return state.qrCardReducer.title;
+  });
+  const SVGComponent = nftCards[svgType || 'svg1'];
 
   return (
     <RootStyle>
-      <Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Box
           sx={{
             zIndex: 0,
@@ -49,7 +52,7 @@ export default function NftCardsCarousel({ nftCards }: any) {
             position: 'relative'
           }}
         >
-          {<SVGComponent qrcode={CreateQRCode()} others={{ height: '400px' }} />}
+          {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} others={{ height: '300px' }} />}
         </Box>
       </Box>
     </RootStyle>

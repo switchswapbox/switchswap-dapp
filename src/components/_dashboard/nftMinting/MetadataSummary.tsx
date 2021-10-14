@@ -181,11 +181,6 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
               ))}
             </TextField>
           </Box>
-
-          <Divider sx={{ borderStyle: 'dashed' }} />
-          <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 2 }}>
-            AUTHOR QR CODE
-          </Label>
         </Form>
       </FormikProvider>
     </RootStyle>

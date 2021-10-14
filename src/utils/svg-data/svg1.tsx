@@ -2,7 +2,7 @@ import { Typography, Box, Grid } from '@mui/material';
 import * as React from 'react';
 import { ArgsProps } from './svgArgs';
 
-function SvgComponent({ qrcode, others }: ArgsProps) {
+function SvgComponent({ qrcode, title, others }: ArgsProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +149,7 @@ function SvgComponent({ qrcode, others }: ArgsProps) {
                 variant="subtitle1"
                 sx={{ fontSize: 16, fontFamily: 'Roboto', width: '100%' }}
               >
-                My beautiful cat, scan QR code to see scan QR code to see the full image
+                {title === '' || undefined ? 'Your title' : title}
               </Typography>
             </Grid>
           </foreignObject>

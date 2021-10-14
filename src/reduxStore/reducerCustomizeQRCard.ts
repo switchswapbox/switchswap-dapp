@@ -1,7 +1,9 @@
 export const CUSTOMIZE_QR_CARD = 'CUSTOMIZE_QR_CARD';
+export const CARD_TITLE = 'CARD_TITLE';
 
 export interface InfoQRCard {
-  layout: string;
+  layout?: string;
+  title?: string;
 }
 
 export const changeQRCard = (infoQRCard: InfoQRCard) => ({
@@ -9,9 +11,15 @@ export const changeQRCard = (infoQRCard: InfoQRCard) => ({
   infoQRCard: infoQRCard
 });
 
+export const changeCardTitle = (infoQRCard: InfoQRCard) => ({
+  type: CARD_TITLE,
+  infoQRCard: infoQRCard
+});
+
 // init state
 const initialQRCard: InfoQRCard = {
-  layout: 'svg1'
+  layout: 'svg1',
+  title: ''
 };
 
 export const qrCardReducer = (
@@ -21,7 +29,13 @@ export const qrCardReducer = (
   switch (action.type) {
     case CUSTOMIZE_QR_CARD:
       return {
+        ...state,
         layout: action.infoQRCard.layout
+      };
+    case CARD_TITLE:
+      return {
+        ...state,
+        title: action.infoQRCard.title
       };
     default:
       return state;
