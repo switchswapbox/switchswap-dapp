@@ -56,6 +56,7 @@ import svg1 from '../../../utils/svg-data/svg1';
 import svg2 from '../../../utils/svg-data/svg2';
 import svg3 from '../../../utils/svg-data/svg3';
 import svg4 from '../../../utils/svg-data/svg4';
+import svgArray from 'utils/svg-data';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 // ----------------------------------------------------------------------
@@ -69,20 +70,6 @@ type FileInfoType = {
   name: string;
   cid: string;
   size: number;
-};
-
-type nftCardsType = {
-  svg1: any;
-  svg2: any;
-  svg3: any;
-  svg4: any;
-};
-
-const nftCards: nftCardsType = {
-  svg1: svg1,
-  svg2: svg2,
-  svg3: svg3,
-  svg4: svg4
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {
@@ -608,7 +595,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             </Grid>
             <Grid container spacing={3}>
               <Grid item xs={12} md={12} lg={7}>
-                <NftCardsCarousel nftCards={nftCards} />
+                <NftCardsCarousel nftCards={svgArray} />
               </Grid>
               <Grid container xs={12} md={12} lg={5}>
                 <Grid item xs={12}>

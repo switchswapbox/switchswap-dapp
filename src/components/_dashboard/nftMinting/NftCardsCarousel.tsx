@@ -33,13 +33,13 @@ const CreateQRCode = () => {
   );
 };
 export default function NftCardsCarousel({ nftCards }: any) {
-  const svgType = useSelector((state: IRootState) => {
+  const layoutIndex = useSelector((state: IRootState) => {
     return state.qrCardReducer.layout;
   });
   const cardTitle = useSelector((state: IRootState) => {
     return state.qrCardReducer.title;
   });
-  const SVGComponent = nftCards[svgType || 'svg1'];
+  const SVGComponent = nftCards[layoutIndex || 0];
 
   return (
     <RootStyle>

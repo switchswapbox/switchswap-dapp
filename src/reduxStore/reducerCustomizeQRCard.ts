@@ -2,7 +2,7 @@ export const CUSTOMIZE_QR_CARD = 'CUSTOMIZE_QR_CARD';
 export const CARD_TITLE = 'CARD_TITLE';
 
 export interface InfoQRCard {
-  layout?: string;
+  layout?: number;
   title?: string;
 }
 
@@ -18,7 +18,7 @@ export const changeCardTitle = (infoQRCard: InfoQRCard) => ({
 
 // init state
 const initialQRCard: InfoQRCard = {
-  layout: 'svg1',
+  layout: 0,
   title: ''
 };
 

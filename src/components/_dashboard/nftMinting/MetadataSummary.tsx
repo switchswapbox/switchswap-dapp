@@ -8,6 +8,7 @@ import ColorSinglePicker from './ColorSinglePicker';
 import { changeQRCard } from '../../../reduxStore/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
 import React from 'react';
+import svgArray from 'utils/svg-data';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,7 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
       '#FFC107'
     ],
     icons: ['Crust', 'Switchswap'],
-    layouts: ['svg1', 'svg2', 'svg3', 'svg4']
+    layouts: Array.from(Array(svgArray.length).keys())
   };
 
   const { name, icons, colors, layouts } = productX;
@@ -48,7 +49,7 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
   const { getFieldProps, handleSubmit } = formik;
   const dispatch = useDispatch();
 
-  const handleSelectLayout = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleSelectLayout = (event: any) => {
     dispatch(
       changeQRCard({
         layout: event.target.value
@@ -82,7 +83,7 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
               SelectProps={{ native: true }}
               onChange={handleSelectLayout}
             >
-              {layouts.map((layout: string) => (
+              {layouts.map((layout: number) => (
                 <option key={layout} value={layout}>
                   {layout}
                 </option>
