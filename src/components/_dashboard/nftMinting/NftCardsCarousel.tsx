@@ -2,7 +2,17 @@
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 //
-import { QRNormal } from 'react-qrbtf';
+import {
+  QRNormal,
+  QR25D,
+  QRDsj,
+  QRRandRect,
+  QRImage,
+  QRResImage,
+  QRBubble,
+  QRFunc,
+  QRLine
+} from 'react-qrbtf';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 
@@ -19,14 +29,22 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 const CreateQRCode = () => {
   return (
+    // <QRNormal
+    //   value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH5465465465465465465465465465"
+    //   className="my-qrcode"
+    //   styles={{ svg: { width: '300px' } }}
+    //   type="round"
+    //   size={50}
+    //   opacity={70}
+    //   posType="planet"
+    //   otherColor="#33CCCC"
+    //   posColor="#009999"
+    // />
     <QRNormal
-      value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH5465465465465465465465465465"
+      value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
-      type="round"
-      size={50}
-      opacity={70}
-      posType="planet"
+      icon="./static/mock-images/middle-qr-logo/crust.png"
       otherColor="#33CCCC"
       posColor="#009999"
     />

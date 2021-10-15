@@ -35,7 +35,7 @@ import { ethers } from 'ethers';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { stringToHex } from '@polkadot/util';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { changeCardTitle, changeQRCard } from '../../../reduxStore/reducerCustomizeQRCard';
+import { changeCardTitle } from '../../../reduxStore/reducerCustomizeQRCard';
 
 import { create } from 'ipfs-http-client';
 import axios from 'axios';
@@ -52,10 +52,6 @@ import {
 } from '../../../assets/COMMON_VARIABLES';
 import NftCardsCarousel from './NftCardsCarousel';
 import MetadataSummary from './MetadataSummary';
-import svg1 from '../../../utils/svg-data/svg1';
-import svg2 from '../../../utils/svg-data/svg2';
-import svg3 from '../../../utils/svg-data/svg3';
-import svg4 from '../../../utils/svg-data/svg4';
 import svgArray from 'utils/svg-data';
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
