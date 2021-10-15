@@ -49,7 +49,8 @@ export default function NftCardsCarousel({ nftCards }: any) {
             zIndex: 0,
             borderRadius: 2,
             overflow: 'hidden',
-            position: 'relative'
+            position: 'relative',
+            height: '300px'
           }}
         >
           {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} others={{ height: '300px' }} />}
