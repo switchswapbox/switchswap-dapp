@@ -1,7 +1,7 @@
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Divider, TextField, Typography } from '@mui/material';
+import { Box, Divider, Pagination, TextField, Theme, Typography } from '@mui/material';
 
 import Label from '../../Label';
 import ColorSinglePicker from './ColorSinglePicker';
@@ -9,6 +9,7 @@ import { changeQRCard } from '../../../reduxStore/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
 import React from 'react';
 import svgArray from 'utils/svg-data';
+import { SxProps } from '@mui/system/styleFunctionSx';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,7 @@ const RootStyle = styled('div')(({ theme }) => ({}));
 
 type MetadataSummaryProps = {
   product: any;
+  sx?: SxProps<Theme> | undefined;
 };
 
 export default function MetadataSummary({ product, ...other }: MetadataSummaryProps) {
@@ -49,10 +51,10 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
   const { getFieldProps, handleSubmit } = formik;
   const dispatch = useDispatch();
 
-  const handleSelectLayout = (event: any) => {
+  const handleSelectLayout = (event: React.ChangeEvent<unknown>, value: number) => {
     dispatch(
       changeQRCard({
-        layout: event.target.value
+        layout: value - 1
       })
     );
   };
@@ -61,34 +63,21 @@ export default function MetadataSummary({ product, ...other }: MetadataSummaryPr
     <RootStyle {...other}>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Divider sx={{ borderStyle: 'dashed' }} />
-
-          <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 2 }}>
+          <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 5 }}>
             FILE QR CODE
           </Label>
           <Box
             sx={{
               mb: 3,
               display: 'flex',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              pt: 2
             }}
           >
             <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
               Layout
             </Typography>
-            <TextField
-              select
-              size="small"
-              {...getFieldProps('layout')}
-              SelectProps={{ native: true }}
-              onChange={handleSelectLayout}
-            >
-              {layouts.map((layout: number) => (
-                <option key={layout} value={layout}>
-                  {layout}
-                </option>
-              ))}
-            </TextField>
+            <Pagination count={svgArray.length} color="primary" onChange={handleSelectLayout} />
           </Box>
 
           <Box
