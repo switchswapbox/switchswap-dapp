@@ -12,6 +12,7 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
+import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../assets/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 const CountdownStyle = styled('div')({
   display: 'flex',
@@ -27,16 +28,24 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
 
 const SOCIALS = [
   {
-    name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
+    name: 'Discord',
+    icon: <Icon icon="logos:discord-icon" width={24} height={24} />,
+    href: DISCORD
   },
   {
-    name: 'Linkedin',
-    icon: <Icon icon={linkedinFill} width={24} height={24} color="#006097" />
+    name: 'Telegram',
+    icon: <Icon icon="logos:telegram" width={24} height={24} />,
+    href: TELEGRAM
   },
   {
     name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />
+    icon: <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />,
+    href: TWITTER
+  },
+  {
+    name: 'Medium',
+    icon: <Icon icon="ant-design:medium-square-filled" width={24} height={24} />,
+    href: MEDIUM
   }
 ];
 
@@ -83,7 +92,9 @@ export default function ComingSoon() {
       <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
         {SOCIALS.map((social) => (
           <Tooltip key={social.name} title={social.name}>
-            <MIconButton>{social.icon}</MIconButton>
+            <MIconButton onClick={() => window.open(social.href, '_blank')}>
+              {social.icon}
+            </MIconButton>
           </Tooltip>
         ))}
       </Box>
