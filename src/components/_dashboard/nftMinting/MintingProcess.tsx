@@ -597,7 +597,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
               <Grid item xs={12} md={12} lg={7}>
                 <NftCardsCarousel nftCards={svgArray} />
               </Grid>
-              <Grid container xs={12} md={12} lg={5}>
+              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid item xs={12}>
                   <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
                     Creating Metadata
