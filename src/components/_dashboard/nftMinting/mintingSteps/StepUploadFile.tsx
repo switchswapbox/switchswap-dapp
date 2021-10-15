@@ -1,6 +1,6 @@
 import { Box, FormControlLabel, Stack, SvgIcon, Switch, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';
-import { Dispatch, SetStateAction, useCallback, useContext, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react';
 import UploadMultiFile from '../UploadMultiFile';
 import { create } from 'ipfs-http-client';
 
@@ -50,13 +50,28 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
 };
 
 function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
-  const mintingContext = useContext(MintingContext);
+  const { setSrcImage, stepOneNotDone } = useContext(MintingContext);
   const [preview, setPreview] = useState(false);
   // const [file, setFile] = useState<File>();
   const [files, setFiles] = useState<File[]>([]);
   const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
   const [isFileUploading, setFileUploading] = useState(false);
   const { setStepOneNotDone } = useContext(MintingContext);
+
+  const loadImg = () => {
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      setSrcImage(reader.result as string);
+    };
+    reader.readAsDataURL(files[0]);
+  };
+
+  useEffect(() => {
+    if (files[0]) {
+      loadImg();
+    }
+  }, [files[0]]);
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
@@ -192,7 +207,7 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
         onRemove={handleRemove}
         onUploadFile={{ uploadFileMetamask, uploadFileCrust }}
         isFileUploading={isFileUploading}
-        stepOneNotDone={mintingContext.stepOneNotDone}
+        stepOneNotDone={!stepOneNotDone}
       />
 
       {uploadedCid.cid !== '' && (

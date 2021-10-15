@@ -1,6 +1,6 @@
 import { Typography, Grid } from '@mui/material';
 import { ArgsProps } from './svgArgs';
-function SvgComponent({ qrcode, title, others }: ArgsProps) {
+function SvgComponent({ qrcode, title, ...other }: ArgsProps) {
   return (
     <svg
       id="prefix__Layer_1"
@@ -8,7 +8,7 @@ function SvgComponent({ qrcode, title, others }: ArgsProps) {
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       viewBox="0 0 725 438"
-      {...others}
+      {...other}
     >
       <defs>
         <linearGradient

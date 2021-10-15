@@ -50,7 +50,7 @@ const CreateQRCode = () => {
     />
   );
 };
-export default function NftCardsCarousel({ nftCards }: any) {
+export default function NftCardsDesign({ nftCards }: any) {
   const layoutIndex = useSelector((state: IRootState) => {
     return state.qrCardReducer.layout;
   });
@@ -68,10 +68,12 @@ export default function NftCardsCarousel({ nftCards }: any) {
             borderRadius: 2,
             overflow: 'hidden',
             position: 'relative',
-            height: '300px'
+            width: '90%',
+            display: 'flex',
+            flexDirection: 'column'
           }}
         >
-          {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} others={{ height: '300px' }} />}
+          {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} sx={{ width: '100%' }} />}
         </Box>
       </Box>
     </RootStyle>

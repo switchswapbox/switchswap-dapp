@@ -18,7 +18,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from 'components/Label';
 import svgArray from 'utils/svg-data';
 import MetadataSummary from '../MetadataSummary';
-import NftCardsCarousel from '../NftCardsCarousel';
+import NftCardsDesign from '../NftCardsDesign';
 import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { changeCardTitle } from 'reduxStore/reducerCustomizeQRCard';
@@ -189,63 +189,65 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
 
   return (
     <>
-      <Grid container spacing={3} sx={{ pt: 5 }}>
+      <Grid container direction="column" rowSpacing={10} sx={{ pt: 5 }}>
         <Grid item xs={12}>
           <Stack alignItems="center" justifyContent="center">
             <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
           </Stack>
         </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12} lg={7}>
-            <NftCardsCarousel nftCards={svgArray} />
-          </Grid>
-          <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-            <Grid item xs={12}>
-              <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
-                Creating Metadata
-              </Label>
-              <Typography
-                variant="h5"
-                paragraph
-                sx={{
-                  mt: 2,
-                  mb: 0
-                }}
-              >
-                Title<span style={{ color: 'red' }}>*</span>
-              </Typography>
-              <TextField
-                fullWidth
-                variant="standard"
-                multiline
-                type="string"
-                required={true}
-                defaultValue={nameNft}
-                onChange={handleNameNftInputChange}
-                disabled={!stepTwoNotDone}
-              />
-
-              <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                  Description
-                </Typography>
-              </Box>
-
-              <TextField
-                rows={3}
-                fullWidth
-                variant="standard"
-                multiline
-                size="small"
-                placeholder="Enter what is so cool about my NFT"
-                type="string"
-                defaultValue={descNft}
-                onChange={handleDescNftInputChange}
-                disabled={!stepTwoNotDone}
-              />
+        <Grid item>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={7}>
+              <NftCardsDesign nftCards={svgArray} />
             </Grid>
-            <Grid item xs={12}>
-              <MetadataSummary product={null} />
+            <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+              <Grid item xs={12}>
+                <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+                  Creating Metadata
+                </Label>
+                <Typography
+                  variant="h5"
+                  paragraph
+                  sx={{
+                    mt: 2,
+                    mb: 0
+                  }}
+                >
+                  Title<span style={{ color: 'red' }}>*</span>
+                </Typography>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  multiline
+                  type="string"
+                  required={true}
+                  defaultValue={nameNft}
+                  onChange={handleNameNftInputChange}
+                  disabled={!stepTwoNotDone}
+                />
+
+                <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                    Description
+                  </Typography>
+                </Box>
+
+                <TextField
+                  rows={3}
+                  fullWidth
+                  variant="standard"
+                  multiline
+                  size="small"
+                  placeholder="Enter what is so cool about my NFT"
+                  type="string"
+                  defaultValue={descNft}
+                  onChange={handleDescNftInputChange}
+                  disabled={!stepTwoNotDone}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <MetadataSummary product={null} />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

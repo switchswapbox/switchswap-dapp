@@ -57,6 +57,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
     setSrcImage
   };
 
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set<number>());
+  const isStepOptional = (step: number) => false;
+  const isStepSkipped = (step: number) => skipped.has(step);
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const onSnackbarAction = (color: VariantType, text: string, url?: string) => {
     enqueueSnackbar(text, {
@@ -80,14 +85,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       )
     });
   };
-
-  const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set<number>());
-  const [files, setFiles] = useState<File[]>([]);
-
-  const isStepOptional = (step: number) => false;
-
-  const isStepSkipped = (step: number) => skipped.has(step);
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -126,21 +123,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   const handleReset = () => {
     setActiveStep(0);
   };
-
-  const loadImg = () => {
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      setSrcImage(reader.result as string);
-    };
-    reader.readAsDataURL(files[0]);
-  };
-
-  useEffect(() => {
-    if (files[0]) {
-      loadImg();
-    }
-  }, [files[0]]);
 
   return (
     <MintingContext.Provider value={initMintingContext}>
