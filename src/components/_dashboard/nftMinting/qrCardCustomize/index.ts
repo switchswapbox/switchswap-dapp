@@ -9,11 +9,12 @@ import {
   QRRandRect,
   QRImage,
   QRResImage,
-  QRBubble,
   QRFunc,
   QRLine,
-  SFC
+  SFC,
+  QRBubble
 } from 'react-qrbtf';
+import CustomizeQRBubble from './CustomizeQRBubble';
 
 const qrStyles = {
   qrNormal: {
@@ -31,6 +32,10 @@ const qrStyles = {
   qr25D: {
     Component: QR25D,
     CustomProps: CustomizeQR25D
+  },
+  qrBubble: {
+    Component: QRBubble,
+    CustomProps: CustomizeQRBubble
   }
 };
 

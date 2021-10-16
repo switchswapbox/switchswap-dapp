@@ -45,3 +45,13 @@ export const defaultQR25DOtherProps: QR25DOtherProps = {
   leftColor: '#FFD7D9',
   rightColor: '#FFEBF3'
 };
+
+interface QRBubbleOtherProps {
+  circleColor: String;
+  posColor: String;
+}
+
+export const defaultQRBubbleOtherProps: QRBubbleOtherProps = {
+  circleColor: '#8ED1FC',
+  posColor: '#0693E3'
+};
