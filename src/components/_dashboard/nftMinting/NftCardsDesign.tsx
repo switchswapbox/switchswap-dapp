@@ -15,8 +15,6 @@ import {
 } from 'react-qrbtf';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { useContext } from 'react';
-import { QRCardCustomizeContext } from './qrCardCustomize/qrCardCustomize.context';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +28,9 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
-  const { icon } = useContext(QRCardCustomizeContext);
+  const icon = useSelector((state: IRootState) => {
+    return state.qrCardReducer.icon;
+  });
   return (
     // <QRNormal
     //   value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH5465465465465465465465465465"

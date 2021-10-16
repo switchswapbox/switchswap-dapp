@@ -1,8 +1,9 @@
-import { Box, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Scrollbar from 'components/Scrollbar';
-import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from 'reduxStore';
+import { changeQRMidIcon } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
-import { QRCardCustomizeContext } from './qrCardCustomize.context';
 
 interface OtherProps {
   type: 'rect' | 'round' | 'rand';
@@ -25,10 +26,14 @@ const defaultOtherProps = {
 const iconNames = ['switchswap', 'crust'];
 
 function CustomizeQRNormal() {
-  const { icon, setIcon } = useContext(QRCardCustomizeContext);
-
+  const icon = useSelector((state: IRootState) => {
+    return state.qrCardReducer.icon;
+  });
+  const dispatch = useDispatch();
   function handleSelectMidIcon(iconName: string) {
-    icon !== iconName ? setIcon(iconName) : setIcon('');
+    icon !== iconName
+      ? dispatch(changeQRMidIcon({ icon: iconName }))
+      : dispatch(changeQRMidIcon({ icon: '' }));
   }
 
   function singleButton(iconName: string) {
