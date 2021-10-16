@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { FileInfoType } from './mintingSteps/StepUploadFile';
+import { FileInfoType } from './StepUploadFile';
 
 export interface MintingContextInterface {
   stepOneNotDone: boolean;

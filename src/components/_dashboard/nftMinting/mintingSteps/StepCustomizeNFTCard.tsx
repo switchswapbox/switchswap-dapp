@@ -35,9 +35,10 @@ import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-da
 import { ethers } from 'ethers';
 import { stringToHex } from '@polkadot/util';
 import { VariantType } from 'notistack';
-import { MintingContext } from '../minting.context';
+import { MintingContext } from './minting.context';
 import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
+import CustomizeQRNormal from '../qrCardCustomize/CustomizeQRNormal';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -246,7 +247,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
                 />
               </Grid>
               <Grid item xs={12}>
-                <MetadataSummary product={null} />
+                <MetadataSummary otherQRProps={<CustomizeQRNormal />} />
               </Grid>
             </Grid>
           </Grid>

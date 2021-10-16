@@ -15,6 +15,8 @@ import {
 } from 'react-qrbtf';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
+import { useContext } from 'react';
+import { QRCardCustomizeContext } from './qrCardCustomize/qrCardCustomize.context';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
+  const { icon } = useContext(QRCardCustomizeContext);
   return (
     // <QRNormal
     //   value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH5465465465465465465465465465"
@@ -44,7 +47,7 @@ const CreateQRCode = () => {
       value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
-      icon="./static/mock-images/middle-qr-logo/crust.png"
+      icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
       otherColor="#33CCCC"
       posColor="#009999"
     />

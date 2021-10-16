@@ -18,7 +18,7 @@ import Label from 'components/Label';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { contractAddress } from 'utils/contractAddress';
 import { useContext, useState } from 'react';
-import { MintingContext } from '../minting.context';
+import { MintingContext } from './minting.context';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
