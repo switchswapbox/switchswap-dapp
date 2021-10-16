@@ -200,7 +200,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   return (
     <>
       <Grid container direction="column" rowSpacing={10} sx={{ pt: 5 }}>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ pb: 0 }}>
           <Stack alignItems="center" justifyContent="center">
             <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
           </Stack>

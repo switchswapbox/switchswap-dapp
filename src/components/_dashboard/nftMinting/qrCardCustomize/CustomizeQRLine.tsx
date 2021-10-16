@@ -90,7 +90,7 @@ function CustomizeQRLine() {
     dispatch(
       changeOtherQRProps({
         otherQRProps: {
-          qrNormal: {
+          qrLine: {
             lineWidth: event.target.value
           }
         }
@@ -102,8 +102,19 @@ function CustomizeQRLine() {
     dispatch(
       changeOtherQRProps({
         otherQRProps: {
-          qrNormal: {
+          qrLine: {
             lineOpacity: event.target.value
+          }
+        }
+      })
+    );
+  }
+  function handleLineColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrLine: {
+            lineColor: value
           }
         }
       })
@@ -173,7 +184,12 @@ function CustomizeQRLine() {
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
           Connection direction
         </Typography>
-        <Pagination count={directions.length} color="primary" onChange={handleSelectDirection} />
+        <Pagination
+          count={directions.length}
+          siblingCount={0}
+          color="primary"
+          onChange={handleSelectDirection}
+        />
       </Box>
 
       <Box
@@ -219,6 +235,28 @@ function CustomizeQRLine() {
             shrink: true
           }}
           variant="standard"
+        />
+      </Box>
+
+      <Box
+        sx={{
+          my: 2,
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Line Color
+        </Typography>
+        <ColorSinglePicker
+          colors={colors}
+          sx={{
+            ...(colors.length > 5 && {
+              maxWidth: 200,
+              justifyContent: 'flex-end'
+            })
+          }}
+          onChange={handleLineColorChange}
         />
       </Box>
     </>
