@@ -1,18 +1,9 @@
-import {
-  Box,
-  Pagination,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography
-} from '@mui/material';
-import Scrollbar from 'components/Scrollbar';
+import { Box, Pagination, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeOtherQRProps, changeQRMidIcon } from 'reduxStore/reducerCustomizeQRCard';
+import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
-const iconNames = ['switchswap', 'crust'];
 const innerPointTypes = ['rect', 'round', 'rand'];
 const anchorPointTypes = ['rect', 'round', 'planet'];
 const colors = [

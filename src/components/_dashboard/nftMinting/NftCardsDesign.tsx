@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
+import { QRDsj } from 'react-qrbtf';
 
 // ----------------------------------------------------------------------
 
@@ -17,14 +18,15 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
-  const { icon, otherQRProps, qrStyleName } = useSelector((state: IRootState) => {
+  const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.qrCardReducer.icon,
-      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal',
-      otherQRProps: state.qrCardReducer.otherQRProps.qrNormal
+      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal'
     };
   });
-  console.log(qrStyleName);
+  const otherQRProps = useSelector((state: IRootState) => {
+    return state.qrCardReducer.otherQRProps[qrStyleName];
+  });
 
   // eslint-disable-next-line @typescript-eslint/dot-notation
   const { Component } = qrStyles[qrStyleName];

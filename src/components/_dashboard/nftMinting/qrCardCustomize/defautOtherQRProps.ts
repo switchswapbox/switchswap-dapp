@@ -15,3 +15,17 @@ export const defaultQRNormalOtherProps: QRNormalOtherProps = {
   otherColor: '#000000',
   posColor: '#000000'
 };
+
+interface QRDsjOtherProps {
+  scale: number;
+  crossWidth: number;
+  posWidth: number;
+  posType: 'rect' | 'dsj';
+}
+
+export const defaultQRDsjOtherProps: QRDsjOtherProps = {
+  scale: 70,
+  crossWidth: 70,
+  posWidth: 90,
+  posType: 'rect'
+};
