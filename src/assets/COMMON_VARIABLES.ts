@@ -8,7 +8,7 @@ const IPFS_GATEWAY_W3AUTH = ['https://crustwebsites.net'];
 const IPFS_PINNING_SERVICE_W3AUTH = ['https://pin.crustcode.com/psa'];
 
 const IPFS_GATEWAY_FOR_FETCHING_DATA = ['https://ipfs.io/ipfs'];
-const NUMBER_OF_NFT_IN_MANAGER_PAGE = 10;
+const NUMBER_OF_NFT_IN_MANAGER_PAGE = 12;
 
 export {
   CRUST_WALLET_WIKI,

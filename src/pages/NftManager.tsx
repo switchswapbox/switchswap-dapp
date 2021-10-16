@@ -1,6 +1,16 @@
 // material
 import { useEffect, useState } from 'react';
-import { Container, Typography, Button, Paper, Stack, Avatar, Box, Grid } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  Paper,
+  Stack,
+  Avatar,
+  Box,
+  Grid,
+  Pagination
+} from '@mui/material';
 // hooks
 import useSettings from '../hooks/useSettings';
 // components
@@ -19,15 +29,13 @@ import {
 } from 'assets/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 
-type BookingItemProps = {
+type NftCardProps = {
   tokenId: string;
   tokenURI: string;
   imageUrl: string;
 };
 
-function BookingItem({ tokenId, tokenURI, imageUrl }: BookingItemProps) {
-  // const { avatar, name, roomNumber, bookdAt, person, cover, roomType } = item;
-
+function NftCard({ tokenId, tokenURI, imageUrl }: NftCardProps) {
   return (
     <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
       <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
@@ -58,11 +66,16 @@ export default function NftManager() {
     []
   );
 
-  const [pageNumber, setPageNumber] = useState(1);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
 
   const [selectedMetamaskAccount, setselectedMetamaskAccount] = useState(
     localStorage.getItem('selectedMetamaskAccount') || ''
   );
+
+  const handlePageChange = (event: any, value: number) => {
+    setPage(value);
+  };
 
   const ipfsUriToCid = (ipfsUrl: string) => {
     const CidSearch = ipfsUrl.match(/(Qm[\w]+)/);
@@ -104,37 +117,54 @@ export default function NftManager() {
     }
   };
 
-  const getNftByPage = async (pageNumber: number) => {
+  const getNftByPage = async (page: number) => {
+    setNftList([]);
+
     const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
     const contract = new ethers.Contract(contractAddress, ABI, provider);
     const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
     const stopIndex =
-      NUMBER_OF_NFT_IN_MANAGER_PAGE * pageNumber > parseInt(NftBalance, 10)
+      NUMBER_OF_NFT_IN_MANAGER_PAGE * page > parseInt(NftBalance, 10)
         ? parseInt(NftBalance, 10)
-        : NUMBER_OF_NFT_IN_MANAGER_PAGE * pageNumber;
+        : NUMBER_OF_NFT_IN_MANAGER_PAGE * page;
 
-    for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (pageNumber - 1); index < stopIndex; index++) {
+    for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (page - 1); index < stopIndex; index++) {
       updateListByTokenIndex(index, contract);
     }
   };
 
   useEffect(() => {
-    getNftByPage(pageNumber);
-  }, [pageNumber]);
+    getNftByPage(page);
+  }, [page]);
+
+  useEffect(() => {
+    async function getPageCount() {
+      const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+      const contract = new ethers.Contract(contractAddress, ABI, provider);
+      const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
+
+      parseInt(NftBalance, 10);
+      setPageCount(Math.ceil(parseInt(NftBalance, 10) / NUMBER_OF_NFT_IN_MANAGER_PAGE));
+    }
+    getPageCount();
+  }, []);
 
   return (
-    <Page title="Page Five">
+    <Page title="NFT Manager">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3}>
           {NftList.map((nft) => {
             return (
               <Grid key={nft.tokenId} item xs={12} sm={6} md={4}>
-                <BookingItem {...nft} />
+                <NftCard {...nft} />
               </Grid>
             );
           })}
         </Grid>
+        <Stack direction="row" justifyContent="center" sx={{ pt: 6 }}>
+          <Pagination count={pageCount} page={page} onChange={handlePageChange} />
+        </Stack>
       </Container>
     </Page>
   );
