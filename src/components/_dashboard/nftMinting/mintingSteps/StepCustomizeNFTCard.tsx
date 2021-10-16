@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Divider,
@@ -39,6 +39,8 @@ import { MintingContext } from './minting.context';
 import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import CustomizeQRNormal from '../qrCardCustomize/CustomizeQRNormal';
+import qrStyles from '../qrCardCustomize';
+import { IRootState } from 'reduxStore';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -62,6 +64,13 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     alignment,
     metadataCid
   } = useContext(MintingContext);
+
+  const { qrStyleName } = useSelector((state: IRootState) => {
+    return {
+      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal'
+    };
+  });
+  const { CustomProps } = qrStyles[qrStyleName];
 
   const dispatch = useDispatch();
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -247,7 +256,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
                 />
               </Grid>
               <Grid item xs={12}>
-                <MetadataSummary otherQRProps={<CustomizeQRNormal />} />
+                <MetadataSummary otherQRProps={<CustomProps />} />
               </Grid>
             </Grid>
           </Grid>

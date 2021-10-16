@@ -5,11 +5,17 @@ import { Box, Divider, Pagination, TextField, Theme, Typography } from '@mui/mat
 
 import Label from '../../Label';
 import ColorSinglePicker from './ColorSinglePicker';
-import { changeQRCard } from '../../../reduxStore/reducerCustomizeQRCard';
+import {
+  changeQRCard,
+  changeQRStyleName,
+  qrStyleNameType
+} from '../../../reduxStore/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
 import React from 'react';
 import svgArray from 'utils/svg-data';
 import { SxProps } from '@mui/system/styleFunctionSx';
+import qrStyles from './qrCardCustomize';
+import MidIconSelection from './qrCardCustomize/MidIconSelection';
 
 // ----------------------------------------------------------------------
 
@@ -23,12 +29,21 @@ type MetadataSummaryProps = {
 };
 
 export default function MetadataSummary({ otherQRProps, ...other }: MetadataSummaryProps) {
+  const qrStylesList = Object.keys(qrStyles);
   const dispatch = useDispatch();
 
   const handleSelectLayout = (event: React.ChangeEvent<unknown>, value: number) => {
     dispatch(
       changeQRCard({
         layout: value - 1
+      })
+    );
+  };
+
+  const handleSelectQRStyle = (event: React.ChangeEvent<unknown>, value: number) => {
+    dispatch(
+      changeQRStyleName({
+        qrStyleName: qrStylesList[value - 1] as qrStyleNameType
       })
     );
   };
@@ -63,7 +78,10 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
           <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
             QR Code Style
           </Typography>
+          <Pagination count={qrStylesList.length} color="primary" onChange={handleSelectQRStyle} />
         </Box>
+        <MidIconSelection />
+        <Divider sx={{ my: 5 }} />
         {otherQRProps}
       </>
     </RootStyle>

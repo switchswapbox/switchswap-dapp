@@ -1,20 +1,9 @@
 // material
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
-//
-import {
-  QRNormal,
-  QR25D,
-  QRDsj,
-  QRRandRect,
-  QRImage,
-  QRResImage,
-  QRBubble,
-  QRFunc,
-  QRLine
-} from 'react-qrbtf';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
+import qrStyles from './qrCardCustomize';
 
 // ----------------------------------------------------------------------
 
@@ -28,29 +17,24 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
-  const { icon, otherQRProps } = useSelector((state: IRootState) => {
+  const { icon, otherQRProps, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.qrCardReducer.icon,
+      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal',
       otherQRProps: state.qrCardReducer.otherQRProps.qrNormal
     };
   });
+  console.log(qrStyleName);
+
+  // eslint-disable-next-line @typescript-eslint/dot-notation
+  const { Component } = qrStyles[qrStyleName];
   return (
-    // <QRNormal
-    //   value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH5465465465465465465465465465"
-    //   className="my-qrcode"
-    //   styles={{ svg: { width: '300px' } }}
-    //   type="round"
-    //   size={50}
-    //   opacity={70}
-    //   posType="planet"
-    //   otherColor="#33CCCC"
-    //   posColor="#009999"
-    // />
-    <QRNormal
+    <Component
       value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
       icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
+      iconScale={0.2}
       {...otherQRProps}
     />
   );
