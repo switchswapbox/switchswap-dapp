@@ -13,9 +13,13 @@ import {
   Typography,
   CardActionArea
 } from '@mui/material';
+import { MIconButton } from '../../components/@material-extend';
+
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
+import { Icon } from '@iconify/react';
+
 import { InfoAccountWallet } from '../../redux/reducer';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
@@ -25,8 +29,11 @@ import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 
 import { shortenAddress } from '../../utils/formatAddress';
+import twitterFill from '@iconify/icons-eva/twitter-fill';
+import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../assets/COMMON_VARIABLES';
 
 import Identicons from '@nimiq/identicons';
+
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
@@ -193,6 +200,35 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
       </Stack>
 
       <NavSection navConfig={sidebarConfig} isShow={!isCollapse} />
+
+      <Box
+        sx={
+          isCollapse
+            ? { textAlign: 'center', '& > *': { mx: 1, my: 0.5 } }
+            : { pl: 3.5, '& > *': { mx: 0.5, my: 0.5 } }
+        }
+      >
+        <Tooltip key="discord" title="Discord">
+          <MIconButton onClick={() => window.open(DISCORD, '_blank')}>
+            <Icon icon="logos:discord-icon" width={24} height={24} />
+          </MIconButton>
+        </Tooltip>
+        <Tooltip key="telegram" title="Telegram">
+          <MIconButton onClick={() => window.open(TELEGRAM, '_blank')}>
+            <Icon icon="logos:telegram" width={24} height={24} />
+          </MIconButton>
+        </Tooltip>
+        <Tooltip key="twitter" title="Twitter">
+          <MIconButton onClick={() => window.open(TWITTER, '_blank')}>
+            <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />
+          </MIconButton>
+        </Tooltip>
+        <Tooltip key="medium" title="Medium">
+          <MIconButton onClick={() => window.open(MEDIUM, '_blank')}>
+            <Icon icon="ant-design:medium-square-filled" width={24} height={24} />
+          </MIconButton>
+        </Tooltip>
+      </Box>
     </Scrollbar>
   );
 
