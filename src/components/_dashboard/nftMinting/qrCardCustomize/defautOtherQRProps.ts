@@ -73,3 +73,23 @@ export const defaultQRFuncOtherProps: QRFuncOtherProps = {
   otherColor2: '#000000',
   posColor: '#000000'
 };
+
+interface QRLineOtherProps {
+  funcType: String;
+  posType: String;
+  posColor: String;
+  direction: String;
+  lineWidth: Number;
+  lineOpacity: Number;
+  lineColor: String;
+}
+
+export const defaultQRLineOtherProps: QRLineOtherProps = {
+  funcType: 'A',
+  posType: 'rect',
+  posColor: '#000000',
+  direction: 'left-right',
+  lineWidth: 50,
+  lineOpacity: 100,
+  lineColor: '#000000'
+};

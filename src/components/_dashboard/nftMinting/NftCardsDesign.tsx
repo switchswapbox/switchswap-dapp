@@ -34,6 +34,7 @@ const CreateQRCode = () => {
       value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
+      image={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
       icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
       iconScale={0.2}
       {...otherQRProps}
