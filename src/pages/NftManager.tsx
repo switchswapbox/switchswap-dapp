@@ -3,13 +3,10 @@ import { useEffect, useState } from 'react';
 import {
   Container,
   Typography,
-  Button,
   Paper,
   Stack,
-  Avatar,
   Box,
   Link,
-  Card,
   Grid,
   Tooltip,
   Pagination
@@ -19,13 +16,10 @@ import useSettings from '../hooks/useSettings';
 
 // components
 import Page from '../components/Page';
-import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
 import { ABI } from '../utils/abi';
 import { contractAddress } from '../utils/contractAddress';
 import { Icon } from '@iconify/react';
-import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
-import peopleFill from '@iconify/icons-eva/people-fill';
 import axios from 'axios';
 import {
   IPFS_GATEWAY_FOR_FETCHING_DATA,
@@ -87,21 +81,19 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
               </Typography>
             </Stack>
           </Tooltip>
-          <Tooltip title="Author Address">
-            <Link
-              href={`https://polygonscan.com/token/${nftContract}?a=${tokenId}`}
-              underline="none"
-              target="_blank"
-              rel="noopener"
-            >
-              <Stack direction="row" alignItems="center" spacing={0.5}>
-                <Icon icon="bi:shield-check" width={16} height={16} />
-                <Typography variant="body2" noWrap>
-                  History
-                </Typography>
-              </Stack>
-            </Link>
-          </Tooltip>
+          <Link
+            href={`https://polygonscan.com/token/${nftContract}?a=${tokenId}`}
+            underline="none"
+            target="_blank"
+            rel="noopener"
+          >
+            <Stack direction="row" alignItems="center" spacing={0.5}>
+              <Icon icon="bi:shield-check" width={16} height={16} />
+              <Typography variant="body2" noWrap>
+                History
+              </Typography>
+            </Stack>
+          </Link>
         </Stack>
       </Stack>
     </Paper>
@@ -118,9 +110,7 @@ export default function NftManager() {
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
 
-  const [selectedMetamaskAccount, setselectedMetamaskAccount] = useState(
-    localStorage.getItem('selectedMetamaskAccount') || ''
-  );
+  const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || '';
 
   const handlePageChange = (event: any, value: number) => {
     setPage(value);
