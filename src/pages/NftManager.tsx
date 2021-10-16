@@ -16,8 +16,6 @@ import {
 } from '@mui/material';
 // hooks
 import useSettings from '../hooks/useSettings';
-import { styled } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
 
 // components
 import Page from '../components/Page';
@@ -40,9 +38,10 @@ type NftCardProps = {
   tokenURI: string;
   imageUrl: string;
   name: string;
+  nftContract: string;
 };
 
-function NftCard({ tokenId, tokenURI, imageUrl, name }: NftCardProps) {
+function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProps) {
   return (
     <Paper sx={{ borderRadius: 2, bgcolor: 'background.neutral' }}>
       <Box sx={{ p: 1, position: 'relative' }}>
@@ -55,48 +54,50 @@ function NftCard({ tokenId, tokenURI, imageUrl, name }: NftCardProps) {
 
       <Stack spacing={1} sx={{ p: 2, pt: 1, pb: 1 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Link color="inherit" underline="none">
+          <Link color="inherit" underline="none" sx={{ width: '100%' }}>
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
           </Link>
-          <Stack spacing={0}>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Icon icon="logos:ethereum" width={16} height={16} />
-              <Typography variant="subtitle2" noWrap>
-                0.01
-              </Typography>
-            </Stack>
-          </Stack>
         </Stack>
 
         <Stack direction="row" justifyContent="space-between">
-          <Tooltip title="NFT Contract">
-            <Link href="#" underline="none" target="_blank" rel="noopener">
-              <Stack direction="row" alignItems="center" spacing={0.5}>
-                <Icon icon="teenyicons:contract-outline" width={16} height={16} />
-                <Typography variant="body2" noWrap>
-                  0xE53821
-                </Typography>
-              </Stack>
-            </Link>
-          </Tooltip>
+          <Stack sx={{ width: '30%' }} direction="row" alignItems="center">
+            <Icon icon="teenyicons:contract-outline" width={16} height={16} />
+            <Tooltip title="NFT Contract" sx={{ width: '80%', pl: 0.5 }}>
+              <Link
+                href={`https://polygonscan.com/address/${nftContract}`}
+                underline="none"
+                target="_blank"
+                rel="noopener"
+              >
+                <Stack direction="row" alignItems="center" spacing={0.5}>
+                  <Typography variant="body2" noWrap>
+                    {nftContract}
+                  </Typography>
+                </Stack>
+              </Link>
+            </Tooltip>
+          </Stack>
           <Tooltip title="NFT ID">
-            <Link href="#" underline="none" target="_blank" rel="noopener">
-              <Stack direction="row" alignItems="center" spacing={0.5}>
-                <Icon icon="ant-design:number-outlined" width={16} height={16} />
-                <Typography variant="body2" noWrap>
-                  142
-                </Typography>
-              </Stack>
-            </Link>
+            <Stack direction="row" alignItems="center" spacing={0.5}>
+              <Icon icon="ant-design:number-outlined" width={16} height={16} />
+              <Typography variant="body2" noWrap>
+                {tokenId}
+              </Typography>
+            </Stack>
           </Tooltip>
           <Tooltip title="Author Address">
-            <Link href="#" underline="none" target="_blank" rel="noopener">
+            <Link
+              href={`https://polygonscan.com/token/${nftContract}?a=${tokenId}`}
+              underline="none"
+              target="_blank"
+              rel="noopener"
+            >
               <Stack direction="row" alignItems="center" spacing={0.5}>
                 <Icon icon="bi:shield-check" width={16} height={16} />
                 <Typography variant="body2" noWrap>
-                  0x1432
+                  History
                 </Typography>
               </Stack>
             </Link>
@@ -206,7 +207,7 @@ export default function NftManager() {
           {NftList.map((nft) => {
             return (
               <Grid key={nft.tokenId} item xs={12} sm={6} md={4}>
-                <NftCard {...nft} />
+                <NftCard {...nft} nftContract={contractAddress} />
               </Grid>
             );
           })}
