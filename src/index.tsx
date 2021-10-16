@@ -5,6 +5,9 @@ import 'simplebar/src/simplebar.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+// lightbox
+import 'react-image-lightbox/style.css';
+
 import ReactDOM from 'react-dom';
 import { StrictMode } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
@@ -16,18 +19,22 @@ import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
 
+import store from './reduxStore/store';
 // ----------------------------------------------------------------------
 
 ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       <SettingsProvider>
-        <CollapseDrawerProvider>
-          <Router>
-            <App />
-          </Router>
-        </CollapseDrawerProvider>
+        <Provider store={store}>
+          <CollapseDrawerProvider>
+            <Router>
+              <App />
+            </Router>
+          </CollapseDrawerProvider>
+        </Provider>
       </SettingsProvider>
     </HelmetProvider>
   </StrictMode>,

@@ -8,23 +8,23 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
-import { InfoAccountWallet } from '../../redux/reducer';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
 
 import Identicons from '@nimiq/identicons';
+import { IRootState } from 'reduxStore';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const selectedAccountAddress = useSelector((state: InfoAccountWallet) => {
-    return state.accountAddress;
+  const selectedAccountAddress = useSelector((state: IRootState) => {
+    return state.accountReducer.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: InfoAccountWallet) => {
-    return state.networkName;
+  const selectedNetworkName = useSelector((state: IRootState) => {
+    return state.accountReducer.networkName;
   });
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');

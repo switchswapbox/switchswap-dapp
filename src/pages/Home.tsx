@@ -1,5 +1,4 @@
 // material
-import { useEffect } from 'react';
 import { Container, Grid, Typography, IconButton } from '@mui/material';
 
 import { Icon } from '@iconify/react';

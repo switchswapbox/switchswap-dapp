@@ -20,7 +20,7 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
 import { Icon } from '@iconify/react';
 
-import { InfoAccountWallet } from '../../redux/reducer';
+import { InfoAccountWallet } from '../../reduxStore/reducerSelectAccount';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -29,11 +29,11 @@ import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 
 import { shortenAddress } from '../../utils/formatAddress';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
 import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../assets/COMMON_VARIABLES';
 
 import Identicons from '@nimiq/identicons';
 
+import { IRootState } from 'reduxStore';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
@@ -113,11 +113,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const selectedAccountAddress = useSelector((state: InfoAccountWallet) => {
-    return state.accountAddress;
+  const selectedAccountAddress = useSelector((state: IRootState) => {
+    return state.accountReducer.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: InfoAccountWallet) => {
-    return state.networkName;
+  const selectedNetworkName = useSelector((state: IRootState) => {
+    return state.accountReducer.networkName;
   });
 
   useEffect(() => {
