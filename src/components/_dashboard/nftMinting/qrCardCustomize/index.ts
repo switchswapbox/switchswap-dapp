@@ -1,6 +1,7 @@
 import CustomizeQRNormal from './CustomizeQRNormal';
 import CustomizeQRRandRect from './CustomizeQRRandRect';
 import CustomizeQRDsj from './CustomizeQRDsj';
+import CustomizeQR25D from './CustomizeQR25D';
 import {
   QRNormal,
   QR25D,
@@ -26,6 +27,10 @@ const qrStyles = {
   qrDsj: {
     Component: QRDsj,
     CustomProps: CustomizeQRDsj
+  },
+  qr25D: {
+    Component: QR25D,
+    CustomProps: CustomizeQR25D
   }
 };
 

@@ -29,3 +29,19 @@ export const defaultQRDsjOtherProps: QRDsjOtherProps = {
   posWidth: 90,
   posType: 'rect'
 };
+
+interface QR25DOtherProps {
+  height: Number;
+  posHeight: Number;
+  topColor: String;
+  leftColor: String;
+  rightColor: String;
+}
+
+export const defaultQR25DOtherProps: QR25DOtherProps = {
+  height: 0.5,
+  posHeight: 0.5,
+  topColor: '#FF7F89',
+  leftColor: '#FFD7D9',
+  rightColor: '#FFEBF3'
+};

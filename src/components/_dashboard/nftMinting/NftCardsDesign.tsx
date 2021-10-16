@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
-import { QRDsj } from 'react-qrbtf';
+import { QR25D } from 'react-qrbtf';
 
 // ----------------------------------------------------------------------
 

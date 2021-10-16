@@ -1,4 +1,5 @@
 import {
+  defaultQR25DOtherProps,
   defaultQRDsjOtherProps,
   defaultQRNormalOtherProps
 } from 'components/_dashboard/nftMinting/qrCardCustomize/defautOtherQRProps';
@@ -9,7 +10,7 @@ export const CHANGE_QR_MID_ICON = 'CHANGE_QR_MID_ICON';
 export const CHANGE_CARD_TITLE = 'CHANGE_CARD_TITLE';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
 
-export type qrStyleNameType = 'qrNormal' | 'qrRandRect' | 'qrDsj';
+export type qrStyleNameType = 'qrNormal' | 'qrRandRect' | 'qrDsj' | 'qr25D';
 export interface InfoQRCard {
   layout?: number;
   qrStyleName?: qrStyleNameType;
@@ -49,7 +50,11 @@ const initialQRCard: InfoQRCard = {
   qrStyleName: 'qrNormal',
   title: '',
   icon: '',
-  otherQRProps: { qrNormal: defaultQRNormalOtherProps, qrDsj: defaultQRDsjOtherProps }
+  otherQRProps: {
+    qrNormal: defaultQRNormalOtherProps,
+    qrDsj: defaultQRDsjOtherProps,
+    qr25D: defaultQR25DOtherProps
+  }
 };
 
 export const qrCardReducer = (
