@@ -60,11 +60,18 @@ export const qrCardReducer = (
         ...state,
         icon: action.infoQRCard.icon
       };
-    case CHANGE_OTHER_QR_PROPS:
-      return {
-        ...state,
-        otherQRProps: action.infoQRCard.otherQRProps
-      };
+    case CHANGE_OTHER_QR_PROPS: {
+      console.log('ok');
+      const keys = Object.keys(action.infoQRCard.otherQRProps);
+      let newState = JSON.parse(JSON.stringify(state));
+      for (let key of keys) {
+        newState.otherQRProps[key] = {
+          ...newState.otherQRProps[key],
+          ...action.infoQRCard.otherQRProps[key]
+        };
+      }
+      return newState;
+    }
     default:
       return state;
   }

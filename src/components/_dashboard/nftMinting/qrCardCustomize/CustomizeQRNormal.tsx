@@ -15,6 +15,18 @@ import ColorSinglePicker from '../ColorSinglePicker';
 const iconNames = ['switchswap', 'crust'];
 const innerPointTypes = ['rect', 'round', 'rand'];
 const anchorPointTypes = ['rect', 'round', 'planet'];
+const colors = [
+  '#FF6900',
+  '#FCB900',
+  '#7BDCB5',
+  '#00D084',
+  '#8ED1FC',
+  '#0693E3',
+  '#ABB8C3',
+  '#EB144C',
+  '#F78DA7',
+  '#9900EF'
+];
 
 function CustomizeQRNormal() {
   const { icon, innerPointSize, innerPointOpacity } = useSelector((state: IRootState) => {
@@ -84,12 +96,36 @@ function CustomizeQRNormal() {
     );
   }
 
+  function handleInnerPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrNormal: {
+            otherColor: value
+          }
+        }
+      })
+    );
+  }
+
   function handleSelectAnchorPointType(event: React.ChangeEvent<unknown>, value: number) {
     dispatch(
       changeOtherQRProps({
         otherQRProps: {
           qrNormal: {
             posType: anchorPointTypes[value - 1]
+          }
+        }
+      })
+    );
+  }
+
+  function handleAnchorPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrNormal: {
+            posColor: value
           }
         }
       })
@@ -181,6 +217,27 @@ function CustomizeQRNormal() {
       </Box>
       <Box
         sx={{
+          my: 2,
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Inner Point Color
+        </Typography>
+        <ColorSinglePicker
+          colors={colors}
+          sx={{
+            ...(colors.length > 5 && {
+              maxWidth: 200,
+              justifyContent: 'flex-end'
+            })
+          }}
+          onChange={handleInnerPointColorChange}
+        />
+      </Box>
+      <Box
+        sx={{
           mb: 3,
           display: 'flex',
           justifyContent: 'space-between',
@@ -194,6 +251,27 @@ function CustomizeQRNormal() {
           count={anchorPointTypes.length}
           color="primary"
           onChange={handleSelectAnchorPointType}
+        />
+      </Box>
+      <Box
+        sx={{
+          my: 2,
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Anchor Point Color
+        </Typography>
+        <ColorSinglePicker
+          colors={colors}
+          sx={{
+            ...(colors.length > 5 && {
+              maxWidth: 200,
+              justifyContent: 'flex-end'
+            })
+          }}
+          onChange={handleAnchorPointColorChange}
         />
       </Box>
     </>
