@@ -199,15 +199,15 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
 
   return (
     <>
-      <Grid container direction="column" rowSpacing={10} sx={{ pt: 5 }}>
-        <Grid item xs={12} sx={{ pb: 0 }}>
+      <Grid container sx={{ pt: 5 }}>
+        <Grid item xs={12} sx={{ pb: 5 }}>
           <Stack alignItems="center" justifyContent="center">
             <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
           </Stack>
         </Grid>
-        <Grid item>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12} lg={7}>
+        <Grid item xs={12}>
+          <Grid container>
+            <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5 } }}>
               <NftCardsDesign nftCards={svgArray} />
             </Grid>
             <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
@@ -255,7 +255,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
                   disabled={!stepTwoNotDone}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ pb: 0 }}>
                 <MetadataSummary otherQRProps={<CustomProps />} />
               </Grid>
             </Grid>
