@@ -55,3 +55,21 @@ export const defaultQRBubbleOtherProps: QRBubbleOtherProps = {
   circleColor: '#8ED1FC',
   posColor: '#0693E3'
 };
+
+interface QRFuncOtherProps {
+  funcType: String;
+  type: String;
+  posType: String;
+  otherColor1: String;
+  otherColor2: String;
+  posColor: String;
+}
+
+export const defaultQRFuncOtherProps: QRFuncOtherProps = {
+  funcType: 'A',
+  type: 'rect',
+  posType: 'rect',
+  otherColor1: '#000000',
+  otherColor2: '#000000',
+  posColor: '#000000'
+};

@@ -65,7 +65,12 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
           <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
             Layout
           </Typography>
-          <Pagination count={svgArray.length} color="primary" onChange={handleSelectLayout} />
+          <Pagination
+            count={svgArray.length}
+            siblingCount={0}
+            color="primary"
+            onChange={handleSelectLayout}
+          />
         </Box>
 
         <Box
@@ -78,7 +83,12 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
           <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
             QR Code Style
           </Typography>
-          <Pagination count={qrStylesList.length} color="primary" onChange={handleSelectQRStyle} />
+          <Pagination
+            count={qrStylesList.length}
+            siblingCount={0}
+            color="primary"
+            onChange={handleSelectQRStyle}
+          />
         </Box>
         <MidIconSelection />
         <Divider sx={{ my: 5 }} />

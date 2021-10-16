@@ -15,6 +15,7 @@ import {
   QRBubble
 } from 'react-qrbtf';
 import CustomizeQRBubble from './CustomizeQRBubble';
+import CustomizeQRFunc from './CustomizeQRFunc';
 
 const qrStyles = {
   qrNormal: {
@@ -36,6 +37,10 @@ const qrStyles = {
   qrBubble: {
     Component: QRBubble,
     CustomProps: CustomizeQRBubble
+  },
+  qrFunc: {
+    Component: QRFunc,
+    CustomProps: CustomizeQRFunc
   }
 };
 
