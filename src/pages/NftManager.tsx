@@ -13,7 +13,10 @@ import { Icon } from '@iconify/react';
 import roundVpnKey from '@iconify/icons-ic/round-vpn-key';
 import peopleFill from '@iconify/icons-eva/people-fill';
 import axios from 'axios';
-import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
+import {
+  IPFS_GATEWAY_FOR_FETCHING_DATA,
+  NUMBER_OF_NFT_IN_MANAGER_PAGE
+} from 'assets/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 
 type BookingItemProps = {
@@ -48,12 +51,14 @@ function BookingItem({ tokenId, tokenURI, imageUrl }: BookingItemProps) {
   );
 }
 
-export default function PageFive() {
+export default function NftManager() {
   const { themeStretch } = useSettings();
 
   const [NftList, setNftList] = useState<{ tokenId: string; tokenURI: string; imageUrl: string }[]>(
     []
   );
+
+  const [pageNumber, setPageNumber] = useState(1);
 
   const [selectedMetamaskAccount, setselectedMetamaskAccount] = useState(
     localStorage.getItem('selectedMetamaskAccount') || ''
@@ -99,18 +104,24 @@ export default function PageFive() {
     }
   };
 
-  useEffect(() => {
-    async function getAllNft() {
-      const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-      const contract = new ethers.Contract(contractAddress, ABI, provider);
-      const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
+  const getNftByPage = async (pageNumber: number) => {
+    const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+    const contract = new ethers.Contract(contractAddress, ABI, provider);
+    const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
-      for (let index = 0; index < parseInt(NftBalance, 10); index++) {
-        updateListByTokenIndex(index, contract);
-      }
+    const stopIndex =
+      NUMBER_OF_NFT_IN_MANAGER_PAGE * pageNumber > parseInt(NftBalance, 10)
+        ? parseInt(NftBalance, 10)
+        : NUMBER_OF_NFT_IN_MANAGER_PAGE * pageNumber;
+
+    for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (pageNumber - 1); index < stopIndex; index++) {
+      updateListByTokenIndex(index, contract);
     }
-    getAllNft();
-  }, []);
+  };
+
+  useEffect(() => {
+    getNftByPage(pageNumber);
+  }, [pageNumber]);
 
   return (
     <Page title="Page Five">
