@@ -29,17 +29,17 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
 const SOCIALS = [
   {
     name: 'Discord',
-    icon: <Icon icon="logos:discord-icon" width={24} height={24} />,
+    icon: <Icon icon="bi:discord" width={24} height={24} />,
     href: DISCORD
   },
   {
     name: 'Telegram',
-    icon: <Icon icon="logos:telegram" width={24} height={24} />,
+    icon: <Icon icon="uim:telegram-alt" width={24} height={24} />,
     href: TELEGRAM
   },
   {
     name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />,
+    icon: <Icon icon="akar-icons:twitter-fill" width={24} height={24} />,
     href: TWITTER
   },
   {

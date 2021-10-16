@@ -210,17 +210,17 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
       >
         <Tooltip key="discord" title="Discord">
           <MIconButton onClick={() => window.open(DISCORD, '_blank')}>
-            <Icon icon="logos:discord-icon" width={24} height={24} />
+            <Icon icon="bi:discord" width={24} height={24} />
           </MIconButton>
         </Tooltip>
         <Tooltip key="telegram" title="Telegram">
           <MIconButton onClick={() => window.open(TELEGRAM, '_blank')}>
-            <Icon icon="logos:telegram" width={24} height={24} />
+            <Icon icon="uim:telegram-alt" width={24} height={24} />
           </MIconButton>
         </Tooltip>
         <Tooltip key="twitter" title="Twitter">
           <MIconButton onClick={() => window.open(TWITTER, '_blank')}>
-            <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />
+            <Icon icon="akar-icons:twitter-fill" width={24} height={24} />
           </MIconButton>
         </Tooltip>
         <Tooltip key="medium" title="Medium">
