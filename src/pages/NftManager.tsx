@@ -8,11 +8,17 @@ import {
   Stack,
   Avatar,
   Box,
+  Link,
+  Card,
   Grid,
+  Tooltip,
   Pagination
 } from '@mui/material';
 // hooks
 import useSettings from '../hooks/useSettings';
+import { styled } from '@mui/material/styles';
+import { Link as RouterLink } from 'react-router-dom';
+
 // components
 import Page from '../components/Page';
 import detectEthereumProvider from '@metamask/detect-provider';
@@ -33,28 +39,70 @@ type NftCardProps = {
   tokenId: string;
   tokenURI: string;
   imageUrl: string;
+  name: string;
 };
 
-function NftCard({ tokenId, tokenURI, imageUrl }: NftCardProps) {
+function NftCard({ tokenId, tokenURI, imageUrl, name }: NftCardProps) {
   return (
-    <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
-      <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
-        <Stack direction="row" alignItems="center" spacing={3} sx={{ color: 'text.secondary' }}>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Icon icon={roundVpnKey} width={16} height={16} />
-            <Typography variant="caption">Room xxx</Typography>
-          </Stack>
+    <Paper sx={{ borderRadius: 2, bgcolor: 'background.neutral' }}>
+      <Box sx={{ p: 1, position: 'relative' }}>
+        <Box
+          component="img"
+          src={imageUrl}
+          sx={{ borderRadius: 1.5, top: 0, width: '100%', height: '200px', objectFit: 'cover' }}
+        />
+      </Box>
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Icon icon={peopleFill} width={16} height={16} />
-            <Typography variant="caption">Hello Person</Typography>
+      <Stack spacing={1} sx={{ p: 2, pt: 1, pb: 1 }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Link color="inherit" underline="none">
+            <Typography variant="subtitle2" noWrap>
+              {name}
+            </Typography>
+          </Link>
+          <Stack spacing={0}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Icon icon="logos:ethereum" width={16} height={16} />
+              <Typography variant="subtitle2" noWrap>
+                0.01
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
-      </Stack>
 
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Box component="img" src={imageUrl} sx={{ borderRadius: 1.5, width: 1 }} />
-      </Box>
+        <Stack direction="row" justifyContent="space-between">
+          <Tooltip title="NFT Contract">
+            <Link href="#" underline="none" target="_blank" rel="noopener">
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <Icon icon="teenyicons:contract-outline" width={16} height={16} />
+                <Typography variant="body2" noWrap>
+                  0xE53821
+                </Typography>
+              </Stack>
+            </Link>
+          </Tooltip>
+          <Tooltip title="NFT ID">
+            <Link href="#" underline="none" target="_blank" rel="noopener">
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <Icon icon="ant-design:number-outlined" width={16} height={16} />
+                <Typography variant="body2" noWrap>
+                  142
+                </Typography>
+              </Stack>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Author Address">
+            <Link href="#" underline="none" target="_blank" rel="noopener">
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <Icon icon="bi:shield-check" width={16} height={16} />
+                <Typography variant="body2" noWrap>
+                  0x1432
+                </Typography>
+              </Stack>
+            </Link>
+          </Tooltip>
+        </Stack>
+      </Stack>
     </Paper>
   );
 }
@@ -62,9 +110,9 @@ function NftCard({ tokenId, tokenURI, imageUrl }: NftCardProps) {
 export default function NftManager() {
   const { themeStretch } = useSettings();
 
-  const [NftList, setNftList] = useState<{ tokenId: string; tokenURI: string; imageUrl: string }[]>(
-    []
-  );
+  const [NftList, setNftList] = useState<
+    { tokenId: string; tokenURI: string; imageUrl: string; name: string }[]
+  >([]);
 
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
@@ -91,6 +139,7 @@ export default function NftManager() {
     if (tokenURICid) {
       const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
       axios.get(tokenURIHttp).then((response) => {
+        const name = response.data.name || '';
         if (response.data && response.data.image) {
           const imageCid = ipfsUriToCid(response.data.image);
           if (imageCid) {
@@ -106,7 +155,7 @@ export default function NftManager() {
               }
               const newNftList = [
                 ...NftList.slice(0, addingNftIndex),
-                { tokenId, tokenURI, imageUrl },
+                { tokenId, tokenURI, imageUrl, name },
                 ...NftList.slice(addingNftIndex)
               ];
               return newNftList;
