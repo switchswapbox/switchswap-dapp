@@ -50,11 +50,10 @@ function BookingItem({ tokenId, tokenURI, imageUrl }: BookingItemProps) {
 
 export default function PageFive() {
   const { themeStretch } = useSettings();
-  const [totalNFT, setTotalNFT] = useState<number>(0);
+
   const [NftList, setNftList] = useState<{ tokenId: string; tokenURI: string; imageUrl: string }[]>(
     []
   );
-  // WARNING: Use useSth to prevent re-create for each render
 
   const [selectedMetamaskAccount, setselectedMetamaskAccount] = useState(
     localStorage.getItem('selectedMetamaskAccount') || ''
@@ -67,46 +66,55 @@ export default function PageFive() {
     } else return null;
   };
 
+  const updateListByTokenIndex = async (index: number, contract: ethers.Contract) => {
+    const tokenId = (await contract.tokenOfOwnerByIndex(selectedMetamaskAccount, index)).toString();
+    const tokenURI = await contract.tokenURI(tokenId);
+    const tokenURICid = ipfsUriToCid(tokenURI);
+    if (tokenURICid) {
+      const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
+      axios.get(tokenURIHttp).then((response) => {
+        if (response.data && response.data.image) {
+          const imageCid = ipfsUriToCid(response.data.image);
+          if (imageCid) {
+            const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
+
+            setNftList((NftList) => {
+              let addingNftIndex = NftList.length;
+              for (let nftIndex = NftList.length; nftIndex > 0; nftIndex--) {
+                if (tokenId > NftList[nftIndex - 1].tokenId) {
+                  break;
+                }
+                addingNftIndex--;
+              }
+              const newNftList = [
+                ...NftList.slice(0, addingNftIndex),
+                { tokenId, tokenURI, imageUrl },
+                ...NftList.slice(addingNftIndex)
+              ];
+              return newNftList;
+            });
+          }
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     async function getAllNft() {
       const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
       const contract = new ethers.Contract(contractAddress, ABI, provider);
       const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
-      // const NftBalance = '1';
+
       for (let index = 0; index < parseInt(NftBalance, 10); index++) {
-        const tokenId = (
-          await contract.tokenOfOwnerByIndex(selectedMetamaskAccount, index)
-        ).toString();
-        const tokenURI = await contract.tokenURI(tokenId);
-        const tokenURICid = ipfsUriToCid(tokenURI);
-        if (tokenURICid) {
-          const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
-          axios.get(tokenURIHttp).then((response) => {
-            if (response.data && response.data.image) {
-              const imageCid = ipfsUriToCid(response.data.image);
-              if (imageCid) {
-                const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
-                // const imageUrl =
-                //   'https://ipfs.io/ipfs/QmYVSo2YxDnVruJ9QYvrdosTygdGwzt2TqURa1y9Fh6NUq';
-                NftList.push({ tokenId, tokenURI, imageUrl });
-                setNftList([...NftList]);
-              }
-            }
-          });
-        }
+        updateListByTokenIndex(index, contract);
       }
     }
     getAllNft();
   }, []);
 
-  const popItem = () => {
-    NftList.shift();
-    setNftList([...NftList]);
-  };
   return (
     <Page title="Page Five">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Button onClick={popItem}>Hello</Button>
         <Grid container spacing={3}>
           {NftList.map((nft) => {
             return (
