@@ -12,6 +12,8 @@ const MEDIUM = 'https://switchswap.medium.com/';
 const TELEGRAM = 'https://t.me/joinchat/B7wpZLuBtLYzNDg0';
 const DISCORD = 'https://discord.gg/MRmytnkf';
 const TWITTER = 'https://twitter.com/switchswapbox';
+const IPFS_GATEWAY_FOR_FETCHING_DATA = ['https://ipfs.io/ipfs'];
+const NUMBER_OF_NFT_IN_MANAGER_PAGE = 12;
 
 export {
   CRUST_WALLET_WIKI,
@@ -22,5 +24,7 @@ export {
   MEDIUM,
   TELEGRAM,
   DISCORD,
-  TWITTER
+  TWITTER,
+  IPFS_GATEWAY_FOR_FETCHING_DATA,
+  NUMBER_OF_NFT_IN_MANAGER_PAGE
 };
