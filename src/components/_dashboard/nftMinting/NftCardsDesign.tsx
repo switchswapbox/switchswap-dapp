@@ -28,8 +28,11 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
-  const icon = useSelector((state: IRootState) => {
-    return state.qrCardReducer.icon;
+  const { icon, otherQRProps } = useSelector((state: IRootState) => {
+    return {
+      icon: state.qrCardReducer.icon,
+      otherQRProps: state.qrCardReducer.otherQRProps.qrNormal
+    };
   });
   return (
     // <QRNormal
@@ -48,8 +51,7 @@ const CreateQRCode = () => {
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
       icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
-      otherColor="#33CCCC"
-      posColor="#009999"
+      {...otherQRProps}
     />
   );
 };

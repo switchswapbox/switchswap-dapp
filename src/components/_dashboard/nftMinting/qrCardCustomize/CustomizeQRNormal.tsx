@@ -1,33 +1,28 @@
-import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import {
+  Box,
+  Pagination,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography
+} from '@mui/material';
 import Scrollbar from 'components/Scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeQRMidIcon } from 'reduxStore/reducerCustomizeQRCard';
+import { changeOtherQRProps, changeQRMidIcon } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
-interface OtherProps {
-  type: 'rect' | 'round' | 'rand';
-  size: number;
-  opacity: number;
-  posType: 'rect' | 'round' | 'planet' | 'roundRect';
-  otherColor: string;
-  posColor: string;
-}
-
-const defaultOtherProps = {
-  type: 'rect',
-  size: 100,
-  opacity: 100,
-  posType: 'rect',
-  otherColor: '#000000',
-  posColor: '#000000'
-};
-
 const iconNames = ['switchswap', 'crust'];
+const innerPointTypes = ['rect', 'round', 'rand'];
+const anchorPointTypes = ['rect', 'round', 'planet'];
 
 function CustomizeQRNormal() {
-  const icon = useSelector((state: IRootState) => {
-    return state.qrCardReducer.icon;
+  const { icon, innerPointSize, innerPointOpacity } = useSelector((state: IRootState) => {
+    return {
+      icon: state.qrCardReducer.icon,
+      innerPointSize: state.qrCardReducer.otherQRProps.qrNormal.size,
+      innerPointOpacity: state.qrCardReducer.otherQRProps.qrNormal.opacity
+    };
   });
   const dispatch = useDispatch();
   function handleSelectMidIcon(iconName: string) {
@@ -51,6 +46,56 @@ function CustomizeQRNormal() {
       </ToggleButton>
     );
   }
+
+  function handleSelectInnerPointType(event: React.ChangeEvent<unknown>, value: number) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrNormal: {
+            type: innerPointTypes[value - 1]
+          }
+        }
+      })
+    );
+  }
+
+  function handleInnerPointSizeChange(event: any) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrNormal: {
+            size: event.target.value
+          }
+        }
+      })
+    );
+  }
+
+  function handleInnerPointOpacityChange(event: any) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrNormal: {
+            opacity:
+              event.target.value > 100 ? 100 : event.target.value < 0 ? 0 : event.target.value
+          }
+        }
+      })
+    );
+  }
+
+  function handleSelectAnchorPointType(event: React.ChangeEvent<unknown>, value: number) {
+    dispatch(
+      changeOtherQRProps({
+        otherQRProps: {
+          qrNormal: {
+            posType: anchorPointTypes[value - 1]
+          }
+        }
+      })
+    );
+  }
+
   return (
     <>
       <Box
@@ -72,6 +117,84 @@ function CustomizeQRNormal() {
             </ToggleButtonGroup>
           </Scrollbar>
         </Box>
+      </Box>
+      <Box
+        sx={{
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'space-between',
+          pt: 2
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Inner point type
+        </Typography>
+        <Pagination
+          count={innerPointTypes.length}
+          color="primary"
+          onChange={handleSelectInnerPointType}
+        />
+      </Box>
+      <Box
+        sx={{
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'space-between',
+          pt: 2
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Inner point size
+        </Typography>
+        <TextField
+          label="Number"
+          type="number"
+          value={innerPointSize as number}
+          onChange={handleInnerPointSizeChange}
+          InputLabelProps={{
+            shrink: true
+          }}
+          variant="standard"
+        />
+      </Box>
+      <Box
+        sx={{
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'space-between',
+          pt: 2
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Inner point opacity
+        </Typography>
+        <TextField
+          label="Percent Number"
+          type="number"
+          value={innerPointOpacity as number}
+          onChange={handleInnerPointOpacityChange}
+          InputLabelProps={{
+            shrink: true
+          }}
+          variant="standard"
+        />
+      </Box>
+      <Box
+        sx={{
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'space-between',
+          pt: 2
+        }}
+      >
+        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+          Anchor point type
+        </Typography>
+        <Pagination
+          count={anchorPointTypes.length}
+          color="primary"
+          onChange={handleSelectAnchorPointType}
+        />
       </Box>
     </>
   );
