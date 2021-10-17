@@ -52,14 +52,16 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
 };
 
 function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
-  const stepOneNotDone = useSelector((state: IRootState) => {
-    return state.reducerMintingProcess.stepOneNotDone;
+  const { stepOneNotDone, uploadedCid } = useSelector((state: IRootState) => {
+    return {
+      stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+      uploadedCid: state.reducerMintingProcess.uploadedCid
+    };
   });
   const dispatch = useDispatch();
 
   const [preview, setPreview] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
   const [isFileUploading, setFileUploading] = useState(false);
 
   const loadImg = () => {
@@ -103,7 +105,11 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
       reader.onerror = () => reject('file reading has failed');
       reader.onload = async () => {
         const added = await ipfs.add(reader.result as ArrayBuffer);
-        setUploadedCid({ cid: added.cid.toV0().toString(), size: added.size, name: files[0].name });
+        dispatch(
+          changeMintingProcessState({
+            uploadedCid: { cid: added.cid.toV0().toString(), size: added.size, name: files[0].name }
+          })
+        );
         setFileUploading(false);
         dispatch(changeMintingProcessState({ stepOneNotDone: false }));
         resolve({ cid: added.cid.toV0().toString(), name: files[0].name });
@@ -214,7 +220,7 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
         stepOneNotDone={stepOneNotDone as boolean}
       />
 
-      {uploadedCid.cid !== '' && (
+      {(uploadedCid ? uploadedCid.cid !== '' : false) && (
         <Box
           sx={{
             my: 1,
@@ -232,7 +238,7 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
             <Stack direction="column">
               <Typography variant="subtitle2">Uploaded successfully to Crust Network</Typography>
               <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-                CID: {uploadedCid.cid}
+                CID: {uploadedCid ? uploadedCid.cid : ''}
               </Typography>
             </Stack>
           </Stack>

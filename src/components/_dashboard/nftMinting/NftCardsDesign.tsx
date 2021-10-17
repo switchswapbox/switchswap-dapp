@@ -1,18 +1,18 @@
 // material
-import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
-import { OtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
+import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
-  const { icon, qrStyleName } = useSelector((state: IRootState) => {
+  const { icon, qrStyleName, uploadedCid } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal',
+      uploadedCid: state.reducerMintingProcess.uploadedCid
     };
   });
   const otherQRProps = useSelector((state: IRootState) => {
@@ -28,7 +28,7 @@ const CreateQRCode = () => {
   const { Component } = qrStyles[qrStyleName];
   return (
     <Component
-      value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
+      value={`${IPFS_GATEWAY_FOR_FETCHING_DATA}/${uploadedCid ? uploadedCid.cid : ''}`}
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
       icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
