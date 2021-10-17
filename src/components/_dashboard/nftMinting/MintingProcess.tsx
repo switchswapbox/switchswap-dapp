@@ -17,10 +17,15 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import Scrollbar from '../../Scrollbar';
 import { Icon } from '@iconify/react';
 
-import UploadFileStep, { FileInfoType } from './mintingSteps/StepUploadFile';
+import UploadFileStep from './mintingSteps/StepUploadFile';
 import StepCustomizeNFTCard from './mintingSteps/StepCustomizeNFTCard';
-import { MintingContext, MintingContextInterface } from './mintingSteps/minting.context';
 import StepMintNFT from './mintingSteps/StepMintNFT';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeMintingProcessState,
+  MintingProcessStateAlignement
+} from 'reduxStore/reducerMintingProcess';
+import { IRootState } from 'reduxStore';
 
 // ----------------------------------------------------------------------
 const steps = ['Upload File', 'Customize NFT Card', 'Mint NFT'];
@@ -30,33 +35,29 @@ type MintingProcessProps = {
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {
-  const [stepOneNotDone, setStepOneNotDone] = useState(true);
-  const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
-  const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
-  const [metadataCid, setMetadataCid] = useState('');
-  const [nameNft, setNameNft] = useState('');
-  const [descNft, setDescNft] = useState('');
-  const [alignment, setAlignment] = useState<string | null>('crust');
-  const [srcImage, setSrcImage] = useState('');
-  const initMintingContext: MintingContextInterface = {
+  const {
     stepOneNotDone,
-    setStepOneNotDone,
     stepTwoNotDone,
-    setStepTwoNotDone,
     nameNft,
-    setNameNft,
     descNft,
-    setDescNft,
     alignment,
-    setAlignment,
     uploadedCid,
-    setUploadedCid,
     metadataCid,
-    setMetadataCid,
-    srcImage,
-    setSrcImage
-  };
+    srcImage
+  } = useSelector((state: IRootState) => {
+    return {
+      stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+      nameNft: state.reducerMintingProcess.nameNft,
+      descNft: state.reducerMintingProcess.descNft,
+      alignment: state.reducerMintingProcess.alignment,
+      uploadedCid: state.reducerMintingProcess.uploadedCid,
+      metadataCid: state.reducerMintingProcess.metadataCid,
+      srcImage: state.reducerMintingProcess.srcImage
+    };
+  });
 
+  const dispatch = useDispatch();
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepOptional = (step: number) => false;
@@ -102,7 +103,11 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-    setAlignment(newAlignment);
+    dispatch(
+      changeMintingProcessState({
+        alignment: newAlignment as MintingProcessStateAlignement
+      })
+    );
   };
 
   const handleSkip = () => {
@@ -125,7 +130,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   return (
-    <MintingContext.Provider value={initMintingContext}>
+    <>
       <Scrollbar>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => {
@@ -248,6 +253,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       ) : (
         <></>
       )}
-    </MintingContext.Provider>
+    </>
   );
 }

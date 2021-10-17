@@ -17,19 +17,31 @@ import { Icon } from '@iconify/react';
 import Label from 'components/Label';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { contractAddress } from 'utils/contractAddress';
-import { useContext, useState } from 'react';
-import { MintingContext } from './minting.context';
+import { useState } from 'react';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
+import { IRootState } from 'reduxStore';
+import { useDispatch, useSelector } from 'react-redux';
 
 type StepMintNFTProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
 };
 
 function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
-  const { nameNft, descNft, metadataCid, uploadedCid, srcImage, alignment } =
-    useContext(MintingContext);
+  const { nameNft, descNft, alignment, uploadedCid, metadataCid, srcImage } = useSelector(
+    (state: IRootState) => {
+      return {
+        nameNft: state.reducerMintingProcess.nameNft,
+        descNft: state.reducerMintingProcess.descNft,
+        alignment: state.reducerMintingProcess.alignment,
+        uploadedCid: state.reducerMintingProcess.uploadedCid,
+        metadataCid: state.reducerMintingProcess.metadataCid,
+        srcImage: state.reducerMintingProcess.srcImage
+      };
+    }
+  );
+  const dispatch = useDispatch();
   const [transactionHash, setTransactionHash] = useState('');
   const [isMinting, setMinting] = useState(false);
   const [nftMinted, setNftMinted] = useState(false);
@@ -50,7 +62,12 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
         const contract = new ethers.Contract(contractAddress, ABI, providerEthers);
         const signedContract = contract.connect(signer);
         signedContract
-          .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
+          .mintDataNTF(
+            addr,
+            `ipfs://${metadataCid}`,
+            `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
+            'null'
+          )
           .then((tx: any) => {
             setTransactionHash(tx.hash);
             providerEthers.waitForTransaction(tx.hash).then(() => {

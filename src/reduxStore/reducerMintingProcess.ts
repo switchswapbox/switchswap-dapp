@@ -2,12 +2,13 @@ import { FileInfoType } from 'components/_dashboard/nftMinting/mintingSteps/Step
 
 export const CHANGE_MINTING_PROCESS_STATE = 'CHANGE_MINTING_PROCESS_STATE';
 
+export type MintingProcessStateAlignement = 'crust' | null;
 export interface MintingProcessState {
   stepOneNotDone?: boolean;
   stepTwoNotDone?: boolean;
   nameNft?: string;
   descNft?: string;
-  alignment?: 'crust' | null;
+  alignment?: MintingProcessStateAlignement;
   uploadedCid?: FileInfoType;
   metadataCid?: string;
   srcImage?: string;

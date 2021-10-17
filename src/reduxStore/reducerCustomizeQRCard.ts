@@ -75,11 +75,9 @@ export const reducerCustomizeQRCard = (
 ) => {
   switch (action.type) {
     case CHANGE_QR_CARD_GENERAL_INFO: {
-      console.log(action.state);
       return { ...state, ...action.state };
     }
     case CHANGE_OTHER_QR_PROPS: {
-      console.log(action.state);
       const keys = Object.keys(action.state.otherQRProps ? action.state.otherQRProps : {});
       let newState = JSON.parse(JSON.stringify(state));
       for (let key of keys) {

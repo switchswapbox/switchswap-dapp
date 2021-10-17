@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -34,13 +34,12 @@ import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-da
 import { ethers } from 'ethers';
 import { stringToHex } from '@polkadot/util';
 import { VariantType } from 'notistack';
-import { MintingContext } from './minting.context';
 import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
-import CustomizeQRNormal from '../qrCardCustomize/CustomizeQRNormal';
 import qrStyles from '../qrCardCustomize';
 import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -51,19 +50,20 @@ type StepCustomizeNFTCardProps = {
 
 function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
-  const {
-    nameNft,
-    setNameNft,
-    descNft,
-    setDescNft,
-    uploadedCid,
-    stepTwoNotDone,
-    setStepTwoNotDone,
-    setMetadataCid,
-    srcImage,
-    alignment,
-    metadataCid
-  } = useContext(MintingContext);
+
+  const { stepTwoNotDone, nameNft, descNft, alignment, uploadedCid, metadataCid, srcImage } =
+    useSelector((state: IRootState) => {
+      return {
+        stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+        nameNft: state.reducerMintingProcess.nameNft,
+        descNft: state.reducerMintingProcess.descNft,
+        alignment: state.reducerMintingProcess.alignment,
+        uploadedCid: state.reducerMintingProcess.uploadedCid,
+        metadataCid: state.reducerMintingProcess.metadataCid,
+        srcImage: state.reducerMintingProcess.srcImage
+      };
+    });
+  const dispatch = useDispatch();
 
   const { qrStyleName } = useSelector((state: IRootState) => {
     return {
@@ -72,9 +72,8 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   });
   const { CustomProps } = qrStyles[qrStyleName];
 
-  const dispatch = useDispatch();
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNameNft(event.target.value);
+    dispatch(changeMintingProcessState({ nameNft: event.target.value }));
     dispatch(
       changeQRCardGeneralInfo({
         title: event.target.value
@@ -83,7 +82,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   };
 
   const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDescNft(event.target.value);
+    dispatch(changeMintingProcessState({ descNft: event.target.value }));
   };
 
   function uploadMetadataW3GatewayPromise(authHeader: string): Promise<any> {
@@ -98,18 +97,17 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       const metadata = {
         name: nameNft,
         description: descNft,
-        image: `ipfs://${uploadedCid.cid}`,
-        fileName: uploadedCid.name,
-        size: uploadedCid.size
+        image: `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
+        fileName: uploadedCid ? uploadedCid.name : '',
+        size: uploadedCid ? uploadedCid.size : 0
       };
       ipfs
         .add(JSON.stringify(metadata))
         .then((added) => {
           console.log(added);
-          setStepTwoNotDone(false);
           setMetadataUploading(false);
-          setStepTwoNotDone(false);
-          setMetadataCid(added.cid.toV0().toString());
+          dispatch(changeMintingProcessState({ stepTwoNotDone: false }));
+          dispatch(changeMintingProcessState({ metadataCid: added.cid.toV0().toString() }));
           resolve({ cid: added.cid.toV0().toString(), size: added.size });
         })
         .catch((error) => {
