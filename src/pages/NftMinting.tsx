@@ -34,6 +34,9 @@ import MintingProcess from '../components/_dashboard/nftMinting/MintingProcess';
 import DemoNft from '../components/_dashboard/nftMinting/DemoNft';
 
 import { CRUST_WALLET_WIKI, METAMASK_SELECT_POLYGON_URL } from '../assets/COMMON_VARIABLES';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { IRootState } from 'reduxStore';
 // ----------------------------------------------------------------------
 
 const withAuthorRegNFT = [
@@ -53,6 +56,10 @@ const ListWrapperStyle = styled(Paper)(({ theme }) => ({
 }));
 
 export default function NftMinting() {
+  const stepOneNotDone = useSelector((state: IRootState) => {
+    return state.reducerMintingProcess.stepOneNotDone as boolean;
+  });
+  const dispatch = useDispatch();
   const { themeStretch } = useSettings();
   const [toggle, setToggle] = useState(['withoutNftCard']);
 
@@ -60,10 +67,13 @@ export default function NftMinting() {
     const currentIndex = toggle.indexOf(value);
 
     if (currentIndex === -1) {
+      dispatch(changeMintingProcessState({ nftType: value }));
       setToggle([value]);
     } else if (value === 'withAuthorReg') {
+      dispatch(changeMintingProcessState({ nftType: 'simplified' }));
       setToggle(['simplified']);
     } else {
+      dispatch(changeMintingProcessState({ nftType: 'withAuthorReg' }));
       setToggle(['withAuthorReg']);
     }
   };
@@ -99,7 +109,10 @@ export default function NftMinting() {
               </ListWrapperStyle>
               <ListWrapperStyle sx={{ mt: 2 }}>
                 <List subheader={<ListSubheader>NFT Type</ListSubheader>}>
-                  <ListItemButton onClick={handleToggle('withAuthorReg')}>
+                  <ListItemButton
+                    onClick={handleToggle('withAuthorReg')}
+                    disabled={!stepOneNotDone}
+                  >
                     <ListItemIcon>
                       <SvgIcon>
                         <Icon icon="fxemoji:rocket" />
@@ -121,7 +134,7 @@ export default function NftMinting() {
                       />
                     </ListItemSecondaryAction>
                   </ListItemButton>
-                  <ListItemButton onClick={handleToggle('simplified')}>
+                  <ListItemButton onClick={handleToggle('simplified')} disabled={!stepOneNotDone}>
                     <ListItemIcon>
                       <SvgIcon>
                         <Icon icon="emojione:small-airplane" />
@@ -139,7 +152,10 @@ export default function NftMinting() {
                       />
                     </ListItemSecondaryAction>
                   </ListItemButton>
-                  <ListItemButton onClick={handleToggle('withoutNftCard')}>
+                  <ListItemButton
+                    onClick={handleToggle('withoutNftCard')}
+                    disabled={!stepOneNotDone}
+                  >
                     <ListItemIcon>
                       <SvgIcon>
                         <Icon icon="emojione:bullet-train" />

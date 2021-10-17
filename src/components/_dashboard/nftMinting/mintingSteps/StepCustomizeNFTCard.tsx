@@ -51,18 +51,27 @@ type StepCustomizeNFTCardProps = {
 function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
 
-  const { stepTwoNotDone, nameNft, descNft, alignment, uploadedCid, metadataCid, srcImage } =
-    useSelector((state: IRootState) => {
-      return {
-        stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
-        nameNft: state.reducerMintingProcess.nameNft,
-        descNft: state.reducerMintingProcess.descNft,
-        alignment: state.reducerMintingProcess.alignment,
-        uploadedCid: state.reducerMintingProcess.uploadedCid,
-        metadataCid: state.reducerMintingProcess.metadataCid,
-        srcImage: state.reducerMintingProcess.srcImage
-      };
-    });
+  const {
+    nftType,
+    stepTwoNotDone,
+    nameNft,
+    descNft,
+    alignment,
+    uploadedCid,
+    metadataCid,
+    srcImage
+  } = useSelector((state: IRootState) => {
+    return {
+      nftType: state.reducerMintingProcess.nftType,
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+      nameNft: state.reducerMintingProcess.nameNft,
+      descNft: state.reducerMintingProcess.descNft,
+      alignment: state.reducerMintingProcess.alignment,
+      uploadedCid: state.reducerMintingProcess.uploadedCid,
+      metadataCid: state.reducerMintingProcess.metadataCid,
+      srcImage: state.reducerMintingProcess.srcImage
+    };
+  });
   const dispatch = useDispatch();
 
   const { qrStyleName } = useSelector((state: IRootState) => {
@@ -195,6 +204,55 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     }
   };
 
+  function TitleAndDescription() {
+    return (
+      <>
+        <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+          Creating Metadata
+        </Label>
+        <Typography
+          variant="h5"
+          paragraph
+          sx={{
+            mt: 2,
+            mb: 0
+          }}
+        >
+          Title<span style={{ color: 'red' }}>*</span>
+        </Typography>
+        <TextField
+          fullWidth
+          variant="standard"
+          multiline
+          type="string"
+          required={true}
+          defaultValue={nameNft}
+          onChange={handleNameNftInputChange}
+          disabled={!stepTwoNotDone}
+        />
+
+        <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+            Description
+          </Typography>
+        </Box>
+
+        <TextField
+          rows={3}
+          fullWidth
+          variant="standard"
+          multiline
+          size="small"
+          placeholder="Enter what is so cool about my NFT"
+          type="string"
+          defaultValue={descNft}
+          onChange={handleDescNftInputChange}
+          disabled={!stepTwoNotDone}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -203,62 +261,27 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
             <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
           </Stack>
         </Grid>
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5 } }}>
-              <NftCardsDesign nftCards={svgArray} />
-            </Grid>
-            <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-              <Grid item xs={12}>
-                <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
-                  Creating Metadata
-                </Label>
-                <Typography
-                  variant="h5"
-                  paragraph
-                  sx={{
-                    mt: 2,
-                    mb: 0
-                  }}
-                >
-                  Title<span style={{ color: 'red' }}>*</span>
-                </Typography>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  multiline
-                  type="string"
-                  required={true}
-                  defaultValue={nameNft}
-                  onChange={handleNameNftInputChange}
-                  disabled={!stepTwoNotDone}
-                />
-
-                <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    Description
-                  </Typography>
-                </Box>
-
-                <TextField
-                  rows={3}
-                  fullWidth
-                  variant="standard"
-                  multiline
-                  size="small"
-                  placeholder="Enter what is so cool about my NFT"
-                  type="string"
-                  defaultValue={descNft}
-                  onChange={handleDescNftInputChange}
-                  disabled={!stepTwoNotDone}
-                />
+        {nftType === 'simplified' ? (
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5 } }}>
+                <NftCardsDesign nftCards={svgArray} />
               </Grid>
-              <Grid item xs={12} sx={{ pb: 0 }}>
-                <MetadataSummary otherQRProps={<CustomProps />} />
+              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+                <Grid item xs={12}>
+                  <TitleAndDescription />
+                </Grid>
+                <Grid item xs={12} sx={{ pb: 0 }}>
+                  <MetadataSummary otherQRProps={<CustomProps />} />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <TitleAndDescription />
+          </Grid>
+        )}
       </Grid>
 
       {isMetadataUploading ? (
