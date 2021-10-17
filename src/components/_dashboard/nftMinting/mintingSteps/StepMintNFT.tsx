@@ -23,6 +23,7 @@ import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
 import { IRootState } from 'reduxStore';
 import { useDispatch, useSelector } from 'react-redux';
+import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
 
 type StepMintNFTProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
@@ -68,7 +69,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
             `ipfs://${metadataCid}`,
             `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
             'null',
-            { gasPrice: BigNumber.from('35000000000') }
+            { gasPrice: BigNumber.from(GAS_PRICE) }
           )
           .then((tx: any) => {
             setTransactionHash(tx.hash);

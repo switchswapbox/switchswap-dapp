@@ -14,6 +14,7 @@ const DISCORD = 'https://discord.gg/MRmytnkf';
 const TWITTER = 'https://twitter.com/switchswapbox';
 const IPFS_GATEWAY_FOR_FETCHING_DATA = ['https://ipfs.io/ipfs'];
 const NUMBER_OF_NFT_IN_MANAGER_PAGE = 12;
+const GAS_PRICE = '35000000000';
 
 export {
   CRUST_WALLET_WIKI,
@@ -26,5 +27,6 @@ export {
   DISCORD,
   TWITTER,
   IPFS_GATEWAY_FOR_FETCHING_DATA,
-  NUMBER_OF_NFT_IN_MANAGER_PAGE
+  NUMBER_OF_NFT_IN_MANAGER_PAGE,
+  GAS_PRICE
 };
