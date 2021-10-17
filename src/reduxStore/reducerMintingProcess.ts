@@ -1,0 +1,43 @@
+import { FileInfoType } from 'components/_dashboard/nftMinting/mintingSteps/StepUploadFile';
+
+export const CHANGE_MINTING_PROCESS_STATE = 'CHANGE_MINTING_PROCESS_STATE';
+
+export interface MintingProcessState {
+  stepOneNotDone?: boolean;
+  stepTwoNotDone?: boolean;
+  nameNft?: string;
+  descNft?: string;
+  alignment?: 'crust' | null;
+  uploadedCid?: FileInfoType;
+  metadataCid?: string;
+  srcImage?: string;
+}
+
+export const changeMintingProcessState = (state: MintingProcessState) => ({
+  type: CHANGE_MINTING_PROCESS_STATE,
+  state: state
+});
+
+// init state
+const initialMintingProcessState: MintingProcessState = {
+  stepOneNotDone: true,
+  stepTwoNotDone: true,
+  nameNft: '',
+  descNft: '',
+  alignment: 'crust',
+  uploadedCid: { cid: '', name: '', size: 0 },
+  metadataCid: '',
+  srcImage: ''
+};
+
+export const reducerMintingProcess = (
+  state = initialMintingProcessState,
+  action: { type: string; state: MintingProcessState }
+) => {
+  switch (action.type) {
+    case CHANGE_MINTING_PROCESS_STATE:
+      return { ...state, ...action.state };
+    default:
+      return state;
+  }
+};

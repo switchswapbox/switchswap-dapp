@@ -21,7 +21,6 @@ import MetadataSummary from '../MetadataSummary';
 import NftCardsDesign from '../NftCardsDesign';
 import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
-import { changeCardTitle } from 'reduxStore/reducerCustomizeQRCard';
 import { create } from 'ipfs-http-client';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
@@ -41,6 +40,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import CustomizeQRNormal from '../qrCardCustomize/CustomizeQRNormal';
 import qrStyles from '../qrCardCustomize';
 import { IRootState } from 'reduxStore';
+import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -67,7 +67,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
 
   const { qrStyleName } = useSelector((state: IRootState) => {
     return {
-      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal'
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
   const { CustomProps } = qrStyles[qrStyleName];
@@ -76,7 +76,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameNft(event.target.value);
     dispatch(
-      changeCardTitle({
+      changeQRCardGeneralInfo({
         title: event.target.value
       })
     );

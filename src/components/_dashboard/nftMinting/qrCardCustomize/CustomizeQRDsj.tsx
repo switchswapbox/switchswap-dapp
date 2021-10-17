@@ -3,16 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
+import { QRDsjOtherPropsPosTypes } from './defautOtherQRProps';
 
 const anchorPointTypes = ['rect', 'dsj'];
 
 function CustomizeqrDsj() {
   const { scale, crossWidth, posWidth, posType } = useSelector((state: IRootState) => {
     return {
-      scale: state.qrCardReducer.otherQRProps.qrDsj.scale,
-      crossWidth: state.qrCardReducer.otherQRProps.qrDsj.crossWidth,
-      posWidth: state.qrCardReducer.otherQRProps.qrDsj.posWidth,
-      posType: state.qrCardReducer.otherQRProps.qrDsj.posType
+      scale: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.scale,
+      crossWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.crossWidth,
+      posWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.posWidth,
+      posType: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.posType
     };
   });
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ function CustomizeqrDsj() {
       changeOtherQRProps({
         otherQRProps: {
           qrDsj: {
-            posType: anchorPointTypes[value - 1]
+            posType: anchorPointTypes[value - 1] as QRDsjOtherPropsPosTypes
           }
         }
       })

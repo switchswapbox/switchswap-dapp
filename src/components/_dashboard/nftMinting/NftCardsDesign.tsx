@@ -4,18 +4,24 @@ import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
+import { OtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
 
 // ----------------------------------------------------------------------
 
 const CreateQRCode = () => {
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
-      icon: state.qrCardReducer.icon,
-      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal'
+      icon: state.reducerCustomizeQRCard.icon,
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
   const otherQRProps = useSelector((state: IRootState) => {
-    return state.qrCardReducer.otherQRProps[qrStyleName];
+    // eslint-disable-next-line no-lone-blocks
+    {
+      return state.reducerCustomizeQRCard?.otherQRProps
+        ? state.reducerCustomizeQRCard?.otherQRProps[qrStyleName]
+        : undefined;
+    }
   });
 
   // eslint-disable-next-line @typescript-eslint/dot-notation
@@ -25,7 +31,6 @@ const CreateQRCode = () => {
       value="QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH"
       className="my-qrcode"
       styles={{ svg: { width: '300px' } }}
-      image={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
       icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
       iconScale={0.2}
       {...otherQRProps}
@@ -34,10 +39,10 @@ const CreateQRCode = () => {
 };
 export default function NftCardsDesign({ nftCards }: any) {
   const layoutIndex = useSelector((state: IRootState) => {
-    return state.qrCardReducer.layout;
+    return state.reducerCustomizeQRCard.layout;
   });
   const cardTitle = useSelector((state: IRootState) => {
-    return state.qrCardReducer.title;
+    return state.reducerCustomizeQRCard.title;
   });
   const SVGComponent = nftCards[layoutIndex || 0];
 

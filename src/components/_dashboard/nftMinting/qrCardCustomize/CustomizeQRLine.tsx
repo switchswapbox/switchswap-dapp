@@ -32,8 +32,8 @@ const colors = [
 function CustomizeQRLine() {
   const { lineWidth, lineOpacity } = useSelector((state: IRootState) => {
     return {
-      lineWidth: state.qrCardReducer.otherQRProps.qrLine.lineWidth,
-      lineOpacity: state.qrCardReducer.otherQRProps.qrLine.lineOpacity
+      lineWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineWidth,
+      lineOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineOpacity
     };
   });
   const dispatch = useDispatch();

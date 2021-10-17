@@ -21,10 +21,10 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const selectedAccountAddress = useSelector((state: IRootState) => {
-    return state.accountReducer.accountAddress;
+    return state.reducerSelectAccount.accountAddress;
   });
   const selectedNetworkName = useSelector((state: IRootState) => {
-    return state.accountReducer.networkName;
+    return state.reducerSelectAccount.networkName;
   });
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');

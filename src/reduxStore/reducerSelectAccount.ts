@@ -5,9 +5,9 @@ export interface InfoAccountWallet {
   networkName: string;
 }
 
-export const changeAccountWallet = (infoAccountWallet: InfoAccountWallet) => ({
+export const changeAccountWallet = (state: InfoAccountWallet) => ({
   type: CHANGE_ACCOUNT_WALLET,
-  infoAccountWallet: infoAccountWallet
+  state: state
 });
 
 // init state
@@ -16,15 +16,15 @@ const initialAccountWallet: InfoAccountWallet = {
   networkName: 'No wallet available'
 };
 
-export const accountReducer = (
+export const reducerSelectAccount = (
   state = initialAccountWallet,
-  action: { type: string; infoAccountWallet: InfoAccountWallet }
+  action: { type: string; state: InfoAccountWallet }
 ) => {
   switch (action.type) {
     case CHANGE_ACCOUNT_WALLET:
       return {
-        accountAddress: action.infoAccountWallet.accountAddress,
-        networkName: action.infoAccountWallet.networkName
+        accountAddress: action.state.accountAddress,
+        networkName: action.state.networkName
       };
     default:
       return state;

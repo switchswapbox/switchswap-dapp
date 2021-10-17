@@ -3,6 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
+import {
+  QRDsjOtherPropsPosTypes,
+  QRNormalOtherPropsPosTypes,
+  QRNormalOtherPropsTypes
+} from './defautOtherQRProps';
 
 const innerPointTypes = ['rect', 'round', 'rand'];
 const anchorPointTypes = ['rect', 'round', 'planet'];
@@ -22,8 +27,8 @@ const colors = [
 function CustomizeQRNormal() {
   const { innerPointSize, innerPointOpacity } = useSelector((state: IRootState) => {
     return {
-      innerPointSize: state.qrCardReducer.otherQRProps.qrNormal.size,
-      innerPointOpacity: state.qrCardReducer.otherQRProps.qrNormal.opacity
+      innerPointSize: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.size,
+      innerPointOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.opacity
     };
   });
   const dispatch = useDispatch();
@@ -33,7 +38,7 @@ function CustomizeQRNormal() {
       changeOtherQRProps({
         otherQRProps: {
           qrNormal: {
-            type: innerPointTypes[value - 1]
+            type: innerPointTypes[value - 1] as QRNormalOtherPropsTypes
           }
         }
       })
@@ -82,7 +87,7 @@ function CustomizeQRNormal() {
       changeOtherQRProps({
         otherQRProps: {
           qrNormal: {
-            posType: anchorPointTypes[value - 1]
+            posType: anchorPointTypes[value - 1] as QRNormalOtherPropsPosTypes
           }
         }
       })
