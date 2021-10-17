@@ -19,7 +19,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { contractAddress } from 'utils/contractAddress';
 import { useState } from 'react';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
 import { IRootState } from 'reduxStore';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,6 +57,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
       if (parseInt(chainId, 16) === 137) {
         setMinting(true);
         const providerEthers = new ethers.providers.Web3Provider(provider);
+        const price = await providerEthers.getGasPrice();
         const signer = providerEthers.getSigner();
         const addr = await signer.getAddress();
         const contract = new ethers.Contract(contractAddress, ABI, providerEthers);
@@ -66,7 +67,8 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
             addr,
             `ipfs://${metadataCid}`,
             `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
-            'null'
+            'null',
+            { gasPrice: BigNumber.from('35000000000') }
           )
           .then((tx: any) => {
             setTransactionHash(tx.hash);
