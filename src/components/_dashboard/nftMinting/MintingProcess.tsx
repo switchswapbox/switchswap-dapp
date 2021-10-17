@@ -30,7 +30,7 @@ type MintingProcessProps = {
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {
-  const [stepOneNotDone, setStepOneNotDone] = useState(false);
+  const [stepOneNotDone, setStepOneNotDone] = useState(true);
   const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
   const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
   const [metadataCid, setMetadataCid] = useState('');

@@ -207,7 +207,7 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
         onRemove={handleRemove}
         onUploadFile={{ uploadFileMetamask, uploadFileCrust }}
         isFileUploading={isFileUploading}
-        stepOneNotDone={!stepOneNotDone}
+        stepOneNotDone={stepOneNotDone}
       />
 
       {uploadedCid.cid !== '' && (
