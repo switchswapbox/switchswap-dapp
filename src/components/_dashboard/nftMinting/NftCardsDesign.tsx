@@ -44,7 +44,7 @@ export default function NftCardsDesign({ nftCards }: any) {
   const { layoutIndex, title, uploadedCid, heightSlideContainer } = useSelector(
     (state: IRootState) => {
       return {
-        layoutIndex: state.reducerCustomizeQRCard.icon,
+        layoutIndex: state.reducerCustomizeQRCard.layout,
         title: state.reducerCustomizeQRCard.title,
         uploadedCid: state.reducerMintingProcess.uploadedCid,
         heightSlideContainer: state.reducerMintingProcess.heightSlideContainer as number
