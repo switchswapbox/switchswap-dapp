@@ -35,25 +35,10 @@ type MintingProcessProps = {
 };
 
 export default function MintingProcess({ nftType }: MintingProcessProps) {
-  const {
-    stepOneNotDone,
-    stepTwoNotDone,
-    nameNft,
-    descNft,
-    alignment,
-    uploadedCid,
-    metadataCid,
-    srcImage
-  } = useSelector((state: IRootState) => {
+  const { stepOneNotDone, stepTwoNotDone } = useSelector((state: IRootState) => {
     return {
       stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
-      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
-      nameNft: state.reducerMintingProcess.nameNft,
-      descNft: state.reducerMintingProcess.descNft,
-      alignment: state.reducerMintingProcess.alignment,
-      uploadedCid: state.reducerMintingProcess.uploadedCid,
-      metadataCid: state.reducerMintingProcess.metadataCid,
-      srcImage: state.reducerMintingProcess.srcImage
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone
     };
   });
 
