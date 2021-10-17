@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -73,6 +73,19 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     };
   });
   const dispatch = useDispatch();
+
+  const heightSlideContainer = useSelector((state: IRootState) => {
+    return state.reducerMintingProcess.heightSlideContainer as number;
+  });
+  const toTakeHeight: any = useRef(null);
+  useEffect(() => {
+    dispatch(
+      changeMintingProcessState({
+        heightSlideContainer:
+          toTakeHeight && toTakeHeight.current ? toTakeHeight.current.clientHeight : 0
+      })
+    );
+  }, []);
 
   const { qrStyleName } = useSelector((state: IRootState) => {
     return {
@@ -264,10 +277,24 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         {nftType === 'simplified' ? (
           <Grid item xs={12}>
             <Grid container>
-              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5 } }}>
+              <Grid
+                item
+                xs={12}
+                md={12}
+                lg={7}
+                sx={{ pb: { xs: 5 } }}
+                height={heightSlideContainer}
+              >
                 <NftCardsDesign nftCards={svgArray} />
               </Grid>
-              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+              <Grid
+                container
+                xs={12}
+                md={12}
+                lg={5}
+                sx={{ ml: { xs: 5, md: 5, lg: 0 } }}
+                ref={toTakeHeight}
+              >
                 <Grid item xs={12}>
                   <TitleAndDescription />
                 </Grid>
