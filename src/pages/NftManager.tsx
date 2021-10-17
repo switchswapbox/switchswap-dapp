@@ -158,19 +158,22 @@ export default function NftManager() {
   };
 
   const getNftByPage = async (page: number) => {
-    setNftList([]);
+    if (ethers.utils.isAddress(selectedMetamaskAccount)) {
+      setNftList([]);
 
-    const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-    const contract = new ethers.Contract(contractAddress, ABI, provider);
-    const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
+      const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+      const contract = new ethers.Contract(contractAddress, ABI, provider);
 
-    const stopIndex =
-      NUMBER_OF_NFT_IN_MANAGER_PAGE * page > parseInt(NftBalance, 10)
-        ? parseInt(NftBalance, 10)
-        : NUMBER_OF_NFT_IN_MANAGER_PAGE * page;
+      const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
-    for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (page - 1); index < stopIndex; index++) {
-      updateListByTokenIndex(index, contract);
+      const stopIndex =
+        NUMBER_OF_NFT_IN_MANAGER_PAGE * page > parseInt(NftBalance, 10)
+          ? parseInt(NftBalance, 10)
+          : NUMBER_OF_NFT_IN_MANAGER_PAGE * page;
+
+      for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (page - 1); index < stopIndex; index++) {
+        updateListByTokenIndex(index, contract);
+      }
     }
   };
 
@@ -180,12 +183,14 @@ export default function NftManager() {
 
   useEffect(() => {
     async function getPageCount() {
-      const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-      const contract = new ethers.Contract(contractAddress, ABI, provider);
-      const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
+      if (ethers.utils.isAddress(selectedMetamaskAccount)) {
+        const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+        const contract = new ethers.Contract(contractAddress, ABI, provider);
+        const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
-      parseInt(NftBalance, 10);
-      setPageCount(Math.ceil(parseInt(NftBalance, 10) / NUMBER_OF_NFT_IN_MANAGER_PAGE));
+        parseInt(NftBalance, 10);
+        setPageCount(Math.ceil(parseInt(NftBalance, 10) / NUMBER_OF_NFT_IN_MANAGER_PAGE));
+      }
     }
     getPageCount();
   }, []);
