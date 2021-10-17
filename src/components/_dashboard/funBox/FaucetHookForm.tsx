@@ -1,29 +1,19 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import axios from 'axios';
-// material
 import { Stack, TextField, Button, Divider, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ResponseFaucetRequest } from '../../../pages/CruFaucet';
 import { Icon } from '@iconify/react';
-// ----------------------------------------------------------------------
+import MaticFormSchema from './MaticFormSchema';
+import CruFormSchema from './CruFormSchema';
 
 type FormValuesProps = {
   address: string;
   token: string;
   tweetUrl: string;
 };
-
-const FormSchema = Yup.object().shape({
-  address: Yup.string()
-    .required('Address is required')
-    .min(6, 'Mininum 6 characters')
-    .max(50, 'Maximum 50 characters'),
-  token: Yup.string(),
-  tweetUrl: Yup.string().required('Tweet URL is required').url('Not an URL')
-});
 
 type FaucetHookFormProps = {
   token: string;
@@ -37,6 +27,19 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
     token,
     tweetUrl: ''
   };
+
+  let FormSchema = MaticFormSchema;
+
+  switch (token) {
+    case 'MATIC':
+      FormSchema = MaticFormSchema;
+      break;
+    case 'CRU':
+      FormSchema = CruFormSchema;
+      break;
+    default:
+      FormSchema = MaticFormSchema;
+  }
 
   const {
     reset,
