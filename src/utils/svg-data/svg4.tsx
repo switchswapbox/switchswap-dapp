@@ -1,6 +1,6 @@
 import { Typography, Grid } from '@mui/material';
 import { ArgsProps } from './svgArgs';
-function SvgComponent({ qrcode, title, ...other }: ArgsProps) {
+function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -1369,7 +1369,7 @@ function SvgComponent({ qrcode, title, ...other }: ArgsProps) {
                   variant="body1"
                   sx={{ fontSize: 10, fontFamily: 'Roboto', width: '100%' }}
                 >
-                  File name: abc.xyz | Size: 123KB
+                  File name: {uploadedCid.name} | Size: {uploadedCid.size}Kb
                 </Typography>
               </Grid>
               <Grid item width="90%">
@@ -1378,7 +1378,7 @@ function SvgComponent({ qrcode, title, ...other }: ArgsProps) {
                   style={{ wordWrap: 'break-word' }}
                   sx={{ fontSize: 14, fontFamily: 'Roboto', width: '100%' }}
                 >
-                  QmaNFdMEfboBAxTy5xxQgvRCYdhDfVqVJHPG1MV3pJtXQH
+                  {uploadedCid.cid}
                 </Typography>
               </Grid>
 

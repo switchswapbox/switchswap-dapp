@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
+import { FileInfoType } from './mintingSteps/StepUploadFile';
 
 // ----------------------------------------------------------------------
 
-const CreateQRCode = () => {
-  const { icon, qrStyleName, uploadedCid } = useSelector((state: IRootState) => {
+const CreateQRCode = (uploadedCid: FileInfoType) => {
+  const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal',
-      uploadedCid: state.reducerMintingProcess.uploadedCid
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
   const otherQRProps = useSelector((state: IRootState) => {
@@ -38,11 +38,12 @@ const CreateQRCode = () => {
   );
 };
 export default function NftCardsDesign({ nftCards }: any) {
-  const layoutIndex = useSelector((state: IRootState) => {
-    return state.reducerCustomizeQRCard.layout;
-  });
-  const cardTitle = useSelector((state: IRootState) => {
-    return state.reducerCustomizeQRCard.title;
+  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+    return {
+      layoutIndex: state.reducerCustomizeQRCard.icon,
+      title: state.reducerCustomizeQRCard.title,
+      uploadedCid: state.reducerMintingProcess.uploadedCid
+    };
   });
   const SVGComponent = nftCards[layoutIndex || 0];
 
@@ -63,7 +64,14 @@ export default function NftCardsDesign({ nftCards }: any) {
           flexDirection: 'column'
         }}
       >
-        {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} sx={{ width: '100%' }} />}
+        {
+          <SVGComponent
+            qrcode={CreateQRCode(uploadedCid as FileInfoType)}
+            title={title}
+            uploadedCid={uploadedCid}
+            sx={{ width: '100%' }}
+          />
+        }
       </Box>
     </Box>
   );
