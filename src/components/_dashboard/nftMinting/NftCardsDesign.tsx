@@ -7,15 +7,6 @@ import qrStyles from './qrCardCustomize';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
-  '& .slick-slide': {
-    float: theme.direction === 'rtl' ? 'right' : 'left',
-    '&:focus': { outline: 'none' }
-  }
-}));
-
-// ----------------------------------------------------------------------
-
 const CreateQRCode = () => {
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
@@ -51,22 +42,24 @@ export default function NftCardsDesign({ nftCards }: any) {
   const SVGComponent = nftCards[layoutIndex || 0];
 
   return (
-    <RootStyle>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Box
-          sx={{
-            zIndex: 0,
-            borderRadius: 2,
-            overflow: 'hidden',
-            position: 'relative',
-            width: '90%',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} sx={{ width: '100%' }} />}
-        </Box>
+    <Box
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      position="sticky"
+      top="80px"
+    >
+      <Box
+        sx={{
+          zIndex: 0,
+          borderRadius: 2,
+          overflow: 'hidden',
+          position: 'relative',
+          width: '90%',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        {<SVGComponent qrcode={CreateQRCode()} title={cardTitle} sx={{ width: '100%' }} />}
       </Box>
-    </RootStyle>
+    </Box>
   );
 }
