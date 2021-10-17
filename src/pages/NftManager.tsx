@@ -139,7 +139,7 @@ export default function NftManager() {
             setNftList((NftList) => {
               let addingNftIndex = NftList.length;
               for (let nftIndex = NftList.length; nftIndex > 0; nftIndex--) {
-                if (tokenId > NftList[nftIndex - 1].tokenId) {
+                if (parseInt(tokenId, 10) > parseInt(NftList[nftIndex - 1].tokenId, 10)) {
                   break;
                 }
                 addingNftIndex--;
@@ -188,7 +188,6 @@ export default function NftManager() {
         const contract = new ethers.Contract(contractAddress, ABI, provider);
         const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
-        parseInt(NftBalance, 10);
         setPageCount(Math.ceil(parseInt(NftBalance, 10) / NUMBER_OF_NFT_IN_MANAGER_PAGE));
       }
     }
