@@ -153,7 +153,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       Step 0
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-      {activeStep === 0 && nftType === 'withoutNftCard' ? (
+      {activeStep === 0 ? (
         <>
           <UploadFileStep onSnackbarAction={onSnackbarAction} />
           <Box sx={{ display: 'flex', mt: 3 }}>
@@ -165,15 +165,6 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
-          </Box>
-        </>
-      ) : activeStep === 0 ? (
-        <>
-          <Box sx={{ display: 'flex', mt: 3 }}>
-            <Typography variant="h6">
-              We currently support creating NFT without customized NFT card, you can try on that and
-              stay tune for other NFT types
-            </Typography>
           </Box>
         </>
       ) : (
