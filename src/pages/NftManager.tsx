@@ -11,8 +11,10 @@ import {
   Tooltip,
   Pagination
 } from '@mui/material';
+import { GridSize } from '@mui/material/Grid';
 // hooks
 import useSettings from '../hooks/useSettings';
+import { useMeasure } from 'react-use';
 
 // components
 import Page from '../components/Page';
@@ -114,6 +116,7 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
 }
 
 export default function NftManager() {
+  const theme = useTheme();
   const { themeStretch } = useSettings();
 
   const [NftList, setNftList] = useState<
@@ -207,13 +210,24 @@ export default function NftManager() {
     getPageCount();
   }, []);
 
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const [lgCol, setLgCol] = useState<GridSize>(4);
+
+  useEffect(() => {
+    if (width > theme.breakpoints.values.lg) {
+      setLgCol(3);
+    } else {
+      setLgCol(4);
+    }
+  }, [width]);
+
   return (
     <Page title="NFT Manager">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} ref={ref}>
           {NftList.map((nft) => {
             return (
-              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={3}>
+              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={lgCol}>
                 <NftCard {...nft} nftContract={contractAddress} />
               </Grid>
             );

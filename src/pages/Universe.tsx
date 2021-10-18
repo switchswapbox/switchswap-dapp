@@ -28,6 +28,8 @@ import {
 } from 'assets/COMMON_VARIABLES';
 import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
+import { useMeasure } from 'react-use';
+import { GridSize } from '@mui/material/Grid';
 
 // ----------------------------------------------------------------------
 type NftCardProps = {
@@ -117,6 +119,8 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
 }
 
 export default function Universe() {
+  const theme = useTheme();
+
   const { themeStretch } = useSettings();
   const [NftList, setNftList] = useState<
     { tokenId: string; tokenURI: string; imageUrl: string; name: string; owner: string }[]
@@ -207,13 +211,24 @@ export default function Universe() {
     getNftByPage(page);
   }, [page]);
 
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const [lgCol, setLgCol] = useState<GridSize>(4);
+
+  useEffect(() => {
+    if (width > theme.breakpoints.values.lg) {
+      setLgCol(3);
+    } else {
+      setLgCol(4);
+    }
+  }, [width]);
+
   return (
     <Page title="Univere Gallery">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} ref={ref}>
           {NftList.map((nft) => {
             return (
-              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={3}>
+              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={lgCol}>
                 <NftCard {...nft} nftContract={contractAddress} />
               </Grid>
             );
