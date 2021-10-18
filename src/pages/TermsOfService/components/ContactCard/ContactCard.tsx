@@ -27,15 +27,7 @@ const ContactCard = (): JSX.Element => {
         >
           If you have any questions or concerns about the privacy policy please contact us.
         </Typography>
-        <Typography variant={'subtitle2'}>
-          hi@maccarianagency.com
-          <br />
-          via Gola 4
-          <br />
-          Milan, Milano 20143
-          <br />
-          Italy
-        </Typography>
+        <Typography variant={'subtitle2'}>hi@switchswap.io</Typography>
       </Box>
     </Box>
   );
