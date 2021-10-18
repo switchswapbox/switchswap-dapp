@@ -5,7 +5,7 @@ import messagCircleOutline from '@iconify/icons-eva/message-circle-outline';
 import externaLinkOutline from '@iconify/icons-eva/external-link-outline';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Avatar, Button, Box, Divider, MenuItem, Typography } from '@mui/material';
+import { Avatar, Button, Box, Divider, MenuItem, Typography, Link } from '@mui/material';
 // components
 import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
@@ -91,30 +91,28 @@ export default function AccountPopover() {
 
         <Divider sx={{ my: 1 }} />
 
-        <MenuItem
-          key="Explorer"
-          sx={{ typography: 'body2', py: 1, px: 2.5 }}
-          onClick={() => {
-            if (selectedNetworkName === 'Crust') {
-              window.open('https://crust.subscan.io/', '_blank');
-            }
-            if (selectedNetworkName === 'Polygon') {
-              window.open('https://polygonscan.com/', '_blank');
-            }
-            setOpen(false);
-          }}
+        <Link
+          href={
+            selectedNetworkName === 'Crust'
+              ? 'https://crust.subscan.io'
+              : 'https://polygonscan.com/'
+          }
+          target="_blank"
+          rel="noopener"
         >
-          <Box
-            component={Icon}
-            icon={externaLinkOutline}
-            sx={{
-              mr: 2,
-              width: 24,
-              height: 24
-            }}
-          />
-          Explorer
-        </MenuItem>
+          <MenuItem key="Explorer" sx={{ typography: 'body2', py: 1, px: 2.5 }}>
+            <Box
+              component={Icon}
+              icon={externaLinkOutline}
+              sx={{
+                mr: 2,
+                width: 24,
+                height: 24
+              }}
+            />
+            Explorer
+          </MenuItem>
+        </Link>
 
         <MenuItem
           key="Support"
