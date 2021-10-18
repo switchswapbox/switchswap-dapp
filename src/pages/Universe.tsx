@@ -213,7 +213,7 @@ export default function Universe() {
         <Grid container spacing={3}>
           {NftList.map((nft) => {
             return (
-              <Grid key={nft.tokenId} item xs={12} sm={6} md={4}>
+              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={3}>
                 <NftCard {...nft} nftContract={contractAddress} />
               </Grid>
             );
