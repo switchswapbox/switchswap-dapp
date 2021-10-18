@@ -48,6 +48,77 @@ type StepCustomizeNFTCardProps = {
   onSnackbarAction: (color: VariantType, text: string, url?: string | undefined) => void;
 };
 
+function TitleAndDescription() {
+  const { stepTwoNotDone, nameNft, descNft } = useSelector((state: IRootState) => {
+    return {
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+      nameNft: state.reducerMintingProcess.nameNft,
+      descNft: state.reducerMintingProcess.descNft
+    };
+  });
+  const dispatch = useDispatch();
+
+  const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeMintingProcessState({ nameNft: event.target.value }));
+    dispatch(
+      changeQRCardGeneralInfo({
+        title: event.target.value
+      })
+    );
+  };
+
+  const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeMintingProcessState({ descNft: event.target.value }));
+  };
+
+  return (
+    <>
+      <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+        Creating Metadata
+      </Label>
+      <Typography
+        variant="h5"
+        paragraph
+        sx={{
+          mt: 2,
+          mb: 0
+        }}
+      >
+        Title<span style={{ color: 'red' }}>*</span>
+      </Typography>
+      <TextField
+        fullWidth
+        variant="standard"
+        multiline
+        type="string"
+        required={true}
+        defaultValue={nameNft}
+        onChange={handleNameNftInputChange}
+        disabled={!stepTwoNotDone}
+      />
+
+      <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          Description
+        </Typography>
+      </Box>
+
+      <TextField
+        rows={3}
+        fullWidth
+        variant="standard"
+        multiline
+        size="small"
+        placeholder="Enter what is so cool about my NFT"
+        type="string"
+        defaultValue={descNft}
+        onChange={handleDescNftInputChange}
+        disabled={!stepTwoNotDone}
+      />
+    </>
+  );
+}
+
 function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
 
@@ -79,19 +150,6 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   const dispatch = useDispatch();
 
   const { CustomProps } = qrStyles[qrStyleName as qrStyleNameType];
-
-  const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeMintingProcessState({ nameNft: event.target.value }));
-    dispatch(
-      changeQRCardGeneralInfo({
-        title: event.target.value
-      })
-    );
-  };
-
-  const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeMintingProcessState({ descNft: event.target.value }));
-  };
 
   function uploadMetadataW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -202,55 +260,6 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
     }
   };
-
-  function TitleAndDescription() {
-    return (
-      <>
-        <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
-          Creating Metadata
-        </Label>
-        <Typography
-          variant="h5"
-          paragraph
-          sx={{
-            mt: 2,
-            mb: 0
-          }}
-        >
-          Title<span style={{ color: 'red' }}>*</span>
-        </Typography>
-        <TextField
-          fullWidth
-          variant="standard"
-          multiline
-          type="string"
-          required={true}
-          defaultValue={nameNft}
-          onChange={handleNameNftInputChange}
-          disabled={!stepTwoNotDone}
-        />
-
-        <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
-          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-            Description
-          </Typography>
-        </Box>
-
-        <TextField
-          rows={3}
-          fullWidth
-          variant="standard"
-          multiline
-          size="small"
-          placeholder="Enter what is so cool about my NFT"
-          type="string"
-          defaultValue={descNft}
-          onChange={handleDescNftInputChange}
-          disabled={!stepTwoNotDone}
-        />
-      </>
-    );
-  }
 
   return (
     <>
