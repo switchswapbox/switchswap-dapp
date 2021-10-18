@@ -35,7 +35,7 @@ function NftCardsDesign() {
   });
   const SVGComponent = svgArray[layoutIndex || 0];
 
-  const CreateQRCode = useMemo(() => {
+  const createQRCode = useMemo(() => {
     const { Component } = qrStyles[qrStyleName];
     return (
       <Component
@@ -49,6 +49,12 @@ function NftCardsDesign() {
     );
   }, [icon, otherQRProps, qrStyleName, uploadedCid]);
 
+  const createQRCard = useMemo(() => {
+    return (
+      <SVGComponent qrcode={createQRCode} title={title} uploadedCid={uploadedCid as FileInfoType} />
+    );
+  }, [SVGComponent, createQRCode, title, uploadedCid]);
+
   return (
     <Box
       sx={{
@@ -61,7 +67,7 @@ function NftCardsDesign() {
         flexDirection: 'column'
       }}
     >
-      <SVGComponent qrcode={CreateQRCode} title={title} uploadedCid={uploadedCid as FileInfoType} />
+      {createQRCard}
     </Box>
   );
 }
