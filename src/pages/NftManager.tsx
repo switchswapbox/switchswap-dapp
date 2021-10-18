@@ -25,6 +25,8 @@ import {
   IPFS_GATEWAY_FOR_FETCHING_DATA,
   NUMBER_OF_NFT_IN_MANAGER_PAGE
 } from 'assets/COMMON_VARIABLES';
+import { useTheme } from '@mui/material/styles';
+
 // ----------------------------------------------------------------------
 
 type NftCardProps = {
@@ -36,8 +38,19 @@ type NftCardProps = {
 };
 
 function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProps) {
+  const theme = useTheme();
   return (
-    <Paper sx={{ borderRadius: 2, bgcolor: 'background.neutral' }}>
+    <Paper
+      elevation={4}
+      sx={{
+        borderRadius: 2,
+        bgcolor: 'white',
+        transition: 'all .2s ease-in-out',
+        '&:hover': {
+          transform: `translateY(-${theme.spacing(1 / 4)})`
+        }
+      }}
+    >
       <Box sx={{ p: 1, position: 'relative' }}>
         <Box
           component="img"
@@ -200,7 +213,7 @@ export default function NftManager() {
         <Grid container spacing={3}>
           {NftList.map((nft) => {
             return (
-              <Grid key={nft.tokenId} item xs={12} sm={6} md={4}>
+              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={3}>
                 <NftCard {...nft} nftContract={contractAddress} />
               </Grid>
             );
