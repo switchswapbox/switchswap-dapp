@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -38,7 +38,7 @@ import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import qrStyles from '../qrCardCustomize';
 import { IRootState } from 'reduxStore';
-import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
@@ -59,7 +59,9 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     alignment,
     uploadedCid,
     metadataCid,
-    srcImage
+    srcImage,
+    qrStyleName,
+    otherQRProps
   } = useSelector((state: IRootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
@@ -69,30 +71,14 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       alignment: state.reducerMintingProcess.alignment,
       uploadedCid: state.reducerMintingProcess.uploadedCid,
       metadataCid: state.reducerMintingProcess.metadataCid,
-      srcImage: state.reducerMintingProcess.srcImage
+      srcImage: state.reducerMintingProcess.srcImage,
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
+      otherQRProps: state.reducerCustomizeQRCard.otherQRProps
     };
   });
   const dispatch = useDispatch();
 
-  const heightSlideContainer = useSelector((state: IRootState) => {
-    return state.reducerMintingProcess.heightSlideContainer as number;
-  });
-  const toTakeHeight: any = useRef(null);
-  useEffect(() => {
-    dispatch(
-      changeMintingProcessState({
-        heightSlideContainer:
-          toTakeHeight && toTakeHeight.current ? toTakeHeight.current.clientHeight : 0
-      })
-    );
-  }, []);
-
-  const { qrStyleName } = useSelector((state: IRootState) => {
-    return {
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
-    };
-  });
-  const { CustomProps } = qrStyles[qrStyleName];
+  const { CustomProps } = qrStyles[qrStyleName as qrStyleNameType];
 
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeMintingProcessState({ nameNft: event.target.value }));
@@ -271,30 +257,16 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       <Grid container sx={{ pt: 5 }}>
         <Grid item xs={12} sx={{ pb: 5 }}>
           <Stack alignItems="center" justifyContent="center">
-            <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
+            <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} height={300} />
           </Stack>
         </Grid>
         {nftType === 'simplified' ? (
           <Grid item xs={12}>
             <Grid container>
-              <Grid
-                item
-                xs={12}
-                md={12}
-                lg={7}
-                sx={{ pb: { xs: 5 } }}
-                height={heightSlideContainer}
-              >
+              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 } }}>
                 <NftCardsDesign nftCards={svgArray} />
               </Grid>
-              <Grid
-                container
-                xs={12}
-                md={12}
-                lg={5}
-                sx={{ ml: { xs: 5, md: 5, lg: 0 } }}
-                ref={toTakeHeight}
-              >
+              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid item xs={12}>
                   <TitleAndDescription />
                 </Grid>

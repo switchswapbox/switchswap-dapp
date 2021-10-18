@@ -13,7 +13,6 @@ export interface MintingProcessState {
   uploadedCid?: FileInfoType;
   metadataCid?: string;
   srcImage?: string;
-  heightSlideContainer?: number;
 }
 
 export const changeMintingProcessState = (state: MintingProcessState) => ({

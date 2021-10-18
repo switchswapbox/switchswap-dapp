@@ -1,10 +1,8 @@
-import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Divider, Pagination, TextField, Theme, Typography } from '@mui/material';
+import { Box, Divider, Pagination, Theme, Typography } from '@mui/material';
 
 import Label from '../../Label';
-import ColorSinglePicker from './ColorSinglePicker';
 import {
   changeQRCardGeneralInfo,
   qrStyleNameType

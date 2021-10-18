@@ -5,9 +5,7 @@ import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
-import useOffSetTop from 'hooks/useOffSetTop';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
-import { useEffect, useRef, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -41,36 +39,23 @@ const CreateQRCode = (uploadedCid: FileInfoType) => {
   );
 };
 export default function NftCardsDesign({ nftCards }: any) {
-  const { layoutIndex, title, uploadedCid, heightSlideContainer } = useSelector(
-    (state: IRootState) => {
-      return {
-        layoutIndex: state.reducerCustomizeQRCard.layout,
-        title: state.reducerCustomizeQRCard.title,
-        uploadedCid: state.reducerMintingProcess.uploadedCid,
-        heightSlideContainer: state.reducerMintingProcess.heightSlideContainer as number
-      };
-    }
-  );
+  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+    return {
+      layoutIndex: state.reducerCustomizeQRCard.layout,
+      title: state.reducerCustomizeQRCard.title,
+      uploadedCid: state.reducerMintingProcess.uploadedCid
+    };
+  });
   const SVGComponent = nftCards[layoutIndex || 0];
   const offset = useOffSetTopDistance();
-  const toTakeHeight: any = useRef(null);
-  const [svgHeight, setSvgHeight] = useState(0);
-  useEffect(() => {
-    setSvgHeight(toTakeHeight.current.clientHeight);
-  }, []);
 
   return (
     <Box
-      ref={toTakeHeight}
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        pt: `${
-          offset - 1266 > heightSlideContainer - svgHeight
-            ? heightSlideContainer - svgHeight
-            : offset - 1266
-        }px`
+        pt: `${offset - 1000}px`
       }}
     >
       <Box
