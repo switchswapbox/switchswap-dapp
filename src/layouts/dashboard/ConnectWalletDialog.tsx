@@ -190,7 +190,13 @@ export default function MaxWidthDialog() {
               >
                 <Typography variant="subtitle2" align="justify">
                   By connecting a wallet, you agree to Switchswap’{' '}
-                  <Link href="#" underline="none" color="info">
+                  <Link
+                    href="#/terms-of-service"
+                    target="_blank"
+                    rel="noopener"
+                    underline="none"
+                    color="info"
+                  >
                     Terms of Service
                   </Link>{' '}
                   and acknowledge that you have read and understand the{' '}

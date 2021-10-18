@@ -22,7 +22,7 @@ const SOCIALS = [
 
 const LINKS = [
   {
-    headline: 'Minimal',
+    headline: 'Switchswap',
     children: [
       { name: 'About us', href: '#' },
       { name: 'Contact us', href: '#' },
@@ -38,10 +38,7 @@ const LINKS = [
   },
   {
     headline: 'Contact',
-    children: [
-      { name: 'support@minimals.cc', href: '#' },
-      { name: 'Los Angeles, 359  Hidden Valley Road', href: '#' }
-    ]
+    children: [{ name: 'hi@switchswap.io', href: '#' }]
   }
 ];
 
@@ -69,8 +66,7 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              The starting point for your next project with Minimal UI Kit, built on the newest
-              version of Material-UI ©, ready to be customized to your style.
+              Empowered by web3 technologies
             </Typography>
 
             <Stack

@@ -78,7 +78,7 @@ export default function Router() {
     {
       path: '/',
       element: <MainLayout />,
-      children: [{ element: <LandingPage /> }]
+      children: [{ path: 'terms-of-service', element: <TermsOfService /> }]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
@@ -96,5 +96,7 @@ const CruFaucet = Loadable(lazy(() => import('../pages/CruFaucet')));
 const MaticFaucet = Loadable(lazy(() => import('../pages/MaticFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
+const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService/TermsOfService')));
+
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));

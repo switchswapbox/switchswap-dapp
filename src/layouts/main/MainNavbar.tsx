@@ -3,7 +3,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, AppBar, Toolbar, Container } from '@mui/material';
 // hooks
-import useOffSetTop from '../../hooks/useOffSetTop';
+// import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
 import Label from '../../components/Label';
@@ -65,7 +65,8 @@ export type MenuProps = {
 };
 
 export default function MainNavbar() {
-  const isOffset = useOffSetTop(100);
+  // const isOffset = useOffSetTop(100);
+  const isOffset = true;
   const { pathname } = useLocation();
   const isHome = pathname === '/';
 
@@ -91,9 +92,7 @@ export default function MainNavbar() {
           <RouterLink to="/">
             <Logo />
           </RouterLink>
-          <Label color="info" sx={{ ml: 1 }}>
-            Simple Ts v2.6.0
-          </Label>
+
           <Box sx={{ flexGrow: 1 }} />
 
           <MHidden width="mdDown">
@@ -105,7 +104,7 @@ export default function MainNavbar() {
             target="_blank"
             href="https://material-ui.com/store/items/minimal-dashboard/"
           >
-            Purchase Now
+            DAPP
           </Button>
 
           <MHidden width="mdUp">
