@@ -40,6 +40,7 @@ import qrStyles from '../qrCardCustomize';
 import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import SliderSVGCard from '../NftCardsDesign';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -273,7 +274,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
           <Grid item xs={12}>
             <Grid container>
               <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 } }}>
-                <NftCardsDesign nftCards={svgArray} />
+                <SliderSVGCard />
               </Grid>
               <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid item xs={12}>
