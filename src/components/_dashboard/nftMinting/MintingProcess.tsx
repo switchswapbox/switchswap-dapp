@@ -32,15 +32,15 @@ import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 export default function MintingProcess() {
-  const { stepOneNotDone, stepTwoNotDone } = useSelector((state: IRootState) => {
+  const { activeStep, stepOneNotDone, stepTwoNotDone } = useSelector((state: IRootState) => {
     return {
+      activeStep: state.reducerMintingProcess.activeStep || 0,
       stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
       stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone
     };
   });
 
   const dispatch = useDispatch();
-  const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepOptional = (step: number) => false;
   const isStepSkipped = (step: number) => skipped.has(step);
@@ -76,12 +76,12 @@ export default function MintingProcess() {
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    dispatch(changeMintingProcessState({ activeStep: activeStep + 1 }));
     setSkipped(newSkipped);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    dispatch(changeMintingProcessState({ activeStep: activeStep - 1 }));
   };
 
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
@@ -99,7 +99,7 @@ export default function MintingProcess() {
       throw new Error("You can't skip a step that isn't optional.");
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    dispatch(changeMintingProcessState({ activeStep: activeStep + 1 }));
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
       newSkipped.add(activeStep);
@@ -108,7 +108,7 @@ export default function MintingProcess() {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    dispatch(changeMintingProcessState({ activeStep: 0 }));
   };
 
   return (

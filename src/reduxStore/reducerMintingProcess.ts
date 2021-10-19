@@ -5,6 +5,7 @@ export const CHANGE_MINTING_PROCESS_STATE = 'CHANGE_MINTING_PROCESS_STATE';
 
 export type MintingProcessStateAlignement = 'crust' | null;
 export interface MintingProcessState {
+  activeStep?: number;
   nftType?: string;
   stepOneNotDone?: boolean;
   stepTwoNotDone?: boolean;
@@ -23,6 +24,7 @@ export const changeMintingProcessState = (state: MintingProcessState) => ({
 
 // init state
 const initialMintingProcessState: MintingProcessState = {
+  activeStep: 0,
   stepOneNotDone: true,
   stepTwoNotDone: true,
   nameNft: '',
