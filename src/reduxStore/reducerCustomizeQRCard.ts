@@ -13,6 +13,7 @@ import {
   QRNormalOtherProps,
   QRRandRectOtherProps
 } from 'components/_dashboard/nftMinting/qrCardCustomize/defautOtherQRProps';
+import { RESET_STATE } from 'reduxStore';
 
 export const CHANGE_QR_CARD_GENERAL_INFO = 'CHANGE_QR_CARD_GENERAL_INFO';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
@@ -88,6 +89,8 @@ export const reducerCustomizeQRCard = (
       }
       return newState;
     }
+    case RESET_STATE:
+      return initialQRCard;
     default:
       return state;
   }

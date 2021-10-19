@@ -1,4 +1,5 @@
 import { FileInfoType } from 'components/_dashboard/nftMinting/mintingSteps/StepUploadFile';
+import { RESET_STATE } from 'reduxStore';
 
 export const CHANGE_MINTING_PROCESS_STATE = 'CHANGE_MINTING_PROCESS_STATE';
 
@@ -39,6 +40,8 @@ export const reducerMintingProcess = (
   switch (action.type) {
     case CHANGE_MINTING_PROCESS_STATE:
       return { ...state, ...action.state };
+    case RESET_STATE:
+      return initialMintingProcessState;
     default:
       return state;
   }
