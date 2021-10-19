@@ -159,7 +159,7 @@ export default function MintingProcess() {
               Back
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
+            <Button variant="contained" onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
@@ -177,7 +177,7 @@ export default function MintingProcess() {
           <UploadFileStep onSnackbarAction={onSnackbarAction} />
           <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
-            <Button color="inherit" disabled={activeStep === 1} onClick={handleBack}>
+            <Button color="inherit" onClick={handleBack}>
               Back
             </Button>
             <Box sx={{ flexGrow: 1 }} />
