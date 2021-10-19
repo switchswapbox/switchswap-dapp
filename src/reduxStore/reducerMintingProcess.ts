@@ -26,6 +26,10 @@ export const changeMintingProcessState = (state: MintingProcessState) => ({
   state: state
 });
 
+export const resetMintingProcessState = () => ({
+  type: RESET_STATE
+});
+
 // init state
 const initialMintingProcessState: MintingProcessState = {
   activeStep: 0,

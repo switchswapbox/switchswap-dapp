@@ -54,6 +54,10 @@ export const changeOtherQRProps = (state: InfoQRCard) => ({
   state: state
 });
 
+export const resetQRCardInfo = () => ({
+  type: RESET_STATE
+});
+
 // init state
 const initialQRCard: InfoQRCard = {
   layout: 0,

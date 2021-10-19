@@ -5,7 +5,7 @@ import { reducerMintingProcess, MintingProcessState } from './reducerMintingProc
 
 export const RESET_STATE = 'RESET_STATE';
 
-const appReducer: Reducer<
+const rootReducer: Reducer<
   CombinedState<{
     reducerCustomizeQRCard: InfoQRCard;
     reducerSelectAccount: InfoAccountWallet;
@@ -28,25 +28,6 @@ const appReducer: Reducer<
   reducerSelectAccount,
   reducerMintingProcess
 });
-
-const rootReducer = (
-  state:
-    | CombinedState<{
-        reducerCustomizeQRCard: InfoQRCard;
-        reducerSelectAccount: InfoAccountWallet;
-        reducerMintingProcess: MintingProcessState;
-      }>
-    | undefined,
-  action:
-    | { type: string; state: InfoQRCard }
-    | { type: string; state: InfoAccountWallet }
-    | { type: string; state: MintingProcessState }
-) => {
-  if (action.type === 'RESET_STATE') {
-    return appReducer(undefined, action);
-  }
-  return appReducer(state, action);
-};
 
 export default rootReducer;
 

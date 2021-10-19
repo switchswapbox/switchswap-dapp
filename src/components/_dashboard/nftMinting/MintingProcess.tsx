@@ -23,22 +23,27 @@ import StepMintNFT from './mintingSteps/StepMintNFT';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   changeMintingProcessState,
-  MintingProcessStateAlignement
+  MintingProcessStateAlignement,
+  resetMintingProcessState
 } from 'reduxStore/reducerMintingProcess';
 import { IRootState } from 'reduxStore';
 
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
+import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 export default function MintingProcess() {
-  const { activeStep, stepOneNotDone, stepTwoNotDone } = useSelector((state: IRootState) => {
-    return {
-      activeStep: state.reducerMintingProcess.activeStep || 0,
-      stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
-      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone
-    };
-  });
+  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted } = useSelector(
+    (state: IRootState) => {
+      return {
+        activeStep: state.reducerMintingProcess.activeStep || 0,
+        stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+        stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+        nftMinted: state.reducerMintingProcess.nftMinted
+      };
+    }
+  );
 
   const dispatch = useDispatch();
   const [skipped, setSkipped] = useState(new Set<number>());
@@ -108,7 +113,8 @@ export default function MintingProcess() {
   };
 
   const handleReset = () => {
-    dispatch(changeMintingProcessState({ activeStep: 0 }));
+    dispatch(resetMintingProcessState());
+    dispatch(resetQRCardInfo());
   };
 
   return (
@@ -238,10 +244,11 @@ export default function MintingProcess() {
             )}
             <Button
               variant="contained"
-              onClick={handleNext}
-              sx={{ display: activeStep === steps.length - 1 ? 'none' : 'flex' }}
+              onClick={handleReset}
+              sx={{ display: 'flex' }}
+              disabled={!nftMinted}
             >
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              Finish
             </Button>
           </Box>
         </>
