@@ -7,7 +7,9 @@ import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
 import svgArray from 'utils/svg-data';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
+import { width } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -72,8 +74,33 @@ function NftCardsDesign() {
   );
 }
 
-export default function SliderSVGCard() {
+interface SliderSVGCardProps {
+  parentBoundingBox: React.RefObject<HTMLHeadingElement>;
+}
+
+export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps) {
+  const cardNFTBoundingBox = useRef<HTMLHeadingElement>(null);
+
+  const topParent = parentBoundingBox?.current?.offsetTop || 0;
+  const heightParent = parentBoundingBox?.current?.clientHeight || 0;
+  var heightNFT = cardNFTBoundingBox?.current?.clientHeight || 0;
+
   const offset = useOffSetTopDistance();
+  const [offsetWithCondition, setOffsetWithCondition] = useState(0);
+
+  useEffect(() => {
+    var topNFT = cardNFTBoundingBox?.current?.offsetTop || 0;
+    if (topParent + heightParent > topNFT + heightNFT) {
+      setOffsetWithCondition(offset);
+    } else if (offset < offsetWithCondition) {
+      setOffsetWithCondition(offset);
+    } else {
+      setOffsetWithCondition(
+        offsetWithCondition - (topNFT + heightNFT - (topParent + heightParent))
+      );
+    }
+  }, [heightNFT, heightParent, offset, offsetWithCondition, topParent]);
+  const paddingTopPlus = 100;
 
   return (
     <Box
@@ -81,10 +108,22 @@ export default function SliderSVGCard() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        pt: `${offset - 1000}px`
+        pt: {
+          xs: 0,
+          lg: `${
+            offsetWithCondition + paddingTopPlus > topParent
+              ? offsetWithCondition + paddingTopPlus - topParent
+              : 0
+          }px`
+        }
       }}
     >
-      <NftCardsDesign />
+      <Box
+        ref={cardNFTBoundingBox}
+        sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}
+      >
+        <NftCardsDesign />
+      </Box>
     </Box>
   );
 }

@@ -262,6 +262,8 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     }
   };
 
+  const parentBoundingBox = useRef<HTMLHeadingElement>(null);
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -271,10 +273,10 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
           </Stack>
         </Grid>
         {nftType === 'simplified' ? (
-          <Grid item xs={12}>
+          <Grid item ref={parentBoundingBox} xs={12}>
             <Grid container>
-              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 } }}>
-                <SliderSVGCard />
+              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 }, maxHeight: '100vh' }}>
+                <SliderSVGCard parentBoundingBox={parentBoundingBox} />
               </Grid>
               <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid item xs={12}>
