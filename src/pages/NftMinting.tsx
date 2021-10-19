@@ -1,30 +1,6 @@
-import { useState } from 'react';
 // material
-import {
-  Container,
-  Paper,
-  Box,
-  SvgIcon,
-  Grid,
-  Tooltip,
-  Zoom,
-  IconButton,
-  List,
-  Switch,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  ListItemSecondaryAction
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import DescriptionIcon from '@mui/icons-material/Description';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import ImageIcon from '@mui/icons-material/Image';
+import { Container, Grid } from '@mui/material';
 
-import { Icon } from '@iconify/react';
 // hooks
 import useSettings from '../hooks/useSettings';
 // components
