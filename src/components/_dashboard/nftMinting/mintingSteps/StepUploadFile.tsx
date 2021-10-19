@@ -202,13 +202,13 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
       <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
         <Typography variant="h6">Upload file to Crust Network</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <FormControlLabel
+        {/* <FormControlLabel
           sx={{ m: 0 }}
           control={
             <Switch checked={preview} onChange={(event) => setPreview(event.target.checked)} />
           }
           label="Show Preview"
-        />
+        /> */}
       </Box>
       <UploadMultiFile
         showPreview={preview}
