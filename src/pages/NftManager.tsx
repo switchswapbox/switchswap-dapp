@@ -43,7 +43,7 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
   const theme = useTheme();
   return (
     <Paper
-      elevation={4}
+      elevation={2}
       sx={{
         borderRadius: 2,
         bgcolor: 'white',

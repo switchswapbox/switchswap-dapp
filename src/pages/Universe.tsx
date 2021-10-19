@@ -46,7 +46,7 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
 
   return (
     <Paper
-      elevation={4}
+      elevation={2}
       sx={{
         borderRadius: 2,
         bgcolor: 'white',
