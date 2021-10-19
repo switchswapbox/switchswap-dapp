@@ -83,21 +83,19 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
 
   const topParent = parentBoundingBox?.current?.offsetTop || 0;
   const heightParent = parentBoundingBox?.current?.clientHeight || 0;
-  var heightNFT = cardNFTBoundingBox?.current?.clientHeight || 0;
+  const heightNFT = cardNFTBoundingBox?.current?.clientHeight || 0;
 
   const offset = useOffSetTopDistance();
   const [offsetWithCondition, setOffsetWithCondition] = useState(0);
 
   useEffect(() => {
-    var topNFT = cardNFTBoundingBox?.current?.offsetTop || 0;
+    const topNFT = cardNFTBoundingBox?.current?.offsetTop || 0;
     if (topParent + heightParent > topNFT + heightNFT) {
       setOffsetWithCondition(offset);
     } else if (offset < offsetWithCondition) {
       setOffsetWithCondition(offset);
     } else {
-      setOffsetWithCondition(
-        offsetWithCondition - (topNFT + heightNFT - (topParent + heightParent))
-      );
+      setOffsetWithCondition((prev) => prev - (topNFT + heightNFT - (topParent + heightParent)));
     }
   }, [heightNFT, heightParent, offset, offsetWithCondition, topParent]);
   const paddingTopPlus = 100;
