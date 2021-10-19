@@ -15,6 +15,10 @@ export interface MintingProcessState {
   uploadedCid?: FileInfoType;
   metadataCid?: string;
   srcImage?: string;
+  transactionHash?: string;
+  isMinting?: boolean;
+  nftMinted?: boolean;
+  tokenID?: number;
 }
 
 export const changeMintingProcessState = (state: MintingProcessState) => ({
@@ -32,7 +36,11 @@ const initialMintingProcessState: MintingProcessState = {
   alignment: 'crust',
   uploadedCid: { cid: '', name: '', size: 0 },
   metadataCid: '',
-  srcImage: ''
+  srcImage: '',
+  transactionHash: '',
+  isMinting: false,
+  nftMinted: false,
+  tokenID: 0
 };
 
 export const reducerMintingProcess = (
