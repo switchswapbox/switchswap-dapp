@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // material
 import {
   Box,
@@ -17,47 +17,35 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import Scrollbar from '../../Scrollbar';
 import { Icon } from '@iconify/react';
 
-import UploadFileStep, { FileInfoType } from './mintingSteps/StepUploadFile';
+import UploadFileStep from './mintingSteps/StepUploadFile';
 import StepCustomizeNFTCard from './mintingSteps/StepCustomizeNFTCard';
-import { MintingContext, MintingContextInterface } from './mintingSteps/minting.context';
 import StepMintNFT from './mintingSteps/StepMintNFT';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeMintingProcessState,
+  MintingProcessStateAlignement,
+  resetMintingProcessState
+} from 'reduxStore/reducerMintingProcess';
+import { IRootState } from 'reduxStore';
 
+import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
+import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
 // ----------------------------------------------------------------------
-const steps = ['Upload File', 'Customize NFT Card', 'Mint NFT'];
+const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
-type MintingProcessProps = {
-  nftType: string;
-};
+export default function MintingProcess() {
+  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted } = useSelector(
+    (state: IRootState) => {
+      return {
+        activeStep: state.reducerMintingProcess.activeStep || 0,
+        stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+        stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+        nftMinted: state.reducerMintingProcess.nftMinted
+      };
+    }
+  );
 
-export default function MintingProcess({ nftType }: MintingProcessProps) {
-  const [stepOneNotDone, setStepOneNotDone] = useState(false);
-  const [stepTwoNotDone, setStepTwoNotDone] = useState(true);
-  const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
-  const [metadataCid, setMetadataCid] = useState('');
-  const [nameNft, setNameNft] = useState('');
-  const [descNft, setDescNft] = useState('');
-  const [alignment, setAlignment] = useState<string | null>('crust');
-  const [srcImage, setSrcImage] = useState('');
-  const initMintingContext: MintingContextInterface = {
-    stepOneNotDone,
-    setStepOneNotDone,
-    stepTwoNotDone,
-    setStepTwoNotDone,
-    nameNft,
-    setNameNft,
-    descNft,
-    setDescNft,
-    alignment,
-    setAlignment,
-    uploadedCid,
-    setUploadedCid,
-    metadataCid,
-    setMetadataCid,
-    srcImage,
-    setSrcImage
-  };
-
-  const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useDispatch();
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepOptional = (step: number) => false;
   const isStepSkipped = (step: number) => skipped.has(step);
@@ -93,16 +81,20 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    dispatch(changeMintingProcessState({ activeStep: activeStep + 1 }));
     setSkipped(newSkipped);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    dispatch(changeMintingProcessState({ activeStep: activeStep - 1 }));
   };
 
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-    setAlignment(newAlignment);
+    dispatch(
+      changeMintingProcessState({
+        alignment: newAlignment as MintingProcessStateAlignement
+      })
+    );
   };
 
   const handleSkip = () => {
@@ -112,7 +104,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       throw new Error("You can't skip a step that isn't optional.");
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    dispatch(changeMintingProcessState({ activeStep: activeStep + 1 }));
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
       newSkipped.add(activeStep);
@@ -121,11 +113,12 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    dispatch(resetMintingProcessState());
+    dispatch(resetQRCardInfo());
   };
 
   return (
-    <MintingContext.Provider value={initMintingContext}>
+    <>
       <Scrollbar>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => {
@@ -163,27 +156,18 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       Step 0
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-      {activeStep === 0 && nftType === 'withoutNftCard' ? (
+      {activeStep === 0 ? (
         <>
-          <UploadFileStep onSnackbarAction={onSnackbarAction} />
+          <StepConfigureNFT />
           <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack}>
               Back
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
+            <Button variant="contained" onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
-          </Box>
-        </>
-      ) : activeStep === 0 ? (
-        <>
-          <Box sx={{ display: 'flex', mt: 3 }}>
-            <Typography variant="h6">
-              We currently support creating NFT without customized NFT card, you can try on that and
-              stay tune for other NFT types
-            </Typography>
           </Box>
         </>
       ) : (
@@ -195,6 +179,28 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
       {activeStep === 1 ? (
+        <>
+          <UploadFileStep onSnackbarAction={onSnackbarAction} />
+          <Box sx={{ display: 'flex', mt: 3 }}>
+            {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
+            <Button color="inherit" onClick={handleBack}>
+              Back
+            </Button>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <></>
+      )}
+
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 2
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+
+      {activeStep === 2 ? (
         <>
           <StepCustomizeNFTCard
             onSnackbarAction={onSnackbarAction}
@@ -220,10 +226,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       )}
 
       {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      Step 2
+      Step 3
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
-      {activeStep === 2 ? (
+      {activeStep === 3 ? (
         <>
           <StepMintNFT handleAlignment={handleAlignment} />
           <Box sx={{ display: 'flex' }}>
@@ -238,16 +244,17 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
             )}
             <Button
               variant="contained"
-              onClick={handleNext}
-              sx={{ display: activeStep === steps.length - 1 ? 'none' : 'flex' }}
+              onClick={handleReset}
+              sx={{ display: 'flex' }}
+              disabled={!nftMinted}
             >
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              Finish
             </Button>
           </Box>
         </>
       ) : (
         <></>
       )}
-    </MintingContext.Provider>
+    </>
   );
 }

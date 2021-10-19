@@ -17,23 +17,46 @@ import { Icon } from '@iconify/react';
 import Label from 'components/Label';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { contractAddress } from 'utils/contractAddress';
-import { useContext, useState } from 'react';
-import { MintingContext } from './minting.context';
+import { useState } from 'react';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
+import { IRootState } from 'reduxStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 
 type StepMintNFTProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
 };
 
 function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
-  const { nameNft, descNft, metadataCid, uploadedCid, srcImage, alignment } =
-    useContext(MintingContext);
-  const [transactionHash, setTransactionHash] = useState('');
-  const [isMinting, setMinting] = useState(false);
-  const [nftMinted, setNftMinted] = useState(false);
-  const [tokenID, setTokenID] = useState(0);
+  const {
+    nameNft,
+    descNft,
+    alignment,
+    uploadedCid,
+    metadataCid,
+    srcImage,
+    isMinting,
+    transactionHash,
+    nftMinted,
+    tokenID
+  } = useSelector((state: IRootState) => {
+    return {
+      nameNft: state.reducerMintingProcess.nameNft,
+      descNft: state.reducerMintingProcess.descNft,
+      alignment: state.reducerMintingProcess.alignment,
+      uploadedCid: state.reducerMintingProcess.uploadedCid,
+      metadataCid: state.reducerMintingProcess.metadataCid,
+      srcImage: state.reducerMintingProcess.srcImage,
+      transactionHash: state.reducerMintingProcess.transactionHash,
+      isMinting: state.reducerMintingProcess.isMinting,
+      nftMinted: state.reducerMintingProcess.nftMinted,
+      tokenID: state.reducerMintingProcess.tokenID
+    };
+  });
+  const dispatch = useDispatch();
 
   async function mintDataNTF() {
     const provider = await detectEthereumProvider();
@@ -43,27 +66,35 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
-        setMinting(true);
+        dispatch(changeMintingProcessState({ isMinting: true }));
         const providerEthers = new ethers.providers.Web3Provider(provider);
         const signer = providerEthers.getSigner();
         const addr = await signer.getAddress();
         const contract = new ethers.Contract(contractAddress, ABI, providerEthers);
         const signedContract = contract.connect(signer);
         signedContract
-          .mintDataNTF(addr, `ipfs://${metadataCid}`, `ipfs://${uploadedCid.cid}`, 'null')
+          .mintDataNTF(
+            addr,
+            `ipfs://${metadataCid}`,
+            `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
+            'null',
+            { gasPrice: BigNumber.from(GAS_PRICE) }
+          )
           .then((tx: any) => {
-            setTransactionHash(tx.hash);
+            dispatch(changeMintingProcessState({ transactionHash: tx.hash }));
             providerEthers.waitForTransaction(tx.hash).then(() => {
-              setMinting(false);
-              setNftMinted(true);
+              dispatch(changeMintingProcessState({ isMinting: false }));
+              dispatch(changeMintingProcessState({ nftMinted: true }));
               providerEthers.getTransactionReceipt(tx.hash).then((receipt: any) => {
-                setTokenID(parseInt(receipt.logs[0].topics[3], 16));
+                dispatch(
+                  changeMintingProcessState({ tokenID: parseInt(receipt.logs[0].topics[3], 16) })
+                );
               });
             });
           })
           .catch((error: any) => {
             console.log(error);
-            setMinting(false);
+            dispatch(changeMintingProcessState({ isMinting: false }));
           });
       }
     }

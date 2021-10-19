@@ -20,8 +20,8 @@ const colors = [
 function CustomizeQR25() {
   const { height, posHeight } = useSelector((state: IRootState) => {
     return {
-      height: state.qrCardReducer.otherQRProps.qr25D.height,
-      posHeight: state.qrCardReducer.otherQRProps.qr25D.posHeight
+      height: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.height,
+      posHeight: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.posHeight
     };
   });
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ function CustomizeQR25() {
       changeOtherQRProps({
         otherQRProps: {
           qr25D: {
-            height: event.target.value
+            height: event.target.value as number
           }
         }
       })

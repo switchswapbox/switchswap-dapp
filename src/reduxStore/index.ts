@@ -1,25 +1,34 @@
 import { CombinedState, combineReducers, Reducer } from 'redux';
-import { InfoQRCard, qrCardReducer } from './reducerCustomizeQRCard';
-import { accountReducer, InfoAccountWallet } from './reducerSelectAccount';
+import { reducerCustomizeQRCard, InfoQRCard } from './reducerCustomizeQRCard';
+import { reducerSelectAccount, InfoAccountWallet } from './reducerSelectAccount';
+import { reducerMintingProcess, MintingProcessState } from './reducerMintingProcess';
 
-const rootReducers: Reducer<
+export const RESET_STATE = 'RESET_STATE';
+
+const rootReducer: Reducer<
   CombinedState<{
-    qrCardReducer: InfoQRCard;
-    accountReducer: InfoAccountWallet;
+    reducerCustomizeQRCard: InfoQRCard;
+    reducerSelectAccount: InfoAccountWallet;
+    reducerMintingProcess: MintingProcessState;
   }>,
   | {
       type: string;
-      infoQRCard: InfoQRCard;
+      state: InfoQRCard;
     }
   | {
       type: string;
-      infoAccountWallet: InfoAccountWallet;
+      state: InfoAccountWallet;
+    }
+  | {
+      type: string;
+      state: MintingProcessState;
     }
 > = combineReducers({
-  qrCardReducer,
-  accountReducer
+  reducerCustomizeQRCard,
+  reducerSelectAccount,
+  reducerMintingProcess
 });
 
-export default rootReducers;
+export default rootReducer;
 
-export type IRootState = ReturnType<typeof rootReducers>;
+export type IRootState = ReturnType<typeof rootReducer>;

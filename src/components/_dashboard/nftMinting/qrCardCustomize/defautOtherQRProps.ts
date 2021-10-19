@@ -1,10 +1,12 @@
-interface QRNormalOtherProps {
-  type: 'rect' | 'round' | 'rand';
-  size: number;
-  opacity: number;
-  posType: 'rect' | 'round' | 'planet' | 'roundRect';
-  otherColor: string;
-  posColor: string;
+export type QRNormalOtherPropsTypes = 'rect' | 'round' | 'rand';
+export type QRNormalOtherPropsPosTypes = 'rect' | 'round' | 'planet' | 'roundRect';
+export interface QRNormalOtherProps {
+  type?: QRNormalOtherPropsTypes;
+  size?: number;
+  opacity?: number;
+  posType?: QRNormalOtherPropsPosTypes;
+  otherColor?: string;
+  posColor?: string;
 }
 
 export const defaultQRNormalOtherProps: QRNormalOtherProps = {
@@ -16,11 +18,12 @@ export const defaultQRNormalOtherProps: QRNormalOtherProps = {
   posColor: '#000000'
 };
 
-interface QRDsjOtherProps {
-  scale: number;
-  crossWidth: number;
-  posWidth: number;
-  posType: 'rect' | 'dsj';
+export type QRDsjOtherPropsPosTypes = 'rect' | 'dsj';
+export interface QRDsjOtherProps {
+  scale?: number;
+  crossWidth?: number;
+  posWidth?: number;
+  posType?: QRDsjOtherPropsPosTypes;
 }
 
 export const defaultQRDsjOtherProps: QRDsjOtherProps = {
@@ -30,12 +33,12 @@ export const defaultQRDsjOtherProps: QRDsjOtherProps = {
   posType: 'rect'
 };
 
-interface QR25DOtherProps {
-  height: Number;
-  posHeight: Number;
-  topColor: String;
-  leftColor: String;
-  rightColor: String;
+export interface QR25DOtherProps {
+  height?: number;
+  posHeight?: number;
+  topColor?: string;
+  leftColor?: string;
+  rightColor?: string;
 }
 
 export const defaultQR25DOtherProps: QR25DOtherProps = {
@@ -46,9 +49,9 @@ export const defaultQR25DOtherProps: QR25DOtherProps = {
   rightColor: '#FFEBF3'
 };
 
-interface QRBubbleOtherProps {
-  circleColor: String;
-  posColor: String;
+export interface QRBubbleOtherProps {
+  circleColor?: string;
+  posColor?: string;
 }
 
 export const defaultQRBubbleOtherProps: QRBubbleOtherProps = {
@@ -56,13 +59,13 @@ export const defaultQRBubbleOtherProps: QRBubbleOtherProps = {
   posColor: '#0693E3'
 };
 
-interface QRFuncOtherProps {
-  funcType: String;
-  type: String;
-  posType: String;
-  otherColor1: String;
-  otherColor2: String;
-  posColor: String;
+export interface QRFuncOtherProps {
+  funcType?: string;
+  type?: string;
+  posType?: string;
+  otherColor1?: string;
+  otherColor2?: string;
+  posColor?: string;
 }
 
 export const defaultQRFuncOtherProps: QRFuncOtherProps = {
@@ -74,14 +77,14 @@ export const defaultQRFuncOtherProps: QRFuncOtherProps = {
   posColor: '#000000'
 };
 
-interface QRLineOtherProps {
-  funcType: String;
-  posType: String;
-  posColor: String;
-  direction: String;
-  lineWidth: Number;
-  lineOpacity: Number;
-  lineColor: String;
+export interface QRLineOtherProps {
+  funcType?: string;
+  posType?: string;
+  posColor?: string;
+  direction?: string;
+  lineWidth?: number;
+  lineOpacity?: number;
+  lineColor?: string;
 }
 
 export const defaultQRLineOtherProps: QRLineOtherProps = {
@@ -93,3 +96,7 @@ export const defaultQRLineOtherProps: QRLineOtherProps = {
   lineOpacity: 100,
   lineColor: '#000000'
 };
+
+export interface QRRandRectOtherProps {}
+
+export const defaultQRRandRectOtherProps: QRRandRectOtherProps = {};

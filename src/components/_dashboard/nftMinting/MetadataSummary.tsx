@@ -1,13 +1,10 @@
-import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Divider, Pagination, TextField, Theme, Typography } from '@mui/material';
+import { Box, Divider, Pagination, Theme, Typography } from '@mui/material';
 
 import Label from '../../Label';
-import ColorSinglePicker from './ColorSinglePicker';
 import {
-  changeQRCard,
-  changeQRStyleName,
+  changeQRCardGeneralInfo,
   qrStyleNameType
 } from '../../../reduxStore/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
@@ -34,7 +31,7 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
 
   const handleSelectLayout = (event: React.ChangeEvent<unknown>, value: number) => {
     dispatch(
-      changeQRCard({
+      changeQRCardGeneralInfo({
         layout: value - 1
       })
     );
@@ -42,7 +39,7 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
 
   const handleSelectQRStyle = (event: React.ChangeEvent<unknown>, value: number) => {
     dispatch(
-      changeQRStyleName({
+      changeQRCardGeneralInfo({
         qrStyleName: qrStylesList[value - 1] as qrStyleNameType
       })
     );

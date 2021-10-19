@@ -1,6 +1,6 @@
 import { Box, FormControlLabel, Stack, SvgIcon, Switch, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';
-import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import UploadMultiFile from '../UploadMultiFile';
 import { create } from 'ipfs-http-client';
 
@@ -18,7 +18,9 @@ import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-da
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { stringToHex } from '@polkadot/util';
 import { VariantType } from 'notistack';
-import { MintingContext } from './minting.context';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from 'reduxStore';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
@@ -50,19 +52,23 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
 };
 
 function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
-  const { setSrcImage, stepOneNotDone } = useContext(MintingContext);
+  const { stepOneNotDone, uploadedCid } = useSelector((state: IRootState) => {
+    return {
+      stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+      uploadedCid: state.reducerMintingProcess.uploadedCid
+    };
+  });
+  const dispatch = useDispatch();
+
   const [preview, setPreview] = useState(false);
-  // const [file, setFile] = useState<File>();
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadedCid, setUploadedCid] = useState<FileInfoType>({ cid: '', name: '', size: 0 });
   const [isFileUploading, setFileUploading] = useState(false);
-  const { setStepOneNotDone } = useContext(MintingContext);
 
   const loadImg = () => {
     const reader = new FileReader();
 
     reader.onload = async () => {
-      setSrcImage(reader.result as string);
+      dispatch(changeMintingProcessState({ srcImage: reader.result as string }));
     };
     reader.readAsDataURL(files[0]);
   };
@@ -99,9 +105,13 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
       reader.onerror = () => reject('file reading has failed');
       reader.onload = async () => {
         const added = await ipfs.add(reader.result as ArrayBuffer);
-        setUploadedCid({ cid: added.cid.toV0().toString(), size: added.size, name: files[0].name });
+        dispatch(
+          changeMintingProcessState({
+            uploadedCid: { cid: added.cid.toV0().toString(), size: added.size, name: files[0].name }
+          })
+        );
         setFileUploading(false);
-        setStepOneNotDone(false);
+        dispatch(changeMintingProcessState({ stepOneNotDone: false }));
         resolve({ cid: added.cid.toV0().toString(), name: files[0].name });
       };
       reader.readAsArrayBuffer(files[0]);
@@ -192,13 +202,13 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
       <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
         <Typography variant="h6">Upload file to Crust Network</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <FormControlLabel
+        {/* <FormControlLabel
           sx={{ m: 0 }}
           control={
             <Switch checked={preview} onChange={(event) => setPreview(event.target.checked)} />
           }
           label="Show Preview"
-        />
+        /> */}
       </Box>
       <UploadMultiFile
         showPreview={preview}
@@ -207,10 +217,10 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
         onRemove={handleRemove}
         onUploadFile={{ uploadFileMetamask, uploadFileCrust }}
         isFileUploading={isFileUploading}
-        stepOneNotDone={!stepOneNotDone}
+        stepOneNotDone={stepOneNotDone as boolean}
       />
 
-      {uploadedCid.cid !== '' && (
+      {(uploadedCid ? uploadedCid.cid !== '' : false) && (
         <Box
           sx={{
             my: 1,
@@ -228,7 +238,7 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
             <Stack direction="column">
               <Typography variant="subtitle2">Uploaded successfully to Crust Network</Typography>
               <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-                CID: {uploadedCid.cid}
+                CID: {uploadedCid ? uploadedCid.cid : ''}
               </Typography>
             </Stack>
           </Stack>

@@ -2,20 +2,20 @@ import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import Scrollbar from 'components/Scrollbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeQRMidIcon } from 'reduxStore/reducerCustomizeQRCard';
+import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
 const iconNames = ['switchswap', 'crust'];
 
 function MidIconSelection() {
   const { icon } = useSelector((state: IRootState) => {
     return {
-      icon: state.qrCardReducer.icon
+      icon: state.reducerCustomizeQRCard.icon
     };
   });
   const dispatch = useDispatch();
   function handleSelectMidIcon(iconName: string) {
     icon !== iconName
-      ? dispatch(changeQRMidIcon({ icon: iconName }))
-      : dispatch(changeQRMidIcon({ icon: '' }));
+      ? dispatch(changeQRCardGeneralInfo({ icon: iconName }))
+      : dispatch(changeQRCardGeneralInfo({ icon: '' }));
   }
 
   function singleButton(iconName: string) {

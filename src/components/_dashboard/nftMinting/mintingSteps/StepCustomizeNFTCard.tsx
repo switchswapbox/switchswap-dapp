@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -21,7 +21,6 @@ import MetadataSummary from '../MetadataSummary';
 import NftCardsDesign from '../NftCardsDesign';
 import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
-import { changeCardTitle } from 'reduxStore/reducerCustomizeQRCard';
 import { create } from 'ipfs-http-client';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
@@ -35,12 +34,13 @@ import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-da
 import { ethers } from 'ethers';
 import { stringToHex } from '@polkadot/util';
 import { VariantType } from 'notistack';
-import { MintingContext } from './minting.context';
 import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
-import CustomizeQRNormal from '../qrCardCustomize/CustomizeQRNormal';
 import qrStyles from '../qrCardCustomize';
 import { IRootState } from 'reduxStore';
+import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import SliderSVGCard from '../NftCardsDesign';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -49,42 +49,108 @@ type StepCustomizeNFTCardProps = {
   onSnackbarAction: (color: VariantType, text: string, url?: string | undefined) => void;
 };
 
-function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
-  const [isMetadataUploading, setMetadataUploading] = useState(false);
-  const {
-    nameNft,
-    setNameNft,
-    descNft,
-    setDescNft,
-    uploadedCid,
-    stepTwoNotDone,
-    setStepTwoNotDone,
-    setMetadataCid,
-    srcImage,
-    alignment,
-    metadataCid
-  } = useContext(MintingContext);
-
-  const { qrStyleName } = useSelector((state: IRootState) => {
+function TitleAndDescription() {
+  const { stepTwoNotDone, nameNft, descNft } = useSelector((state: IRootState) => {
     return {
-      qrStyleName: state.qrCardReducer.qrStyleName || 'qrNormal'
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+      nameNft: state.reducerMintingProcess.nameNft,
+      descNft: state.reducerMintingProcess.descNft
     };
   });
-  const { CustomProps } = qrStyles[qrStyleName];
-
   const dispatch = useDispatch();
+
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNameNft(event.target.value);
+    dispatch(changeMintingProcessState({ nameNft: event.target.value }));
     dispatch(
-      changeCardTitle({
+      changeQRCardGeneralInfo({
         title: event.target.value
       })
     );
   };
 
   const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDescNft(event.target.value);
+    dispatch(changeMintingProcessState({ descNft: event.target.value }));
   };
+
+  return (
+    <>
+      <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
+        Creating Metadata
+      </Label>
+      <Typography
+        variant="h5"
+        paragraph
+        sx={{
+          mt: 2,
+          mb: 0
+        }}
+      >
+        Title<span style={{ color: 'red' }}>*</span>
+      </Typography>
+      <TextField
+        fullWidth
+        variant="standard"
+        multiline
+        type="string"
+        required={true}
+        defaultValue={nameNft}
+        onChange={handleNameNftInputChange}
+        disabled={!stepTwoNotDone}
+      />
+
+      <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
+        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          Description
+        </Typography>
+      </Box>
+
+      <TextField
+        rows={3}
+        fullWidth
+        variant="standard"
+        multiline
+        size="small"
+        placeholder="Enter what is so cool about my NFT"
+        type="string"
+        defaultValue={descNft}
+        onChange={handleDescNftInputChange}
+        disabled={!stepTwoNotDone}
+      />
+    </>
+  );
+}
+
+function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
+  const [isMetadataUploading, setMetadataUploading] = useState(false);
+
+  const {
+    nftType,
+    stepTwoNotDone,
+    nameNft,
+    descNft,
+    alignment,
+    uploadedCid,
+    metadataCid,
+    srcImage,
+    qrStyleName,
+    otherQRProps
+  } = useSelector((state: IRootState) => {
+    return {
+      nftType: state.reducerMintingProcess.nftType,
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+      nameNft: state.reducerMintingProcess.nameNft,
+      descNft: state.reducerMintingProcess.descNft,
+      alignment: state.reducerMintingProcess.alignment,
+      uploadedCid: state.reducerMintingProcess.uploadedCid,
+      metadataCid: state.reducerMintingProcess.metadataCid,
+      srcImage: state.reducerMintingProcess.srcImage,
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
+      otherQRProps: state.reducerCustomizeQRCard.otherQRProps
+    };
+  });
+  const dispatch = useDispatch();
+
+  const { CustomProps } = qrStyles[qrStyleName as qrStyleNameType];
 
   function uploadMetadataW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -98,18 +164,17 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       const metadata = {
         name: nameNft,
         description: descNft,
-        image: `ipfs://${uploadedCid.cid}`,
-        fileName: uploadedCid.name,
-        size: uploadedCid.size
+        image: `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
+        fileName: uploadedCid ? uploadedCid.name : '',
+        size: uploadedCid ? uploadedCid.size : 0
       };
       ipfs
         .add(JSON.stringify(metadata))
         .then((added) => {
           console.log(added);
-          setStepTwoNotDone(false);
           setMetadataUploading(false);
-          setStepTwoNotDone(false);
-          setMetadataCid(added.cid.toV0().toString());
+          dispatch(changeMintingProcessState({ stepTwoNotDone: false }));
+          dispatch(changeMintingProcessState({ metadataCid: added.cid.toV0().toString() }));
           resolve({ cid: added.cid.toV0().toString(), size: added.size });
         })
         .catch((error) => {
@@ -197,70 +262,37 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     }
   };
 
+  const parentBoundingBox = useRef<HTMLHeadingElement>(null);
+
   return (
     <>
-      <Grid container direction="column" rowSpacing={10} sx={{ pt: 5 }}>
-        <Grid item xs={12} sx={{ pb: 0 }}>
+      <Grid container sx={{ pt: 5 }}>
+        <Grid item xs={12} sx={{ pb: 5 }}>
           <Stack alignItems="center" justifyContent="center">
-            <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} />
+            <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} height={300} />
           </Stack>
         </Grid>
-        <Grid item>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12} lg={7}>
-              <NftCardsDesign nftCards={svgArray} />
-            </Grid>
-            <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-              <Grid item xs={12}>
-                <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
-                  Creating Metadata
-                </Label>
-                <Typography
-                  variant="h5"
-                  paragraph
-                  sx={{
-                    mt: 2,
-                    mb: 0
-                  }}
-                >
-                  Title<span style={{ color: 'red' }}>*</span>
-                </Typography>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  multiline
-                  type="string"
-                  required={true}
-                  defaultValue={nameNft}
-                  onChange={handleNameNftInputChange}
-                  disabled={!stepTwoNotDone}
-                />
-
-                <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
-                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                    Description
-                  </Typography>
-                </Box>
-
-                <TextField
-                  rows={3}
-                  fullWidth
-                  variant="standard"
-                  multiline
-                  size="small"
-                  placeholder="Enter what is so cool about my NFT"
-                  type="string"
-                  defaultValue={descNft}
-                  onChange={handleDescNftInputChange}
-                  disabled={!stepTwoNotDone}
-                />
+        {nftType === 'simplified' ? (
+          <Grid item ref={parentBoundingBox} xs={12}>
+            <Grid container>
+              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 }, maxHeight: '100vh' }}>
+                <SliderSVGCard parentBoundingBox={parentBoundingBox} />
               </Grid>
-              <Grid item xs={12}>
-                <MetadataSummary otherQRProps={<CustomProps />} />
+              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+                <Grid item xs={12}>
+                  <TitleAndDescription />
+                </Grid>
+                <Grid item xs={12} sx={{ pb: 0 }}>
+                  <MetadataSummary otherQRProps={<CustomProps />} />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <TitleAndDescription />
+          </Grid>
+        )}
       </Grid>
 
       {isMetadataUploading ? (

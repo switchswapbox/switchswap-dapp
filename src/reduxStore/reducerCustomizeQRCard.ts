@@ -4,13 +4,18 @@ import {
   defaultQRDsjOtherProps,
   defaultQRFuncOtherProps,
   defaultQRLineOtherProps,
-  defaultQRNormalOtherProps
+  defaultQRNormalOtherProps,
+  QR25DOtherProps,
+  QRBubbleOtherProps,
+  QRDsjOtherProps,
+  QRFuncOtherProps,
+  QRLineOtherProps,
+  QRNormalOtherProps,
+  QRRandRectOtherProps
 } from 'components/_dashboard/nftMinting/qrCardCustomize/defautOtherQRProps';
+import { RESET_STATE } from 'reduxStore';
 
-export const CHANGE_QR_LAYOUT = 'CHANGE_QR_LAYOUT';
-export const CHANGE_QR_STYLE_NAME = 'CHANGE_QR_STYLE_NAME';
-export const CHANGE_QR_MID_ICON = 'CHANGE_QR_MID_ICON';
-export const CHANGE_CARD_TITLE = 'CHANGE_CARD_TITLE';
+export const CHANGE_QR_CARD_GENERAL_INFO = 'CHANGE_QR_CARD_GENERAL_INFO';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
 
 export type qrStyleNameType =
@@ -21,37 +26,36 @@ export type qrStyleNameType =
   | 'qrBubble'
   | 'qrFunc'
   | 'qrLine';
+
+export interface OtherQRProps {
+  qrNormal?: QRNormalOtherProps;
+  qrRandRect?: QRRandRectOtherProps;
+  qrDsj?: QRDsjOtherProps;
+  qr25D?: QR25DOtherProps;
+  qrBubble?: QRBubbleOtherProps;
+  qrFunc?: QRFuncOtherProps;
+  qrLine?: QRLineOtherProps;
+}
 export interface InfoQRCard {
   layout?: number;
   qrStyleName?: qrStyleNameType;
   title?: string;
   icon?: string;
-  otherQRProps?: any;
+  otherQRProps?: OtherQRProps;
 }
 
-export const changeQRCard = (infoQRCard: InfoQRCard) => ({
-  type: CHANGE_QR_LAYOUT,
-  infoQRCard: infoQRCard
+export const changeQRCardGeneralInfo = (state: InfoQRCard) => ({
+  type: CHANGE_QR_CARD_GENERAL_INFO,
+  state: state
 });
 
-export const changeQRStyleName = (infoQRCard: InfoQRCard) => ({
-  type: CHANGE_QR_STYLE_NAME,
-  infoQRCard: infoQRCard
-});
-
-export const changeCardTitle = (infoQRCard: InfoQRCard) => ({
-  type: CHANGE_CARD_TITLE,
-  infoQRCard: infoQRCard
-});
-
-export const changeQRMidIcon = (infoQRCard: InfoQRCard) => ({
-  type: CHANGE_QR_MID_ICON,
-  infoQRCard: infoQRCard
-});
-
-export const changeOtherQRProps = (infoQRCard: InfoQRCard) => ({
+export const changeOtherQRProps = (state: InfoQRCard) => ({
   type: CHANGE_OTHER_QR_PROPS,
-  infoQRCard: infoQRCard
+  state: state
+});
+
+export const resetQRCardInfo = () => ({
+  type: RESET_STATE
 });
 
 // init state
@@ -70,42 +74,27 @@ const initialQRCard: InfoQRCard = {
   }
 };
 
-export const qrCardReducer = (
+export const reducerCustomizeQRCard = (
   state = initialQRCard,
-  action: { type: string; infoQRCard: InfoQRCard }
+  action: { type: string; state: InfoQRCard }
 ) => {
   switch (action.type) {
-    case CHANGE_QR_LAYOUT:
-      return {
-        ...state,
-        layout: action.infoQRCard.layout
-      };
-    case CHANGE_QR_STYLE_NAME:
-      return {
-        ...state,
-        qrStyleName: action.infoQRCard.qrStyleName
-      };
-    case CHANGE_CARD_TITLE:
-      return {
-        ...state,
-        title: action.infoQRCard.title
-      };
-    case CHANGE_QR_MID_ICON:
-      return {
-        ...state,
-        icon: action.infoQRCard.icon
-      };
+    case CHANGE_QR_CARD_GENERAL_INFO: {
+      return { ...state, ...action.state };
+    }
     case CHANGE_OTHER_QR_PROPS: {
-      const keys = Object.keys(action.infoQRCard.otherQRProps);
+      const keys = Object.keys(action.state.otherQRProps ? action.state.otherQRProps : {});
       let newState = JSON.parse(JSON.stringify(state));
       for (let key of keys) {
         newState.otherQRProps[key] = {
           ...newState.otherQRProps[key],
-          ...action.infoQRCard.otherQRProps[key]
+          ...(action.state.otherQRProps ? action.state.otherQRProps[key as keyof OtherQRProps] : {})
         };
       }
       return newState;
     }
+    case RESET_STATE:
+      return initialQRCard;
     default:
       return state;
   }
