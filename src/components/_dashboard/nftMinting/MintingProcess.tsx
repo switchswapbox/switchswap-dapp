@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // material
 import {
   Box,
@@ -27,14 +27,11 @@ import {
 } from 'reduxStore/reducerMintingProcess';
 import { IRootState } from 'reduxStore';
 
+import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 // ----------------------------------------------------------------------
-const steps = ['Upload File', 'Customize NFT Card', 'Mint NFT'];
+const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
-type MintingProcessProps = {
-  nftType: string;
-};
-
-export default function MintingProcess({ nftType }: MintingProcessProps) {
+export default function MintingProcess() {
   const { stepOneNotDone, stepTwoNotDone } = useSelector((state: IRootState) => {
     return {
       stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
@@ -155,7 +152,7 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
       {activeStep === 0 ? (
         <>
-          <UploadFileStep onSnackbarAction={onSnackbarAction} />
+          <StepConfigureNFT />
           <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack}>
@@ -176,6 +173,28 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
       {activeStep === 1 ? (
+        <>
+          <UploadFileStep onSnackbarAction={onSnackbarAction} />
+          <Box sx={{ display: 'flex', mt: 3 }}>
+            {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
+            <Button color="inherit" disabled={activeStep === 1} onClick={handleBack}>
+              Back
+            </Button>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <></>
+      )}
+
+      {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Step 2
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+
+      {activeStep === 2 ? (
         <>
           <StepCustomizeNFTCard
             onSnackbarAction={onSnackbarAction}
@@ -201,10 +220,10 @@ export default function MintingProcess({ nftType }: MintingProcessProps) {
       )}
 
       {/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      Step 2
+      Step 3
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
-      {activeStep === 2 ? (
+      {activeStep === 3 ? (
         <>
           <StepMintNFT handleAlignment={handleAlignment} />
           <Box sx={{ display: 'flex' }}>
