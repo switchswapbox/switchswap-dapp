@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 
 // components
+import { BallBeat, Pacman } from 'react-pure-loaders';
 import Page from '../components/Page';
 import { ethers } from 'ethers';
 import { ABI } from '../utils/abi';
@@ -43,6 +44,8 @@ type NftCardProps = {
 
 function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProps) {
   const theme = useTheme();
+  const [loading, setLoading] = useState(true);
+
   return (
     <Paper
       elevation={2}
@@ -56,10 +59,27 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
       }}
     >
       <Box sx={{ p: 1, position: 'relative' }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ height: '200px', display: loading ? 'flex' : 'none' }}
+        >
+          <BallBeat color={'#637381'} loading={loading} />
+        </Stack>
+
         <Box
           component="img"
           src={imageUrl}
-          sx={{ borderRadius: 1.5, top: 0, width: '100%', height: '200px', objectFit: 'cover' }}
+          onLoad={() => setLoading(false)}
+          sx={{
+            borderRadius: 1.5,
+            top: 0,
+            width: '100%',
+            height: '200px',
+            objectFit: 'cover',
+            display: loading ? 'none' : 'block'
+          }}
         />
       </Box>
 
@@ -129,10 +149,12 @@ export default function NftManager() {
 
   const [page, setPage] = useState(parseInt(pageUrl || '0'));
   const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || '';
 
   const handlePageChange = (event: any, value: number) => {
+    setLoading(true);
     setPage(value);
     navigate(`/nft-manager/${value}`);
   };
@@ -192,6 +214,8 @@ export default function NftManager() {
           ? parseInt(NftBalance, 10)
           : NUMBER_OF_NFT_IN_MANAGER_PAGE * page;
 
+      setLoading(false);
+
       for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (page - 1); index < stopIndex; index++) {
         updateListByTokenIndex(index, contract);
       }
@@ -230,6 +254,14 @@ export default function NftManager() {
     <Page title="NFT Manager">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3} ref={ref}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: '100%', display: loading ? 'flex' : 'none' }}
+          >
+            <Pacman color={'#637381'} loading={loading} />
+          </Stack>
           {NftList.map((nft) => {
             return (
               <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={lgCol}>
