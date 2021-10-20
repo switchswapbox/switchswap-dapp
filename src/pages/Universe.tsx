@@ -15,6 +15,8 @@ import {
 // hooks
 import useSettings from '../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
+
+import { BallBeat } from 'react-pure-loaders';
 // components
 import Page from '../components/Page';
 
@@ -44,7 +46,7 @@ type NftCardProps = {
 
 function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftCardProps) {
   const theme = useTheme();
-
+  const [loading, setLoading] = useState(true);
   return (
     <Paper
       elevation={2}
@@ -58,10 +60,27 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
       }}
     >
       <Box sx={{ p: 1, position: 'relative' }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ height: '200px', display: loading ? 'flex' : 'none' }}
+        >
+          <BallBeat color={'#637381'} loading={loading} />
+        </Stack>
+
         <Box
           component="img"
           src={imageUrl}
-          sx={{ borderRadius: 1.5, top: 0, width: '100%', height: '200px', objectFit: 'cover' }}
+          onLoad={() => setLoading(false)}
+          sx={{
+            borderRadius: 1.5,
+            top: 0,
+            width: '100%',
+            height: '200px',
+            objectFit: 'cover',
+            display: loading ? 'none' : 'block'
+          }}
         />
       </Box>
 
