@@ -46,7 +46,7 @@ export default function Router() {
           path: 'gallery',
           children: [
             { element: <Navigate to="/gallery/universe" replace /> },
-            { path: 'universe', element: <Universe /> }
+            { path: 'universe/:pageUrl', element: <Universe /> }
           ]
         },
         { path: 'nft-minting', element: <NftMinting /> },
