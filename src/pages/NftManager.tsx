@@ -14,6 +14,7 @@ import {
 import { GridSize } from '@mui/material/Grid';
 // hooks
 import useSettings from '../hooks/useSettings';
+import { useNavigate } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 
 // components
@@ -28,6 +29,7 @@ import {
   NUMBER_OF_NFT_IN_MANAGER_PAGE
 } from 'assets/COMMON_VARIABLES';
 import { useTheme } from '@mui/material/styles';
+import { useParams } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -117,19 +119,22 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
 
 export default function NftManager() {
   const theme = useTheme();
+  const { pageUrl } = useParams();
+  const navigate = useNavigate();
   const { themeStretch } = useSettings();
 
   const [NftList, setNftList] = useState<
     { tokenId: string; tokenURI: string; imageUrl: string; name: string }[]
   >([]);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(parseInt(pageUrl || '0'));
   const [pageCount, setPageCount] = useState(1);
 
   const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || '';
 
   const handlePageChange = (event: any, value: number) => {
     setPage(value);
+    navigate(`/nft-manager/${value}`);
   };
 
   const ipfsUriToCid = (ipfsUrl: string) => {

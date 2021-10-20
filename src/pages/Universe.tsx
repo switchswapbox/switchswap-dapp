@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 // hooks
 import useSettings from '../hooks/useSettings';
+import { useNavigate } from 'react-router-dom';
 // components
 import Page from '../components/Page';
 
@@ -30,7 +31,7 @@ import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import { useMeasure } from 'react-use';
 import { GridSize } from '@mui/material/Grid';
-
+import { useParams } from 'react-router-dom';
 // ----------------------------------------------------------------------
 type NftCardProps = {
   tokenId: string;
@@ -120,17 +121,20 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
 
 export default function Universe() {
   const theme = useTheme();
+  const { pageUrl } = useParams();
+  const navigate = useNavigate();
 
   const { themeStretch } = useSettings();
   const [NftList, setNftList] = useState<
     { tokenId: string; tokenURI: string; imageUrl: string; name: string; owner: string }[]
   >([]);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(parseInt(pageUrl || '0'));
   const [pageCount, setPageCount] = useState(1);
 
   const handlePageChange = (event: any, value: number) => {
     setPage(value);
+    navigate(`/gallery/universe/${value}`);
   };
 
   const ipfsUriToCid = (ipfsUrl: string) => {
