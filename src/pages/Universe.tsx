@@ -15,6 +15,8 @@ import {
 // hooks
 import useSettings from '../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
+
+import { BallBeat, Pacman } from 'react-pure-loaders';
 // components
 import Page from '../components/Page';
 
@@ -44,7 +46,7 @@ type NftCardProps = {
 
 function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftCardProps) {
   const theme = useTheme();
-
+  const [loading, setLoading] = useState(true);
   return (
     <Paper
       elevation={2}
@@ -58,10 +60,27 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
       }}
     >
       <Box sx={{ p: 1, position: 'relative' }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ height: '200px', display: loading ? 'flex' : 'none' }}
+        >
+          <BallBeat color={'#637381'} loading={loading} />
+        </Stack>
+
         <Box
           component="img"
           src={imageUrl}
-          sx={{ borderRadius: 1.5, top: 0, width: '100%', height: '200px', objectFit: 'cover' }}
+          onLoad={() => setLoading(false)}
+          sx={{
+            borderRadius: 1.5,
+            top: 0,
+            width: '100%',
+            height: '200px',
+            objectFit: 'cover',
+            display: loading ? 'none' : 'block'
+          }}
         />
       </Box>
 
@@ -131,8 +150,10 @@ export default function Universe() {
 
   const [page, setPage] = useState(parseInt(pageUrl || '0'));
   const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const handlePageChange = (event: any, value: number) => {
+    setLoading(true);
     setPage(value);
     navigate(`/gallery/universe/${value}`);
   };
@@ -193,6 +214,7 @@ export default function Universe() {
         ? startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE
         : -1;
 
+    setLoading(false);
     for (let index = startIndex; index > stopIndex; index--) {
       updateListByTokenIndex(index, contract);
     }
@@ -230,6 +252,14 @@ export default function Universe() {
     <Page title="Univere Gallery">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3} ref={ref}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: '100%', display: loading ? 'flex' : 'none' }}
+          >
+            <Pacman color={'#637381'} loading={loading} />
+          </Stack>
           {NftList.map((nft) => {
             return (
               <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={lgCol}>
