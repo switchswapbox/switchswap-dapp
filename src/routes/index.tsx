@@ -62,7 +62,8 @@ export default function Router() {
         {
           path: 'learn-more',
           element: <LearnMore />
-        }
+        },
+        { path: 'assets/:network/:contract/:tokenId', element: <AssetViewer /> }
       ]
     },
 
@@ -97,6 +98,7 @@ const MaticFaucet = Loadable(lazy(() => import('../pages/MaticFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService/TermsOfService')));
+const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
 
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
