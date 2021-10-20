@@ -45,12 +45,12 @@ export default function Router() {
         {
           path: 'gallery',
           children: [
-            { element: <Navigate to="/gallery/universe" replace /> },
-            { path: 'universe', element: <Universe /> }
+            { element: <Navigate to="/gallery/universe/1" replace /> },
+            { path: 'universe/:pageUrl', element: <Universe /> }
           ]
         },
         { path: 'nft-minting', element: <NftMinting /> },
-        { path: 'nft-manager', element: <NftManager /> },
+        { path: 'nft-manager/:pageUrl', element: <NftManager /> },
         {
           path: 'fun-box',
           children: [
