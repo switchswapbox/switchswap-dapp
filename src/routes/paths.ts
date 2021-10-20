@@ -18,7 +18,7 @@ export const PATH_DASHBOARD = {
   },
   gallery: {
     root: path(ROOTS_DASHBOARD, '/gallery'),
-    universe: path(ROOTS_DASHBOARD, '/gallery/universe')
+    universe: path(ROOTS_DASHBOARD, '/gallery/universe/1')
   },
   about: {
     learnMore: path(ROOTS_DASHBOARD, '/learn-more')

@@ -45,7 +45,7 @@ export default function Router() {
         {
           path: 'gallery',
           children: [
-            { element: <Navigate to="/gallery/universe" replace /> },
+            { element: <Navigate to="/gallery/universe/1" replace /> },
             { path: 'universe/:pageUrl', element: <Universe /> }
           ]
         },
