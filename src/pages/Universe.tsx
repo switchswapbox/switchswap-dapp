@@ -16,7 +16,7 @@ import {
 import useSettings from '../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 
-import { BallBeat } from 'react-pure-loaders';
+import { BallBeat, Pacman } from 'react-pure-loaders';
 // components
 import Page from '../components/Page';
 
@@ -150,8 +150,10 @@ export default function Universe() {
 
   const [page, setPage] = useState(parseInt(pageUrl || '0'));
   const [pageCount, setPageCount] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const handlePageChange = (event: any, value: number) => {
+    setLoading(true);
     setPage(value);
     navigate(`/gallery/universe/${value}`);
   };
@@ -212,6 +214,7 @@ export default function Universe() {
         ? startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE
         : -1;
 
+    setLoading(false);
     for (let index = startIndex; index > stopIndex; index--) {
       updateListByTokenIndex(index, contract);
     }
@@ -249,6 +252,14 @@ export default function Universe() {
     <Page title="Univere Gallery">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={3} ref={ref}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: '100%', display: loading ? 'flex' : 'none' }}
+          >
+            <Pacman color={'#637381'} loading={loading} />
+          </Stack>
           {NftList.map((nft) => {
             return (
               <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={lgCol}>
