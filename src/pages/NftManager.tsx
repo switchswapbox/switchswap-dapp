@@ -154,9 +154,11 @@ export default function NftManager() {
   const selectedMetamaskAccount = localStorage.getItem('selectedMetamaskAccount') || '';
 
   const handlePageChange = (event: any, value: number) => {
-    setLoading(true);
-    setPage(value);
-    navigate(`/nft-manager/${value}`);
+    if (value) {
+      setLoading(true);
+      setPage(value);
+      navigate(`/gallery/universe/${value}`);
+    }
   };
 
   const ipfsUriToCid = (ipfsUrl: string) => {
@@ -178,7 +180,7 @@ export default function NftManager() {
           const imageCid = ipfsUriToCid(response.data.image);
           if (imageCid) {
             const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
-
+            setLoading(false);
             setNftList((NftList) => {
               let addingNftIndex = NftList.length;
               for (let nftIndex = NftList.length; nftIndex > 0; nftIndex--) {
@@ -213,8 +215,6 @@ export default function NftManager() {
         NUMBER_OF_NFT_IN_MANAGER_PAGE * page > parseInt(NftBalance, 10)
           ? parseInt(NftBalance, 10)
           : NUMBER_OF_NFT_IN_MANAGER_PAGE * page;
-
-      setLoading(false);
 
       for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (page - 1); index < stopIndex; index++) {
         updateListByTokenIndex(index, contract);
@@ -258,7 +258,7 @@ export default function NftManager() {
             direction="row"
             alignItems="center"
             justifyContent="center"
-            sx={{ width: '100%', display: loading ? 'flex' : 'none' }}
+            sx={{ width: '100%', display: loading ? 'flex' : 'none', mt: 5 }}
           >
             <Pacman color={'#637381'} loading={loading} />
           </Stack>

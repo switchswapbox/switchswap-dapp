@@ -153,9 +153,11 @@ export default function Universe() {
   const [loading, setLoading] = useState(true);
 
   const handlePageChange = (event: any, value: number) => {
-    setLoading(true);
-    setPage(value);
-    navigate(`/gallery/universe/${value}`);
+    if (value) {
+      setLoading(true);
+      setPage(value);
+      navigate(`/gallery/universe/${value}`);
+    }
   };
 
   const ipfsUriToCid = (ipfsUrl: string) => {
@@ -178,7 +180,7 @@ export default function Universe() {
           const imageCid = ipfsUriToCid(response.data.image);
           if (imageCid) {
             const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
-
+            setLoading(false);
             setNftList((NftList) => {
               let addingNftIndex = 0;
               for (let nftIndex = 0; nftIndex < NftList.length; nftIndex++) {
@@ -214,7 +216,6 @@ export default function Universe() {
         ? startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE
         : -1;
 
-    setLoading(false);
     for (let index = startIndex; index > stopIndex; index--) {
       updateListByTokenIndex(index, contract);
     }
@@ -256,7 +257,7 @@ export default function Universe() {
             direction="row"
             alignItems="center"
             justifyContent="center"
-            sx={{ width: '100%', display: loading ? 'flex' : 'none' }}
+            sx={{ width: '100%', display: loading ? 'flex' : 'none', mt: 5 }}
           >
             <Pacman color={'#637381'} loading={loading} />
           </Stack>
