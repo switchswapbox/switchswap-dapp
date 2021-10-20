@@ -50,7 +50,7 @@ export default function Router() {
           ]
         },
         { path: 'nft-minting', element: <NftMinting /> },
-        { path: 'nft-manager', element: <NftManager /> },
+        { path: 'nft-manager/:pageUrl', element: <NftManager /> },
         {
           path: 'fun-box',
           children: [
