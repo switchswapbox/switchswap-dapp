@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { capitalCase } from 'change-case';
+
 // material
 import {
   Box,
@@ -9,8 +12,12 @@ import {
   IconButton,
   Paper,
   Stack,
+  Tab,
+  Tabs,
   Typography
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
 // hooks
 import useSettings from '../hooks/useSettings';
 import { useParams } from 'react-router-dom';
@@ -20,64 +27,109 @@ import { Block } from 'components/Block';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import { ProfileCover } from 'components/_dashboard/assetViewer';
+import { Icon } from '@iconify/react';
+
+import heartFill from '@iconify/icons-eva/heart-fill';
+import peopleFill from '@iconify/icons-eva/people-fill';
+import roundPermMedia from '@iconify/icons-ic/round-perm-media';
+import roundAccountBox from '@iconify/icons-ic/round-account-box';
 // ----------------------------------------------------------------------
+const TabsWrapperStyle = styled('div')(({ theme }) => ({
+  zIndex: 9,
+  bottom: 0,
+  width: '100%',
+  display: 'flex',
+  position: 'absolute',
+  backgroundColor: theme.palette.background.paper,
+  [theme.breakpoints.up('sm')]: {
+    justifyContent: 'center'
+  },
+  [theme.breakpoints.up('md')]: {
+    justifyContent: 'flex-end',
+    paddingRight: theme.spacing(3)
+  }
+}));
 
 export default function LearnMore() {
   const { themeStretch } = useSettings();
   const { network, contract, tokenId } = useParams();
+  const [currentTab, setCurrentTab] = useState('profile');
+  const myProfile = {
+    id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2',
+    cover: '/static/mock-images/covers/cover_2.jpg',
+    position: 'UI Designer',
+    follower: 14098,
+    following: 24578,
+    quote:
+      'Tart I love sugar plum I love oat cake. Sweet roll caramels I love jujubes. Topping cake wafer..',
+    country: 'Madagascar',
+    email: 'ashlynn_ohara62@gmail.com',
+    company: 'Gleichner, Mueller and Tromp',
+    school: 'Nikolaus - Leuschke',
+    role: 'Manager',
+    facebookLink: 'https://www.facebook.com/caitlyn.kerluke',
+    instagramLink: 'https://www.instagram.com/caitlyn.kerluke',
+    linkedinLink: 'https://www.linkedin.com/in/caitlyn.kerluke',
+    twitterLink: 'https://www.twitter.com/caitlyn.kerluke'
+  };
+
+  const PROFILE_TABS = [
+    {
+      value: 'profile',
+      icon: <Icon icon={roundAccountBox} width={20} height={20} />
+    },
+    {
+      value: 'followers',
+      icon: <Icon icon={heartFill} width={20} height={20} />
+    },
+    {
+      value: 'friends',
+      icon: <Icon icon={peopleFill} width={20} height={20} />
+    },
+    {
+      value: 'gallery',
+      icon: <Icon icon={roundPermMedia} width={20} height={20} />
+    }
+  ];
+
+  const handleChangeTab = (newValue: string) => {
+    setCurrentTab(newValue);
+  };
   return (
     <Page title="Learn More">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         {network}
         {contract} {tokenId}
-        <Grid container spacing={3}>
-          <Grid item xs={6} sx={{ height: '800px' }}>
-            <Card sx={{ overflow: 'unset', position: 'unset', width: '100%', height: '500px' }}>
-              {' '}
-              Hello
-            </Card>
-          </Grid>
-          <Grid item xs={6}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper sx={{ display: 'flex', width: '100%' }} elevation={2}>
-                  <Stack direction="row" justifyContent="space-between" sx={{ width: '100%' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                      <CardContent sx={{ flex: '1 0 auto' }}>
-                        <Typography component="div" variant="h5">
-                          Play audio if the NFT is audio
-                        </Typography>
-                        <Typography variant="subtitle1" color="text.secondary" component="div">
-                          Mac Miller
-                        </Typography>
-                      </CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                        <IconButton aria-label="previous">
-                          <SkipPreviousIcon />
-                        </IconButton>
-                        <IconButton aria-label="play/pause">
-                          <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                        </IconButton>
-                        <IconButton aria-label="next">
-                          <SkipNextIcon />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                    <CardMedia
-                      component="img"
-                      sx={{ width: 151 }}
-                      image="https://static8.depositphotos.com/1052036/848/v/600/depositphotos_8480205-stock-illustration-music-doodle.jpg"
-                      alt="Live from space album cover"
-                    />
-                  </Stack>
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper elevation={2}>Hello</Paper>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
+        <Card
+          sx={{
+            mb: 3,
+            height: 280,
+            position: 'relative'
+          }}
+        >
+          <ProfileCover myProfile={myProfile} />
+
+          <TabsWrapperStyle>
+            <Tabs
+              value={currentTab}
+              scrollButtons="auto"
+              variant="scrollable"
+              allowScrollButtonsMobile
+              onChange={(e, value) => handleChangeTab(value)}
+            >
+              {PROFILE_TABS.map((tab) => (
+                <Tab
+                  disableRipple
+                  key={tab.value}
+                  value={tab.value}
+                  icon={tab.icon}
+                  label={capitalCase(tab.value)}
+                />
+              ))}
+            </Tabs>
+          </TabsWrapperStyle>
+        </Card>
       </Container>
     </Page>
   );
