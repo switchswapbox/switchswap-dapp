@@ -26,5 +26,6 @@ export const PATH_DASHBOARD = {
   funbox: {
     cruFaucet: path(ROOTS_DASHBOARD, '/funbox/cru-faucet'),
     maticFaucet: path(ROOTS_DASHBOARD, '/funbox/matic-faucet')
-  }
+  },
+  download: path(ROOTS_DASHBOARD, '/download')
 };

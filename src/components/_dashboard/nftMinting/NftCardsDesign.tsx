@@ -13,14 +13,15 @@ import { width } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
-function NftCardsDesign() {
-  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+export function NftCardsDesign() {
+  var { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
       title: state.reducerCustomizeQRCard.title,
       uploadedCid: state.reducerMintingProcess.uploadedCid
     };
   });
+  console.log(layoutIndex);
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
@@ -64,7 +65,7 @@ function NftCardsDesign() {
         borderRadius: 2,
         overflow: 'hidden',
         position: 'relative',
-        width: '90%',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column'
       }}
@@ -118,7 +119,7 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
     >
       <Box
         ref={cardNFTBoundingBox}
-        sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}
+        sx={{ display: 'flex', justifyContent: 'center', width: '90%' }}
       >
         <NftCardsDesign />
       </Box>

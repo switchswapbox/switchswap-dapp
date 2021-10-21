@@ -30,6 +30,8 @@ import { IRootState } from 'reduxStore';
 
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { PATH_DASHBOARD } from 'routes/paths';
+import { Link } from 'react-router-dom';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
@@ -216,6 +218,13 @@ export default function MintingProcess() {
                 Skip
               </Button>
             )}
+
+            <Link to={PATH_DASHBOARD.download} target="_blank" style={{ textDecoration: 'none' }}>
+              <Button variant="contained" sx={{ mr: 1 }}>
+                Download NFT Card
+              </Button>
+            </Link>
+            <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext} disabled={stepTwoNotDone}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
