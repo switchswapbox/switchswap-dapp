@@ -67,20 +67,21 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
         >
           <BallBeat color={'#637381'} loading={loading} />
         </Stack>
-
-        <Box
-          component="img"
-          src={imageUrl}
-          onLoad={() => setLoading(false)}
-          sx={{
-            borderRadius: 1.5,
-            top: 0,
-            width: '100%',
-            height: '200px',
-            objectFit: 'cover',
-            display: loading ? 'none' : 'block'
-          }}
-        />
+        <Link href={`#/assets/polygon/${contractAddress}/${tokenId}`}>
+          <Box
+            component="img"
+            src={imageUrl}
+            onLoad={() => setLoading(false)}
+            sx={{
+              borderRadius: 1.5,
+              top: 0,
+              width: '100%',
+              height: '200px',
+              objectFit: 'cover',
+              display: loading ? 'none' : 'block'
+            }}
+          />
+        </Link>
       </Box>
 
       <Stack spacing={1} sx={{ p: 2, pt: 1, pb: 1 }}>
