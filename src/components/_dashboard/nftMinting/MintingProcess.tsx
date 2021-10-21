@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // material
 import {
   Box,
@@ -29,21 +29,23 @@ import {
 import { IRootState } from 'reduxStore';
 
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
-import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { downloadNFT, resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
 import { PATH_DASHBOARD } from 'routes/paths';
 import { Link } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 export default function MintingProcess() {
-  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted, nftType } = useSelector(
+  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted, nftType, title } = useSelector(
     (state: IRootState) => {
       return {
         activeStep: state.reducerMintingProcess.activeStep || 0,
         stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
         stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
         nftMinted: state.reducerMintingProcess.nftMinted,
-        nftType: state.reducerMintingProcess.nftType
+        nftType: state.reducerMintingProcess.nftType,
+        title: state.reducerCustomizeQRCard.title
       };
     }
   );
@@ -118,6 +120,11 @@ export default function MintingProcess() {
   const handleReset = () => {
     dispatch(resetMintingProcessState());
     dispatch(resetQRCardInfo());
+  };
+
+  const handleDownload = () => {
+    console.log('step1 ok');
+    dispatch(downloadNFT({ download: true }));
   };
 
   return (
@@ -221,11 +228,9 @@ export default function MintingProcess() {
             )}
 
             {nftType !== 'withoutNftCard' ? (
-              <Link to={PATH_DASHBOARD.download} target="_blank" style={{ textDecoration: 'none' }}>
-                <Button variant="contained" sx={{ mr: 1 }}>
-                  Download NFT Card
-                </Button>
-              </Link>
+              <Button variant="contained" sx={{ mr: 1 }} onClick={handleDownload}>
+                Download NFT Card
+              </Button>
             ) : (
               <></>
             )}

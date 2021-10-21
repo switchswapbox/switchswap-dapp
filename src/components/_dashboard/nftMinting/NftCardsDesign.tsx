@@ -1,6 +1,6 @@
 // material
 import { Box } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
@@ -10,15 +10,17 @@ import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
 import html2canvas from 'html2canvas';
+import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
 
 // ----------------------------------------------------------------------
 
 export function NftCardsDesign() {
-  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+  const { layoutIndex, title, uploadedCid, download } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
       title: state.reducerCustomizeQRCard.title,
-      uploadedCid: state.reducerMintingProcess.uploadedCid
+      uploadedCid: state.reducerMintingProcess.uploadedCid,
+      download: state.reducerCustomizeQRCard.download
     };
   });
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
@@ -27,6 +29,8 @@ export function NftCardsDesign() {
       qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
+  const dispatch = useDispatch();
+
   const otherQRProps = useSelector((state: IRootState) => {
     // eslint-disable-next-line no-lone-blocks
     {
@@ -56,6 +60,34 @@ export function NftCardsDesign() {
       <SVGComponent qrcode={createQRCode} title={title} uploadedCid={uploadedCid as FileInfoType} />
     );
   }, [SVGComponent, createQRCode, title, uploadedCid]);
+
+  const downloadCard = function (href: string, name: string) {
+    var link = document.createElement('a');
+    link.download = name;
+    link.style.opacity = '0';
+    document.body.append(link);
+    link.href = href;
+    link.click();
+  };
+
+  useEffect(() => {
+    if (download) {
+      console.log('ok');
+      const nftCard = document.getElementById('nftCard') as HTMLElement;
+      html2canvas(nftCard, {
+        foreignObjectRendering: false
+      })
+        .then(function (canvas) {
+          let png = canvas.toDataURL('image/png'); // default png
+          downloadCard(png, `${title}.png`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    dispatch(downloadNFT({ download: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [download]);
 
   return (
     <Box
