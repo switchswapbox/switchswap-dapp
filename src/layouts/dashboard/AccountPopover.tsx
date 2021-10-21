@@ -11,10 +11,11 @@ import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
+import { IRootState } from 'reduxStore';
 
 import Identicons from '@nimiq/identicons';
-import { IRootState } from 'reduxStore';
 Identicons.svgPath = './static/identicons.min.svg';
+
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {

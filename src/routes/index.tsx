@@ -62,7 +62,8 @@ export default function Router() {
         {
           path: 'learn-more',
           element: <LearnMore />
-        }
+        },
+        { path: 'assets/:network/:contract/:tokenId', element: <AssetViewer /> }
       ]
     },
 
@@ -99,6 +100,7 @@ const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService/TermsOfService')));
 const NftCardDownload = Loadable(lazy(() => import('../pages/NftCardDownload')));
+const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
 
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
