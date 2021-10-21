@@ -72,21 +72,17 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
 
       <Stack spacing={3} sx={{ p: 3 }}>
         <Box>
-          <Box
-            component="img"
-            alt="post media"
-            src={assetAndOwner.imageUrl}
-            onLoad={() => setLoading(false)}
-            sx={{
-              // top: 0,
-              // width: 1,
-              // height: 1,
-              // borderRadius: 1,
-              // objectFit: 'cover',
-              // position: 'absolute',
-              display: loading ? 'none' : 'block'
-            }}
-          />
+          <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
+            <Box
+              component="img"
+              alt="post media"
+              src={assetAndOwner.imageUrl}
+              onLoad={() => setLoading(false)}
+              sx={{
+                display: loading ? 'none' : 'block'
+              }}
+            />
+          </Stack>
           <Stack
             direction="row"
             alignItems="center"
