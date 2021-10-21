@@ -1,42 +1,36 @@
 import { Icon } from '@iconify/react';
 import { useState, useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import roundSend from '@iconify/icons-ic/round-send';
 import heartFill from '@iconify/icons-eva/heart-fill';
 import shareFill from '@iconify/icons-eva/share-fill';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import messageSquareFill from '@iconify/icons-eva/message-square-fill';
-import roundAddPhotoAlternate from '@iconify/icons-ic/round-add-photo-alternate';
 // material
 import {
   Box,
   Link,
   Card,
   Stack,
-  Paper,
-  Avatar,
   Checkbox,
-  CardProps,
   Typography,
   CardHeader,
   IconButton,
   FormControlLabel
 } from '@mui/material';
-// @types
-import { UserPost } from '../../../@types/user';
 // utils
 import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
 import { MAvatar } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import { shortenAddress } from 'utils/formatAddress';
 
 // ----------------------------------------------------------------------
 
 export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [isLiked, setLiked] = useState(true);
-  const [likes, setLikes] = useState(5);
+  const [likes, setLikes] = useState(1);
 
   const handleLike = () => {
     setLiked(true);
@@ -59,7 +53,7 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
         avatar={<MAvatar src={assetAndOwner.ownerIcon} alt="uniqueIcon" />}
         title={
           <Link to="#" variant="subtitle2" color="text.primary" component={RouterLink}>
-            {assetAndOwner.ownerAddress}
+            {shortenAddress(assetAndOwner.ownerAddress, 8)}
           </Link>
         }
         subheader={

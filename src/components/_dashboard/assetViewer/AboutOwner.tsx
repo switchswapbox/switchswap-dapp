@@ -1,8 +1,3 @@
-import { Icon } from '@iconify/react';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton } from '@mui/material';
@@ -14,29 +9,9 @@ import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 
 import SvgIconStyle from '../../SvgIconStyle';
 import Identicons from '@nimiq/identicons';
+import { shortenAddress } from 'utils/formatAddress';
 
 Identicons.svgPath = './static/identicons.min.svg';
-
-// ----------------------------------------------------------------------
-
-const SOCIALS = [
-  {
-    name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={20} height={20} color="#1877F2" />
-  },
-  {
-    name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={20} height={20} color="#D7336D" />
-  },
-  {
-    name: 'Linkedin',
-    icon: <Icon icon={linkedinFill} width={20} height={20} color="#006097" />
-  },
-  {
-    name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={20} height={20} color="#1C9CEA" />
-  }
-];
 
 const CardMediaStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -110,18 +85,21 @@ export default function UserCard({ assetAndOwner }: { assetAndOwner: AssetAndOwn
       </CardMediaStyle>
 
       <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
-        Address
+        {shortenAddress(assetAndOwner.ownerAddress, 5)}
       </Typography>
       <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
         Polygon
       </Typography>
 
       <Box sx={{ textAlign: 'center', mt: 2, mb: 2.5 }}>
-        {SOCIALS.map((social) => (
-          <Tooltip key={social.name} title={social.name}>
-            <IconButton>{social.icon}</IconButton>
-          </Tooltip>
-        ))}
+        <Tooltip title="PolygonScan">
+          <IconButton
+            href={`https://polygonscan.com/address/${assetAndOwner.ownerAddress}`}
+            target="_blank"
+          >
+            <Box component="img" src="./static/icons/shared/polygon.svg" sx={{ height: 24 }} />
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Divider />

@@ -56,13 +56,15 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
         }
       }}
     >
-      <Box sx={{ p: 1, position: 'relative' }}>
-        <Box
-          component="img"
-          src={imageUrl}
-          sx={{ borderRadius: 1.5, top: 0, width: '100%', height: '200px', objectFit: 'cover' }}
-        />
-      </Box>
+      <Link href={`#/assets/polygon/${contractAddress}/${tokenId}`}>
+        <Box sx={{ p: 1, position: 'relative' }}>
+          <Box
+            component="img"
+            src={imageUrl}
+            sx={{ borderRadius: 1.5, top: 0, width: '100%', height: '200px', objectFit: 'cover' }}
+          />
+        </Box>
+      </Link>
 
       <Stack spacing={1} sx={{ p: 2, pt: 1, pb: 1 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">

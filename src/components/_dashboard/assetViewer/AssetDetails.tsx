@@ -1,11 +1,4 @@
-import { Icon } from '@iconify/react';
-import pinFill from '@iconify/icons-eva/pin-fill';
-import emailFill from '@iconify/icons-eva/email-fill';
-import roundBusinessCenter from '@iconify/icons-ic/round-business-center';
-// material
-import { styled } from '@mui/material/styles';
 import {
-  Link,
   Card,
   Typography,
   CardHeader,
@@ -15,33 +8,9 @@ import {
   Tooltip,
   IconButton
 } from '@mui/material';
-// @types
-import { Profile } from '../../../@types/user';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 
-// ----------------------------------------------------------------------
-const SOCIALS = [
-  {
-    name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={20} height={20} color="#1877F2" />
-  },
-  {
-    name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={20} height={20} color="#D7336D" />
-  },
-  {
-    name: 'Linkedin',
-    icon: <Icon icon={linkedinFill} width={20} height={20} color="#006097" />
-  },
-  {
-    name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={20} height={20} color="#1C9CEA" />
-  }
-];
+import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import { shortenAddress } from 'utils/formatAddress';
 
 export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   // const { quote, country, email, role, company, school } = profile;
@@ -54,14 +23,16 @@ export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAn
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2">Contract Address</Typography>
           <ButtonBase>
-            <Typography variant="body2">0xF123456</Typography>
+            <Typography variant="body2">
+              {shortenAddress(assetAndOwner.contractAddress, 5)}
+            </Typography>
           </ButtonBase>
         </Stack>
 
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2">Token ID</Typography>
           <ButtonBase>
-            <Typography variant="body2">123</Typography>
+            <Typography variant="body2">{assetAndOwner.tokenId}</Typography>
           </ButtonBase>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
@@ -74,11 +45,22 @@ export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAn
         </Stack>
       </Stack>
       <Box sx={{ textAlign: 'center', mb: 2 }}>
-        {SOCIALS.map((social) => (
-          <Tooltip key={social.name} title={social.name}>
-            <IconButton>{social.icon}</IconButton>
-          </Tooltip>
-        ))}
+        <Tooltip title="Transaction history">
+          <IconButton
+            href={`https://polygonscan.com/token/${assetAndOwner.contractAddress}?a=${assetAndOwner.tokenId}`}
+            target="_blank"
+          >
+            <Box component="img" src="./static/icons/shared/polygon.svg" sx={{ height: 24 }} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Opensea Viewer">
+          <IconButton
+            href={`https://opensea.io/assets/matic/${assetAndOwner.contractAddress}/${assetAndOwner.tokenId}`}
+            target="_blank"
+          >
+            <Box component="img" src="./static/icons/shared/opensea.svg" sx={{ height: 24 }} />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Card>
   );
