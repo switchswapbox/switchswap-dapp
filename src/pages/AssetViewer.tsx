@@ -102,64 +102,6 @@ export default function AssetViewer() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   Identicons.toDataUrl('0x123456').then((img: string) => {
-  //     setAssetOwnerProfile({ ...assetOwnerProfile, ownerIcon: img });
-  //   });
-  // }, []);
-
-  const asset = [
-    {
-      id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1',
-      author: {
-        id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b9',
-        avatarUrl: '/static/mock-images/avatars/avatar_2.jpg',
-        name: 'Caitlyn Kerluke'
-      },
-      isLiked: true,
-      createdAt: '2021-10-21T11:21:55.548Z',
-      media: '/static/mock-images/feeds/feed_1.jpg',
-      message: 'Assumenda nam repudiandae rerum fugiat vel maxime.',
-      personLikes: [
-        {
-          name: 'Laney Vazquez',
-          avatarUrl: '/static/mock-images/avatars/avatar_28.jpg'
-        },
-        {
-          name: 'Tiffany May',
-          avatarUrl: '/static/mock-images/avatars/avatar_29.jpg'
-        },
-        {
-          name: 'Dexter Shepherd',
-          avatarUrl: '/static/mock-images/avatars/avatar_30.jpg'
-        }
-      ],
-      comments: [
-        {
-          id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b8',
-          author: {
-            id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b9',
-            avatarUrl: '/static/mock-images/avatars/avatar_5.jpg',
-            name: 'Lainey Davidson'
-          },
-          createdAt: '2021-10-19T09:21:55.548Z',
-          message: 'Praesent venenatis metus at'
-        },
-        {
-          id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b10',
-          author: {
-            id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b11',
-            avatarUrl: '/static/mock-images/avatars/avatar_9.jpg',
-            name: 'Cristopher Cardenas'
-          },
-          createdAt: '2021-10-18T08:21:55.548Z',
-          message:
-            'Etiam rhoncus. Nullam vel sem. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Sed lectus.'
-        }
-      ]
-    }
-  ];
-
   const PROFILE_TABS = [
     {
       value: 'asset',

@@ -59,7 +59,7 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
         avatar={<MAvatar src={assetAndOwner.ownerIcon} alt="uniqueIcon" />}
         title={
           <Link to="#" variant="subtitle2" color="text.primary" component={RouterLink}>
-            Address
+            {assetAndOwner.ownerAddress}
           </Link>
         }
         subheader={
