@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { capitalCase } from 'change-case';
 
 // material
@@ -27,13 +27,16 @@ import { Block } from 'components/Block';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
-import { ProfileCover } from 'components/_dashboard/assetViewer';
+import { Asset } from 'components/_dashboard/assetViewer';
+
 import { Icon } from '@iconify/react';
 
 import heartFill from '@iconify/icons-eva/heart-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
 import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
+import Identicons from '@nimiq/identicons';
+Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
   zIndex: 9,
@@ -51,11 +54,11 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-export default function LearnMore() {
+export default function AssetViewer() {
   const { themeStretch } = useSettings();
   const { network, contract, tokenId } = useParams();
-  const [currentTab, setCurrentTab] = useState('profile');
-  const myProfile = {
+  const [currentTab, setCurrentTab] = useState('asset');
+  const assetOwnerProfile = {
     id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2',
     cover: '/static/mock-images/covers/cover_2.jpg',
     position: 'UI Designer',
@@ -74,22 +77,83 @@ export default function LearnMore() {
     twitterLink: 'https://www.twitter.com/caitlyn.kerluke'
   };
 
+  const asset = [
+    {
+      id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1',
+      author: {
+        id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b9',
+        avatarUrl: '/static/mock-images/avatars/avatar_2.jpg',
+        name: 'Caitlyn Kerluke'
+      },
+      isLiked: true,
+      createdAt: '2021-10-21T11:21:55.548Z',
+      media: '/static/mock-images/feeds/feed_1.jpg',
+      message: 'Assumenda nam repudiandae rerum fugiat vel maxime.',
+      personLikes: [
+        {
+          name: 'Laney Vazquez',
+          avatarUrl: '/static/mock-images/avatars/avatar_28.jpg'
+        },
+        {
+          name: 'Tiffany May',
+          avatarUrl: '/static/mock-images/avatars/avatar_29.jpg'
+        },
+        {
+          name: 'Dexter Shepherd',
+          avatarUrl: '/static/mock-images/avatars/avatar_30.jpg'
+        }
+      ],
+      comments: [
+        {
+          id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b8',
+          author: {
+            id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b9',
+            avatarUrl: '/static/mock-images/avatars/avatar_5.jpg',
+            name: 'Lainey Davidson'
+          },
+          createdAt: '2021-10-19T09:21:55.548Z',
+          message: 'Praesent venenatis metus at'
+        },
+        {
+          id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b10',
+          author: {
+            id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b11',
+            avatarUrl: '/static/mock-images/avatars/avatar_9.jpg',
+            name: 'Cristopher Cardenas'
+          },
+          createdAt: '2021-10-18T08:21:55.548Z',
+          message:
+            'Etiam rhoncus. Nullam vel sem. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Sed lectus.'
+        }
+      ]
+    }
+  ];
+
+  const [ownerIcon, setOwnerIcon] = useState<string>('');
+  useEffect(() => {
+    Identicons.toDataUrl('0x123456').then((img: string) => {
+      setOwnerIcon(img);
+    });
+  }, []);
+
   const PROFILE_TABS = [
     {
-      value: 'profile',
-      icon: <Icon icon={roundAccountBox} width={20} height={20} />
+      value: 'asset',
+      icon: <Icon icon={roundAccountBox} width={20} height={20} />,
+      component: <Asset assetOwnerProfile={assetOwnerProfile} asset={asset} ownerIcon={ownerIcon} />
     },
-    {
-      value: 'followers',
-      icon: <Icon icon={heartFill} width={20} height={20} />
-    },
-    {
-      value: 'friends',
-      icon: <Icon icon={peopleFill} width={20} height={20} />
-    },
+    // {
+    //   value: 'followers',
+    //   icon: <Icon icon={heartFill} width={20} height={20} />
+    // },
+    // {
+    //   value: 'friends',
+    //   icon: <Icon icon={peopleFill} width={20} height={20} />
+    // },
     {
       value: 'gallery',
-      icon: <Icon icon={roundPermMedia} width={20} height={20} />
+      icon: <Icon icon={roundPermMedia} width={20} height={20} />,
+      component: <Box />
     }
   ];
 
@@ -99,37 +163,10 @@ export default function LearnMore() {
   return (
     <Page title="Learn More">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        {network}
-        {contract} {tokenId}
-        <Card
-          sx={{
-            mb: 3,
-            height: 280,
-            position: 'relative'
-          }}
-        >
-          <ProfileCover myProfile={myProfile} />
-
-          <TabsWrapperStyle>
-            <Tabs
-              value={currentTab}
-              scrollButtons="auto"
-              variant="scrollable"
-              allowScrollButtonsMobile
-              onChange={(e, value) => handleChangeTab(value)}
-            >
-              {PROFILE_TABS.map((tab) => (
-                <Tab
-                  disableRipple
-                  key={tab.value}
-                  value={tab.value}
-                  icon={tab.icon}
-                  label={capitalCase(tab.value)}
-                />
-              ))}
-            </Tabs>
-          </TabsWrapperStyle>
-        </Card>
+        {PROFILE_TABS.map((tab) => {
+          const isMatched = tab.value === currentTab;
+          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+        })}
       </Container>
     </Page>
   );
