@@ -14,14 +14,13 @@ import { width } from '@mui/system';
 // ----------------------------------------------------------------------
 
 export function NftCardsDesign() {
-  var { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
       title: state.reducerCustomizeQRCard.title,
       uploadedCid: state.reducerMintingProcess.uploadedCid
     };
   });
-  console.log(layoutIndex);
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
