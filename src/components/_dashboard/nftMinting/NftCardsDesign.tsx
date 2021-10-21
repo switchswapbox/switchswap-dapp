@@ -13,7 +13,7 @@ import { width } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
-function NftCardsDesign() {
+export function NftCardsDesign() {
   const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
@@ -64,7 +64,7 @@ function NftCardsDesign() {
         borderRadius: 2,
         overflow: 'hidden',
         position: 'relative',
-        width: '90%',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column'
       }}
@@ -118,7 +118,7 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
     >
       <Box
         ref={cardNFTBoundingBox}
-        sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}
+        sx={{ display: 'flex', justifyContent: 'center', width: '90%' }}
       >
         <NftCardsDesign />
       </Box>
