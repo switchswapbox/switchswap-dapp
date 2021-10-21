@@ -24,16 +24,6 @@ import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 
 // ----------------------------------------------------------------------
-
-const IconStyle = styled(Icon)(({ theme }) => ({
-  width: 20,
-  height: 20,
-  marginTop: 1,
-  flexShrink: 0,
-  marginRight: theme.spacing(2)
-}));
-
-// ----------------------------------------------------------------------
 const SOCIALS = [
   {
     name: 'Facebook',

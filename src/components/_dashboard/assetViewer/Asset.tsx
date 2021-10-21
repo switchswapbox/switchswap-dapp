@@ -1,7 +1,5 @@
 // material
 import { Grid, Stack } from '@mui/material';
-// @types
-import { Profile as UserProfile, UserPost } from '../../../@types/user';
 //
 import AssetDetails from './AssetDetails';
 import AssetCard from './AssetCard';

@@ -36,10 +36,11 @@ import peopleFill from '@iconify/icons-eva/people-fill';
 import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import Identicons from '@nimiq/identicons';
-import { POLYGON_RPC } from 'assets/COMMON_VARIABLES';
+import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from 'assets/COMMON_VARIABLES';
 import { contractAddress } from 'utils/contractAddress';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
+import axios from 'axios';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -58,11 +59,28 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-export type AssetAndOwnerType = { ownerAddress: string; ownerIcon: string; balance: string };
+export type AssetAndOwnerType = {
+  ownerAddress: string;
+  ownerIcon: string;
+  balance: string;
+  imageUrl: string;
+  name: string;
+  description: string;
+};
 const initAssetAndOwner: AssetAndOwnerType = {
   ownerAddress: '',
   ownerIcon: '',
-  balance: '0'
+  balance: '0',
+  imageUrl: '',
+  name: '',
+  description: ''
+};
+
+const ipfsUriToCid = (ipfsUrl: string) => {
+  const CidSearch = ipfsUrl.match(/(Qm[\w]+)/);
+  if (CidSearch) {
+    return CidSearch[1];
+  } else return null;
 };
 
 export default function AssetViewer() {
@@ -88,16 +106,41 @@ export default function AssetViewer() {
 
       const ownerOfNFT = await contractEthersJs.ownerOf(tokenId);
       const balanceOfOwner = (await contractEthersJs.balanceOf(ownerOfNFT)).toString();
-      console.log(balanceOfOwner);
+      const tokenURI = await contractEthersJs.tokenURI(tokenId);
+
+      const tokenURICid = ipfsUriToCid(tokenURI);
 
       Identicons.toDataUrl(ownerOfNFT).then((img: string) => {
-        setAssetAndOwner({
+        setAssetAndOwner((assetAndOwner) => ({
           ...assetAndOwner,
           ownerIcon: img,
           balance: balanceOfOwner,
           ownerAddress: ownerOfNFT
-        });
+        }));
       });
+
+      if (tokenURICid) {
+        const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
+        axios.get(tokenURIHttp).then((response) => {
+          const name = response.data.name || '';
+          const description = response.data.description || '';
+
+          if (response.data && response.data.image) {
+            const imageCid = ipfsUriToCid(response.data.image);
+            if (imageCid) {
+              const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
+              setAssetAndOwner((assetAndOwner) => ({
+                ...assetAndOwner,
+                imageUrl,
+                name,
+                description
+              }));
+            }
+          }
+        });
+      }
+
+      console.log(balanceOfOwner);
     }
     fetchData();
   }, []);

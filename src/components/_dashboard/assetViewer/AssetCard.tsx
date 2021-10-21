@@ -79,7 +79,7 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
           <Box
             component="img"
             alt="post media"
-            src={assetAndOwner.ownerIcon}
+            src={assetAndOwner.imageUrl}
             sx={{
               top: 0,
               width: 1,
@@ -116,7 +116,8 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
           </IconButton>
         </Stack>
         <Stack>
-          <Typography variant="body1">Message</Typography>
+          <Typography variant="subtitle1">{assetAndOwner.name}</Typography>
+          <Typography variant="body2">{assetAndOwner.description}</Typography>
         </Stack>
       </Stack>
     </Card>
