@@ -29,17 +29,14 @@ import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
 import { MAvatar } from '../../@material-extend';
+import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+
 // ----------------------------------------------------------------------
 
-interface ProfilePostCardProps extends CardProps {
-  post: UserPost;
-  ownerIcon: string;
-}
-
-export default function AssetCard({ post, ownerIcon }: ProfilePostCardProps) {
+export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   const commentInputRef = useRef<HTMLInputElement>(null);
-  const [isLiked, setLiked] = useState(post.isLiked);
-  const [likes, setLikes] = useState(post.personLikes.length);
+  const [isLiked, setLiked] = useState(true);
+  const [likes, setLikes] = useState(5);
 
   const handleLike = () => {
     setLiked(true);
@@ -59,7 +56,7 @@ export default function AssetCard({ post, ownerIcon }: ProfilePostCardProps) {
     <Card>
       <CardHeader
         disableTypography
-        avatar={<MAvatar src={ownerIcon} alt="uniqueIcon" />}
+        avatar={<MAvatar src={assetAndOwner.ownerIcon} alt="uniqueIcon" />}
         title={
           <Link to="#" variant="subtitle2" color="text.primary" component={RouterLink}>
             Address
@@ -67,7 +64,7 @@ export default function AssetCard({ post, ownerIcon }: ProfilePostCardProps) {
         }
         subheader={
           <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
-            {fDate(post.createdAt)}
+            {fDate(Date.now())}
           </Typography>
         }
         action={
@@ -82,7 +79,7 @@ export default function AssetCard({ post, ownerIcon }: ProfilePostCardProps) {
           <Box
             component="img"
             alt="post media"
-            src={ownerIcon}
+            src={assetAndOwner.ownerIcon}
             sx={{
               top: 0,
               width: 1,
@@ -119,7 +116,7 @@ export default function AssetCard({ post, ownerIcon }: ProfilePostCardProps) {
           </IconButton>
         </Stack>
         <Stack>
-          <Typography variant="body1">{post.message}</Typography>
+          <Typography variant="body1">Message</Typography>
         </Stack>
       </Stack>
     </Card>

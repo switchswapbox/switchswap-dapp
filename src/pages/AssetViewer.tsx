@@ -36,6 +36,10 @@ import peopleFill from '@iconify/icons-eva/people-fill';
 import roundPermMedia from '@iconify/icons-ic/round-perm-media';
 import roundAccountBox from '@iconify/icons-ic/round-account-box';
 import Identicons from '@nimiq/identicons';
+import { POLYGON_RPC } from 'assets/COMMON_VARIABLES';
+import { contractAddress } from 'utils/contractAddress';
+import { ethers } from 'ethers';
+import { ABI } from 'utils/abi';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -54,28 +58,55 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
   }
 }));
 
+export type AssetAndOwnerType = { ownerAddress: string; ownerIcon: string; balance: string };
+const initAssetAndOwner: AssetAndOwnerType = {
+  ownerAddress: '',
+  ownerIcon: '',
+  balance: '0'
+};
+
 export default function AssetViewer() {
   const { themeStretch } = useSettings();
+  let networkRPC = '';
+
   const { network, contract, tokenId } = useParams();
+  switch (network) {
+    case 'polygon':
+      networkRPC = POLYGON_RPC[0];
+      break;
+    default:
+      networkRPC = '0';
+  }
+
   const [currentTab, setCurrentTab] = useState('asset');
-  const assetOwnerProfile = {
-    id: 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2',
-    cover: '/static/mock-images/covers/cover_2.jpg',
-    position: 'UI Designer',
-    follower: 14098,
-    following: 24578,
-    quote:
-      'Tart I love sugar plum I love oat cake. Sweet roll caramels I love jujubes. Topping cake wafer..',
-    country: 'Madagascar',
-    email: 'ashlynn_ohara62@gmail.com',
-    company: 'Gleichner, Mueller and Tromp',
-    school: 'Nikolaus - Leuschke',
-    role: 'Manager',
-    facebookLink: 'https://www.facebook.com/caitlyn.kerluke',
-    instagramLink: 'https://www.instagram.com/caitlyn.kerluke',
-    linkedinLink: 'https://www.linkedin.com/in/caitlyn.kerluke',
-    twitterLink: 'https://www.twitter.com/caitlyn.kerluke'
-  };
+  const [assetAndOwner, setAssetAndOwner] = useState<AssetAndOwnerType>(initAssetAndOwner);
+
+  useEffect(() => {
+    async function fetchData() {
+      const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
+      const contractEthersJs = new ethers.Contract(contractAddress, ABI, provider);
+
+      const ownerOfNFT = await contractEthersJs.ownerOf(tokenId);
+      const balanceOfOwner = (await contractEthersJs.balanceOf(ownerOfNFT)).toString();
+      console.log(balanceOfOwner);
+
+      Identicons.toDataUrl(ownerOfNFT).then((img: string) => {
+        setAssetAndOwner({
+          ...assetAndOwner,
+          ownerIcon: img,
+          balance: balanceOfOwner,
+          ownerAddress: ownerOfNFT
+        });
+      });
+    }
+    fetchData();
+  }, []);
+
+  // useEffect(() => {
+  //   Identicons.toDataUrl('0x123456').then((img: string) => {
+  //     setAssetOwnerProfile({ ...assetOwnerProfile, ownerIcon: img });
+  //   });
+  // }, []);
 
   const asset = [
     {
@@ -129,18 +160,11 @@ export default function AssetViewer() {
     }
   ];
 
-  const [ownerIcon, setOwnerIcon] = useState<string>('');
-  useEffect(() => {
-    Identicons.toDataUrl('0x123456').then((img: string) => {
-      setOwnerIcon(img);
-    });
-  }, []);
-
   const PROFILE_TABS = [
     {
       value: 'asset',
       icon: <Icon icon={roundAccountBox} width={20} height={20} />,
-      component: <Asset assetOwnerProfile={assetOwnerProfile} asset={asset} ownerIcon={ownerIcon} />
+      component: <Asset assetAndOwner={assetAndOwner} />
     },
     // {
     //   value: 'followers',

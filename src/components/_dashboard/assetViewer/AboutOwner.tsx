@@ -10,8 +10,11 @@ import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton } fro
 // import { fShortenNumber } from '../../../../utils/formatNumber';
 // @types
 //
+import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+
 import SvgIconStyle from '../../SvgIconStyle';
 import Identicons from '@nimiq/identicons';
+
 Identicons.svgPath = './static/identicons.min.svg';
 
 // ----------------------------------------------------------------------
@@ -66,7 +69,7 @@ const CoverImgStyle = styled('img')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function InfoItem(name: string, number: number) {
+function InfoItem(name: string, number: string) {
   return (
     <Grid item xs={6} sx={{ textAlign: 'center' }}>
       <Typography variant="caption" sx={{ mb: 0.5, color: 'text.secondary', display: 'block' }}>
@@ -77,7 +80,7 @@ function InfoItem(name: string, number: number) {
   );
 }
 
-export default function UserCard({ ownerIcon }: { ownerIcon: string }) {
+export default function UserCard({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   return (
     <Card>
       <CardMediaStyle>
@@ -94,7 +97,7 @@ export default function UserCard({ ownerIcon }: { ownerIcon: string }) {
         />
         <Avatar
           alt="Hello"
-          src={ownerIcon}
+          src={assetAndOwner.ownerIcon}
           sx={{
             width: 64,
             height: 64,
@@ -103,7 +106,7 @@ export default function UserCard({ ownerIcon }: { ownerIcon: string }) {
             transform: 'translateY(-50%)'
           }}
         />
-        <CoverImgStyle alt="cover" src={ownerIcon} />
+        <CoverImgStyle alt="cover" src={assetAndOwner.ownerIcon} />
       </CardMediaStyle>
 
       <Typography variant="subtitle1" align="center" sx={{ mt: 6 }}>
@@ -124,8 +127,8 @@ export default function UserCard({ ownerIcon }: { ownerIcon: string }) {
       <Divider />
 
       <Grid container sx={{ py: 3 }}>
-        {InfoItem('Total Minted NFT', 20)}
-        {InfoItem('Total rocket', 300)}
+        {InfoItem('Total Minted NFT', assetAndOwner.balance)}
+        {InfoItem('Total rocket', '0')}
       </Grid>
     </Card>
   );

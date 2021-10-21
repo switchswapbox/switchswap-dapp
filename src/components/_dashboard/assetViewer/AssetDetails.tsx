@@ -21,6 +21,8 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
+import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+
 // ----------------------------------------------------------------------
 
 const IconStyle = styled(Icon)(({ theme }) => ({
@@ -51,8 +53,8 @@ const SOCIALS = [
   }
 ];
 
-export default function AssetDetails({ profile }: { profile: Profile }) {
-  const { quote, country, email, role, company, school } = profile;
+export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
+  // const { quote, country, email, role, company, school } = profile;
 
   return (
     <Card>

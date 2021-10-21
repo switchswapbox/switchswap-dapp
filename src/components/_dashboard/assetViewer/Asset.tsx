@@ -7,31 +7,24 @@ import AssetDetails from './AssetDetails';
 import AssetCard from './AssetCard';
 import AboutOwner from './AboutOwner';
 // import ProfileSocialInfo from './ProfileSocialInfo';
-
+import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 // ----------------------------------------------------------------------
 
-type ProfileProps = {
-  assetOwnerProfile: UserProfile;
-  asset: UserPost[];
-  ownerIcon: string;
-};
-
-export default function Asset({ assetOwnerProfile, asset, ownerIcon }: ProfileProps) {
+export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
+  console.log(assetAndOwner);
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={4}>
         <Stack spacing={3}>
-          <AboutOwner ownerIcon={ownerIcon} />
-          <AssetDetails profile={assetOwnerProfile} />
+          <AboutOwner assetAndOwner={assetAndOwner} />
+          <AssetDetails assetAndOwner={assetAndOwner} />
           {/* <ProfileSocialInfo profile={myProfile} /> */}
         </Stack>
       </Grid>
 
       <Grid item xs={12} md={8}>
         <Stack spacing={3}>
-          {asset.map((asset) => (
-            <AssetCard key={asset.id} post={asset} ownerIcon={ownerIcon} />
-          ))}
+          <AssetCard assetAndOwner={assetAndOwner} />
         </Stack>
       </Grid>
     </Grid>
