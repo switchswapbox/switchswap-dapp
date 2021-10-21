@@ -15,6 +15,7 @@ const TWITTER = 'https://twitter.com/switchswapbox';
 const IPFS_GATEWAY_FOR_FETCHING_DATA = ['https://ipfs.io/ipfs'];
 const NUMBER_OF_NFT_IN_MANAGER_PAGE = 12;
 const GAS_PRICE = '35000000000';
+const POLYGON_RPC = ['https://polygon-rpc.com/'];
 
 export {
   CRUST_WALLET_WIKI,
@@ -28,5 +29,6 @@ export {
   TWITTER,
   IPFS_GATEWAY_FOR_FETCHING_DATA,
   NUMBER_OF_NFT_IN_MANAGER_PAGE,
-  GAS_PRICE
+  GAS_PRICE,
+  POLYGON_RPC
 };

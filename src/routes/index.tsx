@@ -62,7 +62,8 @@ export default function Router() {
         {
           path: 'learn-more',
           element: <LearnMore />
-        }
+        },
+        { path: 'assets/:network/:contract/:tokenId', element: <AssetViewer /> }
       ]
     },
 
@@ -80,6 +81,7 @@ export default function Router() {
       element: <MainLayout />,
       children: [{ path: 'terms-of-service', element: <TermsOfService /> }]
     },
+    { path: '/', children: [{ path: 'download', element: <NftCardDownload /> }] },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
 }
@@ -97,6 +99,8 @@ const MaticFaucet = Loadable(lazy(() => import('../pages/MaticFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService/TermsOfService')));
+const NftCardDownload = Loadable(lazy(() => import('../pages/NftCardDownload')));
+const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
 
 // Main
 const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
