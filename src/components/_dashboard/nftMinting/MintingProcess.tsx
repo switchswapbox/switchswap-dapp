@@ -36,13 +36,14 @@ import { Link } from 'react-router-dom';
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 export default function MintingProcess() {
-  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted } = useSelector(
+  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted, nftType } = useSelector(
     (state: IRootState) => {
       return {
         activeStep: state.reducerMintingProcess.activeStep || 0,
         stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
         stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
-        nftMinted: state.reducerMintingProcess.nftMinted
+        nftMinted: state.reducerMintingProcess.nftMinted,
+        nftType: state.reducerMintingProcess.nftType
       };
     }
   );
@@ -219,11 +220,15 @@ export default function MintingProcess() {
               </Button>
             )}
 
-            <Link to={PATH_DASHBOARD.download} target="_blank" style={{ textDecoration: 'none' }}>
-              <Button variant="contained" sx={{ mr: 1 }}>
-                Download NFT Card
-              </Button>
-            </Link>
+            {nftType !== 'withoutNftCard' ? (
+              <Link to={PATH_DASHBOARD.download} target="_blank" style={{ textDecoration: 'none' }}>
+                <Button variant="contained" sx={{ mr: 1 }}>
+                  Download NFT Card
+                </Button>
+              </Link>
+            ) : (
+              <></>
+            )}
             <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext} disabled={stepTwoNotDone}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
