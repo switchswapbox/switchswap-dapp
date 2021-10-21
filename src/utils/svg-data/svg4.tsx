@@ -113,17 +113,20 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
           <foreignObject x="50" y="100" width="300" height="300">
             {qrcode}
           </foreignObject>
-          <foreignObject x="395" y="110" width="270" height="100">
-            <Grid container alignItems="center" height="100%">
-              <Typography
-                align="center"
-                variant="subtitle1"
-                sx={{ fontSize: 16, fontFamily: 'Roboto', width: '100%' }}
-              >
-                {title === '' || undefined ? 'Your title' : title}
-              </Typography>
-            </Grid>
-          </foreignObject>
+          <svg x="395" y="110" width="270" height="100">
+            <rect x="0" y="0" width="270" height="100" fill="none" />
+            <text
+              x="50%"
+              y="50%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              font-family="Roboto"
+              fontSize="16"
+              font-weight="bold"
+            >
+              {title === '' || undefined ? 'Your title' : title}
+            </text>
+          </svg>
           <foreignObject x="395" y="210" width="270" height="170">
             <Grid
               container

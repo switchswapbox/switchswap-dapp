@@ -9,7 +9,7 @@ import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
 import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
-import { width } from '@mui/system';
+import html2canvas from 'html2canvas';
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ export function NftCardsDesign() {
         value={`${IPFS_GATEWAY_FOR_FETCHING_DATA}/${uploadedCid ? uploadedCid.cid : ''}`}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
-        icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
+        icon={icon !== '' ? `./static/icons/shared/${icon}.svg` : ''}
         iconScale={0.2}
         {...otherQRProps}
       />
@@ -59,6 +59,7 @@ export function NftCardsDesign() {
 
   return (
     <Box
+      id="nftCard"
       sx={{
         zIndex: 0,
         borderRadius: 2,
