@@ -24,6 +24,7 @@ import { fShortenNumber } from '../../../utils/formatNumber';
 import { MAvatar } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { shortenAddress } from 'utils/formatAddress';
+import { LineScalePulseOutRapid } from 'react-pure-loaders';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [isLiked, setLiked] = useState(true);
   const [likes, setLikes] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const handleLike = () => {
     setLiked(true);
@@ -69,20 +71,30 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
       />
 
       <Stack spacing={3} sx={{ p: 3 }}>
-        <Box sx={{ position: 'relative', pt: 'calc(100% / 16 * 9)' }}>
+        <Box>
           <Box
             component="img"
             alt="post media"
             src={assetAndOwner.imageUrl}
+            onLoad={() => setLoading(false)}
             sx={{
-              top: 0,
-              width: 1,
-              height: 1,
-              borderRadius: 1,
-              objectFit: 'cover',
-              position: 'absolute'
+              // top: 0,
+              // width: 1,
+              // height: 1,
+              // borderRadius: 1,
+              // objectFit: 'cover',
+              // position: 'absolute',
+              display: loading ? 'none' : 'block'
             }}
           />
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: '100%', display: loading ? 'flex' : 'none', mt: 5 }}
+          >
+            <LineScalePulseOutRapid color={'#637381'} loading={loading} />
+          </Stack>
         </Box>
 
         <Stack direction="row" alignItems="center">
