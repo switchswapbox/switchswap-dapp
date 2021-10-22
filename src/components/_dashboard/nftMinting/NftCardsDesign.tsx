@@ -40,6 +40,25 @@ export function NftCardsDesign() {
     }
   });
   const SVGComponent = svgArray[layoutIndex || 0];
+  const [url, setUrl] = useState('');
+
+  useMemo(() => {
+    if (icon !== '') {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const base_image = new Image();
+      base_image.onload = function () {
+        canvas.width = base_image.width;
+        canvas.height = base_image.height;
+        context?.drawImage(base_image, 0, 0);
+        setUrl(canvas.toDataURL());
+      };
+
+      base_image.src = `./static/mock-images/middle-qr-logo/${icon}.png`;
+    } else {
+      setUrl('');
+    }
+  }, [icon]);
 
   const createQRCode = useMemo(() => {
     const { Component } = qrStyles[qrStyleName];
@@ -48,12 +67,12 @@ export function NftCardsDesign() {
         value={`${IPFS_GATEWAY_FOR_FETCHING_DATA}/${uploadedCid ? uploadedCid.cid : ''}`}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
-        icon={icon !== '' ? `./static/icons/shared/${icon}.svg` : ''}
+        icon={url}
         iconScale={0.2}
         {...otherQRProps}
       />
     );
-  }, [icon, otherQRProps, qrStyleName, uploadedCid]);
+  }, [qrStyleName, uploadedCid, url, otherQRProps]);
 
   const createQRCard = useMemo(() => {
     return (
@@ -72,7 +91,6 @@ export function NftCardsDesign() {
 
   useEffect(() => {
     if (download) {
-      console.log('ok');
       const nftCard = document.getElementById('nftCard') as HTMLElement;
       html2canvas(nftCard, {
         foreignObjectRendering: false

@@ -123,7 +123,6 @@ export default function MintingProcess() {
   };
 
   const handleDownload = () => {
-    console.log('step1 ok');
     dispatch(downloadNFT({ download: true }));
   };
 
