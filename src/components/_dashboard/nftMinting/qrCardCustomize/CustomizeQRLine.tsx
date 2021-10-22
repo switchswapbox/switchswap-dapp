@@ -39,27 +39,31 @@ function CustomizeQRLine() {
   const dispatch = useDispatch();
 
   function handleSelectFuncType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrLine: {
-            funcType: funcTypes[value - 1]
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrLine: {
+              funcType: funcTypes[value - 1]
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleSelectPosType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrLine: {
-            posType: types[value - 1]
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrLine: {
+              posType: types[value - 1]
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handlePosColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
@@ -75,15 +79,17 @@ function CustomizeQRLine() {
   }
 
   function handleSelectDirection(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrLine: {
-            direction: directions[value - 1]
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrLine: {
+              direction: directions[value - 1]
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleLineWidth(event: any) {

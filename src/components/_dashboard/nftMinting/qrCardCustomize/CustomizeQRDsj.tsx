@@ -43,15 +43,17 @@ function CustomizeqrDsj() {
   }
 
   function handleSelectAnchorPointType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrDsj: {
-            posType: anchorPointTypes[value - 1] as QRDsjOtherPropsPosTypes
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrDsj: {
+              posType: anchorPointTypes[value - 1] as QRDsjOtherPropsPosTypes
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handlePosWidthChange(event: any) {
