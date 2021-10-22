@@ -385,7 +385,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
             alignItems="center"
             justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
           >
-            <Scrollbar sx={{ maxWidth: '331px' }}>
+            <Scrollbar sx={{ maxWidth: '111px' }}>
               <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
                 <ToggleButton
                   value="crust"
