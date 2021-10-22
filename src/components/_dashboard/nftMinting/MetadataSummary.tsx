@@ -30,19 +30,23 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
   const dispatch = useDispatch();
 
   const handleSelectLayout = (event: React.ChangeEvent<unknown>, value: number) => {
-    dispatch(
-      changeQRCardGeneralInfo({
-        layout: value - 1
-      })
-    );
+    if (value) {
+      dispatch(
+        changeQRCardGeneralInfo({
+          layout: value - 1
+        })
+      );
+    }
   };
 
   const handleSelectQRStyle = (event: React.ChangeEvent<unknown>, value: number) => {
-    dispatch(
-      changeQRCardGeneralInfo({
-        qrStyleName: qrStylesList[value - 1] as qrStyleNameType
-      })
-    );
+    if (value) {
+      dispatch(
+        changeQRCardGeneralInfo({
+          qrStyleName: qrStylesList[value - 1] as qrStyleNameType
+        })
+      );
+    }
   };
 
   return (

@@ -23,39 +23,45 @@ function CustomizeQRFunc() {
   const dispatch = useDispatch();
 
   function handleSelectFuncType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrFunc: {
-            funcType: funcTypes[value - 1]
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrFunc: {
+              funcType: funcTypes[value - 1]
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleSelectType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrFunc: {
-            type: types[value - 1]
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrFunc: {
+              type: types[value - 1]
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleSelectPosType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrFunc: {
-            posType: posTypes[value - 1]
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrFunc: {
+              posType: posTypes[value - 1]
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleInnerPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {

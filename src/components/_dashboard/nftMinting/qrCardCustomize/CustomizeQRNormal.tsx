@@ -34,15 +34,17 @@ function CustomizeQRNormal() {
   const dispatch = useDispatch();
 
   function handleSelectInnerPointType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrNormal: {
-            type: innerPointTypes[value - 1] as QRNormalOtherPropsTypes
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrNormal: {
+              type: innerPointTypes[value - 1] as QRNormalOtherPropsTypes
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleInnerPointSizeChange(event: any) {
@@ -83,15 +85,17 @@ function CustomizeQRNormal() {
   }
 
   function handleSelectAnchorPointType(event: React.ChangeEvent<unknown>, value: number) {
-    dispatch(
-      changeOtherQRProps({
-        otherQRProps: {
-          qrNormal: {
-            posType: anchorPointTypes[value - 1] as QRNormalOtherPropsPosTypes
+    if (value) {
+      dispatch(
+        changeOtherQRProps({
+          otherQRProps: {
+            qrNormal: {
+              posType: anchorPointTypes[value - 1] as QRNormalOtherPropsPosTypes
+            }
           }
-        }
-      })
-    );
+        })
+      );
+    }
   }
 
   function handleAnchorPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
