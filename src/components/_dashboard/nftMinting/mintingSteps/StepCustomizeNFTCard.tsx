@@ -41,6 +41,7 @@ import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
+import html2canvas from 'html2canvas';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -123,6 +124,8 @@ function TitleAndDescription() {
 function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
 
+  let nftCardCidTemp = '';
+
   const {
     nftType,
     stepTwoNotDone,
@@ -131,6 +134,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     alignment,
     uploadedCid,
     metadataCid,
+    nftCardCid,
     srcImage,
     qrStyleName,
     otherQRProps
@@ -143,6 +147,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       alignment: state.reducerMintingProcess.alignment,
       uploadedCid: state.reducerMintingProcess.uploadedCid,
       metadataCid: state.reducerMintingProcess.metadataCid,
+      nftCardCid: state.reducerMintingProcess.nftCardCid,
       srcImage: state.reducerMintingProcess.srcImage,
       qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
       otherQRProps: state.reducerCustomizeQRCard.otherQRProps
@@ -152,26 +157,76 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
 
   const { CustomProps } = qrStyles[qrStyleName as qrStyleNameType];
 
+  function dataURLtoBlob(dataurl: string) {
+    const arr = dataurl.split(',');
+    const searchMime = arr[0].match(/:(.*?);/);
+    let mime = '';
+    if (searchMime && searchMime[1]) {
+      mime = searchMime[1];
+    }
+
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  }
+
+  function uploadNFTCardW3GatewayPromise(authHeader: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const nftCard = document.getElementById('nftCard') as HTMLElement;
+      html2canvas(nftCard, {
+        foreignObjectRendering: false
+      })
+        .then(function (canvas) {
+          let pngDataUrl = canvas.toDataURL('image/png'); // default png
+          const pngBlob = dataURLtoBlob(pngDataUrl);
+          const ipfs = create({
+            url: ipfsGateway + '/api/v0',
+            headers: {
+              authorization: 'Basic ' + authHeader
+            }
+          });
+          ipfs.add(pngBlob as Blob).then((added) => {
+            nftCardCidTemp = added.cid.toV0().toString();
+            dispatch(changeMintingProcessState({ nftCardCid: added.cid.toV0().toString() }));
+            resolve({ cid: added.cid.toV0().toString(), size: added.size });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  }
+
   function uploadMetadataW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      setMetadataUploading(true);
       const ipfs = create({
         url: ipfsGateway + '/api/v0',
         headers: {
           authorization: 'Basic ' + authHeader
         }
       });
+      console.log(
+        `ipfs://${
+          nftType !== 'withoutNftCard' ? nftCardCidTemp : uploadedCid ? uploadedCid.cid : ''
+        }`
+      );
+      console.log(nftCardCidTemp);
       const metadata = {
         name: nameNft,
         description: descNft,
-        image: `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
+        image: `ipfs://${
+          nftType !== 'withoutNftCard' ? nftCardCidTemp : uploadedCid ? uploadedCid.cid : ''
+        }`,
         fileName: uploadedCid ? uploadedCid.name : '',
         size: uploadedCid ? uploadedCid.size : 0
       };
       ipfs
         .add(JSON.stringify(metadata))
         .then((added) => {
-          console.log(added);
           setMetadataUploading(false);
           dispatch(changeMintingProcessState({ stepTwoNotDone: false }));
           dispatch(changeMintingProcessState({ metadataCid: added.cid.toV0().toString() }));
@@ -216,13 +271,15 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     }
     const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
 
-    uploadMetadataW3GatewayPromise(authHeader)
-      .then((metadataInfo) => {
-        pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setMetadataUploading(true);
+
+    if (nftType !== 'withoutNftCard') {
+      const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
+      pinW3Crust(authHeader, nftCardInfo.cid, 'nftcard');
+    }
+
+    const metadataInfo = await uploadMetadataW3GatewayPromise(authHeader);
+    pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
   };
 
   const uploadMetadataMetamask = async () => {
@@ -243,13 +300,15 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
 
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
 
-        uploadMetadataW3GatewayPromise(authHeader)
-          .then((metadataInfo) => {
-            pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        setMetadataUploading(true);
+
+        if (nftType !== 'withoutNftCard') {
+          const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
+          pinW3Crust(authHeader, nftCardInfo.cid, 'nftcard');
+        }
+
+        const metadataInfo = await uploadMetadataW3GatewayPromise(authHeader);
+        pinW3Crust(authHeader, metadataInfo.cid, 'metadata');
       } else {
         onSnackbarAction(
           'warning',
@@ -352,7 +411,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
                     sx={{ height: '24px', width: '32px' }}
                   />
                 </ToggleButton>
-                <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
+                {/* <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
                   <Box
                     component="img"
                     src="./static/icons/shared/solana.svg"
@@ -379,7 +438,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
                     src="./static/icons/shared/avalanche.svg"
                     sx={{ height: '24px', width: '32px' }}
                   />
-                </ToggleButton>
+                </ToggleButton> */}
               </ToggleButtonGroup>
             </Scrollbar>
           </Stack>
@@ -406,9 +465,37 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
               <Icon icon="teenyicons:certificate-outline" color="black" />
             </SvgIcon>
             <Stack direction="column">
-              <Typography variant="subtitle2">Uploaded successfully to Crust Network</Typography>
+              <Typography variant="subtitle2">
+                Metadata is uploaded successfully to Crust Network
+              </Typography>
               <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                 CID: {metadataCid}
+              </Typography>
+            </Stack>
+          </Stack>
+        </Box>
+      )}
+      {nftCardCid !== '' && (
+        <Box
+          sx={{
+            my: 1,
+            px: 2,
+            py: 1,
+            borderRadius: 1,
+            border: (theme) => `solid 1px ${theme.palette.divider}`,
+            bgcolor: '#C8FACD'
+          }}
+        >
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <SvgIcon color="action">
+              <Icon icon="teenyicons:certificate-outline" color="black" />
+            </SvgIcon>
+            <Stack direction="column">
+              <Typography variant="subtitle2">
+                NFT Card is uploaded successfully to Crust Network
+              </Typography>
+              <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+                CID: {nftCardCid}
               </Typography>
             </Stack>
           </Stack>

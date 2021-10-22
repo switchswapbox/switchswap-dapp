@@ -14,6 +14,7 @@ export interface MintingProcessState {
   alignment?: MintingProcessStateAlignement;
   uploadedCid?: FileInfoType;
   metadataCid?: string;
+  nftCardCid?: string;
   srcImage?: string;
   transactionHash?: string;
   isMinting?: boolean;
@@ -41,6 +42,7 @@ const initialMintingProcessState: MintingProcessState = {
   alignment: 'crust',
   uploadedCid: { cid: '', name: '', size: 0 },
   metadataCid: '',
+  nftCardCid: '',
   srcImage: '',
   transactionHash: '',
   isMinting: false,
