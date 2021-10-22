@@ -17,6 +17,7 @@ import { RESET_STATE } from 'reduxStore';
 
 export const CHANGE_QR_CARD_GENERAL_INFO = 'CHANGE_QR_CARD_GENERAL_INFO';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
+export const DOWNLOAD = 'DOWNLOAD';
 
 export type qrStyleNameType =
   | 'qrNormal'
@@ -42,6 +43,7 @@ export interface InfoQRCard {
   title?: string;
   icon?: string;
   otherQRProps?: OtherQRProps;
+  download?: boolean;
 }
 
 export const changeQRCardGeneralInfo = (state: InfoQRCard) => ({
@@ -58,6 +60,11 @@ export const resetQRCardInfo = () => ({
   type: RESET_STATE
 });
 
+export const downloadNFT = (state: InfoQRCard) => ({
+  type: DOWNLOAD,
+  state: state
+});
+
 // init state
 const initialQRCard: InfoQRCard = {
   layout: 0,
@@ -71,7 +78,8 @@ const initialQRCard: InfoQRCard = {
     qrBubble: defaultQRBubbleOtherProps,
     qrFunc: defaultQRFuncOtherProps,
     qrLine: defaultQRLineOtherProps
-  }
+  },
+  download: false
 };
 
 export const reducerCustomizeQRCard = (
@@ -95,6 +103,8 @@ export const reducerCustomizeQRCard = (
     }
     case RESET_STATE:
       return initialQRCard;
+    case DOWNLOAD:
+      return { ...state, ...action.state };
     default:
       return state;
   }

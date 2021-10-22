@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Grid,
   List,
@@ -49,8 +50,13 @@ export default function StepConfigureNFT() {
   const stepOneNotDone = useSelector((state: IRootState) => {
     return state.reducerMintingProcess.stepOneNotDone as boolean;
   });
-  const [toggle, setToggle] = useState(['withoutNftCard']);
+  const [toggle, setToggle] = useState(['simplified']);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(changeMintingProcessState({ nftType: 'simplified' }));
+  }, []);
 
   const handleToggle = (value: string) => () => {
     const currentIndex = toggle.indexOf(value);
@@ -62,8 +68,8 @@ export default function StepConfigureNFT() {
       dispatch(changeMintingProcessState({ nftType: 'simplified' }));
       setToggle(['simplified']);
     } else {
-      dispatch(changeMintingProcessState({ nftType: 'withAuthorReg' }));
-      setToggle(['withAuthorReg']);
+      dispatch(changeMintingProcessState({ nftType: 'simplified' }));
+      setToggle(['simplified']);
     }
   };
   return (
@@ -95,7 +101,7 @@ export default function StepConfigureNFT() {
           </ListWrapperStyle>
           <ListWrapperStyle sx={{ mt: 2 }}>
             <List subheader={<ListSubheader>NFT Type</ListSubheader>}>
-              <ListItemButton onClick={handleToggle('withAuthorReg')} disabled={!stepOneNotDone}>
+              <ListItemButton onClick={handleToggle('withAuthorReg')} disabled={true}>
                 <ListItemIcon>
                   <SvgIcon>
                     <Icon icon="fxemoji:rocket" />

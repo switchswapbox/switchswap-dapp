@@ -1,6 +1,6 @@
 // material
 import { Box } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
@@ -9,16 +9,18 @@ import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
 import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
-import { width } from '@mui/system';
+import html2canvas from 'html2canvas';
+import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
 
 // ----------------------------------------------------------------------
 
 export function NftCardsDesign() {
-  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+  const { layoutIndex, title, uploadedCid, download } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
       title: state.reducerCustomizeQRCard.title,
-      uploadedCid: state.reducerMintingProcess.uploadedCid
+      uploadedCid: state.reducerMintingProcess.uploadedCid,
+      download: state.reducerCustomizeQRCard.download
     };
   });
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
@@ -27,6 +29,8 @@ export function NftCardsDesign() {
       qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
+  const dispatch = useDispatch();
+
   const otherQRProps = useSelector((state: IRootState) => {
     // eslint-disable-next-line no-lone-blocks
     {
@@ -36,6 +40,25 @@ export function NftCardsDesign() {
     }
   });
   const SVGComponent = svgArray[layoutIndex || 0];
+  const [url, setUrl] = useState('');
+
+  useMemo(() => {
+    if (icon !== '') {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const base_image = new Image();
+      base_image.onload = function () {
+        canvas.width = base_image.width;
+        canvas.height = base_image.height;
+        context?.drawImage(base_image, 0, 0);
+        setUrl(canvas.toDataURL());
+      };
+
+      base_image.src = `./static/mock-images/middle-qr-logo/${icon}.png`;
+    } else {
+      setUrl('');
+    }
+  }, [icon]);
 
   const createQRCode = useMemo(() => {
     const { Component } = qrStyles[qrStyleName];
@@ -44,12 +67,12 @@ export function NftCardsDesign() {
         value={`${IPFS_GATEWAY_FOR_FETCHING_DATA}/${uploadedCid ? uploadedCid.cid : ''}`}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
-        icon={icon !== '' ? `./static/mock-images/middle-qr-logo/${icon}.png` : ''}
+        icon={url}
         iconScale={0.2}
         {...otherQRProps}
       />
     );
-  }, [icon, otherQRProps, qrStyleName, uploadedCid]);
+  }, [qrStyleName, uploadedCid, url, otherQRProps]);
 
   const createQRCard = useMemo(() => {
     return (
@@ -57,8 +80,36 @@ export function NftCardsDesign() {
     );
   }, [SVGComponent, createQRCode, title, uploadedCid]);
 
+  const downloadCard = function (href: string, name: string) {
+    var link = document.createElement('a');
+    link.download = name;
+    link.style.opacity = '0';
+    document.body.append(link);
+    link.href = href;
+    link.click();
+  };
+
+  useEffect(() => {
+    if (download) {
+      const nftCard = document.getElementById('nftCard') as HTMLElement;
+      html2canvas(nftCard, {
+        foreignObjectRendering: false
+      })
+        .then(function (canvas) {
+          let png = canvas.toDataURL('image/png'); // default png
+          downloadCard(png, `${title}.png`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    dispatch(downloadNFT({ download: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [download]);
+
   return (
     <Box
+      id="nftCard"
       sx={{
         zIndex: 0,
         borderRadius: 2,

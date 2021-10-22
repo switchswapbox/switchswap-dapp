@@ -343,7 +343,7 @@ export default function UploadMultiFile({
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
-                    <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
+                    {/* <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
                       <Box
                         component="img"
                         src="./static/icons/shared/solana.svg"
@@ -370,7 +370,7 @@ export default function UploadMultiFile({
                         src="./static/icons/shared/avalanche.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
-                    </ToggleButton>
+                    </ToggleButton> */}
                   </ToggleButtonGroup>
                 </Scrollbar>
               </Stack>

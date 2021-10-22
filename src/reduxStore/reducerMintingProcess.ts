@@ -14,6 +14,7 @@ export interface MintingProcessState {
   alignment?: MintingProcessStateAlignement;
   uploadedCid?: FileInfoType;
   metadataCid?: string;
+  nftCardCid?: string;
   srcImage?: string;
   transactionHash?: string;
   isMinting?: boolean;
@@ -33,6 +34,7 @@ export const resetMintingProcessState = () => ({
 // init state
 const initialMintingProcessState: MintingProcessState = {
   activeStep: 0,
+  nftType: 'withoutNftCard',
   stepOneNotDone: true,
   stepTwoNotDone: true,
   nameNft: '',
@@ -40,6 +42,7 @@ const initialMintingProcessState: MintingProcessState = {
   alignment: 'crust',
   uploadedCid: { cid: '', name: '', size: 0 },
   metadataCid: '',
+  nftCardCid: '',
   srcImage: '',
   transactionHash: '',
   isMinting: false,
