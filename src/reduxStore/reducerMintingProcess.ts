@@ -33,6 +33,7 @@ export const resetMintingProcessState = () => ({
 // init state
 const initialMintingProcessState: MintingProcessState = {
   activeStep: 0,
+  nftType: 'withoutNftCard',
   stepOneNotDone: true,
   stepTwoNotDone: true,
   nameNft: '',
