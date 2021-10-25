@@ -63,11 +63,11 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
             {fDate(Date.now())}
           </Typography>
         }
-        action={
-          <IconButton>
-            <Icon icon={moreVerticalFill} width={20} height={20} />
-          </IconButton>
-        }
+        // action={
+        //   <IconButton>
+        //     <Icon icon={moreVerticalFill} width={20} height={20} />
+        //   </IconButton>
+        // }
       />
 
       <Stack spacing={3} sx={{ p: 3 }}>
@@ -93,7 +93,7 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
           </Stack>
         </Box>
 
-        <Stack direction="row" alignItems="center">
+        {/* <Stack direction="row" alignItems="center">
           <FormControlLabel
             control={
               <Checkbox
@@ -116,7 +116,7 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
           <IconButton>
             <Icon icon={shareFill} width={20} height={20} />
           </IconButton>
-        </Stack>
+        </Stack> */}
         <Stack>
           <Typography variant="subtitle1">{assetAndOwner.name}</Typography>
           <Typography variant="body2">{assetAndOwner.description}</Typography>
