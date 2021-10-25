@@ -132,6 +132,9 @@ interface SliderSVGCardProps {
 
 export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps) {
   const cardNFTBoundingBox = useRef<HTMLHeadingElement>(null);
+  const qrStyleName = useSelector((state: IRootState) => {
+    return state.reducerCustomizeQRCard.qrStyleName;
+  });
 
   const topParent = parentBoundingBox?.current?.offsetTop || 0;
   const heightParent = parentBoundingBox?.current?.clientHeight || 0;
@@ -139,18 +142,27 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
 
   const offset = useOffSetTopDistance();
   const [offsetWithCondition, setOffsetWithCondition] = useState(0);
+  const [isBottom, setBottom] = useState(false);
 
   useEffect(() => {
     const topNFT = cardNFTBoundingBox?.current?.offsetTop || 0;
     if (topParent + heightParent > topNFT + heightNFT) {
-      setOffsetWithCondition(offset);
+      if (!isBottom) {
+        setOffsetWithCondition(offset);
+      }
     } else if (offset < offsetWithCondition) {
       setOffsetWithCondition(offset);
+      setBottom(false);
     } else {
       setOffsetWithCondition((prev) => prev - (topNFT + heightNFT - (topParent + heightParent)));
+      setBottom(true);
     }
-  }, [heightNFT, heightParent, offset, offsetWithCondition, topParent]);
+  }, [heightNFT, heightParent, isBottom, offset, offsetWithCondition, topParent]);
   const paddingTopPlus = 100;
+
+  useEffect(() => {
+    setBottom(false);
+  }, [qrStyleName]);
 
   return (
     <Box
