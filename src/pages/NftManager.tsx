@@ -158,7 +158,7 @@ export default function NftManager() {
     if (value) {
       setLoading(true);
       setPage(value);
-      navigate(`/gallery/universe/${value}`);
+      navigate(`/nft-manager/${value}`);
     }
   };
 
