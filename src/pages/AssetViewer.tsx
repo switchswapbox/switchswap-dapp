@@ -104,8 +104,6 @@ export default function AssetViewer() {
           }
         });
       }
-
-      console.log(balanceOfOwner);
     }
     fetchData();
   }, []);

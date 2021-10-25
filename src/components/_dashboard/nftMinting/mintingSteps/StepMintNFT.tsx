@@ -224,6 +224,18 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
             />
           </ToggleButton>
           <ToggleButton
+            value="switchswap"
+            sx={{ minWidth: '56px', display: tokenID === 0 ? 'none' : 'flex' }}
+            href={tokenID !== 0 ? `#/assets/polygon/${contractAddress}/${tokenID}` : ''}
+            target="_blank"
+          >
+            <Box
+              component="img"
+              src="./static/icons/shared/switchswap.jpg"
+              sx={{ height: '24px', borderRadius: '50%' }}
+            />
+          </ToggleButton>
+          <ToggleButton
             value="opensea"
             sx={{ minWidth: '56px', display: tokenID === 0 ? 'none' : 'flex' }}
             href={
