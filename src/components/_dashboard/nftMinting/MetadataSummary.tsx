@@ -13,6 +13,7 @@ import svgArray from 'utils/svg-data';
 import { SxProps } from '@mui/system/styleFunctionSx';
 import qrStyles from './qrCardCustomize';
 import MidIconSelection from './qrCardCustomize/MidIconSelection';
+import LayoutSelection from './qrCardCustomize/LayoutSelection';
 
 // ----------------------------------------------------------------------
 
@@ -55,24 +56,6 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
         <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 5 }}>
           FILE QR CODE
         </Label>
-        <Box
-          sx={{
-            mb: 3,
-            display: 'flex',
-            justifyContent: 'space-between',
-            pt: 2
-          }}
-        >
-          <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
-            Layout
-          </Typography>
-          <Pagination
-            count={svgArray.length}
-            siblingCount={0}
-            color="primary"
-            onChange={handleSelectLayout}
-          />
-        </Box>
 
         <Box
           sx={{

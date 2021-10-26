@@ -136,8 +136,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     metadataCid,
     nftCardCid,
     srcImage,
-    qrStyleName,
-    otherQRProps
+    qrStyleName
   } = useSelector((state: IRootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
@@ -149,8 +148,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       metadataCid: state.reducerMintingProcess.metadataCid,
       nftCardCid: state.reducerMintingProcess.nftCardCid,
       srcImage: state.reducerMintingProcess.srcImage,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
-      otherQRProps: state.reducerCustomizeQRCard.otherQRProps
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName
     };
   });
   const dispatch = useDispatch();
