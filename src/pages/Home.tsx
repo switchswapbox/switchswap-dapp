@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 // material
 import { Container, Grid, Typography, IconButton } from '@mui/material';
 
@@ -14,13 +15,13 @@ import { Welcome, NftPresentation } from '../components/_dashboard/home';
 export default function Home() {
   const { themeStretch } = useSettings();
 
-  // const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
-  // useEffect(() => {
-  //   if (!isWarningNotIssueToken) {
-  //     onSnackbarClose('info');
-  //     sessionStorage.setItem('notIssueToken', 'true');
-  //   }
-  // }, []);
+  const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
+  useEffect(() => {
+    if (!isWarningNotIssueToken) {
+      onSnackbarClose('info');
+      sessionStorage.setItem('notIssueToken', 'true');
+    }
+  }, []);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const onSnackbarClose = (color: VariantType) => {
@@ -30,11 +31,13 @@ export default function Home() {
           {color}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Switchswap didn't issue any token
+          Switchswap is in beta version. Many ideas are being deployed. Get back for more
+          interesting products!
         </Typography>
       </div>,
       {
         variant: color,
+        autoHideDuration: 20000,
         action: (key) => (
           <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
             <Icon icon={closeFill} width={24} height={24} />
