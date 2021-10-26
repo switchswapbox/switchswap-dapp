@@ -178,7 +178,8 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     return new Promise((resolve, reject) => {
       const nftCard = document.getElementById('nftCard') as HTMLElement;
       html2canvas(nftCard, {
-        foreignObjectRendering: false
+        foreignObjectRendering: false,
+        scale: 4
       })
         .then(function (canvas) {
           let pngDataUrl = canvas.toDataURL('image/png'); // default png
