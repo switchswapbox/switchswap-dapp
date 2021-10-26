@@ -32,7 +32,6 @@ import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import { downloadNFT, resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
 import { PATH_DASHBOARD } from 'routes/paths';
 import { Link } from 'react-router-dom';
-import html2canvas from 'html2canvas';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
