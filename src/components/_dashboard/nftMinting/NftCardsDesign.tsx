@@ -1,5 +1,5 @@
 // material
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
@@ -12,7 +12,6 @@ import React from 'react';
 import html2canvas from 'html2canvas';
 import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
-import { CarouselAnimation, CarouselBasic1, CarouselBasic2 } from 'components/carousel';
 
 // ----------------------------------------------------------------------
 
@@ -192,8 +191,12 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
           width: '90%'
         }}
       >
-        <NftCardsDesign />
-        <LayoutSelection />
+        <Stack sx={{ width: '100%' }}>
+          <NftCardsDesign />
+        </Stack>
+        <Stack>
+          <LayoutSelection />
+        </Stack>
       </Box>
     </Box>
   );

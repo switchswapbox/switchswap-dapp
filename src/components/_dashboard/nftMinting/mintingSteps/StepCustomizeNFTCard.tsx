@@ -176,7 +176,8 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     return new Promise((resolve, reject) => {
       const nftCard = document.getElementById('nftCard') as HTMLElement;
       html2canvas(nftCard, {
-        foreignObjectRendering: false
+        foreignObjectRendering: false,
+        scale: 2
       })
         .then(function (canvas) {
           let pngDataUrl = canvas.toDataURL('image/png'); // default png
@@ -332,15 +333,23 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         {nftType === 'simplified' ? (
           <Grid item ref={parentBoundingBox} xs={12}>
             <Grid container>
-              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 }, maxHeight: '100vh' }}>
+              <Grid
+                item
+                xs={12}
+                md={12}
+                lg={7}
+                sx={{ pb: { xs: 5, md: 0 }, maxHeight: { xs: 'auto', lg: '100vh' } }}
+              >
                 <SliderSVGCard parentBoundingBox={parentBoundingBox} />
               </Grid>
-              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-                <Grid item xs={12}>
-                  <TitleAndDescription />
-                </Grid>
-                <Grid item xs={12} sx={{ pb: 0 }}>
-                  <MetadataSummary otherQRProps={<CustomProps />} />
+              <Grid item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <TitleAndDescription />
+                  </Grid>
+                  <Grid item xs={12} sx={{ pb: 0 }}>
+                    <MetadataSummary otherQRProps={<CustomProps />} />
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>

@@ -23,8 +23,8 @@ const LayoutSelection = () => {
       nameArray={layoutIndexes}
       srcArray={srcArray}
       handleSelect={handleSelect}
-      buttonDim="70px"
-      groupWidth="400px"
+      buttonDim="100px"
+      groupWidth="500px"
     />
   );
 };
