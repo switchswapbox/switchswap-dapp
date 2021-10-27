@@ -87,7 +87,12 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
 
       <Stack spacing={1} sx={{ p: 2, pt: 1, pb: 1 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Link color="inherit" underline="none" sx={{ width: '80%' }}>
+          <Link
+            color="inherit"
+            underline="none"
+            sx={{ width: '100%' }}
+            href={`#/assets/polygon/${contractAddress}/${tokenId}`}
+          >
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
