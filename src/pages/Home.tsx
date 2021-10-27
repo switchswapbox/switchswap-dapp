@@ -8,13 +8,14 @@ import { useSnackbar, VariantType } from 'notistack';
 
 // hooks
 import useSettings from '../hooks/useSettings';
+import useLocales from '../hooks/useLocales';
 // components
 import Page from '../components/Page';
 import { Welcome, NftPresentation } from '../components/_dashboard/home';
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
-
+  const { translate } = useLocales();
   const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
   useEffect(() => {
     if (!isWarningNotIssueToken) {

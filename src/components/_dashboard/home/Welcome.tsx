@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Button, Card, CardContent, CardProps, Popover, Box } from '@mui/material';
 import { DocIllustration } from '../../../assets';
 
+import useLocales from '../../../hooks/useLocales';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -28,6 +29,7 @@ interface HomeWelcomeProps extends CardProps {
 
 export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
   const [click, setCLick] = useState<HTMLButtonElement | null>(null);
+  const { translate } = useLocales();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setCLick(event.currentTarget);
   };
@@ -45,12 +47,12 @@ export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
         }}
       >
         <Typography gutterBottom variant="h4">
-          Welcome back,
+          {translate(`generalApp.welcome`)},
           <br /> {!displayName ? '...' : displayName}!
         </Typography>
 
         <Typography variant="body2" sx={{ pb: { xs: 3, xl: 5 }, maxWidth: 480, mx: 'auto' }}>
-          Everything is decentralized here!
+          {translate(`generalApp.slogan`)}
         </Typography>
 
         <Button variant="contained" onClick={handleClick}>

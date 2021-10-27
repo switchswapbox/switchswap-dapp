@@ -16,7 +16,7 @@ import {
   ListItemButton,
   ListItemButtonProps
 } from '@mui/material';
-
+import useLocales from '../hooks/useLocales';
 // ----------------------------------------------------------------------
 
 const ListSubheaderStyle = styled((props) => (
@@ -80,6 +80,7 @@ type NavItemProps = {
 function NavItem({ item, isShow }: { item: NavItemProps; isShow?: boolean | undefined }) {
   const theme = useTheme();
   const { pathname } = useLocation();
+  const { translate } = useLocales();
   const { title, path, icon, info, children } = item;
   const isActiveRoot = path ? !!matchPath({ path, end: false }, pathname) : false;
 
@@ -114,7 +115,7 @@ function NavItem({ item, isShow }: { item: NavItemProps; isShow?: boolean | unde
 
           {isShow && (
             <>
-              <ListItemText disableTypography primary={title} />
+              <ListItemText disableTypography primary={translate(`sidebar.${title}`)} />
               {info && info}
               <Box
                 component={Icon}
@@ -160,7 +161,7 @@ function NavItem({ item, isShow }: { item: NavItemProps; isShow?: boolean | unde
                         }}
                       />
                     </ListItemIconStyle>
-                    <ListItemText disableTypography primary={title} />
+                    <ListItemText disableTypography primary={translate(`sidebar.${title}`)} />
                   </ListItemStyle>
                 );
               })}

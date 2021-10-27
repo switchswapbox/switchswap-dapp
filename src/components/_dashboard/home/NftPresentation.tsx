@@ -7,7 +7,7 @@ import { Box, Card, Button, CardContent, Popover, Typography } from '@mui/materi
 // utils
 
 import { CarouselControlsPaging1 } from '../../carousel';
-
+import useLocales from '../../../hooks/useLocales';
 // ----------------------------------------------------------------------
 
 const NFT = [
@@ -40,6 +40,7 @@ type CarouselItemProps = {
 
 function CarouselItem({ item }: CarouselItemProps) {
   const { image, name } = item;
+  const { translate } = useLocales();
   const [click, setCLick] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setCLick(event.currentTarget);
@@ -74,7 +75,7 @@ function CarouselItem({ item }: CarouselItemProps) {
           Learn More
         </Button> */}
         <Button variant="contained" onClick={handleClick}>
-          Learn More
+          {translate(`general.learnMore`)}
         </Button>
         <Popover
           open={Boolean(click)}
