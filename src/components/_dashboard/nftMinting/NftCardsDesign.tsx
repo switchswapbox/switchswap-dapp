@@ -15,7 +15,7 @@ import LayoutSelection from './qrCardCustomize/LayoutSelection';
 
 // ----------------------------------------------------------------------
 
-export function NftCardsDesign() {
+export const NftCardsDesign = () => {
   const { layoutIndex, title, uploadedCid, download } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
@@ -125,13 +125,12 @@ export function NftCardsDesign() {
       {createQRCard}
     </Box>
   );
-}
+};
 
 interface SliderSVGCardProps {
   parentBoundingBox: React.RefObject<HTMLHeadingElement>;
 }
-
-export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps) {
+const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
   const cardNFTBoundingBox = useRef<HTMLHeadingElement>(null);
   const qrStyleName = useSelector((state: IRootState) => {
     return state.reducerCustomizeQRCard.qrStyleName;
@@ -200,4 +199,6 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
       </Box>
     </Box>
   );
-}
+};
+
+export default SliderSVGCard;

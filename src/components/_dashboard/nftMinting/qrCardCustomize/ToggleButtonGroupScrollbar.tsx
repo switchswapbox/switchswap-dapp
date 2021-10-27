@@ -1,5 +1,6 @@
 import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Scrollbar from 'components/Scrollbar';
+import React from 'react';
 
 const singleButton = (
   name: string | number,
@@ -63,4 +64,4 @@ const ToggleButtonGroupScrollbar = ({
   );
 };
 
-export default ToggleButtonGroupScrollbar;
+export default React.memo(ToggleButtonGroupScrollbar);

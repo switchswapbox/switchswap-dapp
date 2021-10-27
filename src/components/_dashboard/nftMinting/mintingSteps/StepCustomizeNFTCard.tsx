@@ -348,7 +348,9 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
                     <TitleAndDescription />
                   </Grid>
                   <Grid item xs={12} sx={{ pb: 0 }}>
-                    <MetadataSummary otherQRProps={<CustomProps />} />
+                    <MetadataSummary>
+                      <CustomProps />
+                    </MetadataSummary>
                   </Grid>
                 </Grid>
               </Grid>

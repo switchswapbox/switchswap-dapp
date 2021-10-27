@@ -8,12 +8,10 @@ import {
   qrStyleNameType
 } from '../../../reduxStore/reducerCustomizeQRCard';
 import { useDispatch } from 'react-redux';
-import React from 'react';
-import svgArray from 'utils/svg-data';
+import React, { ReactElement } from 'react';
 import { SxProps } from '@mui/system/styleFunctionSx';
 import qrStyles from './qrCardCustomize';
 import MidIconSelection from './qrCardCustomize/MidIconSelection';
-import LayoutSelection from './qrCardCustomize/LayoutSelection';
 
 // ----------------------------------------------------------------------
 
@@ -22,23 +20,13 @@ const RootStyle = styled('div')(({ theme }) => ({}));
 // ----------------------------------------------------------------------
 
 type MetadataSummaryProps = {
-  otherQRProps: any;
+  children: ReactElement;
   sx?: SxProps<Theme> | undefined;
 };
 
-export default function MetadataSummary({ otherQRProps, ...other }: MetadataSummaryProps) {
+const MetadataSummary = ({ children, ...other }: MetadataSummaryProps) => {
   const qrStylesList = Object.keys(qrStyles);
   const dispatch = useDispatch();
-
-  const handleSelectLayout = (event: React.ChangeEvent<unknown>, value: number) => {
-    if (value) {
-      dispatch(
-        changeQRCardGeneralInfo({
-          layout: value - 1
-        })
-      );
-    }
-  };
 
   const handleSelectQRStyle = (event: React.ChangeEvent<unknown>, value: number) => {
     if (value) {
@@ -76,8 +64,10 @@ export default function MetadataSummary({ otherQRProps, ...other }: MetadataSumm
         </Box>
         <MidIconSelection />
         <Divider sx={{ my: 5 }} />
-        {otherQRProps}
+        {children}
       </>
     </RootStyle>
   );
-}
+};
+
+export default MetadataSummary;

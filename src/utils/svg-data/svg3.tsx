@@ -1,4 +1,4 @@
-import { Typography, Grid } from '@mui/material';
+import React from 'react';
 import { ArgsProps } from './svgArgs';
 function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
   return (
@@ -223,4 +223,5 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
     </svg>
   );
 }
-export default SvgComponent;
+
+export default React.memo(SvgComponent);
