@@ -222,7 +222,9 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         image: `ipfs://${
           nftType !== 'withoutNftCard' ? nftCardCidTemp : uploadedCid ? uploadedCid.cid : ''
         }`,
+        fileId: uploadedCid ? `ipfs://${uploadedCid.cid}` : '',
         fileName: uploadedCid ? uploadedCid.name : '',
+
         size: uploadedCid ? uploadedCid.size : 0
       };
       ipfs
