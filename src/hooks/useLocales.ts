@@ -15,14 +15,12 @@ const LANGS = [
     label: 'Tiếng Việt',
     value: 'vi',
     systemValue: viVN,
-
-    icon: './static/icons/ic_flag_de.svg'
+    icon: './static/icons/ic_flag_vi.svg'
   },
   {
     label: 'Deutsch',
     value: 'de',
     systemValue: deDE,
-
     icon: './static/icons/ic_flag_de.svg'
   },
   {
