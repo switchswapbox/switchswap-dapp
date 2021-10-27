@@ -1,71 +1,70 @@
 {
-    "demo": {
-      "title": "English",
-      "introduction": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+  "demo": {
+    "title": "English",
+    "introduction": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+  },
+  "sidebar": {
+    "home": "Home",
+    "Home": "Home",
+    "NFT Gallery": "NFT Gallery",
+    "Gallery 1": "Gallery 1",
+    "Gallery 2": "Gallery 2",
+    "Gallery 3": "Gallery 3",
+    "Universal": "Universal",
+    "D-NFT Minting": "D-NFT Minting",
+    "NFT Manager": "NFT Manager",
+    "Info": "Info",
+    "Media": "Media",
+    "user": "User",
+    "Four": "Four",
+    "Five": "Five",
+    "Six": "Six",
+    "DAPP": "DAPP",
+    "ABOUT": "About"
+  },
+  "landingPage": {
+    "title": "Điểm khởi đầu cho dự án của "
+  },
+  "generalApp": {
+    "welcome": "Welcome",
+    "hello": "NFT Lovers",
+    "slogan": "Everything is decentralized here!",
+    "Decentralization SwitchSwap": "Decentralization SwitchSwap",
+    "Smart Contracts Dev": "Smart Contracts Dev",
+    "Interface Design": "Interface Design"
+  },
+  "general": {
+    "learnMore": "Learn More",
+    "logout": "Logout"
+  },
+  "other": {
+    "Total Minted NFTs": "Total Minted NFTs",
+    "Development progress": "Development progress",
+    "Tasks": "Tasks",
+    "Status": "Status",
+    "Your Proposal": "Your Proposal",
+    "Under Development": "This function is under development, stay tuned!"
+  },
+  "homework": {
+    "task": {
+      "Design IPFS hostable interface": "Design IPFS hostable interface",
+      "Deploy Github Workflow": "Deploy Github Workflow",
+      "Generate NFT stored on Crust": "Generate NFT stored on Crust",
+      "Swap NFT": "Swap NFT",
+      "Create Gallery for NFT": "Create Gallery for NFT",
+      "Home page": "Home page",
+      "Proposal": "Proposal",
+      "NFT Minting Page": "NFT Minting Page"
     },
-    "sidebar": {
-      "home": "Home",
-      "Home": "Home",
-      "NFT Gallery": "NFT Gallery",
-      "Gallery 1": "Gallery 1",
-      "Gallery 2": "Gallery 2",
-      "Gallery 3": "Gallery 3",
-      "Universal": "Universal",
-      "D-NFT Minting": "D-NFT Minting",
-      "NFT Manager": "NFT Manager",
-      "Info": "Info",
-      "Media": "Media",
-      "user": "User",
-      "Four": "Four",
-      "Five": "Five",
-      "Six": "Six",
-      "DAPP": "DAPP",
-      "ABOUT": "About"
+    "status": {
+      "in_progress": "In Progress",
+      "to_do": "To Do",
+      "completed": "Completed"
     },
-    "landingPage": {
-      "title": "Điểm khởi đầu cho dự án của "
-    },
-    "generalApp": {
-      "welcome": "Welcome",
-      "hello": "NFT Lovers",
-      "slogan": "Everything is decentralized here!",
-      "Decentralization SwitchSwap": "Decentralization SwitchSwap",
-      "Smart Contracts Dev": "Smart Contracts Dev",
-      "Interface Design": "Interface Design"
-    },
-    "general": {
-      "learnMore": "Learn More",
-      "logout": "Logout"
-    },
-    "other": {
-      "Total Minted NFTs": "Total Minted NFTs",
-      "Development progress": "Development progress",
-      "Tasks": "Tasks",
-      "Status": "Status",
-      "Your Proposal": "Your Proposal",
-      "Under Development": "This function is under development, stay tuned!"
-    },
-    "homework": {
-      "task": {
-        "Design IPFS hostable interface": "Design IPFS hostable interface",
-        "Deploy Github Workflow": "Deploy Github Workflow",
-        "Generate NFT stored on Crust": "Generate NFT stored on Crust",
-        "Swap NFT": "Swap NFT",
-        "Create Gallery for NFT": "Create Gallery for NFT",
-        "Home page": "Home page",
-        "Proposal": "Proposal",
-        "NFT Minting Page": "NFT Minting Page"
-      },
-      "status": {
-        "in_progress": "In Progress",
-        "to_do": "To Do",
-        "completed": "Completed"
-      },
-      "priority": {
-        "High Priority": "High Priority",
-        "Medium Priority": "Medium Priority",
-        "Low Priority": "Low Priority"
-      }
+    "priority": {
+      "High Priority": "High Priority",
+      "Medium Priority": "Medium Priority",
+      "Low Priority": "Low Priority"
     }
   }
-  
+}
