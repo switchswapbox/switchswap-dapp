@@ -12,7 +12,7 @@ import {
   LandingCleanInterfaces,
   LandingHugePackElements
 } from '../components/_external-pages/landing';
-
+import useLocales from '../hooks/useLocales';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)({
@@ -28,8 +28,9 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LandingPage() {
+  const { translate } = useLocales();
   return (
-    <RootStyle title="The starting point for your next project | Minimal-UI" id="move_top">
+    <RootStyle title={translate('landingPage.title')} id="move_top">
       <LandingHero />
       <ContentStyle>
         <LandingMinimal />

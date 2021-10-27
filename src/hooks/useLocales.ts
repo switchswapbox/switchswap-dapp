@@ -19,14 +19,14 @@ const LANGS = [
     icon: './static/icons/ic_flag_de.svg'
   },
   {
-    label: 'German',
+    label: 'Deutsch',
     value: 'de',
     systemValue: deDE,
 
     icon: './static/icons/ic_flag_de.svg'
   },
   {
-    label: 'French',
+    label: 'français',
     value: 'fr',
     systemValue: frFR,
     icon: './static/icons/ic_flag_fr.svg'
@@ -43,7 +43,7 @@ export default function useLocales() {
   };
 
   return {
-    onChangeLang: handleChangeLanguage,
+    handleChangeLanguage,
     translate,
     currentLang,
     allLang: LANGS

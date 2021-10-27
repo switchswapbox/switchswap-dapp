@@ -10,7 +10,7 @@ import useLocales from '../../hooks/useLocales';
 export default function LanguagePopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { allLang, currentLang, onChangeLang } = useLocales();
+  const { allLang, currentLang, handleChangeLanguage } = useLocales();
 
   return (
     <>
@@ -34,7 +34,7 @@ export default function LanguagePopover() {
               key={option.value}
               selected={option.value === currentLang.value}
               onClick={() => {
-                onChangeLang(option.value);
+                handleChangeLanguage(option.value);
                 setOpen(false);
               }}
               sx={{ py: 1, px: 2.5 }}
