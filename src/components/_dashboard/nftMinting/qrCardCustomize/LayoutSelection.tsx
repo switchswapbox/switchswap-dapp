@@ -23,8 +23,8 @@ const LayoutSelection = () => {
       nameArray={layoutIndexes}
       srcArray={srcArray}
       handleSelect={handleSelect}
-      buttonDim="100px"
-      groupWidth="500px"
+      buttonDim="80px"
+      sx={{ '& .simplebar-content': { display: { sm: 'flex' }, justifyContent: { sm: 'center' } } }}
     />
   );
 };

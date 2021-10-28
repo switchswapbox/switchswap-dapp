@@ -193,7 +193,7 @@ const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
         <Stack sx={{ width: '100%' }}>
           <NftCardsDesign />
         </Stack>
-        <Stack>
+        <Stack sx={{ width: '100%', alignItems: 'center' }}>
           <LayoutSelection />
         </Stack>
       </Box>

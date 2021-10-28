@@ -1,4 +1,5 @@
-import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { SxProps } from '@mui/system';
 import Scrollbar from 'components/Scrollbar';
 import React from 'react';
 
@@ -10,7 +11,16 @@ const singleButton = (
 ) => {
   return (
     <ToggleButton key={name} value={name} onClick={() => handleSelect(name)}>
-      <Box component="img" src={src} sx={{ height: buttonDim, width: buttonDim }} />
+      <Box
+        component="img"
+        src={src}
+        sx={{
+          minHeight: buttonDim,
+          minWidth: buttonDim,
+          maxHeight: buttonDim,
+          maxWidth: buttonDim
+        }}
+      />
     </ToggleButton>
   );
 };
@@ -24,7 +34,7 @@ interface ToggleButtonGroupScrollbarProps {
   srcArray: Array<string>;
   handleSelect: (name: stringAndNumber) => void;
   buttonDim: string;
-  groupWidth: string;
+  sx?: SxProps;
 }
 
 const ToggleButtonGroupScrollbar = ({
@@ -34,23 +44,25 @@ const ToggleButtonGroupScrollbar = ({
   srcArray,
   handleSelect,
   buttonDim,
-  groupWidth
+  sx
 }: ToggleButtonGroupScrollbarProps) => {
   return (
     <>
-      <Box
+      <Stack
         sx={{
           mb: 3,
-          display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
-          pt: 2
+          alignItems: 'flex-start',
+          pt: 2,
+          width: '100%',
+          overflow: 'hidden',
+          ...sx
         }}
       >
-        <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+        <Typography variant="subtitle1" sx={{ mb: 2 }}>
           {label}
         </Typography>
-        <Box sx={{ width: groupWidth }}>
+        <Box sx={{ width: '100%' }}>
           <Scrollbar>
             <ToggleButtonGroup value={value} exclusive>
               {nameArray.map((name, index) =>
@@ -59,7 +71,7 @@ const ToggleButtonGroupScrollbar = ({
             </ToggleButtonGroup>
           </Scrollbar>
         </Box>
-      </Box>
+      </Stack>
     </>
   );
 };

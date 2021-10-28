@@ -25,8 +25,7 @@ const MidIconSelection = () => {
       nameArray={iconNames}
       srcArray={srcArray}
       handleSelect={handleSelectMidIcon}
-      buttonDim="24px"
-      groupWidth="160px"
+      buttonDim="30px"
     />
   );
 };
