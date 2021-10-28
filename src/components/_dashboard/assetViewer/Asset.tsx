@@ -8,13 +8,12 @@ import AboutOwner from './AboutOwner';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import FilesInfo from './FilesInfo';
 // ----------------------------------------------------------------------
 
 export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   const theme = useTheme();
   const biggerThanMd = useMediaQuery(theme.breakpoints.up('md'));
-
-  console.log(biggerThanMd);
 
   return (
     <Grid container spacing={3} direction={biggerThanMd ? 'row' : 'column-reverse'}>
@@ -26,7 +25,10 @@ export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerT
       </Grid>
 
       <Grid item xs={12} md={8}>
-        <AssetCard assetAndOwner={assetAndOwner} />
+        <Stack spacing={3}>
+          <AssetCard assetAndOwner={assetAndOwner} />
+          <FilesInfo assetAndOwner={assetAndOwner} />
+        </Stack>
       </Grid>
     </Grid>
   );
