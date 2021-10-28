@@ -1,22 +1,14 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
-import { sentenceCase } from 'change-case';
-import { Link as RouterLink } from 'react-router-dom';
-import shareFill from '@iconify/icons-eva/share-fill';
-import printerFill from '@iconify/icons-eva/printer-fill';
-import archiveFill from '@iconify/icons-eva/archive-fill';
-import downloadFill from '@iconify/icons-eva/download-fill';
-import trash2Outline from '@iconify/icons-eva/trash-2-outline';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { typesBundleForPolkadot } from '@crustio/type-definitions';
+
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-// material
 import { useTheme } from '@mui/material/styles';
-import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import {
-  Box,
   Menu,
   Card,
   Table,
-  Button,
   Divider,
   MenuItem,
   TableRow,
@@ -32,6 +24,25 @@ import Label from '../../Label';
 import Scrollbar from '../../Scrollbar';
 import { MIconButton } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE } from 'assets/COMMON_VARIABLES';
+
+const getStatusMainnet = async (cid: string) => {
+  try {
+    const wsProvider = new WsProvider(CRUST_CHAIN_RPC);
+    const chain = new ApiPromise({
+      provider: wsProvider,
+      typesBundle: typesBundleForPolkadot
+    });
+    await chain.isReadyOrError;
+
+    const fileInfo = await chain.query.market.files(cid);
+
+    chain.disconnect();
+    return fileInfo.toHuman();
+  } catch (e) {
+    return null;
+  }
+};
 
 function MoreMenuButton() {
   const menuRef = useRef(null);
@@ -64,13 +75,13 @@ function MoreMenuButton() {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <MenuItem>
-          <Icon icon={printerFill} width={20} height={20} />
+          <Icon icon="ic:baseline-autorenew" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Renew
           </Typography>
         </MenuItem>
         <MenuItem>
-          <Icon icon={archiveFill} width={20} height={20} />
+          <Icon icon="carbon:add-alt" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Add Balance
           </Typography>
@@ -78,13 +89,13 @@ function MoreMenuButton() {
 
         <Divider />
         <MenuItem>
-          <Icon icon={downloadFill} width={20} height={20} />
+          <Icon icon="bx:bx-cloud-download" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Download
           </Typography>
         </MenuItem>
         <MenuItem>
-          <Icon icon={trash2Outline} width={20} height={20} />
+          <Icon icon="fluent:document-copy-20-regular" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Copy file's address
           </Typography>
@@ -108,22 +119,56 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
 
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
 
-  const MOCK_FILES_INFO = [
-    { fileType: 'NFT Content', network: 'Crust', replicas: '12', expireOn: '20-10', prepaid: '12' },
-    { fileType: 'Metadata', network: 'Crust', replicas: '12', expireOn: '20-10', prepaid: '12' },
-    { fileType: 'NFT Card', network: 'Crust', replicas: '12', expireOn: '20-10', prepaid: '12' }
-  ];
+  const fetchFileInfo = async (cid: string, fileType: string) => {
+    const fileInfo = await getStatusMainnet(cid);
+
+    if (fileInfo) {
+      const expiredDate = new Date(
+        CRUST_CONSENSUS_DATE.getTime() +
+          parseInt((fileInfo as any).expired_at.replace(/,/g, ''), 10) * 6 * 1000
+      )
+        .toISOString()
+        .split('T')[0];
+
+      setFilesInfo((filesInfo) => {
+        filesInfo.push({
+          fileType,
+          network: 'Crust',
+          replicas: (fileInfo as any).reported_replica_count,
+          expireOn: expiredDate,
+          prepaid: (fileInfo as any).prepaid
+        });
+        return [...filesInfo];
+      });
+    }
+  };
 
   useEffect(() => {
-    filesInfo.push({
-      fileType: 'Metadata',
-      network: 'Hello',
-      replicas: '12',
-      expireOn: '20-10',
-      prepaid: '123'
-    });
-    setFilesInfo(filesInfo);
+    async function fetchData() {
+      if (contentId !== '') {
+        fetchFileInfo(contentId, 'NFT Content');
+      }
+    }
+    fetchData();
   }, [contentId]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (metadataId !== '') {
+        fetchFileInfo(metadataId, 'Metadata');
+      }
+    }
+    fetchData();
+  }, [metadataId]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (nftCardId !== '' && nftCardId !== contentId) {
+        fetchFileInfo(nftCardId, 'NFT Card');
+      }
+    }
+    fetchData();
+  }, [nftCardId]);
 
   return (
     <Card>

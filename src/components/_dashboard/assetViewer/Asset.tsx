@@ -15,8 +15,6 @@ export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerT
   const theme = useTheme();
   const biggerThanMd = useMediaQuery(theme.breakpoints.up('md'));
 
-  console.log(biggerThanMd);
-
   return (
     <Grid container spacing={3} direction={biggerThanMd ? 'row' : 'column-reverse'}>
       <Grid item xs={12} md={4}>
