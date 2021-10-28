@@ -136,8 +136,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     metadataCid,
     nftCardCid,
     srcImage,
-    qrStyleName,
-    otherQRProps
+    qrStyleName
   } = useSelector((state: IRootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
@@ -149,8 +148,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       metadataCid: state.reducerMintingProcess.metadataCid,
       nftCardCid: state.reducerMintingProcess.nftCardCid,
       srcImage: state.reducerMintingProcess.srcImage,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
-      otherQRProps: state.reducerCustomizeQRCard.otherQRProps
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName
     };
   });
   const dispatch = useDispatch();
@@ -335,15 +333,25 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         {nftType === 'simplified' ? (
           <Grid item ref={parentBoundingBox} xs={12}>
             <Grid container>
-              <Grid item xs={12} md={12} lg={7} sx={{ pb: { xs: 5, md: 0 }, maxHeight: '100vh' }}>
+              <Grid
+                item
+                xs={12}
+                md={12}
+                lg={7}
+                sx={{ pb: { xs: 5, md: 0 }, maxHeight: { xs: 'auto', lg: '100vh' } }}
+              >
                 <SliderSVGCard parentBoundingBox={parentBoundingBox} />
               </Grid>
-              <Grid container xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-                <Grid item xs={12}>
-                  <TitleAndDescription />
-                </Grid>
-                <Grid item xs={12} sx={{ pb: 0 }}>
-                  <MetadataSummary otherQRProps={<CustomProps />} />
+              <Grid item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <TitleAndDescription />
+                  </Grid>
+                  <Grid item xs={12} sx={{ pb: 0 }}>
+                    <MetadataSummary>
+                      <CustomProps />
+                    </MetadataSummary>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
@@ -386,7 +394,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
             alignItems="center"
             justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
           >
-            <Scrollbar sx={{ maxWidth: '111px' }}>
+            <Scrollbar sxRoot={{ maxWidth: '111px' }}>
               <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
                 <ToggleButton
                   value="crust"

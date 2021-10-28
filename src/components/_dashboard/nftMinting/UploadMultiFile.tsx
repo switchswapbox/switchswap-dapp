@@ -317,7 +317,7 @@ export default function UploadMultiFile({
                 justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
                 spacing={2}
               >
-                <Scrollbar sx={{ maxWidth: '111px' }}>
+                <Scrollbar sxRoot={{ maxWidth: '111px' }}>
                   <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
                     <ToggleButton
                       value="crust"

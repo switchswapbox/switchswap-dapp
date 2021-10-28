@@ -1,5 +1,5 @@
 // material
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
@@ -11,10 +11,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
 import html2canvas from 'html2canvas';
 import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
+import LayoutSelection from './qrCardCustomize/LayoutSelection';
 
 // ----------------------------------------------------------------------
 
-export function NftCardsDesign() {
+export const NftCardsDesign = () => {
   const { layoutIndex, title, uploadedCid, download } = useSelector((state: IRootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
@@ -124,13 +125,12 @@ export function NftCardsDesign() {
       {createQRCard}
     </Box>
   );
-}
+};
 
 interface SliderSVGCardProps {
   parentBoundingBox: React.RefObject<HTMLHeadingElement>;
 }
-
-export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps) {
+const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
   const cardNFTBoundingBox = useRef<HTMLHeadingElement>(null);
   const qrStyleName = useSelector((state: IRootState) => {
     return state.reducerCustomizeQRCard.qrStyleName;
@@ -182,10 +182,23 @@ export default function SliderSVGCard({ parentBoundingBox }: SliderSVGCardProps)
     >
       <Box
         ref={cardNFTBoundingBox}
-        sx={{ display: 'flex', justifyContent: 'center', width: '90%' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '90%'
+        }}
       >
-        <NftCardsDesign />
+        <Stack sx={{ width: '100%' }}>
+          <NftCardsDesign />
+        </Stack>
+        <Stack sx={{ width: '100%', alignItems: 'center' }}>
+          <LayoutSelection />
+        </Stack>
       </Box>
     </Box>
   );
-}
+};
+
+export default SliderSVGCard;

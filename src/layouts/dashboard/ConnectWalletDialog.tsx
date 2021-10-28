@@ -35,6 +35,7 @@ import {
 
 import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
 import { changeAccountWallet } from '../../reduxStore/reducerSelectAccount';
+import React from 'react';
 
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -45,7 +46,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   justifyContent: 'center'
 }));
 
-export default function MaxWidthDialog() {
+const MaxWidthDialog = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -457,4 +458,6 @@ export default function MaxWidthDialog() {
       </Dialog>
     </>
   );
-}
+};
+
+export default React.memo(MaxWidthDialog);
