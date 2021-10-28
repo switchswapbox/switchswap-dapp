@@ -16,7 +16,7 @@ import {
 import useSettings from '../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 
-import { BallBeat, LineScalePulseOutRapid } from 'react-pure-loaders';
+import { BallClipRotateMultiple, LineScalePulseOutRapid } from 'react-pure-loaders';
 // components
 import Page from '../components/Page';
 
@@ -66,7 +66,7 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, owner, nftContract }: NftC
           justifyContent="center"
           sx={{ height: '200px', display: loading ? 'flex' : 'none' }}
         >
-          <BallBeat color={'#637381'} loading={loading} />
+          <BallClipRotateMultiple color={'#637381'} loading={loading} />
         </Stack>
         <Link href={`#/assets/polygon/${contractAddress}/${tokenId}`}>
           <Box
