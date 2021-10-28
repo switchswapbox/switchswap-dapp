@@ -3,6 +3,7 @@ import SimpleBarReact, { Props } from 'simplebar-react';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, BoxProps } from '@mui/material';
 import { SxProps } from '@mui/system';
+import React from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -38,13 +39,7 @@ const SimpleBarStyle = styled(SimpleBarReact)(({ theme }) => ({
 interface SxRootProps {
   sxRoot?: SxProps;
 }
-
-export default function Scrollbar({
-  children,
-  sx,
-  sxRoot,
-  ...other
-}: BoxProps & SxRootProps & Props) {
+const Scrollbar = ({ children, sx, sxRoot, ...other }: BoxProps & SxRootProps & Props) => {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
@@ -59,9 +54,11 @@ export default function Scrollbar({
 
   return (
     <RootStyle sx={sxRoot}>
-      <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx} {...other}>
+      <SimpleBarStyle timeout={500} clickOnTrack={true} sx={sx} {...other}>
         {children}
       </SimpleBarStyle>
     </RootStyle>
   );
-}
+};
+
+export default React.memo(Scrollbar);

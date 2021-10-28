@@ -34,6 +34,7 @@ import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../assets/COMMON_VARIABLE
 import Identicons from '@nimiq/identicons';
 
 import { IRootState } from 'reduxStore';
+import React from 'react';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
@@ -107,7 +108,7 @@ type DashboardSidebarProps = {
   onCloseSidebar: VoidFunction;
 };
 
-export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: DashboardSidebarProps) {
+const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarProps) => {
   const { pathname } = useLocation();
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
@@ -283,4 +284,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }: Dash
       </MHidden>
     </RootStyle>
   );
-}
+};
+
+export default React.memo(DashboardSidebar);
