@@ -8,6 +8,7 @@ import AboutOwner from './AboutOwner';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import FilesInfo from './FilesInfo';
 // ----------------------------------------------------------------------
 
 export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
@@ -26,7 +27,10 @@ export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerT
       </Grid>
 
       <Grid item xs={12} md={8}>
-        <AssetCard assetAndOwner={assetAndOwner} />
+        <Stack spacing={3}>
+          <AssetCard assetAndOwner={assetAndOwner} />
+          <FilesInfo />
+        </Stack>
       </Grid>
     </Grid>
   );
