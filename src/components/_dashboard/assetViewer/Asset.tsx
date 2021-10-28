@@ -29,7 +29,7 @@ export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerT
       <Grid item xs={12} md={8}>
         <Stack spacing={3}>
           <AssetCard assetAndOwner={assetAndOwner} />
-          <FilesInfo />
+          <FilesInfo assetAndOwner={assetAndOwner} />
         </Stack>
       </Grid>
     </Grid>

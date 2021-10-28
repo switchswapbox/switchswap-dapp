@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
 import shareFill from '@iconify/icons-eva/share-fill';
@@ -31,6 +31,7 @@ import {
 import Label from '../../Label';
 import Scrollbar from '../../Scrollbar';
 import { MIconButton } from '../../@material-extend';
+import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 
 function MoreMenuButton() {
   const menuRef = useRef(null);
@@ -93,14 +94,36 @@ function MoreMenuButton() {
   );
 }
 
-export default function FilesInfo() {
+type FileInfoType = {
+  fileType: string;
+  network: string;
+  replicas: string;
+  expireOn: string;
+  prepaid: string;
+};
+
+export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   const theme = useTheme();
+  const { contentId, metadataId, nftCardId } = assetAndOwner;
+
+  const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
 
   const MOCK_FILES_INFO = [
     { fileType: 'NFT Content', network: 'Crust', replicas: '12', expireOn: '20-10', prepaid: '12' },
     { fileType: 'Metadata', network: 'Crust', replicas: '12', expireOn: '20-10', prepaid: '12' },
     { fileType: 'NFT Card', network: 'Crust', replicas: '12', expireOn: '20-10', prepaid: '12' }
   ];
+
+  useEffect(() => {
+    filesInfo.push({
+      fileType: 'Metadata',
+      network: 'Hello',
+      replicas: '12',
+      expireOn: '20-10',
+      prepaid: '123'
+    });
+    setFilesInfo(filesInfo);
+  }, [contentId]);
 
   return (
     <Card>
@@ -120,7 +143,7 @@ export default function FilesInfo() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {MOCK_FILES_INFO.map((row) => (
+              {filesInfo.map((row) => (
                 <TableRow key={row.fileType}>
                   <TableCell>{row.fileType}</TableCell>
                   <TableCell align="center">{row.network}</TableCell>

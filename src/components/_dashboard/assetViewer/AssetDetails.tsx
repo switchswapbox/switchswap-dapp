@@ -13,8 +13,6 @@ import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { shortenAddress } from 'utils/formatAddress';
 
 export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
-  // const { quote, country, email, role, company, school } = profile;
-
   return (
     <Card>
       <CardHeader title="Asset Details" />

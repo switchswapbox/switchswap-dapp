@@ -28,6 +28,9 @@ export type AssetAndOwnerType = {
   imageUrl: string;
   name: string;
   description: string;
+  contentId: string;
+  nftCardId: string;
+  metadataId: string;
 };
 const initAssetAndOwner: AssetAndOwnerType = {
   ownerAddress: '',
@@ -37,7 +40,10 @@ const initAssetAndOwner: AssetAndOwnerType = {
   balance: '0',
   imageUrl: '',
   name: '',
-  description: ''
+  description: '',
+  contentId: '',
+  nftCardId: '',
+  metadataId: ''
 };
 
 const ipfsUriToCid = (ipfsUrl: string) => {
@@ -71,6 +77,13 @@ export default function AssetViewer() {
       const balanceOfOwner = (await contractEthersJs.balanceOf(ownerOfNFT)).toString();
       const tokenURI = await contractEthersJs.tokenURI(tokenId);
 
+      contractEthersJs.getDataIdOnchain(tokenId).then((contentId: string) => {
+        setAssetAndOwner((assetAndOwner) => ({
+          ...assetAndOwner,
+          contentId: ipfsUriToCid(contentId) || ''
+        }));
+      });
+
       const tokenURICid = ipfsUriToCid(tokenURI);
 
       Identicons.toDataUrl(ownerOfNFT).then((img: string) => {
@@ -85,6 +98,11 @@ export default function AssetViewer() {
       });
 
       if (tokenURICid) {
+        setAssetAndOwner((assetAndOwner) => ({
+          ...assetAndOwner,
+          metadataId: tokenURICid
+        }));
+
         const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
         axios.get(tokenURIHttp).then((response) => {
           const name = response.data.name || '';
@@ -98,7 +116,8 @@ export default function AssetViewer() {
                 ...assetAndOwner,
                 imageUrl,
                 name,
-                description
+                description,
+                nftCardId: imageCid
               }));
             }
           }
