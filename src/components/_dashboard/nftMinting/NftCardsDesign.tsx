@@ -95,7 +95,7 @@ export const NftCardsDesign = () => {
       const nftCard = document.getElementById('nftCard') as HTMLElement;
       html2canvas(nftCard, {
         foreignObjectRendering: false,
-        scale: 2
+        scale: 4
       })
         .then(function (canvas) {
           let png = canvas.toDataURL('image/png'); // default png
