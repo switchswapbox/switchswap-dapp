@@ -25,7 +25,7 @@ const QRStyleSelection = () => {
       nameArray={qrStyleNames}
       srcArray={srcArray}
       handleSelect={handleSelectQRStyle}
-      buttonDim="100px"
+      buttonDim="50px"
     />
   );
 };
