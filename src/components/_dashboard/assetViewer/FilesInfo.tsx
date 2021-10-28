@@ -144,31 +144,21 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
   };
 
   useEffect(() => {
-    async function fetchData() {
-      if (contentId !== '') {
+    if (contentId !== '' && nftCardId !== '') {
+      if (contentId === nftCardId) {
         fetchFileInfo(contentId, 'NFT Content');
-      }
-    }
-    fetchData();
-  }, [contentId]);
-
-  useEffect(() => {
-    async function fetchData() {
-      if (metadataId !== '') {
-        fetchFileInfo(metadataId, 'Metadata');
-      }
-    }
-    fetchData();
-  }, [metadataId]);
-
-  useEffect(() => {
-    async function fetchData() {
-      if (nftCardId !== '' && nftCardId !== contentId) {
+      } else {
+        fetchFileInfo(contentId, 'NFT Content');
         fetchFileInfo(nftCardId, 'NFT Card');
       }
     }
-    fetchData();
-  }, [nftCardId]);
+  }, [contentId, nftCardId]);
+
+  useEffect(() => {
+    if (metadataId !== '') {
+      fetchFileInfo(metadataId, 'Metadata');
+    }
+  }, [metadataId]);
 
   return (
     <Card>
