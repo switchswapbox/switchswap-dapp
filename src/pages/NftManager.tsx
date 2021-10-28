@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 
 // components
-import { BallBeat, Pacman } from 'react-pure-loaders';
+import { BallBeat, LineScalePulseOutRapid } from 'react-pure-loaders';
 import Page from '../components/Page';
 import { ethers } from 'ethers';
 import { ABI } from '../utils/abi';
@@ -266,7 +266,7 @@ export default function NftManager() {
             justifyContent="center"
             sx={{ width: '100%', display: loading ? 'flex' : 'none', mt: 5 }}
           >
-            <Pacman color={'#637381'} loading={loading} />
+            <LineScalePulseOutRapid color={'#637381'} loading={loading} />
           </Stack>
           {NftList.map((nft) => {
             return (

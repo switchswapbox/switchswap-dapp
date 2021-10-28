@@ -16,7 +16,7 @@ import {
 import useSettings from '../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 
-import { BallBeat, Pacman } from 'react-pure-loaders';
+import { BallBeat, LineScalePulseOutRapid } from 'react-pure-loaders';
 // components
 import Page from '../components/Page';
 
@@ -265,7 +265,7 @@ export default function Universe() {
             justifyContent="center"
             sx={{ width: '100%', display: loading ? 'flex' : 'none', mt: 5 }}
           >
-            <Pacman color={'#637381'} loading={loading} />
+            <LineScalePulseOutRapid color={'#637381'} loading={loading} />
           </Stack>
           {NftList.map((nft) => {
             return (

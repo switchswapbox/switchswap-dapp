@@ -2,13 +2,14 @@ import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { typesBundleForPolkadot } from '@crustio/type-definitions';
-
+import { LineScalePulseOutRapid } from 'react-pure-loaders';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { useTheme } from '@mui/material/styles';
 import {
   Menu,
   Card,
   Table,
+  Stack,
   Divider,
   MenuItem,
   TableRow,
@@ -116,6 +117,7 @@ type FileInfoType = {
 export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   const theme = useTheme();
   const { contentId, metadataId, nftCardId } = assetAndOwner;
+  const [loading, setLoading] = useState(true);
 
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
 
@@ -131,15 +133,17 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
         .split('T')[0];
 
       setFilesInfo((filesInfo) => {
-        filesInfo.push({
+        const newFileInfo = {
           fileType,
           network: 'Crust',
           replicas: (fileInfo as any).reported_replica_count,
           expireOn: expiredDate,
           prepaid: (fileInfo as any).prepaid
-        });
-        return [...filesInfo];
+        };
+
+        return [...filesInfo, newFileInfo];
       });
+      setLoading(false);
     }
   };
 
@@ -202,6 +206,13 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
           </Table>
         </TableContainer>
       </Scrollbar>
+      <Stack
+        sx={{ height: '150px', display: loading ? 'flex' : 'none' }}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <LineScalePulseOutRapid color={'#637381'} loading={loading} />
+      </Stack>
     </Card>
   );
 }
