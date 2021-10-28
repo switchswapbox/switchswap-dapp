@@ -10,7 +10,12 @@ const singleButton = (
   buttonDim: string
 ) => {
   return (
-    <ToggleButton key={name} value={name} onClick={() => handleSelect(name)}>
+    <ToggleButton
+      key={name}
+      value={name}
+      onClick={() => handleSelect(name)}
+      sx={{ padding: '7px' }}
+    >
       <Box
         component="img"
         src={src}
