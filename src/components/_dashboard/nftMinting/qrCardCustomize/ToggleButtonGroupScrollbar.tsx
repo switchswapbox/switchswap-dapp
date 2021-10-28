@@ -46,7 +46,8 @@ const SingleButton = (
           minHeight: buttonDim,
           minWidth: buttonDim,
           maxHeight: buttonDim,
-          maxWidth: buttonDim
+          maxWidth: buttonDim,
+          borderRadius: '8px'
         }}
       />
     </ToggleButton>
