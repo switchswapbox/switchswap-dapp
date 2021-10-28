@@ -26,6 +26,9 @@ import Scrollbar from '../../Scrollbar';
 import { MIconButton } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE } from 'assets/COMMON_VARIABLES';
+import marketTypes from '@crustio/type-definitions/src/market';
+
+type FileInfo = typeof marketTypes.types.FileInfo;
 
 const getStatusMainnet = async (cid: string) => {
   try {
@@ -39,7 +42,7 @@ const getStatusMainnet = async (cid: string) => {
     const fileInfo = await chain.query.market.files(cid);
 
     chain.disconnect();
-    return fileInfo.toHuman();
+    return fileInfo.toHuman() as FileInfo;
   } catch (e) {
     return null;
   }
@@ -122,12 +125,12 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
 
   const fetchFileInfo = async (cid: string, fileType: string) => {
-    const fileInfo = await getStatusMainnet(cid);
+    const fileInfo: FileInfo | null = await getStatusMainnet(cid);
 
     if (fileInfo) {
       const expiredDate = new Date(
         CRUST_CONSENSUS_DATE.getTime() +
-          parseInt((fileInfo as any).expired_at.replace(/,/g, ''), 10) * 6 * 1000
+          parseInt(fileInfo.expired_at.replace(/,/g, ''), 10) * 6 * 1000
       )
         .toISOString()
         .split('T')[0];
@@ -136,9 +139,9 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
         const newFileInfo = {
           fileType,
           network: 'Crust',
-          replicas: (fileInfo as any).reported_replica_count,
+          replicas: fileInfo.reported_replica_count,
           expireOn: expiredDate,
-          prepaid: (fileInfo as any).prepaid
+          prepaid: fileInfo.prepaid
         };
 
         return [...filesInfo, newFileInfo];
