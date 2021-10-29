@@ -27,6 +27,8 @@ import { MIconButton } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE } from 'assets/COMMON_VARIABLES';
 import marketTypes from '@crustio/type-definitions/src/market';
+import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
 type FileInfo = typeof marketTypes.types.FileInfo;
 
@@ -46,6 +48,43 @@ const getStatusMainnet = async (cid: string) => {
   } catch (e) {
     return null;
   }
+};
+
+const publishCidMainnet = async (cid: string, fileSizeInBytes: number) => {
+  const extensions = await web3Enable('NFT Dapp');
+  if (extensions.length === 0) {
+    // onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
+    return;
+  }
+
+  const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+
+  let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
+
+  crustAccountIndex =
+    crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
+
+  const account = allAccounts[crustAccountIndex];
+
+  const injector = await web3FromSource(account.meta.source);
+
+  const wsProvider = new WsProvider(CRUST_CHAIN_RPC);
+  const chain = new ApiPromise({
+    provider: wsProvider,
+    typesBundle: typesBundleForPolkadot
+  });
+
+  await chain.isReadyOrError;
+
+  const transferExtrinsic = chain.tx.market.placeStorageOrder(cid, fileSizeInBytes, 0, '');
+
+  const txHash = await transferExtrinsic.signAndSend(account.address, {
+    signer: injector.signer,
+    nonce: -1
+  });
+
+  chain.disconnect();
+  return txHash;
 };
 
 function MoreMenuButton() {
@@ -78,7 +117,11 @@ function MoreMenuButton() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            publishCidMainnet('QmRh7iuE4sG7LbvY391CLfJpL5fTMGLB1VmDZjwVVSaYFg', 18903);
+          }}
+        >
           <Icon icon="ic:baseline-autorenew" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Renew
