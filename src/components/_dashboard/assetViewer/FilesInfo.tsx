@@ -84,10 +84,11 @@ const publishCidMainnet = async (cid: string, fileSizeInBytes: number) => {
   });
 
   chain.disconnect();
+
   return txHash;
 };
 
-function MoreMenuButton() {
+function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
 
@@ -119,7 +120,7 @@ function MoreMenuButton() {
       >
         <MenuItem
           onClick={() => {
-            publishCidMainnet('QmRh7iuE4sG7LbvY391CLfJpL5fTMGLB1VmDZjwVVSaYFg', 18903);
+            publishCidMainnet(cid, fileSize);
           }}
         >
           <Icon icon="ic:baseline-autorenew" width={20} height={20} />
@@ -153,11 +154,13 @@ function MoreMenuButton() {
 }
 
 type FileInfoType = {
+  cid: string;
   fileType: string;
   network: string;
   replicas: string;
   expireOn: string;
   prepaid: string;
+  fileSize: number;
 };
 
 export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
@@ -178,13 +181,17 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
         .toISOString()
         .split('T')[0];
 
+      console.log(fileInfo);
+
       setFilesInfo((filesInfo) => {
         const newFileInfo = {
           fileType,
           network: 'Crust',
           replicas: fileInfo.reported_replica_count,
           expireOn: expiredDate,
-          prepaid: fileInfo.prepaid
+          prepaid: fileInfo.prepaid,
+          fileSize: parseInt(fileInfo.file_size.replace(/,/g, ''), 10),
+          cid
         };
 
         return [...filesInfo, newFileInfo];
@@ -244,7 +251,7 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
                     </Label>
                   </TableCell>
                   <TableCell align="right">
-                    <MoreMenuButton />
+                    <MoreMenuButton cid={row.cid} fileSize={row.fileSize} />
                   </TableCell>
                 </TableRow>
               ))}
