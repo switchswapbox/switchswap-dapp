@@ -170,14 +170,8 @@ const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        pt: {
-          xs: 0,
-          lg: `${
-            offsetWithCondition + paddingTopPlus > topParent
-              ? offsetWithCondition + paddingTopPlus - topParent
-              : 0
-          }px`
-        }
+        position: 'sticky',
+        top: 100
       }}
     >
       <Box
