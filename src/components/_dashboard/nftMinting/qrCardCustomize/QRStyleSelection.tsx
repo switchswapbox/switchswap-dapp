@@ -4,7 +4,7 @@ import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCust
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 const qrStyleNames = ['qrNormal', 'qrRandRect', 'qrDsj', 'qr25D', 'qrBubble', 'qrFunc', 'qrLine'];
 const srcArray = qrStyleNames.map((qrStyleName) => {
-  return `./static/mock-images/qr-style/${qrStyleName}.png`;
+  return `./static/mock-images/qr-style/${qrStyleName}.svg`;
 });
 
 const QRStyleSelection = () => {
@@ -25,7 +25,7 @@ const QRStyleSelection = () => {
       nameArray={qrStyleNames}
       srcArray={srcArray}
       handleSelect={handleSelectQRStyle}
-      buttonDim="100px"
+      buttonDim="50px"
     />
   );
 };
