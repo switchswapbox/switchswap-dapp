@@ -4,7 +4,7 @@ import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 const layoutIndexes = [0, 1, 2, 3];
 const srcArray = layoutIndexes.map((layoutIndex) => {
-  return `./static/mock-images/nft-style/${layoutIndex}.png`;
+  return `./static/mock-images/nft-style/${layoutIndex}.svg`;
 });
 
 const LayoutSelection = () => {
