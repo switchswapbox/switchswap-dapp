@@ -65,7 +65,7 @@ export const NftCardsDesign = () => {
     const { Component } = qrStyles[qrStyleName];
     return (
       <Component
-        value={`${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${uploadedCid ? uploadedCid.cid : ''}`}
+        value={`${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${uploadedCid?.cid || ''}`}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
         icon={url}
@@ -170,14 +170,8 @@ const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        pt: {
-          xs: 0,
-          lg: `${
-            offsetWithCondition + paddingTopPlus > topParent
-              ? offsetWithCondition + paddingTopPlus - topParent
-              : 0
-          }px`
-        }
+        position: 'sticky',
+        top: 100
       }}
     >
       <Box
