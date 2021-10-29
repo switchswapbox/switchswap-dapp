@@ -171,7 +171,7 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
     <Card>
       <CardHeader title="Files Status" sx={{ mb: 3 }} />
       <Scrollbar>
-        <TableContainer sx={{ minWidth: 480 }}>
+        <TableContainer sx={{ minWidth: 700 }}>
           <Table>
             <TableHead>
               <TableRow>
