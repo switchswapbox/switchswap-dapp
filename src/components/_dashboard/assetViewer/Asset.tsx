@@ -16,18 +16,18 @@ export default function Asset({ assetAndOwner }: { assetAndOwner: AssetAndOwnerT
   const biggerThanMd = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <Grid container spacing={3} direction={biggerThanMd ? 'row' : 'column-reverse'}>
-      <Grid item xs={12} md={4}>
-        <Stack spacing={3}>
-          <AboutOwner assetAndOwner={assetAndOwner} />
-          <AssetDetails assetAndOwner={assetAndOwner} />
-        </Stack>
-      </Grid>
-
+    <Grid container spacing={3}>
       <Grid item xs={12} md={8}>
         <Stack spacing={3}>
           <AssetCard assetAndOwner={assetAndOwner} />
           <FilesInfo assetAndOwner={assetAndOwner} />
+        </Stack>
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <Stack spacing={3}>
+          <AboutOwner assetAndOwner={assetAndOwner} />
+          <AssetDetails assetAndOwner={assetAndOwner} />
         </Stack>
       </Grid>
     </Grid>
