@@ -40,12 +40,12 @@ import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCust
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
 import html2canvas from 'html2canvas';
+import useSnackbarAction from 'hooks/useSnackbarAction';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
 type StepCustomizeNFTCardProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
-  onSnackbarAction: (color: VariantType, text: string, url?: string | undefined) => void;
 };
 
 function TitleAndDescription() {
@@ -119,8 +119,9 @@ function TitleAndDescription() {
   );
 }
 
-function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
+function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+  const onSnackbarAction = useSnackbarAction();
 
   let nftCardCidTemp = '';
 
@@ -240,7 +241,13 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   const uploadMetadataCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
+      onSnackbarAction(
+        'warning',
+        'Please install Crust Wallet',
+        null,
+        'LEARN MORE',
+        CRUST_WALLET_WIKI
+      );
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -312,11 +319,19 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         onSnackbarAction(
           'warning',
           'Please select Polygon Network from Metamask',
+          null,
+          'LEARN MORE',
           METAMASK_SELECT_POLYGON_URL
         );
       }
     } else {
-      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
+      onSnackbarAction(
+        'warning',
+        'Please install Metamask',
+        null,
+        'LEARN MORE',
+        INSTALL_METAMASK_URL
+      );
     }
   };
 
