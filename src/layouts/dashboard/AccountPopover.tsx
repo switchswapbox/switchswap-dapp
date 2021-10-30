@@ -12,7 +12,7 @@ import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
 import { IRootState } from 'reduxStore';
-
+import useLocales from '../../hooks/useLocales';
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
 
@@ -21,6 +21,7 @@ Identicons.svgPath = './static/identicons.min.svg';
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const { translate } = useLocales();
   const selectedAccountAddress = useSelector((state: IRootState) => {
     return state.reducerSelectAccount.accountAddress;
   });
@@ -111,7 +112,7 @@ export default function AccountPopover() {
                 height: 24
               }}
             />
-            Explorer
+            {translate(`dashboard.explore`)}
           </MenuItem>
         </Link>
 
@@ -131,12 +132,12 @@ export default function AccountPopover() {
               height: 24
             }}
           />
-          Support
+          {translate(`dashboard.support`)}
         </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button fullWidth color="inherit" variant="outlined">
-            Disconnect
+            {translate(`dashboard.disconnect`)}
           </Button>
         </Box>
       </MenuPopover>

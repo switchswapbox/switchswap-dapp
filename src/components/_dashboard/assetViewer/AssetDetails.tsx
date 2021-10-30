@@ -11,17 +11,17 @@ import {
 
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { shortenAddress } from 'utils/formatAddress';
-
+import useLocales from '../../../hooks/useLocales';
 export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   // const { quote, country, email, role, company, school } = profile;
-
+  const { translate } = useLocales();
   return (
     <Card>
       <CardHeader title="Asset Details" />
 
       <Stack spacing={1} sx={{ p: 3 }}>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">Contract Address</Typography>
+          <Typography variant="body2">{translate(`assetDetail.contract`)}</Typography>
           <ButtonBase>
             <Typography variant="body2">
               {shortenAddress(assetAndOwner.contractAddress, 5)}
@@ -30,17 +30,17 @@ export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAn
         </Stack>
 
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">Token ID</Typography>
+          <Typography variant="body2">{translate(`assetDetail.id`)}</Typography>
           <ButtonBase>
             <Typography variant="body2">{assetAndOwner.tokenId}</Typography>
           </ButtonBase>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">Token Standard</Typography>
+          <Typography variant="body2">{translate(`assetDetail.standard`)}</Typography>
           <Typography variant="body2">ERC721</Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography variant="body2">Network</Typography>
+          <Typography variant="body2">{translate(`assetDetail.network`)}</Typography>
           <Typography variant="body2">Polygon</Typography>
         </Stack>
       </Stack>

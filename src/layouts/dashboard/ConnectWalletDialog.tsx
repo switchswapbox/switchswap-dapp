@@ -36,7 +36,7 @@ import {
 import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
 import { changeAccountWallet } from '../../reduxStore/reducerSelectAccount';
 import React from 'react';
-
+import useLocales from '../../hooks/useLocales';
 // ----------------------------------------------------------------------
 const IconWrapperStyle = styled('div')(({ theme }) => ({
   width: 24,
@@ -49,6 +49,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 const MaxWidthDialog = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const { translate } = useLocales();
   const dispatch = useDispatch();
   const [displayMessageAccSelected, setDisplayMessageAccSelected] = useState({
     metamask: false,
@@ -174,11 +175,11 @@ const MaxWidthDialog = () => {
           </SvgIcon>
         }
       >
-        My wallet
+        {translate(`connectWallet.myWallet`)}
       </Button>
 
       <Dialog open={open} maxWidth="xs" onClose={handleClose}>
-        <DialogTitle sx={{ pb: 1 }}>Wallet management</DialogTitle>
+        <DialogTitle sx={{ pb: 1 }}>{translate(`connectWallet.management`)} </DialogTitle>
         <DialogContent>
           <Stack spacing={2} alignItems="stretch">
             <Card variant="outlined">
@@ -190,7 +191,7 @@ const MaxWidthDialog = () => {
                 sx={{ p: 2 }}
               >
                 <Typography variant="subtitle2" align="justify">
-                  By connecting a wallet, you agree to Switchswap’{' '}
+                  {translate(`connectWallet.agreement`)}
                   <Link
                     href="#/terms-of-service"
                     target="_blank"
@@ -198,11 +199,11 @@ const MaxWidthDialog = () => {
                     underline="none"
                     color="info"
                   >
-                    Terms of Service
+                    {translate(`connectWallet.term`)}
                   </Link>{' '}
-                  and acknowledge that you have read and understand the{' '}
+                  {translate(`connectWallet.acknowledge`)}{' '}
                   <Link href="#" underline="none" color="info">
-                    Switchswap disclaimer
+                    {translate(`connectWallet.disclaimer`)}
                   </Link>
                   .
                 </Typography>
@@ -254,7 +255,7 @@ const MaxWidthDialog = () => {
                           sx={{ color: 'text.primary' }}
                           noWrap
                         >
-                          Connect
+                          {translate(`connectWallet.connect`)}
                         </Typography>
                       ) : (
                         <Typography
@@ -278,11 +279,11 @@ const MaxWidthDialog = () => {
               sx={{ width: '100%', display: isMetamaskInstalled ? 'none' : 'flex' }}
               action={
                 <Button color="inherit" size="small" href={INSTALL_METAMASK_URL} target="_blank">
-                  LEARN
+                  {translate(`connectWallet.learn`)}
                 </Button>
               }
             >
-              Install Metamask!
+              {translate(`connectWallet.install`)}
             </Alert>
             <Alert
               severity="warning"
@@ -294,11 +295,11 @@ const MaxWidthDialog = () => {
                   href={METAMASK_SELECT_POLYGON_URL}
                   target="_blank"
                 >
-                  LEARN
+                  {translate(`connectWallet.learn`)}
                 </Button>
               }
             >
-              Choose Polygon Network!
+              {translate(`connectWallet.choose`)}
             </Alert>
             <Alert
               icon={false}
@@ -309,7 +310,8 @@ const MaxWidthDialog = () => {
                 display: displayMessageAccSelected.metamask ? 'flex' : 'none'
               }}
             >
-              Metamask Wallet is selected by default{'  '}
+              {translate(`connectWallet.selected`)}
+              {'  '}
               <SvgIcon>
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
@@ -329,7 +331,7 @@ const MaxWidthDialog = () => {
                   spacing={2}
                   sx={{ p: 2 }}
                 >
-                  <Typography variant="subtitle1">Crust Network</Typography>
+                  <Typography variant="subtitle1">{translate(`connectWallet.network`)}</Typography>
                   <IconWrapperStyle
                     sx={{
                       ...(1 < 0 && {
@@ -361,7 +363,7 @@ const MaxWidthDialog = () => {
                             sx={{ color: 'text.primary' }}
                             noWrap
                           >
-                            Select
+                            {translate(`connectWallet.select`)}
                           </Typography>
                         ) : (
                           <Typography
@@ -428,11 +430,11 @@ const MaxWidthDialog = () => {
               sx={{ width: '100%', display: isCrustInstalled ? 'none' : 'flex' }}
               action={
                 <Button color="inherit" size="small" href={CRUST_WALLET_WIKI} target="_blank">
-                  LEARN
+                  {translate(`connectWallet.learn`)}
                 </Button>
               }
             >
-              Install Crust Wallet!
+              {translate(`connectWallet.installCrust`)}
             </Alert>
             <Alert
               icon={false}
@@ -443,7 +445,8 @@ const MaxWidthDialog = () => {
                 display: displayMessageAccSelected.crust ? 'flex' : 'none'
               }}
             >
-              Crust Wallet is selected by default{'  '}
+              {translate(`connectWallet.default`)}
+              {'  '}
               <SvgIcon>
                 <Icon icon="fxemoji:rocket" />
               </SvgIcon>
@@ -452,7 +455,7 @@ const MaxWidthDialog = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="outlined" color="info">
-            Close
+            {translate(`connectWallet.close`)}
           </Button>
         </DialogActions>
       </Dialog>

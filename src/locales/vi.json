@@ -1,49 +1,49 @@
 {
-  "demo": {
-    "title": "English",
-    "introduction": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-  },
   "sidebar": {
-    "home": "Home",
-    "Home": "Home",
-    "NFT Gallery": "NFT Gallery",
-    "Gallery 1": "Gallery 1",
-    "Gallery 2": "Gallery 2",
-    "Gallery 3": "Gallery 3",
-    "Universal": "Universal",
-    "D-NFT Minting": "D-NFT Minting",
-    "NFT Manager": "NFT Manager",
+    "home": "Trang chủ",
+    "Home": "Trang chủ",
+    "NFT Gallery": "Thư viện NFT",
+    "Gallery 1": "Bộ sưu tập 1",
+    "Gallery 2": "Bộ sưu tập 2",
+    "Gallery 3": "Bộ sưu tập 3",
+    "Universal": "Toàn bộ",
+    "D-NFT Minting": "Tạo D-NFT",
+    "NFT Manager": "Quản lý",
     "Info": "Info",
     "Media": "Media",
     "user": "User",
     "Four": "Four",
     "Five": "Five",
     "Six": "Six",
-    "DAPP": "DAPP",
-    "ABOUT": "About"
+    "DAPP": "ỨNG DỤNG",
+    "ABOUT": "About",
+    "Gallery": "Bộ sưu tập",
+    "Universe": "Universe",
+    "Funbox": "Funbox",
+    "Learn More": "Tìm hiểu thêm"
   },
   "landingPage": {
     "title": "Điểm khởi đầu cho dự án của "
   },
   "generalApp": {
-    "welcome": "Welcome",
+    "welcome": "Xin chào",
     "hello": "NFT Lovers",
-    "slogan": "Everything is decentralized here!",
-    "Decentralization SwitchSwap": "Decentralization SwitchSwap",
+    "slogan": "Tất cả đều phi tập trung tại đây!",
+    "Decentralization SwitchSwap": "SwitchSwap Phi tập trung",
     "Smart Contracts Dev": "Smart Contracts Dev",
     "Interface Design": "Interface Design"
   },
   "general": {
-    "learnMore": "Learn More",
-    "logout": "Logout"
+    "learnMore": "Tìm hiểu thêm",
+    "logout": "Đăng xuất"
   },
   "other": {
-    "Total Minted NFTs": "Total Minted NFTs",
+    "Total Minted NFTs": "Tất cả NFTs",
     "Development progress": "Development progress",
-    "Tasks": "Tasks",
-    "Status": "Status",
-    "Your Proposal": "Your Proposal",
-    "Under Development": "This function is under development, stay tuned!"
+    "Tasks": "Nhiệm vụ",
+    "Status": "Tình trạng",
+    "Your Proposal": "Đề xuất của bạn",
+    "Under Development": "Chức năng này đang được phát triển, xin hãy chờ!"
   },
   "homework": {
     "task": {
@@ -66,5 +66,41 @@
       "Medium Priority": "Medium Priority",
       "Low Priority": "Low Priority"
     }
+  },
+  "dashboard": {
+    "explore": "Khám phá",
+    "support": "Hỗ trợ",
+    "disconnect": "Ngắt kết nối"
+  },
+  "assetDetail": {
+    "contract": "Địa chỉ hợp đồng",
+    "id": "Token ID",
+    "standard": "Tiêu chuẩn Token",
+    "network": "Mạng"
+  },
+  "funBox": {
+    "requirement": "Những yêu cầu của Tweet",
+    "keywords": "Đăng bài Tweet của bạn có chứa những từ khóa sau đây: #web3, #ipfs, #switchswap, #crustnetwork, #polygon",
+    "useDefault": "Hoặc sử dụng Tweet mặc định có sẵn",
+    "quickTweet": "Quick Tweet",
+    "getFaucet": "Get Faucet"
+  },
+  "connectWallet": {
+    "myWallet": "Ví của tôi",
+    "management": "Quản lý ví",
+    "agreement": "Khi kết nối vào ví, bạn đồng ý với Switchswap ",
+    "term": "Các điều khoản dịch vụ",
+    "acknowledge": "và xác nhận rằng bạn đã đọc và hiểu",
+    "disclaimer": "Miễn trừ trách nhiệm của Switchswap",
+    "connect": "Kết nối",
+    "learn": "TÌM HIỂU",
+    "install": "Cài đặt Metamask!",
+    "choose": "Chọn mạng Polygon!",
+    "selected": "Ví Metamask Wallet được chọn mặc định",
+    "network": "Mạng Crust",
+    "select": "Chọn",
+    "installCrust": "Cài đặt ví Crust!",
+    "default": "Ví Crust được chọn mặc định",
+    "close": "Đóng"
   }
 }
