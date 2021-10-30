@@ -1,13 +1,12 @@
 // material
-import { Box, Card, Grid, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
 import svgArray from 'utils/svg-data';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
@@ -68,6 +67,7 @@ export const NftCardsDesign = () => {
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
         icon={url}
+        // icon={`./static/icons/shared/${icon}.svg`}
         iconScale={0.2}
         {...otherQRProps}
       />
