@@ -18,17 +18,22 @@ import {
   TableHead,
   Typography,
   CardHeader,
-  TableContainer
+  TableContainer,
+  Button,
+  IconButton
 } from '@mui/material';
 // utils
 import Label from '../../Label';
 import Scrollbar from '../../Scrollbar';
 import { MIconButton } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
-import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE } from 'assets/COMMON_VARIABLES';
+import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE, CRUST_WALLET_WIKI } from 'assets/COMMON_VARIABLES';
 import marketTypes from '@crustio/type-definitions/src/market';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { useSnackbar, VariantType } from 'notistack';
+import closeFill from '@iconify/icons-eva/close-fill';
+// import useSnackbarAction from 'hooks/useSnackbarAction';
 
 type FileInfo = typeof marketTypes.types.FileInfo;
 
@@ -54,7 +59,7 @@ const publishCidMainnet = async (cid: string, fileSizeInBytes: number) => {
   const extensions = await web3Enable('NFT Dapp');
   if (extensions.length === 0) {
     // onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
-    return;
+    return null;
   }
 
   const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -88,9 +93,44 @@ const publishCidMainnet = async (cid: string, fileSizeInBytes: number) => {
   return txHash;
 };
 
+export function useSnackbarAction() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const onSnackbarAction = (
+    color: VariantType,
+    text: string,
+    autoHideDuration: number | null,
+    label?: string,
+    url?: string
+  ) => {
+    enqueueSnackbar(text, {
+      variant: color,
+      autoHideDuration,
+      action: (key) => (
+        <>
+          {url && (
+            <Button
+              size="small"
+              color={color !== 'default' ? color : 'primary'}
+              href={url}
+              target="_blank"
+            >
+              {label}
+            </Button>
+          )}
+          <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} width={24} height={24} />
+          </IconButton>
+        </>
+      )
+    });
+  };
+  return onSnackbarAction;
+}
+
 function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const onSnackbarAction = useSnackbarAction();
 
   const handleOpen = () => {
     setOpen(true);
@@ -98,6 +138,21 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleRenewFile = async (cid: string, fileSize: number) => {
+    const txHash = await publishCidMainnet(cid, fileSize);
+    if (txHash) {
+      onSnackbarAction(
+        'success',
+        'Successfully renew file',
+        null,
+        'SUBSCAN',
+        `https://crust.subscan.io/extrinsic/${txHash}`
+      );
+    } else {
+      onSnackbarAction('warning', 'Please install Crust Wallet', null, 'LEARN', CRUST_WALLET_WIKI);
+    }
   };
 
   return (
@@ -120,7 +175,7 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
       >
         <MenuItem
           onClick={() => {
-            publishCidMainnet(cid, fileSize);
+            handleRenewFile(cid, fileSize);
           }}
         >
           <Icon icon="ic:baseline-autorenew" width={20} height={20} />
