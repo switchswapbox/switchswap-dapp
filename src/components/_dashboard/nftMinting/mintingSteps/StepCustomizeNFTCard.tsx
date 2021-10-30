@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -16,9 +16,7 @@ import {
 } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from 'components/Label';
-import svgArray from 'utils/svg-data';
 import MetadataSummary from '../MetadataSummary';
-import NftCardsDesign from '../NftCardsDesign';
 import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { create } from 'ipfs-http-client';
@@ -320,8 +318,6 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
     }
   };
 
-  const parentBoundingBox = useRef<HTMLHeadingElement>(null);
-
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -331,19 +327,22 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
           </Stack>
         </Grid>
         {nftType === 'simplified' ? (
-          <Grid item ref={parentBoundingBox} xs={12}>
-            <Grid container>
+          <Grid container item xs={12}>
+            <Grid container item>
               <Grid
                 item
                 xs={12}
                 md={12}
                 lg={7}
-                sx={{ pb: { xs: 5, md: 0 }, maxHeight: { xs: 'auto', lg: '100vh' } }}
+                sx={{
+                  pb: { xs: 5, md: 0 },
+                  maxHeight: { xs: 'auto', lg: '500vh' }
+                }}
               >
-                <SliderSVGCard parentBoundingBox={parentBoundingBox} />
+                <SliderSVGCard />
               </Grid>
-              <Grid item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-                <Grid container>
+              <Grid container item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+                <Grid container item>
                   <Grid item xs={12}>
                     <TitleAndDescription />
                   </Grid>
