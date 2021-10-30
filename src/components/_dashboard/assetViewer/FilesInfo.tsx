@@ -90,6 +90,45 @@ const publishCidMainnet = async (cid: string, fileSizeInBytes: number) => {
   return txHash;
 };
 
+const addPrepaid = async (cid: string, amount: number) => {
+  const extensions = await web3Enable('NFT Dapp');
+
+  if (extensions.length === 0) {
+    return null;
+  }
+
+  const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+
+  let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
+
+  crustAccountIndex =
+    crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
+
+  const account = allAccounts[crustAccountIndex];
+
+  const injector = await web3FromSource(account.meta.source);
+
+  const wsProvider = new WsProvider(CRUST_CHAIN_RPC);
+  const chain = new ApiPromise({
+    provider: wsProvider,
+    typesBundle: typesBundleForPolkadot
+  });
+
+  await chain.isReadyOrError;
+
+  const ap = chain.tx.market.addPrepaid(cid, amount);
+
+  const txHash = await ap.signAndSend(account.address, {
+    signer: injector.signer,
+    nonce: -1
+  });
+
+  chain.disconnect();
+  console.log(`txHash ${txHash}`);
+  console.log(txHash);
+  return txHash;
+};
+
 function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -146,7 +185,11 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
             Renew
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            addPrepaid(cid, 0.0001 * 10 ** 12);
+          }}
+        >
           <Icon icon="carbon:add-alt" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Add Balance
