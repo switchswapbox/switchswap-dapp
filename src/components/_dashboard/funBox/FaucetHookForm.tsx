@@ -8,6 +8,7 @@ import { ResponseFaucetRequest } from '../../../pages/CruFaucet';
 import { Icon } from '@iconify/react';
 import MaticFormSchema from './MaticFormSchema';
 import CruFormSchema from './CruFormSchema';
+import useLocales from '../../../hooks/useLocales';
 
 type FormValuesProps = {
   address: string;
@@ -54,6 +55,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
   });
 
   const watchingUrl = watch('tweetUrl');
+  const { translate } = useLocales();
 
   useEffect(() => {
     const tweetIdReg = /\/status\/([0-9]+)/;
@@ -92,13 +94,12 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
           />
           <Divider />
           <Stack>
-            <Typography variant="h6">Tweet requirements</Typography>
+            <Typography variant="h6">{translate(`funBox.requirement`)}</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
-              Write your own tweet including the following keywords: #web3, #ipfs, #switchswap,
-              #crustnetwork, #polygon
+              {translate(`funBox.keywords`)}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', my: 1 }}>
-              Or using Quick Tweet with pre-written tweet
+              {translate(`funBox.useDefault`)}
             </Typography>
             <Button
               variant="contained"
@@ -106,7 +107,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
               target="_blank"
               startIcon={<Icon icon="logos:twitter" />}
             >
-              Quick tweet
+              {translate(`funBox.quickTweet`)}
             </Button>
           </Stack>
 
@@ -132,7 +133,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
             loading={isSubmitting}
             disabled={!isDirty}
           >
-            Get Faucet
+            {translate(`funBox.getFaucet`)}
           </LoadingButton>
         </Stack>
       </form>
