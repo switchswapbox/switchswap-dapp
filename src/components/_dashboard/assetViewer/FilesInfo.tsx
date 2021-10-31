@@ -210,12 +210,17 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
         >
           <Icon icon="carbon:add-alt" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
-            Add Balance
+            Add Prepaid
           </Typography>
         </MenuItem>
 
         <Divider />
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            window.open(`https://ipfs.io/ipfs/${cid}`, '_blank');
+            handleClose();
+          }}
+        >
           <Icon icon="bx:bx-cloud-download" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Download
