@@ -13,8 +13,8 @@ export default function NftMinting() {
 
   return (
     <Page title="NFT Minting">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3}>
+      <Container sx={{ maxWidth: { xs: '500px', md: 'md', lg: 'xl' } }}>
+        <Grid container spacing={3} width="100%">
           <Grid item xs={12}>
             <Block title="Generate NFT">
               <MintingProcess />

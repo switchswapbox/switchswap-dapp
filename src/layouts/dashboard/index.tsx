@@ -16,12 +16,12 @@ const APP_BAR_DESKTOP = 92;
 const RootStyle = styled('div')({
   display: 'flex',
   minHeight: '100%',
-  overflow: 'clip'
+  overflow: 'inherit'
 });
 
 const MainStyle = styled('div')(({ theme }) => ({
   flexGrow: 1,
-  overflow: 'clip',
+  overflow: 'inherit',
   minHeight: '100%',
   paddingTop: APP_BAR_MOBILE + 24,
   paddingBottom: theme.spacing(10),
