@@ -20,14 +20,14 @@ const ICONS = {
 
 const sidebarConfig = [
   {
-    subheader: 'APP',
+    subheader: 'DAPP',
     items: [
       { title: 'Home', path: PATH_DASHBOARD.app.homepage, icon: ICONS.home },
       {
-        title: 'Gallery',
+        title: 'NFT Gallery',
         path: PATH_DASHBOARD.gallery.root,
         icon: ICONS.gallery,
-        children: [{ title: 'Universe', path: PATH_DASHBOARD.gallery.universe }]
+        children: [{ title: 'Universal', path: PATH_DASHBOARD.gallery.universe }]
       },
       { title: 'D-NFT Minting', path: PATH_DASHBOARD.app.nftMinting, icon: ICONS.nftMinting },
       { title: 'NFT Manager', path: PATH_DASHBOARD.app.nftManager, icon: ICONS.nftManager },

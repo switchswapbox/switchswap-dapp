@@ -18,15 +18,29 @@ import {
   TableHead,
   Typography,
   CardHeader,
-  TableContainer
+  TableContainer,
+  DialogProps,
+  Button,
+  Dialog,
+  Box,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  TextField,
+  InputAdornment
 } from '@mui/material';
 // utils
 import Label from '../../Label';
 import Scrollbar from '../../Scrollbar';
 import { MIconButton } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
-import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE } from 'assets/COMMON_VARIABLES';
+import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE, CRUST_WALLET_WIKI } from 'assets/COMMON_VARIABLES';
 import marketTypes from '@crustio/type-definitions/src/market';
+import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
+import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+
+import useSnackbarAction from 'hooks/useSnackbarAction';
 
 type FileInfo = typeof marketTypes.types.FileInfo;
 
@@ -48,9 +62,88 @@ const getStatusMainnet = async (cid: string) => {
   }
 };
 
-function MoreMenuButton() {
+const publishCidMainnet = async (cid: string, fileSizeInBytes: number) => {
+  const extensions = await web3Enable('NFT Dapp');
+
+  if (extensions.length === 0) {
+    return null;
+  }
+
+  const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+
+  let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
+
+  crustAccountIndex =
+    crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
+
+  const account = allAccounts[crustAccountIndex];
+
+  const injector = await web3FromSource(account.meta.source);
+
+  const wsProvider = new WsProvider(CRUST_CHAIN_RPC);
+  const chain = new ApiPromise({
+    provider: wsProvider,
+    typesBundle: typesBundleForPolkadot
+  });
+
+  await chain.isReadyOrError;
+
+  const transferExtrinsic = chain.tx.market.placeStorageOrder(cid, fileSizeInBytes, 0, '');
+
+  const txHash = await transferExtrinsic.signAndSend(account.address, {
+    signer: injector.signer,
+    nonce: -1
+  });
+
+  chain.disconnect();
+
+  return txHash;
+};
+
+const addPrepaid = async (cid: string, amount: number) => {
+  const extensions = await web3Enable('NFT Dapp');
+
+  if (extensions.length === 0) {
+    return null;
+  }
+
+  const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+
+  let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
+
+  crustAccountIndex =
+    crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
+
+  const account = allAccounts[crustAccountIndex];
+
+  const injector = await web3FromSource(account.meta.source);
+
+  const wsProvider = new WsProvider(CRUST_CHAIN_RPC);
+  const chain = new ApiPromise({
+    provider: wsProvider,
+    typesBundle: typesBundleForPolkadot
+  });
+
+  await chain.isReadyOrError;
+
+  const ap = chain.tx.market.addPrepaid(cid, amount);
+
+  const txHash = await ap.signAndSend(account.address, {
+    signer: injector.signer,
+    nonce: -1
+  });
+
+  chain.disconnect();
+
+  return txHash;
+};
+
+function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
+
+  const onSnackbarAction = useSnackbarAction();
+  const [addPrepaidOpen, setAddPrepaidOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -58,6 +151,27 @@ function MoreMenuButton() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleRenewFile = async (cid: string, fileSize: number) => {
+    const txHash = await publishCidMainnet(cid, fileSize);
+    if (txHash) {
+      onSnackbarAction(
+        'success',
+        'Successfully renew file',
+        null,
+        'SUBSCAN',
+        `https://crust.subscan.io/extrinsic/${txHash}`
+      );
+    } else {
+      onSnackbarAction(
+        'warning',
+        'Please verify your Crust Wallet',
+        null,
+        'LEARN',
+        CRUST_WALLET_WIKI
+      );
+    }
   };
 
   return (
@@ -78,43 +192,169 @@ function MoreMenuButton() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleRenewFile(cid, fileSize);
+            handleClose();
+          }}
+        >
           <Icon icon="ic:baseline-autorenew" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Renew
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAddPrepaidOpen(true);
+            handleClose();
+          }}
+        >
           <Icon icon="carbon:add-alt" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
-            Add Balance
+            Add Prepaid
           </Typography>
         </MenuItem>
 
         <Divider />
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            window.open(`https://ipfs.io/ipfs/${cid}`, '_blank');
+            handleClose();
+          }}
+        >
           <Icon icon="bx:bx-cloud-download" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Download
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigator.clipboard.writeText(`https://ipfs.io/ipfs/${cid}`);
+            handleClose();
+            onSnackbarAction('success', `Copied file's address`, 2000);
+          }}
+        >
           <Icon icon="fluent:document-copy-20-regular" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Copy file's address
           </Typography>
         </MenuItem>
       </Menu>
+
+      <AddPrepaidDialog
+        cid={cid}
+        addPrepaidOpen={addPrepaidOpen}
+        setAddPrepaidOpen={setAddPrepaidOpen}
+      />
+    </>
+  );
+}
+
+export function AddPrepaidDialog({
+  cid,
+  addPrepaidOpen,
+  setAddPrepaidOpen
+}: {
+  cid: string;
+  addPrepaidOpen: boolean;
+  setAddPrepaidOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState<DialogProps['maxWidth']>('sm');
+  const [prepaidAmountRaw, setPrepaidAmountRaw] = useState('');
+  const [prepaidAmount, setPrepaidAmount] = useState(0);
+  const [prepaidAmountError, setPrepaidAmountError] = useState(false);
+  const onSnackbarAction = useSnackbarAction();
+
+  const handleClose = () => {
+    setAddPrepaidOpen(false);
+  };
+
+  const handleConfirm = async () => {
+    if (!prepaidAmountError) {
+      setAddPrepaidOpen(false);
+      const txHash = await addPrepaid(cid, prepaidAmount * 10 ** 12);
+      if (txHash) {
+        onSnackbarAction(
+          'success',
+          'Successfully add prepaid',
+          null,
+          'SUBSCAN',
+          `https://crust.subscan.io/extrinsic/${txHash}`
+        );
+      } else {
+        onSnackbarAction(
+          'warning',
+          'Please verify your Crust Wallet',
+          null,
+          'LEARN',
+          CRUST_WALLET_WIKI
+        );
+      }
+    }
+  };
+
+  const handlePrepaidAmountRaw = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPrepaidAmountRaw(e.target.value);
+    if (isNaN(e.target.value as any) || isNaN(parseFloat(e.target.value))) {
+      setPrepaidAmountError(true);
+    } else {
+      setPrepaidAmountError(false);
+      setPrepaidAmount(parseFloat(e.target.value));
+    }
+  };
+
+  return (
+    <>
+      <Dialog open={addPrepaidOpen} maxWidth={maxWidth} onClose={handleClose} fullWidth={fullWidth}>
+        <DialogTitle>Amount of prepaid in CRU</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            The file will be automatically renewed with the prepaid fund
+          </DialogContentText>
+
+          <Box
+            sx={{
+              pt: 2,
+              margin: 'auto',
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'column'
+            }}
+          >
+            <TextField
+              error={prepaidAmountError}
+              helperText={prepaidAmountError ? 'Please enter a valid number' : null}
+              id="amout-CRU-prepaid"
+              value={prepaidAmountRaw}
+              onChange={handlePrepaidAmountRaw}
+              InputProps={{
+                endAdornment: <InputAdornment position="start">CRU</InputAdornment>
+              }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant="contained">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirm} variant="contained">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
 
 type FileInfoType = {
+  cid: string;
   fileType: string;
   network: string;
   replicas: string;
   expireOn: string;
   prepaid: string;
+  fileSize: number;
 };
 
 export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
@@ -141,7 +381,9 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
           network: 'Crust',
           replicas: fileInfo.reported_replica_count,
           expireOn: expiredDate,
-          prepaid: fileInfo.prepaid
+          prepaid: fileInfo.prepaid,
+          fileSize: parseInt(fileInfo.file_size.replace(/,/g, ''), 10),
+          cid
         };
 
         return [...filesInfo, newFileInfo];
@@ -170,8 +412,9 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
   return (
     <Card>
       <CardHeader title="Files Status" sx={{ mb: 3 }} />
+
       <Scrollbar>
-        <TableContainer sx={{ minWidth: 480 }}>
+        <TableContainer sx={{ minWidth: 700 }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -201,7 +444,7 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
                     </Label>
                   </TableCell>
                   <TableCell align="right">
-                    <MoreMenuButton />
+                    <MoreMenuButton cid={row.cid} fileSize={row.fileSize} />
                   </TableCell>
                 </TableRow>
               ))}

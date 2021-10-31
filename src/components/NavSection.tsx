@@ -183,7 +183,7 @@ function NavItem({ item, isShow }: { item: NavItemProps; isShow?: boolean | unde
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
       {isShow && (
         <>
-          <ListItemText disableTypography primary={title} />
+          <ListItemText disableTypography primary={translate(`sidebar.${title}`)} />
           {info && info}
         </>
       )}
@@ -200,13 +200,14 @@ interface NavSectionProps extends BoxProps {
 }
 
 export default function NavSection({ navConfig, isShow = true, ...other }: NavSectionProps) {
+  const { translate } = useLocales();
   return (
     <Box {...other}>
       {navConfig.map((list) => {
         const { subheader, items } = list;
         return (
           <List key={subheader} disablePadding>
-            {isShow && <ListSubheaderStyle>{subheader}</ListSubheaderStyle>}
+            {isShow && <ListSubheaderStyle>{translate(`sidebar.${subheader}`)}</ListSubheaderStyle>}
             {items.map((item: NavItemProps) => (
               <NavItem key={item.title} item={item} isShow={isShow} />
             ))}

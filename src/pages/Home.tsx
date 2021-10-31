@@ -12,41 +12,23 @@ import useLocales from '../hooks/useLocales';
 // components
 import Page from '../components/Page';
 import { Welcome, NftPresentation } from '../components/_dashboard/home';
+import useSnackbarAction from 'hooks/useSnackbarAction';
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
   const { translate } = useLocales();
   const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
+  const onSnackbarAction = useSnackbarAction();
   useEffect(() => {
     if (!isWarningNotIssueToken) {
-      onSnackbarClose('info');
+      onSnackbarAction(
+        'info',
+        'Switchswap is in beta version. Many ideas are being deployed. Get back for more interesting products!',
+        15000
+      );
       sessionStorage.setItem('notIssueToken', 'true');
     }
   }, []);
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const onSnackbarClose = (color: VariantType) => {
-    enqueueSnackbar(
-      <div>
-        <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-          {color}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Switchswap is in beta version. Many ideas are being deployed. Get back for more
-          interesting products!
-        </Typography>
-      </div>,
-      {
-        variant: color,
-        autoHideDuration: 20000,
-        action: (key) => (
-          <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} width={24} height={24} />
-          </IconButton>
-        )
-      }
-    );
-  };
 
   return (
     <Page title="Home">

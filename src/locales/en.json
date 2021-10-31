@@ -1,9 +1,6 @@
 {
-  "demo": {
-    "title": "English",
-    "introduction": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-  },
   "sidebar": {
+    "app": "APP",
     "home": "Home",
     "Home": "Home",
     "NFT Gallery": "NFT Gallery",
@@ -22,7 +19,9 @@
     "DAPP": "DAPP",
     "ABOUT": "About",
     "Gallery": "Gallery",
-    "Universe": "Universe"
+    "Universe": "Universe",
+    "Funbox": "Funbox",
+    "Learn More": "Learn More"
   },
   "landingPage": {
     "title": "The starting point for your next project"
@@ -68,5 +67,41 @@
       "Medium Priority": "Medium Priority",
       "Low Priority": "Low Priority"
     }
+  },
+  "dashboard": {
+    "explore": "Explore",
+    "support": "Support",
+    "disconnect": "Disconnect"
+  },
+  "assetDetail": {
+    "contract": "Contract Address",
+    "id": "Token ID",
+    "standard": "Token Standard",
+    "network": "Network"
+  },
+  "funBox": {
+    "requirement": "Tweet requirements",
+    "keywords": "Write your own tweet including the following keywords: #web3, #ipfs, #switchswap, #crustnetwork, #polygon",
+    "useDefault": "Or using Quick Tweet with pre-written tweet",
+    "quickTweet": "Quick Tweet",
+    "getFaucet": "Get Faucet"
+  },
+  "connectWallet": {
+    "myWallet": "My Wallet",
+    "management": "Wallet management",
+    "agreement": "By connecting a wallet, you agree to Switchswap’ ",
+    "term": "Terms of Service",
+    "acknowledge": "and acknowledge that you have read and understand the",
+    "disclaimer": "Switchswap disclaimer",
+    "connect": "Connect",
+    "learn": "LEARN",
+    "install": "Install Metamask!",
+    "choose": "Choose Polygon Network!",
+    "selected": "Metamask Wallet is selected by default",
+    "network": "Crust Network",
+    "select": "Select",
+    "installCrust": "Install Crust Wallet!",
+    "default": "Crust Wallet is selected by default",
+    "close": "Close"
   }
 }

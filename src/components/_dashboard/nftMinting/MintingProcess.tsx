@@ -1,21 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 // material
-import {
-  Box,
-  Step,
-  Paper,
-  Button,
-  IconButton,
-  Stepper,
-  StepLabel,
-  Typography
-} from '@mui/material';
-
-import { useSnackbar, VariantType } from 'notistack';
-import closeFill from '@iconify/icons-eva/close-fill';
+import { Box, Step, Paper, Button, Stepper, StepLabel, Typography } from '@mui/material';
 
 import Scrollbar from '../../Scrollbar';
-import { Icon } from '@iconify/react';
 
 import UploadFileStep from './mintingSteps/StepUploadFile';
 import StepCustomizeNFTCard from './mintingSteps/StepCustomizeNFTCard';
@@ -30,8 +17,7 @@ import { IRootState } from 'reduxStore';
 
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import { downloadNFT, resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
-import { PATH_DASHBOARD } from 'routes/paths';
-import { Link } from 'react-router-dom';
+
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
@@ -53,30 +39,6 @@ export default function MintingProcess() {
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepOptional = (step: number) => false;
   const isStepSkipped = (step: number) => skipped.has(step);
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const onSnackbarAction = (color: VariantType, text: string, url?: string) => {
-    enqueueSnackbar(text, {
-      variant: color,
-      action: (key) => (
-        <>
-          {url && (
-            <Button
-              size="small"
-              color={color !== 'default' ? color : 'primary'}
-              href={url}
-              target="_blank"
-            >
-              Learn
-            </Button>
-          )}
-          <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} width={24} height={24} />
-          </IconButton>
-        </>
-      )
-    });
-  };
 
   const handleNext = () => {
     let newSkipped = skipped;
@@ -188,7 +150,7 @@ export default function MintingProcess() {
 
       {activeStep === 1 ? (
         <>
-          <UploadFileStep onSnackbarAction={onSnackbarAction} />
+          <UploadFileStep />
           <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" onClick={handleBack}>
@@ -210,10 +172,7 @@ export default function MintingProcess() {
 
       {activeStep === 2 ? (
         <>
-          <StepCustomizeNFTCard
-            onSnackbarAction={onSnackbarAction}
-            handleAlignment={handleAlignment}
-          />
+          <StepCustomizeNFTCard handleAlignment={handleAlignment} />
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
               Back

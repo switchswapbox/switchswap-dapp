@@ -65,5 +65,8 @@
       "Medium Priority": "Moyenne Priorité",
       "Low Priority": "Petite Priorité"
     }
+  },
+  "connectWallet": {
+    "myWallet": "My Wallette"
   }
 }

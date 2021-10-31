@@ -56,7 +56,7 @@ export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
         </Typography>
 
         <Button variant="contained" onClick={handleClick}>
-          Learn More
+          {translate(`general.learnMore`)}
         </Button>
         <Popover
           open={Boolean(click)}
@@ -73,7 +73,7 @@ export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
         >
           <Box sx={{ p: 2, maxWidth: 280 }}>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              We are working hard on this page. Stay tuned!
+              {translate(`other.${'Under Development'}`)}
             </Typography>
           </Box>
         </Popover>
