@@ -141,6 +141,7 @@ const addPrepaid = async (cid: string, amount: number) => {
 function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
+
   const onSnackbarAction = useSnackbarAction();
   const [addPrepaidOpen, setAddPrepaidOpen] = useState(false);
 
@@ -226,7 +227,13 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
             Download
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigator.clipboard.writeText(`https://ipfs.io/ipfs/${cid}`);
+            handleClose();
+            onSnackbarAction('success', `Copied file's address`, 2000);
+          }}
+        >
           <Icon icon="fluent:document-copy-20-regular" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
             Copy file's address
