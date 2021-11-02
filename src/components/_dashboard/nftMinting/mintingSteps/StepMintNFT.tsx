@@ -25,6 +25,7 @@ import { IRootState } from 'reduxStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import useLocales from '../../../../hooks/useLocales';
 
 type StepMintNFTProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
@@ -59,7 +60,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
     };
   });
   const dispatch = useDispatch();
-
+  const { translate } = useLocales();
   async function mintDataNTF() {
     const provider = await detectEthereumProvider();
     if (provider && provider.isMetaMask) {
@@ -113,7 +114,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
         </Grid>
         <Grid item xs={12} md={6} lg={5}>
           <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
-            Minting NFT
+            {translate(`nftMinting.minting`)}
           </Label>
           <Typography
             variant="h5"
@@ -146,7 +147,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
       >
         <Grid item xs={12} md={3}>
           <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
-            <Typography variant="h6">Mint NFT</Typography>
+            <Typography variant="h6">{translate(`nftMinting.mint`)}</Typography>
             <Tooltip
               TransitionComponent={Zoom}
               title="You must have a small amount of token in your wallet"
@@ -176,7 +177,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
               }
               sx={{ whiteSpace: 'nowrap' }}
             >
-              Mint NFT
+              {translate(`nftMinting.minting`)}
             </Button>
           </Stack>
         </Grid>

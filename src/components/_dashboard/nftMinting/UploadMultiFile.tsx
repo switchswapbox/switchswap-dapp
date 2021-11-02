@@ -55,6 +55,7 @@ import { fData } from '../../../utils/formatNumber';
 import { MIconButton } from '../../@material-extend';
 import { varFadeInRight } from '../../animate';
 import { UploadIllustration } from '../../../assets';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -117,7 +118,7 @@ export default function UploadMultiFile({
 }: UploadMultiFileProps) {
   const theme = useTheme();
   const medium = useMediaQuery(theme.breakpoints.up('md'));
-
+  const { translate } = useLocales();
   const hasFile = files.length > 0;
 
   const [alignment, setAlignment] = useState<string | null>('crust');
@@ -180,19 +181,19 @@ export default function UploadMultiFile({
 
         <Box sx={{ p: 3, ml: { md: 2 } }}>
           <Typography gutterBottom variant="h5">
-            Drop or Select file
+            {translate(`uploadMultiFile.select`)}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drop file here or click&nbsp;
+            {translate(`uploadMultiFile.drop`)}
             <Typography
               variant="body2"
               component="span"
               sx={{ color: 'primary.main', textDecoration: 'underline' }}
             >
-              browse
+              {translate(`uploadMultiFile.browse`)}
             </Typography>
-            &nbsp;thorough your machine
+            {translate(`uploadMultiFile.machine`)}
           </Typography>
         </Box>
       </DropZoneStyle>

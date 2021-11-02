@@ -8,6 +8,7 @@ import { SxProps } from '@mui/system';
 import { fData } from '../../../utils/formatNumber';
 //
 import { UploadIllustration } from '../../../assets';
+import useLocales from '../../../hooks/useLocales';
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +52,7 @@ export default function UploadSingleFile({
   sx,
   ...other
 }: UploadSingleFileProps) {
+  const { translate } = useLocales();
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     multiple: false,
     ...other
@@ -105,19 +107,19 @@ export default function UploadSingleFile({
 
         <Box sx={{ p: 3, ml: { md: 2 } }}>
           <Typography gutterBottom variant="h5">
-            Drop or Select file
+            {translate(`uploadMultiFile.select`)}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Drop files here or click&nbsp;
+            {translate(`uploadMultiFile.drop`)}
             <Typography
               variant="body2"
               component="span"
               sx={{ color: 'primary.main', textDecoration: 'underline' }}
             >
-              browse
+              {translate(`uploadMultiFile.browse`)}
             </Typography>
-            &nbsp;thorough your machine
+            {translate(`uploadMultiFile.machine`)}
           </Typography>
         </Box>
 
