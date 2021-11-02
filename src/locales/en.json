@@ -1,6 +1,5 @@
 {
   "sidebar": {
-    "app": "APP",
     "home": "Home",
     "Home": "Home",
     "NFT Gallery": "NFT Gallery",
@@ -19,7 +18,7 @@
     "DAPP": "DAPP",
     "ABOUT": "About",
     "Gallery": "Gallery",
-    "Universe": "Universe",
+    "Universe": "Universal",
     "Funbox": "Funbox",
     "Learn More": "Learn More"
   },
@@ -103,5 +102,54 @@
     "installCrust": "Install Crust Wallet!",
     "default": "Crust Wallet is selected by default",
     "close": "Close"
+  },
+  "nftMinting": {
+    "describe-1": "This is for configure Nft",
+    "config": "NFT Configuration",
+    "blockchain": "Blockchain",
+    "author": "With Author Registration",
+    "simplified": "Simplified",
+    "card": "Without NFT Card",
+    "NFT type": "NFT Type",
+    "requirements and sample": "Requirements & Sample NFT",
+    "extensions": "All file extensions",
+    "requirements": "Requirements",
+    "usage": "Usage",
+    "images": "Only for images",
+    "art": "Art, Intellectual Property",
+    "asset": "Anonymous Asset",
+    "describe-2": "This is for customize Nft ",
+    "metadata": "Creating Metadata",
+    "description": "Description",
+    "placeholder": "Enter what is so cool about my NFT",
+    "upload": "Upload Metadata",
+    "updated": "Metadata is uploaded successfully to Crust Network",
+    "uploaded": "NFT Card is uploaded successfully to Crust Network",
+    "describe-3": "This is for Step mint Nft",
+    "minting": "Minting NFT",
+    "mint": "Mint NFT",
+    "describe-4": "This is for Step upload file",
+    "upload file": "Upload file to Crust Network",
+    "uploaded successfully": "Uploaded successfully to Crust Network"
+  },
+  "mintingProcess": {
+    "learn": "Learn",
+    "step completed": "All steps completed - you're finished",
+    "reset": "Reset",
+    "back": "Back",
+    "skip": "Skip",
+    "download": "Download NFT Card",
+    "finish": "Finish",
+    "next": "Next",
+    "NFT Configuration": "NFT Configuration",
+    "Upload File": "Upload File",
+    "Customize NFT Card": "Customize NFT Card",
+    "Mint NFT": "Mint NFT"
+  },
+  "uploadMultiFile": {
+    "select": "Drop or Select file",
+    "drop": "Drop file here or click ",
+    "browse": "browse ",
+    "machine": "through your machine"
   }
 }

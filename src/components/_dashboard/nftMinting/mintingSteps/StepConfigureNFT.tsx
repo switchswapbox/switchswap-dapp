@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { useState } from 'react';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import useLocales from '../../../../hooks/useLocales';
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
   width: '100%',
@@ -53,6 +54,7 @@ export default function StepConfigureNFT() {
   const [toggle, setToggle] = useState(['simplified']);
 
   const dispatch = useDispatch();
+  const { translate } = useLocales();
 
   useEffect(() => {
     dispatch(changeMintingProcessState({ nftType: 'simplified' }));
@@ -75,9 +77,9 @@ export default function StepConfigureNFT() {
   return (
     <Grid container spacing={3} sx={{ pt: 2 }}>
       <Grid item xs={12} md={4}>
-        <Block title="NFT Configuration">
+        <Block title={translate(`nftMinting.config`)}>
           <ListWrapperStyle>
-            <List subheader={<ListSubheader>Blockchain</ListSubheader>}>
+            <List subheader={<ListSubheader>{translate(`nftMinting.blockchain`)}</ListSubheader>}>
               <ListItemButton>
                 <ListItemIcon>
                   <Box
@@ -100,7 +102,7 @@ export default function StepConfigureNFT() {
             </List>
           </ListWrapperStyle>
           <ListWrapperStyle sx={{ mt: 2 }}>
-            <List subheader={<ListSubheader>NFT Type</ListSubheader>}>
+            <List subheader={<ListSubheader>{translate(`nftMinting.NFT type`)}</ListSubheader>}>
               <ListItemButton onClick={handleToggle('withAuthorReg')} disabled={true}>
                 <ListItemIcon>
                   <SvgIcon>
@@ -109,7 +111,7 @@ export default function StepConfigureNFT() {
                 </ListItemIcon>
                 <ListItemText
                   id="withAuthorReg"
-                  primary="With Author Registration"
+                  primary={translate(`nftMinting.author`)}
                   sx={{ pr: 5 }}
                 />
                 <ListItemSecondaryAction>
@@ -129,7 +131,11 @@ export default function StepConfigureNFT() {
                     <Icon icon="emojione:small-airplane" />
                   </SvgIcon>
                 </ListItemIcon>
-                <ListItemText id="simplified" primary="Simplified" sx={{ pr: 5 }} />
+                <ListItemText
+                  id="simplified"
+                  primary={translate(`nftMinting.simplified`)}
+                  sx={{ pr: 5 }}
+                />
                 <ListItemSecondaryAction>
                   <Switch
                     edge="end"
@@ -147,7 +153,11 @@ export default function StepConfigureNFT() {
                     <Icon icon="emojione:bullet-train" />
                   </SvgIcon>
                 </ListItemIcon>
-                <ListItemText id="withoutNftCard" primary="Without NFT Card" sx={{ pr: 5 }} />
+                <ListItemText
+                  id="withoutNftCard"
+                  primary={translate(`nftMinting.card`)}
+                  sx={{ pr: 5 }}
+                />
                 <ListItemSecondaryAction>
                   <Switch
                     edge="end"
@@ -164,11 +174,13 @@ export default function StepConfigureNFT() {
         </Block>
       </Grid>
       <Grid item xs={12} md={8}>
-        <Block title="Requirements & Sample NFT">
+        <Block title={translate(`nftMinting.requirements and sample`)}>
           <Grid container spacing={3}>
             <Grid item xs={12} xl={4} spacing={3}>
               <ListWrapperStyle>
-                <List subheader={<ListSubheader>Requirements</ListSubheader>}>
+                <List
+                  subheader={<ListSubheader>{translate(`nftMinting.requirements`)}</ListSubheader>}
+                >
                   <ListItem
                     secondaryAction={
                       <IconButton
@@ -218,7 +230,7 @@ export default function StepConfigureNFT() {
               </ListWrapperStyle>
 
               <ListWrapperStyle sx={{ mt: 2 }}>
-                <List subheader={<ListSubheader>Usage</ListSubheader>}>
+                <List subheader={<ListSubheader>{translate(`nftMinting.usage`)}</ListSubheader>}>
                   <ListItem
                     sx={{
                       display: toggle.indexOf('withoutNftCard') !== -1 ? 'flex' : 'none'
@@ -229,7 +241,7 @@ export default function StepConfigureNFT() {
                         <ImageIcon />
                       </Tooltip>
                     </ListItemIcon>
-                    <ListItemText id="blockchain" primary="Only for image" />
+                    <ListItemText id="blockchain" primary={translate(`nftMinting.image`)} />
                   </ListItem>
                   <ListItem
                     sx={{
@@ -241,7 +253,7 @@ export default function StepConfigureNFT() {
                         <DescriptionIcon />
                       </Tooltip>
                     </ListItemIcon>
-                    <ListItemText id="blockchain" primary="All file extensions" />
+                    <ListItemText id="blockchain" primary={translate(`nftMinting.extensions`)} />
                   </ListItem>
                   <ListItem
                     sx={{
@@ -253,7 +265,7 @@ export default function StepConfigureNFT() {
                         <BookmarkAddedIcon />
                       </Tooltip>
                     </ListItemIcon>
-                    <ListItemText id="blockchain" primary="Art, Intellectual Property" />
+                    <ListItemText id="blockchain" primary={translate(`nftMinting.art`)} />
                   </ListItem>
                   <ListItem
                     sx={{
@@ -265,7 +277,7 @@ export default function StepConfigureNFT() {
                         <BookmarkAddedIcon />
                       </Tooltip>
                     </ListItemIcon>
-                    <ListItemText id="blockchain" primary="Anonymous Asset" />
+                    <ListItemText id="blockchain" primary={translate(`nftMinting.asset`)} />
                   </ListItem>
                 </List>
               </ListWrapperStyle>

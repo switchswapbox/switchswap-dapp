@@ -32,6 +32,7 @@ import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import { downloadNFT, resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
 import { PATH_DASHBOARD } from 'routes/paths';
 import { Link } from 'react-router-dom';
+import useLocales from '../../../hooks/useLocales';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
@@ -53,6 +54,9 @@ export default function MintingProcess() {
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepOptional = (step: number) => false;
   const isStepSkipped = (step: number) => skipped.has(step);
+  const { translate } = useLocales();
+  const finish = translate(`mintingProcess.finish`);
+  const next = translate(`mintingProcess.next`);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const onSnackbarAction = (color: VariantType, text: string, url?: string) => {
@@ -67,7 +71,7 @@ export default function MintingProcess() {
               href={url}
               target="_blank"
             >
-              Learn
+              {translate(`mintingProcess.learn`)}
             </Button>
           )}
           <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
@@ -140,7 +144,7 @@ export default function MintingProcess() {
             }
             return (
               <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
+                <StepLabel {...labelProps}>{translate(`mintingProcess.${label}`)}</StepLabel>
               </Step>
             );
           })}
@@ -150,12 +154,12 @@ export default function MintingProcess() {
       {activeStep === steps.length ? (
         <>
           <Paper sx={{ p: 3, my: 3, minHeight: 120, bgcolor: 'grey.50012' }}>
-            <Typography sx={{ my: 1 }}>All steps completed - you&apos;re finished</Typography>
+            <Typography sx={{ my: 1 }}>{translate(`mintingProcess.step completed`)}</Typography>
           </Paper>
 
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ flexGrow: 1 }} />
-            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={handleReset}>{translate(`mintingProcess.reset`)}</Button>
           </Box>
         </>
       ) : (
@@ -170,11 +174,11 @@ export default function MintingProcess() {
           <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack}>
-              Back
+              {translate(`mintingProcess.back`)}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              {activeStep === steps.length - 1 ? finish : next}
             </Button>
           </Box>
         </>
@@ -192,11 +196,11 @@ export default function MintingProcess() {
           <Box sx={{ display: 'flex', mt: 3 }}>
             {/* <Button onClick={uploadSingleFile}>Test Upfile </Button> */}
             <Button color="inherit" onClick={handleBack}>
-              Back
+              {translate(`mintingProcess.back`)}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext} disabled={stepOneNotDone}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              {activeStep === steps.length - 1 ? finish : next}
             </Button>
           </Box>
         </>
@@ -216,25 +220,25 @@ export default function MintingProcess() {
           />
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-              Back
+              {translate(`mintingProcess.back`)}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
             {isStepOptional(activeStep) && (
               <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
+                {translate(`mintingProcess.skip`)}
               </Button>
             )}
 
             {nftType !== 'withoutNftCard' ? (
               <Button variant="contained" sx={{ mr: 1 }} onClick={handleDownload}>
-                Download NFT Card
+                {translate(`mintingProcess.download`)}
               </Button>
             ) : (
               <></>
             )}
             <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext} disabled={stepTwoNotDone}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              {activeStep === steps.length - 1 ? finish : next}
             </Button>
           </Box>
         </>
@@ -251,12 +255,12 @@ export default function MintingProcess() {
           <StepMintNFT handleAlignment={handleAlignment} />
           <Box sx={{ display: 'flex' }}>
             <Button color="inherit" onClick={handleBack} sx={{ mr: 1 }}>
-              Back
+              {translate(`mintingProcess.back`)}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
             {isStepOptional(activeStep) && (
               <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
+                {translate(`mintingProcess.skip`)}
               </Button>
             )}
             <Button
@@ -265,7 +269,7 @@ export default function MintingProcess() {
               sx={{ display: 'flex' }}
               disabled={!nftMinted}
             >
-              Finish
+              {translate(`mintingProcess.finish`)}
             </Button>
           </Box>
         </>

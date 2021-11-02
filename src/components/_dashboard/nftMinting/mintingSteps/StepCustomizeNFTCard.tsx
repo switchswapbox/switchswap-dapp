@@ -42,6 +42,7 @@ import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCust
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
 import html2canvas from 'html2canvas';
+import useLocales from '../../../../hooks/useLocales';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
@@ -59,7 +60,7 @@ function TitleAndDescription() {
     };
   });
   const dispatch = useDispatch();
-
+  const { translate } = useLocales();
   const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeMintingProcessState({ nameNft: event.target.value }));
     dispatch(
@@ -76,7 +77,7 @@ function TitleAndDescription() {
   return (
     <>
       <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase' }}>
-        Creating Metadata
+        {translate(`nftMinting.metadata`)}
       </Label>
       <Typography
         variant="h5"
@@ -101,7 +102,7 @@ function TitleAndDescription() {
 
       <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
         <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-          Description
+          {translate(`nftMinting.description`)}
         </Typography>
       </Box>
 
@@ -111,7 +112,7 @@ function TitleAndDescription() {
         variant="standard"
         multiline
         size="small"
-        placeholder="Enter what is so cool about my NFT"
+        placeholder={translate(`nftMinting.placeholder`)}
         type="string"
         defaultValue={descNft}
         onChange={handleDescNftInputChange}
@@ -123,7 +124,7 @@ function TitleAndDescription() {
 
 function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
-
+  const { translate } = useLocales();
   let nftCardCidTemp = '';
 
   const {
@@ -379,7 +380,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
       >
         <Grid item xs={12} md={3}>
           <Stack direction="row" alignItems="center" spacing={2} sx={{ height: '100%' }}>
-            <Typography variant="h6">Upload Metadata</Typography>
+            <Typography variant="h6">{translate(`nftMinting.upload`)}</Typography>
             <Tooltip
               TransitionComponent={Zoom}
               title="Upload and pin freely to Crust Network with W3Auth. Sign a message with your prefered network to use the service."
@@ -474,9 +475,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
               <Icon icon="teenyicons:certificate-outline" color="black" />
             </SvgIcon>
             <Stack direction="column">
-              <Typography variant="subtitle2">
-                Metadata is uploaded successfully to Crust Network
-              </Typography>
+              <Typography variant="subtitle2">{translate(`nftMinting.updated`)}</Typography>
               <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                 CID: {metadataCid}
               </Typography>
@@ -500,9 +499,7 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
               <Icon icon="teenyicons:certificate-outline" color="black" />
             </SvgIcon>
             <Stack direction="column">
-              <Typography variant="subtitle2">
-                NFT Card is uploaded successfully to Crust Network
-              </Typography>
+              <Typography variant="subtitle2">{translate(`nftMinting.uploaded`)}</Typography>
               <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                 CID: {nftCardCid}
               </Typography>
