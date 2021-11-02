@@ -388,10 +388,12 @@ const daysNumberToHumanReadable = (days: number): string => {
   if (month > 0) {
     daysReadable += month + (month > 1 ? ' months ' : ' month ');
     daysLeft -= month * (365 / 12);
-    if (year) {
-      return daysReadable;
-    }
   }
+
+  if (year) {
+    return daysReadable;
+  }
+
   if (daysLeft) {
     daysReadable += Math.floor(daysLeft) + ' days';
   }
