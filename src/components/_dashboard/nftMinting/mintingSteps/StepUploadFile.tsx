@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import useSnackbarAction from 'hooks/useSnackbarAction';
+import useLocales from '../../../../hooks/useLocales';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
@@ -56,6 +57,7 @@ function StepUploadFile() {
   });
   const dispatch = useDispatch();
   const onSnackbarAction = useSnackbarAction();
+  const { translate } = useLocales();
 
   const [preview, setPreview] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -211,7 +213,7 @@ function StepUploadFile() {
   return (
     <>
       <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
-        <Typography variant="h6">Upload file to Crust Network</Typography>
+        <Typography variant="h6">{translate(`nftMinting.upload file`)}</Typography>
         <Box sx={{ flexGrow: 1 }} />
         {/* <FormControlLabel
           sx={{ m: 0 }}
@@ -247,7 +249,9 @@ function StepUploadFile() {
               <Icon icon="teenyicons:certificate-outline" color="black" />
             </SvgIcon>
             <Stack direction="column">
-              <Typography variant="subtitle2">Uploaded successfully to Crust Network</Typography>
+              <Typography variant="subtitle2">
+                {translate(`nftMinting.uploaded successfully`)}
+              </Typography>
               <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                 CID: {uploadedCid ? uploadedCid.cid : ''}
               </Typography>

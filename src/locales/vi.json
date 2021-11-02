@@ -20,7 +20,7 @@
     "Gallery": "Bộ sưu tập",
     "Universe": "Universe",
     "Funbox": "Funbox",
-    "Learn More": "Tìm hiểu thêm"
+    "Learn More": "Tìm hiểu thêm."
   },
   "landingPage": {
     "title": "Điểm khởi đầu cho dự án của "
@@ -102,5 +102,52 @@
     "installCrust": "Cài đặt ví Crust!",
     "default": "Ví Crust được chọn mặc định",
     "close": "Đóng"
+  },
+  "nftMinting": {
+    "config": "Cấu hình NFT",
+    "blockchain": "Blockchain",
+    "author": "Không có quyền tác giả",
+    "simplified": "Đơn giản",
+    "card": "Không có NFT Card",
+    "NFT type": "Loại NFT",
+    "requirements and sample": "Yêu cầu & NFT mẫu",
+    "extensions": "Tất cả các tệp mở rộng",
+    "requirements": "Yêu cầu",
+    "usage": "Sử dụng",
+    "images": "Chỉ dùng cho tập tin ảnh",
+    "art": "Nghệ thuật, sở hữu trí tuệ",
+    "asset": "Tài sản vô danh",
+    "metadata": "Tạo Metadata",
+    "description": "Mô tả",
+    "placeholder": "Viết gì xàm xàm đi mấy fen",
+    "upload": "Tải lên Metadata",
+    "updated": "Metadata đã được tải lên thành công trên mạng Crust",
+    "uploaded": "Thẻ NFT đã được tải lên thành công trên mạng Crust",
+    "describe-3": "This is for Step mint Nft",
+    "minting": "Các bước tạo NFT",
+    "mint": "Tạo NFT",
+    "describe-4": "This is for Step upload file",
+    "upload file": "Tải tệp lên mạng Crust",
+    "uploaded successfully": "Tải tệp thành công lên mạng Crust"
+  },
+  "mintingProcess": {
+    "learn": "Tìm hiểu",
+    "step completed": "Tất cả các bước đã hoàn tất",
+    "reset": "Reset",
+    "back": "Quay lại",
+    "skip": "Bỏ qua",
+    "download": "Tải về NFT Card",
+    "finish": "Hoàn tất",
+    "next": "Kế tiếp",
+    "NFT Configuration": "Cấu hình NFT",
+    "Upload File": "Tải tệp lên",
+    "Customize NFT Card": "Tùy chỉnh NFT Card",
+    "Mint NFT": "Tạo NFT"
+  },
+  "uploadMultiFile": {
+    "select": "Kéo thả vào hoặc chọn tệp",
+    "drop": "Kéo thả tệp hoặc click ",
+    "browse": "Tìm duyệt ",
+    "machine": "từ máy của bạn"
   }
 }
