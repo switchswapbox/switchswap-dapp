@@ -1,37 +1,53 @@
 // material
-import { useTheme } from '@mui/material/styles';
 import { Box, BoxProps } from '@mui/material';
-
+import './LogoStyle.css';
 // ----------------------------------------------------------------------
 
 export default function Logo({ sx }: BoxProps) {
-  const theme = useTheme();
-  const PRIMARY_LIGHT = theme.palette.primary.light;
-  const PRIMARY_MAIN = theme.palette.primary.main;
-  const PRIMARY_DARK = theme.palette.primary.dark;
-
   return (
-    <Box sx={{ width: 40, height: 40, ...sx }}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
+    <Box sx={{ width: 30, height: 30, ...sx }}>
+      <svg
+        version="1.2"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 306 306"
+        width="100%"
+        height="100%"
+      >
         <defs>
-          <linearGradient id="BG1" x1="100%" x2="50%" y1="9.946%" y2="50%">
-            <stop offset="0%" stopColor={PRIMARY_DARK} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
+          <linearGradient
+            id="grd1"
+            gradientUnits="userSpaceOnUse"
+            x1="12.62"
+            y1="117.48"
+            x2="244.62"
+            y2="258.81"
+          >
+            <stop offset="0" stopColor="#00ff5b" />
+            <stop offset="1" stopColor="#0014ff" />
           </linearGradient>
-          <linearGradient id="BG2" x1="50%" x2="50%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor={PRIMARY_LIGHT} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
-          <linearGradient id="BG3" x1="50%" x2="50%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor={PRIMARY_LIGHT} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
+          <linearGradient
+            id="grd2"
+            gradientUnits="userSpaceOnUse"
+            x1="40045.29"
+            y1="28313"
+            x2="100318.89"
+            y2="56579"
+          >
+            <stop offset="0" stopColor="#00ff5b" />
+            <stop offset="1" stopColor="#0014ff" />
           </linearGradient>
         </defs>
-        <g fill={PRIMARY_MAIN} fillRule="evenodd" stroke="none" strokeWidth="1">
-          <path d="M67.69 260.27C113.96 341.23 161.79 417.5 216.73 305.62C224.25 291.23 229.73 263.28 242 263.28L242 263.42C254.27 263.42 259.75 291.38 267.27 305.76C322.21 417.64 370.04 341.37 416.31 260.42C419.79 254.31 423.14 248.48 426 243.42C319.96 310.55 328.89 107.75 242 106.14L242 106C155.11 107.61 164.04 310.4 58 243.28C60.86 248.34 64.21 254.17 67.69 260.27" />
-          <path d="M62 106C35.49 106 14 127.49 14 154C14 180.51 35.49 202 62 202C88.51 202 110 180.51 110 154C110 127.49 88.51 106 62 106Z" />
-          <path d="M422 106C395.49 106 374 127.49 374 154C374 180.51 395.49 202 422 202C448.51 202 470 180.51 470 154C470 127.49 448.51 106 422 106Z" />
-        </g>
+
+        <path
+          id="Layer"
+          className="shp0"
+          d="M23.1 178L23.1 228L66.4 253L109.7 278L109.7 278L153 303L196.3 278L196.3 278L196.3 278L196.3 278L239.6 253L282.9 228L282.9 178L239.6 153L196.3 128L196.3 128L153 103L153 153L196.3 178L196.3 178L239.6 203L196.3 228L196.3 228L153 253L153 253L109.7 228L109.7 228L66.4 203L66.4 153L23.1 178L23.1 178Z"
+        />
+        <path
+          id="Layer"
+          className="shp1"
+          d="M282.9 128L282.9 78L239.6 53L196.3 28L196.3 28L153 3L109.7 28L109.7 28L109.7 28L109.7 28L66.4 53L23.1 78L23.1 128L66.4 153L109.7 178L109.7 178L153 203L153 153L109.7 128L109.7 128L66.4 103L109.7 78L109.7 78L153 53L153 53L196.3 78L196.3 78L239.6 103L239.6 153L282.9 128L282.9 128Z"
+        />
       </svg>
     </Box>
   );
