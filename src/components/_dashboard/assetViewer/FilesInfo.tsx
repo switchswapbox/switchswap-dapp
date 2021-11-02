@@ -23,6 +23,7 @@ import {
   Button,
   Dialog,
   Box,
+  Tooltip,
   DialogTitle,
   DialogContent,
   DialogContentText,
@@ -30,17 +31,25 @@ import {
   TextField,
   InputAdornment
 } from '@mui/material';
+import axios from 'axios';
 // utils
 import Label from '../../Label';
 import Scrollbar from '../../Scrollbar';
 import { MIconButton } from '../../@material-extend';
 import { AssetAndOwnerType } from '../../../pages/AssetViewer';
-import { CRUST_CHAIN_RPC, CRUST_CONSENSUS_DATE, CRUST_WALLET_WIKI } from 'assets/COMMON_VARIABLES';
+
 import marketTypes from '@crustio/type-definitions/src/market';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
 import useSnackbarAction from 'hooks/useSnackbarAction';
+import {
+  CRUST_CHAIN_RPC,
+  CRUST_CONSENSUS_DATE,
+  CRUST_WALLET_WIKI,
+  METADATA_SUBSCAN_CRUST,
+  RENEW_PERIOD_BLOCK_NUMBER
+} from 'assets/COMMON_VARIABLES';
 
 type FileInfo = typeof marketTypes.types.FileInfo;
 
@@ -54,9 +63,8 @@ const getStatusMainnet = async (cid: string) => {
     await chain.isReadyOrError;
 
     const fileInfo = await chain.query.market.files(cid);
-
     chain.disconnect();
-    return fileInfo.toHuman() as FileInfo;
+    return fileInfo.toJSON() as FileInfo;
   } catch (e) {
     return null;
   }
@@ -211,7 +219,7 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
         >
           <Icon icon="carbon:add-alt" width={20} height={20} />
           <Typography variant="body2" sx={{ ml: 2 }}>
-            Add Prepaid
+            Add Lifetime
           </Typography>
         </MenuItem>
 
@@ -352,16 +360,57 @@ type FileInfoType = {
   fileType: string;
   network: string;
   replicas: string;
+  realTimeStorageFee: number;
   expireOn: string;
+  guaranteedLifetime: string;
   prepaid: string;
   fileSize: number;
+};
+
+type MetaDataSubscan = {
+  isDone: boolean;
+  blockNum: number;
+  avgBlockTime: number;
+  fileBaseFee: number;
+  fileByteFee: number;
+  fileKeysCountFee: number;
+};
+
+const daysNumberToHumanReadable = (days: number): string => {
+  let daysReadable = '';
+  let daysLeft = days;
+  const year = Math.floor(daysLeft / 365);
+  if (year) {
+    daysReadable += year + (year > 1 ? ' years ' : ' year ');
+    daysLeft -= year * 365;
+  }
+  const month = Math.floor(daysLeft / (365 / 12));
+  if (month > 0) {
+    daysReadable += month + (month > 1 ? ' months ' : ' month ');
+    daysLeft -= month * (365 / 12);
+    if (year) {
+      return daysReadable;
+    }
+  }
+  if (daysLeft) {
+    daysReadable += Math.floor(daysLeft) + ' days';
+  }
+
+  return daysReadable;
 };
 
 export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
   const theme = useTheme();
   const { contentId, metadataId, nftCardId } = assetAndOwner;
   const [loading, setLoading] = useState(true);
-
+  const [metadataSubscan, setMetadataSubscan] = useState<MetaDataSubscan>({
+    isDone: false,
+    blockNum: 0,
+    avgBlockTime: 0,
+    fileBaseFee: 0,
+    fileByteFee: 0,
+    fileKeysCountFee: 0
+  });
   const [filesInfo, setFilesInfo] = useState<FileInfoType[]>([]);
 
   const fetchFileInfo = async (cid: string, fileType: string) => {
@@ -369,20 +418,40 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
 
     if (fileInfo) {
       const expiredDate = new Date(
-        CRUST_CONSENSUS_DATE.getTime() +
-          parseInt(fileInfo.expired_at.replace(/,/g, ''), 10) * 6 * 1000
+        CRUST_CONSENSUS_DATE.getTime() + parseInt(fileInfo.expired_at, 10) * 6 * 1000
       )
         .toISOString()
         .split('T')[0];
+
+      let guaranteedBlock = parseInt(fileInfo.expired_at, 10) - metadataSubscan.blockNum;
+      guaranteedBlock = guaranteedBlock > 0 ? guaranteedBlock : 0;
+      let realTimeStorageFee = 0;
+
+      realTimeStorageFee =
+        metadataSubscan.fileByteFee * Math.ceil(parseInt(fileInfo.file_size, 10) / (1024 * 1024)) +
+        metadataSubscan.fileBaseFee +
+        metadataSubscan.fileKeysCountFee;
+
+      if (parseInt(fileInfo.prepaid, 10) > 0) {
+        guaranteedBlock +=
+          Math.floor(parseInt(fileInfo.prepaid, 10) / realTimeStorageFee) *
+          RENEW_PERIOD_BLOCK_NUMBER;
+      }
+
+      const guaranteedDays = Math.floor(
+        (guaranteedBlock * metadataSubscan.avgBlockTime) / (3600 * 24)
+      );
 
       setFilesInfo((filesInfo) => {
         const newFileInfo = {
           fileType,
           network: 'Crust',
+          realTimeStorageFee,
           replicas: fileInfo.reported_replica_count,
           expireOn: expiredDate,
+          guaranteedLifetime: daysNumberToHumanReadable(guaranteedDays),
           prepaid: fileInfo.prepaid,
-          fileSize: parseInt(fileInfo.file_size.replace(/,/g, ''), 10),
+          fileSize: parseInt(fileInfo.file_size, 10),
           cid
         };
 
@@ -393,7 +462,22 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
   };
 
   useEffect(() => {
-    if (contentId !== '' && nftCardId !== '') {
+    axios.get(METADATA_SUBSCAN_CRUST).then((response) => {
+      if (response.status === 200) {
+        setMetadataSubscan({
+          isDone: true,
+          blockNum: parseInt(response.data.data.blockNum),
+          avgBlockTime: parseFloat(response.data.data.avgBlockTime),
+          fileBaseFee: parseInt(response.data.data.fileBaseFee),
+          fileByteFee: parseInt(response.data.data.fileByteFee),
+          fileKeysCountFee: parseInt(response.data.data.fileKeysCountFee)
+        });
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (contentId !== '' && nftCardId !== '' && metadataSubscan.isDone) {
       if (contentId === nftCardId) {
         fetchFileInfo(contentId, 'NFT Content');
       } else {
@@ -401,13 +485,13 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
         fetchFileInfo(nftCardId, 'NFT Card');
       }
     }
-  }, [contentId, nftCardId]);
+  }, [contentId, nftCardId, metadataSubscan]);
 
   useEffect(() => {
-    if (metadataId !== '') {
+    if (metadataId !== '' && metadataSubscan.isDone) {
       fetchFileInfo(metadataId, 'Metadata');
     }
-  }, [metadataId]);
+  }, [metadataId, metadataSubscan]);
 
   return (
     <Card>
@@ -421,8 +505,16 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
                 <TableCell>File</TableCell>
                 <TableCell align="center">Network</TableCell>
                 <TableCell align="center">Replicas</TableCell>
-                <TableCell align="center">Expire on</TableCell>
-                <TableCell align="center">Prepaid</TableCell>
+                <TableCell align="center">
+                  <Tooltip title="The lifetime is calculated based on the real-time status of the network, it could be slightly changed later.">
+                    <Stack direction="row" justifyContent="center">
+                      <Typography variant="subtitle2">Guaranteed Lifetime</Typography>
+                      <Typography variant="subtitle2" color="red">
+                        *
+                      </Typography>
+                    </Stack>
+                  </Tooltip>
+                </TableCell>
                 <TableCell align="center">Status</TableCell>
                 <TableCell />
               </TableRow>
@@ -433,8 +525,7 @@ export default function FilesInfo({ assetAndOwner }: { assetAndOwner: AssetAndOw
                   <TableCell>{row.fileType}</TableCell>
                   <TableCell align="center">{row.network}</TableCell>
                   <TableCell align="center">{row.replicas}</TableCell>
-                  <TableCell align="center">{row.expireOn}</TableCell>
-                  <TableCell align="center">{row.prepaid}</TableCell>
+                  <TableCell align="center">{row.guaranteedLifetime}</TableCell>
                   <TableCell align="center">
                     <Label
                       variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
