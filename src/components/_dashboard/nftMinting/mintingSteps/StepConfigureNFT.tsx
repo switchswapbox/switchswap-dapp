@@ -241,7 +241,7 @@ export default function StepConfigureNFT() {
                         <ImageIcon />
                       </Tooltip>
                     </ListItemIcon>
-                    <ListItemText id="blockchain" primary={translate(`nftMinting.image`)} />
+                    <ListItemText id="blockchain" primary={translate(`nftMinting.images`)} />
                   </ListItem>
                   <ListItem
                     sx={{
