@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 // material
-import { Container, Grid, Typography, IconButton } from '@mui/material';
+import { Container, Grid, Typography, IconButton, SvgIcon } from '@mui/material';
 
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
@@ -11,7 +11,7 @@ import useSettings from '../hooks/useSettings';
 import useLocales from '../hooks/useLocales';
 // components
 import Page from '../components/Page';
-import { Welcome, NftPresentation } from '../components/_dashboard/home';
+import { Welcome, NftPresentation, StatisticsCard } from '../components/_dashboard/home';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 // ----------------------------------------------------------------------
 export default function Home() {
@@ -40,6 +40,33 @@ export default function Home() {
           <Grid item xs={12} md={6} lg={5}>
             <NftPresentation />
           </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="Total Minted NFT" value={143}>
+              <SvgIcon>
+                <Icon icon="bi:card-image" width="20" height="20" />
+              </SvgIcon>
+            </StatisticsCard>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="Locked NFTs value" value={0}>
+              <SvgIcon>
+                <Icon icon="fa-solid:user-lock" width="20" height="20" />
+              </SvgIcon>
+            </StatisticsCard>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="NFTs trading volumn" value={0}>
+              <SvgIcon>
+                <Icon icon="dashicons:money-alt" width="24" height="24" />
+              </SvgIcon>
+            </StatisticsCard>
+          </Grid>
+          {/* <Grid item xs={12} md={4}>
+            <StatisticsCard text="Locked NFT value" value={0} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="NFT's traded volume" value={0} />
+          </Grid> */}
         </Grid>
       </Container>
     </Page>
