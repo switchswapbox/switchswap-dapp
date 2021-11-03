@@ -11,7 +11,12 @@ import useSettings from '../hooks/useSettings';
 import useLocales from '../hooks/useLocales';
 // components
 import Page from '../components/Page';
-import { Welcome, NftPresentation, StatisticsCard } from '../components/_dashboard/home';
+import {
+  Welcome,
+  NftPresentation,
+  StatisticsCard,
+  ProjectTimeline
+} from '../components/_dashboard/home';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 // ----------------------------------------------------------------------
 export default function Home() {
@@ -60,6 +65,9 @@ export default function Home() {
                 <Icon icon="dashicons:money-alt" width="24" height="24" />
               </SvgIcon>
             </StatisticsCard>
+          </Grid>
+          <Grid item xs={12}>
+            <ProjectTimeline />
           </Grid>
           {/* <Grid item xs={12} md={4}>
             <StatisticsCard text="Locked NFT value" value={0} />
