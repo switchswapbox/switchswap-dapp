@@ -16,3 +16,7 @@
   font-style: normal;
   src: local('CircularStd'), url('CircularStd-Bold.otf') format('opentype');
 }
+@font-face {
+  font-family: 'OCRAExtended';
+  src: url('/static/font/OCRAEXT.TTF') format('truetype');
+}

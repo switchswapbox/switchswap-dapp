@@ -220,7 +220,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 fontFamily: 'OCRAExtended,OCR A Extended',
-                fontSize: '16px',
+                fontSize: '22px',
                 fontWeight: 'bold'
               }}
             >
@@ -241,7 +241,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                   wordBreak: 'break-all',
                   textAlignLast: 'center',
                   fontFamily: 'OCRAExtended,OCR A Extended',
-                  fontSize: '10px'
+                  fontSize: '14px'
                 }}
               >
                 File name: {uploadedCid.name} | Size: {uploadedCid.size}Kb
@@ -261,7 +261,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                   wordWrap: 'break-word',
                   wordBreak: 'break-all',
                   textAlignLast: 'center',
-                  fontFamily: 'Roboto',
+                  fontFamily: 'OCRAExtended,OCR A Extended',
                   fontSize: '14px'
                 }}
               >
@@ -277,7 +277,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Roboto',
+                fontFamily: 'OCRAExtended,OCR A Extended',
                 fontSize: '10px'
               }}
             >
@@ -292,7 +292,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Roboto',
+                fontFamily: 'OCRAExtended,OCR A Extended',
                 fontSize: '10px'
               }}
             >
