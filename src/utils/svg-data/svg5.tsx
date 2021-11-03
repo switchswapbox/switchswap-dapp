@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArgsProps } from './svgArgs';
-function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
+function SvgComponent({ qrcode, title, uploadedCid, qrcodeHash, ...other }: ArgsProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -313,6 +313,9 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
 
           <foreignObject x="190" y="110" width="250" height="250">
             {qrcode}
+          </foreignObject>
+          <foreignObject x="440" y="110" width="250" height="250">
+            {qrcodeHash}
           </foreignObject>
           <path fill="url(#svg5_linear-gradient-2)" d="M720 0h5v438h-5z" />
           <g clipPath="url(#svg5_clip-path-2)" opacity={0.3}>

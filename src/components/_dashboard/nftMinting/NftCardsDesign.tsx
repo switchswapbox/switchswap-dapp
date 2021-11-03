@@ -14,14 +14,17 @@ import LayoutSelection from './qrCardCustomize/LayoutSelection';
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
-  const { layoutIndex, title, uploadedCid, download } = useSelector((state: IRootState) => {
-    return {
-      layoutIndex: state.reducerCustomizeQRCard.layout,
-      title: state.reducerCustomizeQRCard.title,
-      uploadedCid: state.reducerMintingProcess.uploadedCid,
-      download: state.reducerCustomizeQRCard.download
-    };
-  });
+  const { layoutIndex, title, uploadedCid, download, transactionHash } = useSelector(
+    (state: IRootState) => {
+      return {
+        layoutIndex: state.reducerCustomizeQRCard.layout,
+        title: state.reducerCustomizeQRCard.title,
+        uploadedCid: state.reducerMintingProcess.uploadedCid,
+        download: state.reducerCustomizeQRCard.download,
+        transactionHash: state.reducerMintingProcess.transactionHash
+      };
+    }
+  );
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
@@ -67,18 +70,39 @@ export const NftCardsDesign = () => {
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
         icon={url}
-        // icon={`./static/icons/shared/${icon}.svg`}
         iconScale={0.2}
         {...otherQRProps}
       />
     );
-  }, [qrStyleName, uploadedCid, url, otherQRProps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrStyleName, url, otherQRProps]);
+
+  const createQRCodeHash = useMemo(() => {
+    const { Component } = qrStyles[qrStyleName];
+    console.log(transactionHash);
+    return (
+      <Component
+        value={transactionHash ? transactionHash : ''}
+        className="my-qrcode"
+        styles={{ svg: { width: '300px' } }}
+        icon={url}
+        iconScale={0.2}
+        {...otherQRProps}
+      />
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrStyleName, url, otherQRProps, transactionHash]);
 
   const createQRCard = useMemo(() => {
     return (
-      <SVGComponent qrcode={createQRCode} title={title} uploadedCid={uploadedCid as FileInfoType} />
+      <SVGComponent
+        qrcode={createQRCode}
+        qrcodeHash={layoutIndex ? layoutIndex > 3 ? createQRCodeHash : <></> : <></>}
+        title={title}
+        uploadedCid={uploadedCid as FileInfoType}
+      />
     );
-  }, [SVGComponent, createQRCode, title, uploadedCid]);
+  }, [SVGComponent, createQRCode, createQRCodeHash, layoutIndex, title, uploadedCid]);
 
   const downloadCard = function (href: string, name: string) {
     var link = document.createElement('a');
