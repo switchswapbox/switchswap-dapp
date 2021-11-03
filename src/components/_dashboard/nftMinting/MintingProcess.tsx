@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 // material
 import { Box, Step, Paper, Button, Stepper, StepLabel, Typography } from '@mui/material';
 
@@ -100,14 +100,14 @@ export default function MintingProcess() {
       });
   };
 
-  const downloadCard = function (href: string, name: string) {
+  const downloadCard = useCallback((href: string, name: string) => {
     var link = document.createElement('a');
     link.download = name;
     link.style.opacity = '0';
     document.body.append(link);
     link.href = href;
     link.click();
-  };
+  }, []);
 
   return (
     <>
