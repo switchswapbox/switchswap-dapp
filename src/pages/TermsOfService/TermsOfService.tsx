@@ -7,10 +7,11 @@ import Typography from '@mui/material/Typography';
 // import Main from 'layouts/Main';
 import Container from './components/Container';
 import { ContactCard, Content } from './components';
+import useLocales from '../../hooks/useLocales';
 
 const TermsOfService = (): JSX.Element => {
   const theme = useTheme();
-
+  const { translate } = useLocales();
   return (
     <Container>
       <Box boxShadow={4} borderRadius={2} sx={{ mt: 4 }}>
@@ -24,7 +25,7 @@ const TermsOfService = (): JSX.Element => {
                 color: theme.palette.common.white
               }}
             >
-              Terms & privacy policy
+              {translate(`term.Terms`)}
             </Typography>
             <Typography
               gutterBottom
@@ -32,7 +33,7 @@ const TermsOfService = (): JSX.Element => {
                 color: theme.palette.common.white
               }}
             >
-              Last modified on <strong>23 Aug, 2021</strong>
+              {translate(`term.Last modified`)} <strong>23 Aug, 2021</strong>
             </Typography>
           </Container>
           <Box
