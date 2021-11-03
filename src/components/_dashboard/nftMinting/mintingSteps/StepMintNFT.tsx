@@ -17,7 +17,7 @@ import { Icon } from '@iconify/react';
 import Label from 'components/Label';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { contractAddress } from 'utils/contractAddress';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
@@ -25,6 +25,9 @@ import { IRootState } from 'reduxStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import html2canvas from 'html2canvas';
+import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
+import { NftCardsDesign } from '../NftCardsDesign';
 
 type StepMintNFTProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
@@ -37,7 +40,6 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
     alignment,
     uploadedCid,
     metadataCid,
-    nftCardCid,
     srcImage,
     isMinting,
     transactionHash,
@@ -50,7 +52,6 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
       alignment: state.reducerMintingProcess.alignment,
       uploadedCid: state.reducerMintingProcess.uploadedCid,
       metadataCid: state.reducerMintingProcess.metadataCid,
-      nftCardCid: state.reducerMintingProcess.nftCardCid,
       srcImage: state.reducerMintingProcess.srcImage,
       transactionHash: state.reducerMintingProcess.transactionHash,
       isMinting: state.reducerMintingProcess.isMinting,
@@ -131,6 +132,19 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
               {descNft}
             </Typography>
           </Box>
+        </Grid>
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <Stack width="50%" display="flex" alignItems="center">
+            <Stack
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '80%'
+              }}
+            >
+              <NftCardsDesign />
+            </Stack>
+          </Stack>
         </Grid>
       </Grid>
 

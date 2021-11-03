@@ -20,6 +20,7 @@ export interface MintingProcessState {
   isMinting?: boolean;
   nftMinted?: boolean;
   tokenID?: number;
+  link?: HTMLAnchorElement | null;
 }
 
 export const changeMintingProcessState = (state: MintingProcessState) => ({
@@ -47,7 +48,8 @@ const initialMintingProcessState: MintingProcessState = {
   transactionHash: '',
   isMinting: false,
   nftMinted: false,
-  tokenID: 0
+  tokenID: 0,
+  link: null
 };
 
 export const reducerMintingProcess = (

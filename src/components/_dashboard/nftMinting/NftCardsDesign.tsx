@@ -8,19 +8,19 @@ import { FileInfoType } from './mintingSteps/StepUploadFile';
 import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
-  const { layoutIndex, title, uploadedCid, download, transactionHash } = useSelector(
+  const { layoutIndex, title, uploadedCid, activeStep, transactionHash } = useSelector(
     (state: IRootState) => {
       return {
         layoutIndex: state.reducerCustomizeQRCard.layout,
         title: state.reducerCustomizeQRCard.title,
         uploadedCid: state.reducerMintingProcess.uploadedCid,
-        download: state.reducerCustomizeQRCard.download,
+        activeStep: state.reducerMintingProcess.activeStep,
         transactionHash: state.reducerMintingProcess.transactionHash
       };
     }
@@ -103,34 +103,6 @@ export const NftCardsDesign = () => {
       />
     );
   }, [SVGComponent, createQRCode, createQRCodeHash, layoutIndex, title, uploadedCid]);
-
-  const downloadCard = function (href: string, name: string) {
-    var link = document.createElement('a');
-    link.download = name;
-    link.style.opacity = '0';
-    document.body.append(link);
-    link.href = href;
-    link.click();
-  };
-
-  useEffect(() => {
-    if (download) {
-      const nftCard = document.getElementById('nftCard') as HTMLElement;
-      html2canvas(nftCard, {
-        foreignObjectRendering: false,
-        scale: 4
-      })
-        .then(function (canvas) {
-          let png = canvas.toDataURL('image/png'); // default png
-          downloadCard(png, `${title}.png`);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    dispatch(downloadNFT({ download: false }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [download]);
 
   return (
     <Box

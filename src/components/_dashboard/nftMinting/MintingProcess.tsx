@@ -16,7 +16,8 @@ import {
 import { IRootState } from 'reduxStore';
 
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
-import { downloadNFT, resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
+import html2canvas from 'html2canvas';
 
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
@@ -30,7 +31,8 @@ export default function MintingProcess() {
         stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
         nftMinted: state.reducerMintingProcess.nftMinted,
         nftType: state.reducerMintingProcess.nftType,
-        title: state.reducerCustomizeQRCard.title
+        title: state.reducerCustomizeQRCard.title,
+        link: state.reducerMintingProcess.link
       };
     }
   );
@@ -84,7 +86,27 @@ export default function MintingProcess() {
   };
 
   const handleDownload = () => {
-    dispatch(downloadNFT({ download: true }));
+    const nftCard = document.getElementById('nftCard') as HTMLElement;
+    html2canvas(nftCard, {
+      foreignObjectRendering: false,
+      scale: 4
+    })
+      .then(function (canvas) {
+        let png = canvas.toDataURL('image/png'); // default png
+        downloadCard(png, `${title}.png`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const downloadCard = function (href: string, name: string) {
+    var link = document.createElement('a');
+    link.download = name;
+    link.style.opacity = '0';
+    document.body.append(link);
+    link.href = href;
+    link.click();
   };
 
   return (
@@ -183,15 +205,6 @@ export default function MintingProcess() {
                 Skip
               </Button>
             )}
-
-            {nftType !== 'withoutNftCard' ? (
-              <Button variant="contained" sx={{ mr: 1 }} onClick={handleDownload}>
-                Download NFT Card
-              </Button>
-            ) : (
-              <></>
-            )}
-            <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext} disabled={stepTwoNotDone}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
@@ -218,6 +231,19 @@ export default function MintingProcess() {
                 Skip
               </Button>
             )}
+            {nftType !== 'withoutNftCard' ? (
+              <Button
+                variant="contained"
+                sx={{ mr: 1 }}
+                onClick={handleDownload}
+                disabled={!nftMinted}
+              >
+                Download NFT Card
+              </Button>
+            ) : (
+              <></>
+            )}
+            <Box sx={{ flexGrow: 1 }} />
             <Button
               variant="contained"
               onClick={handleReset}
