@@ -79,7 +79,10 @@ export default function Router() {
     {
       path: '/',
       element: <MainLayout />,
-      children: [{ path: 'terms-of-service', element: <TermsOfService /> }]
+      children: [
+        { path: 'terms-of-service', element: <TermsOfService /> },
+        { path: 'disclaimer', element: <Disclaimer /> }
+      ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
@@ -98,6 +101,7 @@ const MaticFaucet = Loadable(lazy(() => import('../pages/MaticFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService/TermsOfService')));
+const Disclaimer = Loadable(lazy(() => import('../pages/Disclaimer/Disclaimer')));
 const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
 
 // Main

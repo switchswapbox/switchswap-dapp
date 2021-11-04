@@ -99,12 +99,8 @@ export default function MainNavbar() {
             <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden>
 
-          <Button
-            variant="contained"
-            target="_blank"
-            href="https://material-ui.com/store/items/minimal-dashboard/"
-          >
-            DAPP
+          <Button variant="contained" target="_blank" href="https://switchswap.io/#/home">
+            HOME
           </Button>
 
           <MHidden width="mdUp">

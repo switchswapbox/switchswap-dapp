@@ -202,7 +202,13 @@ const MaxWidthDialog = () => {
                     {translate(`connectWallet.term`)}
                   </Link>{' '}
                   {translate(`connectWallet.acknowledge`)}{' '}
-                  <Link href="#" underline="none" color="info">
+                  <Link
+                    href="#/disclaimer"
+                    target="_blank"
+                    rel="noopener"
+                    underline="none"
+                    color="info"
+                  >
                     {translate(`connectWallet.disclaimer`)}
                   </Link>
                   .
