@@ -11,6 +11,9 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
       {...other}
     >
       <defs>
+        <style>
+          {"@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');"}
+        </style>
         <linearGradient
           id="svg1_linear-gradient"
           x1={719.87}
@@ -156,7 +159,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            fontFamily: 'OCRAExtended,OCR A Extended',
+            fontFamily: 'IBM Plex Sans KR, sans-serif',
             fontSize: '20px',
             fontWeight: 'bold'
           }}
@@ -177,7 +180,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
               wordWrap: 'break-word',
               wordBreak: 'break-all',
               textAlignLast: 'center',
-              fontFamily: 'OCRAExtended,OCR A Extended',
+              fontFamily: 'IBM Plex Sans KR, sans-serif',
               fontSize: '12px'
             }}
           >
@@ -198,7 +201,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
               wordWrap: 'break-word',
               wordBreak: 'break-all',
               textAlignLast: 'center',
-              fontFamily: 'OCRAExtended,OCR A Extended',
+              fontFamily: 'IBM Plex Sans KR, sans-serif',
               fontSize: '14px'
             }}
           >
@@ -214,7 +217,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            fontFamily: 'OCRAExtended,OCR A Extended',
+            fontFamily: 'IBM Plex Sans KR, sans-serif',
             fontSize: '10px'
           }}
         >
@@ -229,7 +232,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            fontFamily: 'OCRAExtended,OCR A Extended',
+            fontFamily: 'IBM Plex Sans KR, sans-serif',
             fontSize: '10px'
           }}
         >

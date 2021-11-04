@@ -9,6 +9,7 @@ function SvgComponent({ qrcode, title, uploadedCid, qrcodeHash, ...other }: Args
       {...other}
     >
       <defs>
+        <style>{'@import url(http://fonts.cdnfonts.com/css/ocr-a-extended);'}</style>
         <linearGradient
           id="svg5_linear-gradient"
           x1={100.51}

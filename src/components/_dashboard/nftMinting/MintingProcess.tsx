@@ -86,14 +86,14 @@ export default function MintingProcess() {
   };
 
   const handleDownload = () => {
-    const nftCard = document.getElementById('nftCard') as HTMLElement;
+    let nftCard = document.getElementById('nftCard') as HTMLElement;
+    nftCard.style.fontFeatureSettings = 'OCRAExtended,OCR A Extended';
     html2canvas(nftCard, {
-      foreignObjectRendering: false,
       scale: 4
     })
       .then(function (canvas) {
         let png = canvas.toDataURL('image/png'); // default png
-        downloadCard(png, `${title}.png`);
+        downloadCard(png, title === '' ? 'image.png' : `${title}.png`);
       })
       .catch((error) => {
         console.log(error);
@@ -236,7 +236,7 @@ export default function MintingProcess() {
                 variant="contained"
                 sx={{ mr: 1 }}
                 onClick={handleDownload}
-                disabled={!nftMinted}
+                // disabled={!nftMinted}
               >
                 Download NFT Card
               </Button>

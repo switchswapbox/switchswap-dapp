@@ -31,7 +31,6 @@ export const NftCardsDesign = () => {
       qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
-  const dispatch = useDispatch();
 
   const otherQRProps = useSelector((state: IRootState) => {
     // eslint-disable-next-line no-lone-blocks
