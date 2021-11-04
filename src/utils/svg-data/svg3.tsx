@@ -131,8 +131,8 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Roboto',
-                fontSize: '16px',
+                fontFamily: 'OCRAExtended,OCR A Extended',
+                fontSize: '20px',
                 fontWeight: 'bold'
               }}
             >
@@ -152,8 +152,8 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                   wordWrap: 'break-word',
                   wordBreak: 'break-all',
                   textAlignLast: 'center',
-                  fontFamily: 'Roboto',
-                  fontSize: '10px'
+                  fontFamily: 'OCRAExtended,OCR A Extended',
+                  fontSize: '12px'
                 }}
               >
                 File name: {uploadedCid.name} | Size: {uploadedCid.size}Kb
@@ -173,7 +173,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                   wordWrap: 'break-word',
                   wordBreak: 'break-all',
                   textAlignLast: 'center',
-                  fontFamily: 'Roboto',
+                  fontFamily: 'OCRAExtended,OCR A Extended',
                   fontSize: '14px'
                 }}
               >
@@ -189,7 +189,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Roboto',
+                fontFamily: 'OCRAExtended,OCR A Extended',
                 fontSize: '10px'
               }}
             >
@@ -204,7 +204,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Roboto',
+                fontFamily: 'OCRAExtended,OCR A Extended',
                 fontSize: '10px'
               }}
             >

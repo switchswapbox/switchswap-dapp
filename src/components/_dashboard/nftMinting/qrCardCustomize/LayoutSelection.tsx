@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
-const layoutIndexes = [0, 1, 2, 3];
+const layoutIndexes = [0, 1, 2, 3, 4];
 const srcArray = layoutIndexes.map((layoutIndex) => {
   return `./static/mock-images/nft-style/${layoutIndex}.svg`;
 });

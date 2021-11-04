@@ -8,27 +8,29 @@ import { FileInfoType } from './mintingSteps/StepUploadFile';
 import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { downloadNFT } from 'reduxStore/reducerCustomizeQRCard';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
+import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
-  const { layoutIndex, title, uploadedCid, download } = useSelector((state: IRootState) => {
-    return {
-      layoutIndex: state.reducerCustomizeQRCard.layout,
-      title: state.reducerCustomizeQRCard.title,
-      uploadedCid: state.reducerMintingProcess.uploadedCid,
-      download: state.reducerCustomizeQRCard.download
-    };
-  });
+  const { layoutIndex, title, uploadedCid, activeStep, transactionHash } = useSelector(
+    (state: IRootState) => {
+      return {
+        layoutIndex: state.reducerCustomizeQRCard.layout,
+        title: state.reducerCustomizeQRCard.title,
+        uploadedCid: state.reducerMintingProcess.uploadedCid,
+        activeStep: state.reducerMintingProcess.activeStep,
+        transactionHash: state.reducerMintingProcess.transactionHash
+      };
+    }
+  );
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
       qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
     };
   });
-  const dispatch = useDispatch();
 
   const otherQRProps = useSelector((state: IRootState) => {
     // eslint-disable-next-line no-lone-blocks
@@ -67,46 +69,39 @@ export const NftCardsDesign = () => {
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
         icon={url}
-        // icon={`./static/icons/shared/${icon}.svg`}
         iconScale={0.2}
         {...otherQRProps}
       />
     );
-  }, [qrStyleName, uploadedCid, url, otherQRProps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrStyleName, url, otherQRProps]);
+
+  const createQRCodeHash = useMemo(() => {
+    const { Component } = qrStyles[qrStyleName];
+    console.log(transactionHash);
+    return (
+      <Component
+        value={transactionHash ? transactionHash : ''}
+        className="my-qrcode"
+        styles={{ svg: { width: '300px' } }}
+        icon={url}
+        iconScale={0.2}
+        {...otherQRProps}
+      />
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrStyleName, url, otherQRProps, transactionHash]);
 
   const createQRCard = useMemo(() => {
     return (
-      <SVGComponent qrcode={createQRCode} title={title} uploadedCid={uploadedCid as FileInfoType} />
+      <SVGComponent
+        qrcode={createQRCode}
+        qrcodeHash={layoutIndex ? layoutIndex > 3 ? createQRCodeHash : <></> : <></>}
+        title={title}
+        uploadedCid={uploadedCid as FileInfoType}
+      />
     );
-  }, [SVGComponent, createQRCode, title, uploadedCid]);
-
-  const downloadCard = function (href: string, name: string) {
-    var link = document.createElement('a');
-    link.download = name;
-    link.style.opacity = '0';
-    document.body.append(link);
-    link.href = href;
-    link.click();
-  };
-
-  useEffect(() => {
-    if (download) {
-      const nftCard = document.getElementById('nftCard') as HTMLElement;
-      html2canvas(nftCard, {
-        foreignObjectRendering: false,
-        scale: 4
-      })
-        .then(function (canvas) {
-          let png = canvas.toDataURL('image/png'); // default png
-          downloadCard(png, `${title}.png`);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    dispatch(downloadNFT({ download: false }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [download]);
+  }, [SVGComponent, createQRCode, createQRCodeHash, layoutIndex, title, uploadedCid]);
 
   return (
     <Box
