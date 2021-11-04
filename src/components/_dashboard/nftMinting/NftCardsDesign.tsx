@@ -1,15 +1,14 @@
 // material
 import { Box, Stack } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
 import svgArray from 'utils/svg-data';
-import { useEffect, useMemo, useState } from 'react';
-import html2canvas from 'html2canvas';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
-import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
 
 // ----------------------------------------------------------------------
 
@@ -120,22 +119,78 @@ export const NftCardsDesign = () => {
     </Box>
   );
 };
-const SliderSVGCard = () => {
+
+interface SliderSVGCardProps {
+  parentBoundingBox: React.RefObject<HTMLHeadingElement>;
+}
+const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
+  const cardNFTBoundingBox = useRef<HTMLHeadingElement>(null);
+  const qrStyleName = useSelector((state: IRootState) => {
+    return state.reducerCustomizeQRCard.qrStyleName;
+  });
+
+  const topParent = parentBoundingBox?.current?.offsetTop || 0;
+  const heightParent = parentBoundingBox?.current?.clientHeight || 0;
+  const heightNFT = cardNFTBoundingBox?.current?.clientHeight || 0;
+
+  const offset = useOffSetTopDistance();
+  const [offsetWithCondition, setOffsetWithCondition] = useState(0);
+  const [isBottom, setBottom] = useState(false);
+
+  useEffect(() => {
+    const topNFT = cardNFTBoundingBox?.current?.offsetTop || 0;
+    if (topParent + heightParent > topNFT + heightNFT) {
+      if (!isBottom) {
+        setOffsetWithCondition(offset);
+      }
+    } else if (offset < offsetWithCondition) {
+      setOffsetWithCondition(offset);
+      setBottom(false);
+    } else {
+      setOffsetWithCondition((prev) => prev - (topNFT + heightNFT - (topParent + heightParent)));
+      setBottom(true);
+    }
+  }, [heightNFT, heightParent, isBottom, offset, offsetWithCondition, topParent]);
+  const paddingTopPlus = 100;
+
+  useEffect(() => {
+    setBottom(false);
+  }, [qrStyleName]);
+
   return (
-    <Stack height="100%" display="flex" alignItems="center">
-      <Stack
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        pt: {
+          xs: 0,
+          lg: `${
+            offsetWithCondition + paddingTopPlus > topParent
+              ? offsetWithCondition + paddingTopPlus - topParent
+              : 0
+          }px`
+        }
+      }}
+    >
+      <Box
+        ref={cardNFTBoundingBox}
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: '80%',
-          position: 'sticky',
-          top: 100
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '90%'
         }}
       >
-        <NftCardsDesign />
-        <LayoutSelection />
-      </Stack>
-    </Stack>
+        <Stack sx={{ width: '100%' }}>
+          <NftCardsDesign />
+        </Stack>
+        <Stack sx={{ width: '100%', alignItems: 'center' }}>
+          <LayoutSelection />
+        </Stack>
+      </Box>
+    </Box>
   );
 };
 

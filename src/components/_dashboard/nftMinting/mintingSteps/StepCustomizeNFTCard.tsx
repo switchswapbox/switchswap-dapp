@@ -337,6 +337,8 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
   };
 
+  const parentBoundingBox = useRef(null);
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -349,6 +351,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
           <Grid container item xs={12}>
             <Grid container item>
               <Grid
+                ref={parentBoundingBox}
                 item
                 xs={12}
                 md={12}
@@ -358,7 +361,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                   maxHeight: { xs: 'auto', lg: '500vh' }
                 }}
               >
-                <SliderSVGCard />
+                <SliderSVGCard parentBoundingBox={parentBoundingBox} />
               </Grid>
               <Grid container item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid container item>
