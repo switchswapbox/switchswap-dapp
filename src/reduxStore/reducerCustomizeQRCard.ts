@@ -44,6 +44,7 @@ export interface InfoQRCard {
   qrStyleNameAuthorRegister?: qrStyleNameType;
   title?: string;
   icon?: string;
+  iconAuthorRegister?: string;
   otherQRProps?: OtherQRProps;
   otherQRPropsAuthorRegister?: OtherQRProps;
   download?: boolean;
@@ -81,6 +82,7 @@ export const initialQRCard: InfoQRCard = {
   qrStyleNameAuthorRegister: 'qrNormal',
   title: '',
   icon: '',
+  iconAuthorRegister: '',
   otherQRProps: {
     qrNormal: defaultQRNormalOtherProps,
     qrDsj: defaultQRDsjOtherProps,
