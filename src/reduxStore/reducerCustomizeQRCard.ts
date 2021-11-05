@@ -123,16 +123,12 @@ export const reducerCustomizeQRCard = (
       return newState;
     }
     case CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER: {
-      const keys = Object.keys(
-        action.state.otherQRPropsAuthorRegister ? action.state.otherQRPropsAuthorRegister : {}
-      );
+      const keys = Object.keys(action.state.otherQRProps ? action.state.otherQRProps : {});
       let newState = JSON.parse(JSON.stringify(state));
       for (let key of keys) {
         newState.otherQRPropsAuthorRegister[key] = {
           ...newState.otherQRPropsAuthorRegister[key],
-          ...(action.state.otherQRPropsAuthorRegister
-            ? action.state.otherQRPropsAuthorRegister[key as keyof OtherQRProps]
-            : {})
+          ...(action.state.otherQRProps ? action.state.otherQRProps[key as keyof OtherQRProps] : {})
         };
       }
       return newState;
