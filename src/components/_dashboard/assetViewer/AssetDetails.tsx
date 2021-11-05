@@ -13,7 +13,6 @@ import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 import { shortenAddress } from 'utils/formatAddress';
 import useLocales from '../../../hooks/useLocales';
 export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
-  // const { quote, country, email, role, company, school } = profile;
   const { translate } = useLocales();
   return (
     <Card>
@@ -45,7 +44,7 @@ export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAn
         </Stack>
       </Stack>
       <Box sx={{ textAlign: 'center', mb: 2 }}>
-        <Tooltip title="Transaction history">
+        <Tooltip title="Transaction History">
           <IconButton
             href={`https://polygonscan.com/token/${assetAndOwner.contractAddress}?a=${assetAndOwner.tokenId}`}
             target="_blank"

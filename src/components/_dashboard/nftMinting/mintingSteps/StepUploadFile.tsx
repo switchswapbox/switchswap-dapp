@@ -1,6 +1,6 @@
-import { Box, FormControlLabel, Stack, SvgIcon, Switch, Typography } from '@mui/material';
+import { Box, Stack, SvgIcon, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import UploadMultiFile from '../UploadMultiFile';
 import { create } from 'ipfs-http-client';
 
@@ -17,10 +17,10 @@ import { ethers } from 'ethers';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { stringToHex } from '@polkadot/util';
-import { VariantType } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
@@ -30,10 +30,6 @@ export type FileInfoType = {
   name: string;
   cid: string;
   size: number;
-};
-
-type StepUploadFileProps = {
-  onSnackbarAction: (color: VariantType, text: string, url?: string | undefined) => void;
 };
 
 export const pinW3Crust = async (authHeader: string, cid: string, name: string) => {
@@ -52,7 +48,7 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
   );
 };
 
-function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
+function StepUploadFile() {
   const { stepOneNotDone, uploadedCid } = useSelector((state: IRootState) => {
     return {
       stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
@@ -60,6 +56,7 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
     };
   });
   const dispatch = useDispatch();
+  const onSnackbarAction = useSnackbarAction();
   const { translate } = useLocales();
 
   const [preview, setPreview] = useState(false);
@@ -149,18 +146,32 @@ function StepUploadFile({ onSnackbarAction }: StepUploadFileProps) {
         onSnackbarAction(
           'warning',
           'Please select Polygon Network from Metamask',
+          null,
+          'LEARN MORE',
           METAMASK_SELECT_POLYGON_URL
         );
       }
     } else {
-      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
+      onSnackbarAction(
+        'warning',
+        'Please install Metamask',
+        null,
+        'LEARN MORE',
+        INSTALL_METAMASK_URL
+      );
     }
   };
 
   const uploadFileCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
+      onSnackbarAction(
+        'warning',
+        'Please install Crust Wallet',
+        null,
+        'LEARN MORE',
+        CRUST_WALLET_WIKI
+      );
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();

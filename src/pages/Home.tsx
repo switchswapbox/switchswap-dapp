@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 // material
-import { Container, Grid, Typography, IconButton } from '@mui/material';
+import { Container, Grid, Typography, IconButton, SvgIcon } from '@mui/material';
 
 import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
@@ -11,42 +11,29 @@ import useSettings from '../hooks/useSettings';
 import useLocales from '../hooks/useLocales';
 // components
 import Page from '../components/Page';
-import { Welcome, NftPresentation } from '../components/_dashboard/home';
+import {
+  Welcome,
+  NftPresentation,
+  StatisticsCard,
+  ProjectTimeline
+} from '../components/_dashboard/home';
+import useSnackbarAction from 'hooks/useSnackbarAction';
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
   const { translate } = useLocales();
   const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
+  const onSnackbarAction = useSnackbarAction();
   useEffect(() => {
     if (!isWarningNotIssueToken) {
-      onSnackbarClose('info');
+      onSnackbarAction(
+        'info',
+        'Switchswap is in beta version. Many ideas are being deployed. Get back for more interesting products!',
+        15000
+      );
       sessionStorage.setItem('notIssueToken', 'true');
     }
   }, []);
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const onSnackbarClose = (color: VariantType) => {
-    enqueueSnackbar(
-      <div>
-        <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-          {color}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Switchswap is in beta version. Many ideas are being deployed. Get back for more
-          interesting products!
-        </Typography>
-      </div>,
-      {
-        variant: color,
-        autoHideDuration: 20000,
-        action: (key) => (
-          <IconButton size="small" color="inherit" onClick={() => closeSnackbar(key)}>
-            <Icon icon={closeFill} width={24} height={24} />
-          </IconButton>
-        )
-      }
-    );
-  };
 
   return (
     <Page title="Home">
@@ -58,6 +45,36 @@ export default function Home() {
           <Grid item xs={12} md={6} lg={5}>
             <NftPresentation />
           </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="Total Minted NFT" value={143}>
+              <SvgIcon>
+                <Icon icon="bi:card-image" width="20" height="20" />
+              </SvgIcon>
+            </StatisticsCard>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="Locked NFTs value" value={0}>
+              <SvgIcon>
+                <Icon icon="fa-solid:user-lock" width="20" height="20" />
+              </SvgIcon>
+            </StatisticsCard>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="NFTs trading volumn" value={0}>
+              <SvgIcon>
+                <Icon icon="dashicons:money-alt" width="24" height="24" />
+              </SvgIcon>
+            </StatisticsCard>
+          </Grid>
+          <Grid item xs={12}>
+            <ProjectTimeline />
+          </Grid>
+          {/* <Grid item xs={12} md={4}>
+            <StatisticsCard text="Locked NFT value" value={0} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <StatisticsCard text="NFT's traded volume" value={0} />
+          </Grid> */}
         </Grid>
       </Container>
     </Page>

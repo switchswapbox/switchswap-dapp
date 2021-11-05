@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -16,9 +16,7 @@ import {
 } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from 'components/Label';
-import svgArray from 'utils/svg-data';
 import MetadataSummary from '../MetadataSummary';
-import NftCardsDesign from '../NftCardsDesign';
 import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { create } from 'ipfs-http-client';
@@ -42,13 +40,13 @@ import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCust
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
 import html2canvas from 'html2canvas';
+import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
 type StepCustomizeNFTCardProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
-  onSnackbarAction: (color: VariantType, text: string, url?: string | undefined) => void;
 };
 
 function TitleAndDescription() {
@@ -122,8 +120,10 @@ function TitleAndDescription() {
   );
 }
 
-function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomizeNFTCardProps) {
+function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   const [isMetadataUploading, setMetadataUploading] = useState(false);
+  const onSnackbarAction = useSnackbarAction();
+
   const { translate } = useLocales();
   let nftCardCidTemp = '';
 
@@ -221,7 +221,9 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         image: `ipfs://${
           nftType !== 'withoutNftCard' ? nftCardCidTemp : uploadedCid ? uploadedCid.cid : ''
         }`,
+        fileId: uploadedCid ? `ipfs://${uploadedCid.cid}` : '',
         fileName: uploadedCid ? uploadedCid.name : '',
+
         size: uploadedCid ? uploadedCid.size : 0
       };
       ipfs
@@ -241,7 +243,13 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
   const uploadMetadataCrust = async () => {
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
-      onSnackbarAction('warning', 'Please install Crust Wallet', CRUST_WALLET_WIKI);
+      onSnackbarAction(
+        'warning',
+        'Please install Crust Wallet',
+        null,
+        'LEARN MORE',
+        CRUST_WALLET_WIKI
+      );
       return;
     }
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
@@ -313,15 +321,21 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
         onSnackbarAction(
           'warning',
           'Please select Polygon Network from Metamask',
+          null,
+          'LEARN MORE',
           METAMASK_SELECT_POLYGON_URL
         );
       }
     } else {
-      onSnackbarAction('warning', 'Please install Metamask', INSTALL_METAMASK_URL);
+      onSnackbarAction(
+        'warning',
+        'Please install Metamask',
+        null,
+        'LEARN MORE',
+        INSTALL_METAMASK_URL
+      );
     }
   };
-
-  const parentBoundingBox = useRef<HTMLHeadingElement>(null);
 
   return (
     <>
@@ -332,19 +346,22 @@ function StepCustomizeNFTCard({ handleAlignment, onSnackbarAction }: StepCustomi
           </Stack>
         </Grid>
         {nftType === 'simplified' ? (
-          <Grid item ref={parentBoundingBox} xs={12}>
-            <Grid container>
+          <Grid container item xs={12}>
+            <Grid container item>
               <Grid
                 item
                 xs={12}
                 md={12}
                 lg={7}
-                sx={{ pb: { xs: 5, md: 0 }, maxHeight: { xs: 'auto', lg: '100vh' } }}
+                sx={{
+                  pb: { xs: 5, md: 0 },
+                  maxHeight: { xs: 'auto', lg: '500vh' }
+                }}
               >
-                <SliderSVGCard parentBoundingBox={parentBoundingBox} />
+                <SliderSVGCard />
               </Grid>
-              <Grid item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
-                <Grid container>
+              <Grid container item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
+                <Grid container item>
                   <Grid item xs={12}>
                     <TitleAndDescription />
                   </Grid>

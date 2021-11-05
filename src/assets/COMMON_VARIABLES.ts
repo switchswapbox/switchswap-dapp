@@ -20,6 +20,11 @@ const NUMBER_OF_NFT_IN_MANAGER_PAGE = 12;
 const GAS_PRICE = '35000000000';
 const POLYGON_RPC = ['https://polygon-rpc.com/'];
 
+const CRUST_CONSENSUS_DATE = new Date(2021, 6, 9, 7, 50, 30);
+const CRUST_CHAIN_RPC = 'wss://rpc.crust.network';
+const METADATA_SUBSCAN_CRUST = 'https://crust.webapi.subscan.io/api/scan/metadata';
+const RENEW_PERIOD_BLOCK_NUMBER = 2592000;
+
 export {
   CRUST_WALLET_WIKI,
   METAMASK_SELECT_POLYGON_URL,
@@ -33,5 +38,9 @@ export {
   IPFS_GATEWAY_FOR_FETCHING_DATA,
   NUMBER_OF_NFT_IN_MANAGER_PAGE,
   GAS_PRICE,
-  POLYGON_RPC
+  POLYGON_RPC,
+  CRUST_CONSENSUS_DATE,
+  CRUST_CHAIN_RPC,
+  METADATA_SUBSCAN_CRUST,
+  RENEW_PERIOD_BLOCK_NUMBER
 };

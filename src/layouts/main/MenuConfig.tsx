@@ -14,9 +14,10 @@ const ICON_SIZE = {
 const menuConfig = [
   {
     title: 'About',
-    path: PATH_DASHBOARD.about.learnMore,
-    icon: <Icon icon={fileFill} {...ICON_SIZE} />
-  }
+    path: '/',
+    icon: <Icon icon={homeFill} {...ICON_SIZE} />
+  },
+  { title: 'Contact', path: PATH_DASHBOARD.root, icon: <Icon icon={fileFill} {...ICON_SIZE} /> }
 ];
 
 export default menuConfig;

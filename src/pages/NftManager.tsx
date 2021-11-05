@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMeasure } from 'react-use';
 
 // components
-import { BallBeat, Pacman } from 'react-pure-loaders';
+import { BallClipRotateMultiple, LineScalePulseOutRapid } from 'react-pure-loaders';
 import Page from '../components/Page';
 import { ethers } from 'ethers';
 import { ABI } from '../utils/abi';
@@ -65,7 +65,7 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
           justifyContent="center"
           sx={{ height: '200px', display: loading ? 'flex' : 'none' }}
         >
-          <BallBeat color={'#637381'} loading={loading} />
+          <BallClipRotateMultiple color={'#637381'} loading={loading} />
         </Stack>
         <Link href={`#/assets/polygon/${contractAddress}/${tokenId}`}>
           <Box
@@ -86,7 +86,12 @@ function NftCard({ tokenId, tokenURI, imageUrl, name, nftContract }: NftCardProp
 
       <Stack spacing={1} sx={{ p: 2, pt: 1, pb: 1 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Link color="inherit" underline="none" sx={{ width: '100%' }}>
+          <Link
+            color="inherit"
+            underline="none"
+            sx={{ width: '100%' }}
+            href={`#/assets/polygon/${contractAddress}/${tokenId}`}
+          >
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
@@ -261,7 +266,7 @@ export default function NftManager() {
             justifyContent="center"
             sx={{ width: '100%', display: loading ? 'flex' : 'none', mt: 5 }}
           >
-            <Pacman color={'#637381'} loading={loading} />
+            <LineScalePulseOutRapid color={'#637381'} loading={loading} />
           </Stack>
           {NftList.map((nft) => {
             return (

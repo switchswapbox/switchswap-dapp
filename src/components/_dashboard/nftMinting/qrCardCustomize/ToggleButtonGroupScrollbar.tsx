@@ -79,16 +79,14 @@ const ToggleButtonGroupScrollbar = ({
     <>
       <Stack
         sx={{
-          mb: 3,
           justifyContent: 'space-between',
           alignItems: 'flex-start',
-          pt: 2,
           width: '100%',
           overflow: 'hidden',
           ...sx
         }}
       >
-        <Typography variant="subtitle1" sx={{ mb: 2 }}>
+        <Typography variant="subtitle1" sx={{ mb: 1, mt: 1 }}>
           {label}
         </Typography>
         <Box sx={{ width: '100%' }}>

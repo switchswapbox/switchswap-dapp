@@ -5,17 +5,9 @@ import CustomizeQR25D from './CustomizeQR25D';
 import CustomizeQRBubble from './CustomizeQRBubble';
 import CustomizeQRFunc from './CustomizeQRFunc';
 import CustomizeQRLine from './CustomizeQRLine';
-import {
-  QRNormal,
-  QR25D,
-  QRDsj,
-  QRRandRect,
-  QRImage,
-  QRResImage,
-  QRFunc,
-  QRLine,
-  QRBubble
-} from 'react-qrbtf';
+import { QRNormal, QRDsj, QRRandRect, QRFunc, QRLine } from 'react-qrbtf';
+import QR25D from '../qrStyles/QR25D';
+import QRBubble from '../qrStyles/QRBubble';
 
 const qrStyles = {
   qrNormal: {
