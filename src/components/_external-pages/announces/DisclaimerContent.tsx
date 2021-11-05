@@ -7,18 +7,16 @@ export default function Content() {
     <Box>
       <Typography component={'p'} color={'text.secondary'}>
         Switchswap is a decentralized peer-to-peer protocol that people can use to create and trade
-        Nfts using Crust network Storage and Multi blockchain such as Polygon, Binance smart chain,
-        Skale network. There are three versions of the Uniswap protocol (v1, v2, and v3), each of
-        which is made up of free, public, open-source or source-available software including a set
-        of smart contracts that are deployed on the Ethereum Blockchain. Your use of the Switchswap
-        protocol involves various risks, including, but not limited to, losses while digital assets
-        are being supplied to the Switchswap protocol and losses due to the fluctuation of prices of
-        Nfts in a trading pair or liquidity pool. Before using the Switchswap protocol, you should
-        review the relevant documentation to make sure you understand how the Switchswap protocol
-        works. Additionally, just as you can access email email protocols such as SMTP through
-        multiple email clients, you can access the Switchswap protocol through dozens of web or
-        mobile interfaces. You are responsible for doing your own diligence on those interfaces to
-        understand the fees and risks they present.<br></br>
+        NFTs using Crust network Storage and Multi blockchain such as Polygon, Binance smart chain,
+        Skale network. There is one version of NFTs smart contract, which is made up of free,
+        public, open-source or source-available software. Your use of the Switchswap protocol
+        involves various risks, including, but not limited to, losses while digital assets are being
+        supplied to the Switchswap protocol. Before using the Switchswap protocol, you should review
+        the relevant documentation to make sure you understand how the Switchswap protocol works.
+        Additionally, just as you can access email protocols such as SMTP through multiple email
+        clients, you can access the Switchswap protocol through dozens of web or mobile interfaces.
+        You are responsible for doing your own diligence on those interfaces to understand the fees
+        and risks they present.<br></br>
         <br></br>
         AS DESCRIBED IN THE SWITCHSWAP PROTOCOL LICENSES, THE SWITCHSWAP PROTOCOL IS PROVIDED ”AS
         IS”, AT YOUR OWN RISK, AND WITHOUT WARRANTIES OF ANY KIND. Although Universal Navigation
