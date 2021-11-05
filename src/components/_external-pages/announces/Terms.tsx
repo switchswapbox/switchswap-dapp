@@ -15,7 +15,7 @@ export default function Content() {
         INTRODUCTION
       </Typography>
       <Typography component={'p'} color={'text.secondary'}>
-        Welcome to
+        Welcome to{' '}
         <a href="https://switchswap.io" target="_blank">
           https://switchswap.io
         </a>
@@ -32,7 +32,8 @@ export default function Content() {
         variant={'h6'}
         gutterBottom
         sx={{
-          fontWeight: 'medium'
+          fontWeight: 'medium',
+          my: 2
         }}
       >
         NOTICE: Please read these Terms and the Privacy Policy carefully as they govern your use of

@@ -100,12 +100,8 @@ const CruFaucet = Loadable(lazy(() => import('../pages/CruFaucet')));
 const MaticFaucet = Loadable(lazy(() => import('../pages/MaticFaucet')));
 const LearnMore = Loadable(lazy(() => import('../pages/LearnMore')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
-const TermsOfService = Loadable(
-  lazy(() => import('../components/_external-pages/Terms-and-services/TermsOfService'))
-);
-const Disclaimer = Loadable(
-  lazy(() => import('../components/_external-pages/Terms-and-services/Disclaimer'))
-);
+const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService')));
+const Disclaimer = Loadable(lazy(() => import('../pages/Disclaimer')));
 const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
 
 // Main

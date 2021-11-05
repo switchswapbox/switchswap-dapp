@@ -4,15 +4,12 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-// import Main from 'layouts/Main';
-import Container from './Container';
-import ContactCard from './ContactCard';
-import Content from './DisclaimerContent';
-import useLocales from '../../../hooks/useLocales';
+import Container from '../components/_external-pages/announces/Container';
+import ContactCard from '../components/_external-pages/announces/ContactCard';
+import Content from '../components/_external-pages/announces/DisclaimerContent';
 
-const TermsOfService = (): JSX.Element => {
+const Disclaimer = (): JSX.Element => {
   const theme = useTheme();
-  const { translate } = useLocales();
   return (
     <Container>
       <Box boxShadow={4} borderRadius={2} sx={{ mt: 4 }}>
@@ -80,4 +77,4 @@ const TermsOfService = (): JSX.Element => {
   );
 };
 
-export default TermsOfService;
+export default Disclaimer;
