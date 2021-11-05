@@ -234,7 +234,12 @@ export default function MintingProcess() {
               </Button>
             )}
             {nftType !== 'withoutNftCard' ? (
-              <Button variant="contained" sx={{ mr: 1 }} onClick={handleDownload}>
+              <Button
+                variant="contained"
+                sx={{ mr: 1 }}
+                onClick={handleDownload}
+                disabled={!nftMinted}
+              >
                 {translate(`mintingProcess.download`)}
               </Button>
             ) : (
