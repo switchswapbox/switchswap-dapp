@@ -107,7 +107,6 @@ export const NftCardsDesign = () => {
       id="nftCard"
       sx={{
         zIndex: 0,
-        borderRadius: 2,
         overflow: 'hidden',
         position: 'relative',
         width: '100%',
