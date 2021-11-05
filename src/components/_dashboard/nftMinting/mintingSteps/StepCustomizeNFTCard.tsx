@@ -347,7 +347,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
             <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} height={300} />
           </Stack>
         </Grid>
-        {nftType === 'simplified' ? (
+        {nftType === 'simplified' || 'withAuthorReg' ? (
           <Grid container item xs={12}>
             <Grid container item>
               <Grid

@@ -24,6 +24,7 @@ export const NftCardsDesign = () => {
       };
     }
   );
+  console.log(layoutIndex);
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
@@ -42,7 +43,7 @@ export const NftCardsDesign = () => {
   const SVGComponent = svgArray[layoutIndex || 0];
   const [url, setUrl] = useState('');
 
-  useMemo(() => {
+  useEffect(() => {
     if (icon !== '') {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
@@ -77,7 +78,6 @@ export const NftCardsDesign = () => {
 
   const createQRCodeHash = useMemo(() => {
     const { Component } = qrStyles[qrStyleName];
-    console.log(transactionHash);
     return (
       <Component
         value={transactionHash ? transactionHash : ''}

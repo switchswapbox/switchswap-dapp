@@ -30,6 +30,7 @@ import { IRootState } from 'reduxStore';
 import { useState } from 'react';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
+import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
   width: '100%',
@@ -66,11 +67,18 @@ export default function StepConfigureNFT() {
     if (currentIndex === -1) {
       dispatch(changeMintingProcessState({ nftType: value }));
       setToggle([value]);
+      if (value === 'withAuthorReg') {
+        dispatch(changeQRCardGeneralInfo({ layout: 4 }));
+      } else {
+        dispatch(changeQRCardGeneralInfo({ layout: 0 }));
+      }
     } else if (value === 'withAuthorReg') {
       dispatch(changeMintingProcessState({ nftType: 'simplified' }));
+      dispatch(changeQRCardGeneralInfo({ layout: 0 }));
       setToggle(['simplified']);
     } else {
       dispatch(changeMintingProcessState({ nftType: 'simplified' }));
+      dispatch(changeQRCardGeneralInfo({ layout: 0 }));
       setToggle(['simplified']);
     }
   };
@@ -103,7 +111,7 @@ export default function StepConfigureNFT() {
           </ListWrapperStyle>
           <ListWrapperStyle sx={{ mt: 2 }}>
             <List subheader={<ListSubheader>{translate(`nftMinting.NFT type`)}</ListSubheader>}>
-              <ListItemButton onClick={handleToggle('withAuthorReg')} disabled={true}>
+              <ListItemButton onClick={handleToggle('withAuthorReg')} disabled={!stepOneNotDone}>
                 <ListItemIcon>
                   <SvgIcon>
                     <Icon icon="fxemoji:rocket" />
