@@ -17,6 +17,7 @@ import { RESET_STATE } from 'reduxStore';
 
 export const CHANGE_QR_CARD_GENERAL_INFO = 'CHANGE_QR_CARD_GENERAL_INFO';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
+export const CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER = 'CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER';
 export const DOWNLOAD = 'DOWNLOAD';
 
 export type qrStyleNameType =
@@ -40,10 +41,13 @@ export interface OtherQRProps {
 export interface InfoQRCard {
   layout?: number;
   qrStyleName?: qrStyleNameType;
+  qrStyleNameAuthorRegister?: qrStyleNameType;
   title?: string;
   icon?: string;
   otherQRProps?: OtherQRProps;
+  otherQRPropsAuthorRegister?: OtherQRProps;
   download?: boolean;
+  changeQRFile?: boolean;
 }
 
 export const changeQRCardGeneralInfo = (state: InfoQRCard) => ({
@@ -53,6 +57,11 @@ export const changeQRCardGeneralInfo = (state: InfoQRCard) => ({
 
 export const changeOtherQRProps = (state: InfoQRCard) => ({
   type: CHANGE_OTHER_QR_PROPS,
+  state: state
+});
+
+export const changeOtherQRPropsAuthorRegister = (state: InfoQRCard) => ({
+  type: CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER,
   state: state
 });
 
@@ -66,9 +75,10 @@ export const downloadNFT = (state: InfoQRCard) => ({
 });
 
 // init state
-const initialQRCard: InfoQRCard = {
+export const initialQRCard: InfoQRCard = {
   layout: 0,
   qrStyleName: 'qrNormal',
+  qrStyleNameAuthorRegister: 'qrNormal',
   title: '',
   icon: '',
   otherQRProps: {
@@ -79,7 +89,16 @@ const initialQRCard: InfoQRCard = {
     qrFunc: defaultQRFuncOtherProps,
     qrLine: defaultQRLineOtherProps
   },
-  download: false
+  otherQRPropsAuthorRegister: {
+    qrNormal: defaultQRNormalOtherProps,
+    qrDsj: defaultQRDsjOtherProps,
+    qr25D: defaultQR25DOtherProps,
+    qrBubble: defaultQRBubbleOtherProps,
+    qrFunc: defaultQRFuncOtherProps,
+    qrLine: defaultQRLineOtherProps
+  },
+  download: false,
+  changeQRFile: true
 };
 
 export const reducerCustomizeQRCard = (
@@ -97,6 +116,21 @@ export const reducerCustomizeQRCard = (
         newState.otherQRProps[key] = {
           ...newState.otherQRProps[key],
           ...(action.state.otherQRProps ? action.state.otherQRProps[key as keyof OtherQRProps] : {})
+        };
+      }
+      return newState;
+    }
+    case CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER: {
+      const keys = Object.keys(
+        action.state.otherQRPropsAuthorRegister ? action.state.otherQRPropsAuthorRegister : {}
+      );
+      let newState = JSON.parse(JSON.stringify(state));
+      for (let key of keys) {
+        newState.otherQRPropsAuthorRegister[key] = {
+          ...newState.otherQRPropsAuthorRegister[key],
+          ...(action.state.otherQRPropsAuthorRegister
+            ? action.state.otherQRPropsAuthorRegister[key as keyof OtherQRProps]
+            : {})
         };
       }
       return newState;

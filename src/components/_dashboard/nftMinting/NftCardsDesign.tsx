@@ -9,6 +9,7 @@ import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
+import { initialQRCard, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 
 // ----------------------------------------------------------------------
 
@@ -24,10 +25,14 @@ export const NftCardsDesign = () => {
       };
     }
   );
-  const { icon, qrStyleName } = useSelector((state: IRootState) => {
+  const { icon, qrStyleName, qrStyleNameAuthorRegister } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
+      qrStyleName:
+        state.reducerCustomizeQRCard.qrStyleName || (initialQRCard.qrStyleName as qrStyleNameType),
+      qrStyleNameAuthorRegister:
+        state.reducerCustomizeQRCard.qrStyleNameAuthorRegister ||
+        (initialQRCard.qrStyleNameAuthorRegister as qrStyleNameType)
     };
   });
 
@@ -39,6 +44,16 @@ export const NftCardsDesign = () => {
         : undefined;
     }
   });
+
+  const otherQRPropsAuthorRegister = useSelector((state: IRootState) => {
+    // eslint-disable-next-line no-lone-blocks
+    {
+      return state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister
+        ? state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister[qrStyleName]
+        : undefined;
+    }
+  });
+
   const SVGComponent = svgArray[layoutIndex || 0];
   const [url, setUrl] = useState('');
 
@@ -76,7 +91,7 @@ export const NftCardsDesign = () => {
   }, [qrStyleName, url, otherQRProps]);
 
   const createQRCodeHash = useMemo(() => {
-    const { Component } = qrStyles[qrStyleName];
+    const { Component } = qrStyles[qrStyleNameAuthorRegister];
     return (
       <Component
         value={transactionHash ? transactionHash : ''}
@@ -84,11 +99,11 @@ export const NftCardsDesign = () => {
         styles={{ svg: { width: '300px' } }}
         icon={url}
         iconScale={0.2}
-        {...otherQRProps}
+        {...otherQRPropsAuthorRegister}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qrStyleName, url, otherQRProps, transactionHash]);
+  }, [qrStyleNameAuthorRegister, url, otherQRPropsAuthorRegister, transactionHash]);
 
   const createQRCard = useMemo(() => {
     return (
