@@ -7,7 +7,7 @@ export default function useOffSetTopDistance() {
 
   useEffect(() => {
     window.onscroll = () => {
-      setOffSetTop(window.pageYOffset);
+      setOffSetTop(window.scrollY);
     };
     return () => {
       window.onscroll = null;

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -337,14 +337,36 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
   };
 
-  const parentBoundingBox = useRef(null);
+  const parentBoundingBox = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const scrollDestination = useRef() as React.MutableRefObject<HTMLDivElement>;
+
+  useEffect(() => {
+    if (window.innerWidth > 1200) {
+      window.scrollTo({
+        top: scrollDestination.current.offsetTop + 200,
+        behavior: 'smooth'
+      });
+      parentBoundingBox.current.style.height = 'auto';
+      setTimeout(() => {
+        parentBoundingBox.current.style.height = `${parentBoundingBox.current.offsetHeight}px`;
+      }, 1000);
+    } else {
+      parentBoundingBox.current.style.height = 'auto';
+    }
+  }, [qrStyleName]);
 
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
         <Grid item xs={12} sx={{ pb: 5 }}>
           <Stack alignItems="center" justifyContent="center">
-            <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} height={300} />
+            <Box
+              ref={scrollDestination}
+              sx={{ borderRadius: 2 }}
+              component="img"
+              src={srcImage}
+              height={300}
+            />
           </Stack>
         </Grid>
         {nftType === 'simplified' || 'withAuthorReg' ? (
@@ -357,8 +379,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 md={12}
                 lg={7}
                 sx={{
-                  pb: { xs: 5, md: 0 },
-                  maxHeight: { xs: 'auto', lg: '500vh' }
+                  pb: { xs: 5, md: 0 }
                 }}
               >
                 <SliderSVGCard parentBoundingBox={parentBoundingBox} />

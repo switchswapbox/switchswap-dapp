@@ -24,7 +24,6 @@ export const NftCardsDesign = () => {
       };
     }
   );
-  console.log(layoutIndex);
   const { icon, qrStyleName } = useSelector((state: IRootState) => {
     return {
       icon: state.reducerCustomizeQRCard.icon,
@@ -120,41 +119,17 @@ export const NftCardsDesign = () => {
 };
 
 interface SliderSVGCardProps {
-  parentBoundingBox: React.RefObject<HTMLHeadingElement>;
+  parentBoundingBox: React.MutableRefObject<HTMLDivElement>;
 }
 const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
-  const cardNFTBoundingBox = useRef<HTMLHeadingElement>(null);
-  const qrStyleName = useSelector((state: IRootState) => {
-    return state.reducerCustomizeQRCard.qrStyleName;
-  });
+  const cardNFTBoundingBox = useRef() as React.MutableRefObject<HTMLDivElement>;
 
-  const topParent = parentBoundingBox?.current?.offsetTop || 0;
-  const heightParent = parentBoundingBox?.current?.clientHeight || 0;
-  const heightNFT = cardNFTBoundingBox?.current?.clientHeight || 0;
+  const topParent = parentBoundingBox?.current?.offsetTop;
+  const heightParent = parentBoundingBox?.current?.offsetHeight;
+  const heightNFT = cardNFTBoundingBox?.current?.offsetHeight;
 
   const offset = useOffSetTopDistance();
-  const [offsetWithCondition, setOffsetWithCondition] = useState(0);
-  const [isBottom, setBottom] = useState(false);
-
-  useEffect(() => {
-    const topNFT = cardNFTBoundingBox?.current?.offsetTop || 0;
-    if (topParent + heightParent > topNFT + heightNFT) {
-      if (!isBottom) {
-        setOffsetWithCondition(offset);
-      }
-    } else if (offset < offsetWithCondition) {
-      setOffsetWithCondition(offset);
-      setBottom(false);
-    } else {
-      setOffsetWithCondition((prev) => prev - (topNFT + heightNFT - (topParent + heightParent)));
-      setBottom(true);
-    }
-  }, [heightNFT, heightParent, isBottom, offset, offsetWithCondition, topParent]);
-  const paddingTopPlus = 100;
-
-  useEffect(() => {
-    setBottom(false);
-  }, [qrStyleName]);
+  const paddingTopPlus = 120;
 
   return (
     <Box
@@ -165,9 +140,9 @@ const SliderSVGCard = ({ parentBoundingBox }: SliderSVGCardProps) => {
         pt: {
           xs: 0,
           lg: `${
-            offsetWithCondition + paddingTopPlus > topParent
-              ? offsetWithCondition + paddingTopPlus - topParent
-              : 0
+            offset < topParent + heightParent - heightNFT - paddingTopPlus
+              ? offset - topParent + paddingTopPlus
+              : heightParent - heightNFT
           }px`
         }
       }}
