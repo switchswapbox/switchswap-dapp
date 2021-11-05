@@ -18,12 +18,17 @@ const colors = [
 ];
 
 function CustomizeQR25() {
-  const { height, posHeight } = useSelector((state: IRootState) => {
-    return {
-      height: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.height,
-      posHeight: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.posHeight
-    };
-  });
+  const { height, posHeight, topColor, leftColor, rightColor } = useSelector(
+    (state: IRootState) => {
+      return {
+        height: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.height,
+        posHeight: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.posHeight,
+        topColor: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.topColor,
+        leftColor: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.leftColor,
+        rightColor: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.rightColor
+      };
+    }
+  );
   const dispatch = useDispatch();
 
   function handleHeightChange(event: any) {
@@ -146,6 +151,7 @@ function CustomizeQR25() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={topColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -168,6 +174,7 @@ function CustomizeQR25() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={leftColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -190,6 +197,7 @@ function CustomizeQR25() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={rightColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

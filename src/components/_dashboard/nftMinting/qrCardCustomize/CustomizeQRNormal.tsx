@@ -25,12 +25,16 @@ const colors = [
 ];
 
 function CustomizeQRNormal() {
-  const { innerPointSize, innerPointOpacity } = useSelector((state: IRootState) => {
-    return {
-      innerPointSize: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.size,
-      innerPointOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.opacity
-    };
-  });
+  const { innerPointSize, innerPointOpacity, otherColor, posColor } = useSelector(
+    (state: IRootState) => {
+      return {
+        innerPointSize: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.size,
+        innerPointOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.opacity,
+        otherColor: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.otherColor,
+        posColor: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.posColor
+      };
+    }
+  );
   const dispatch = useDispatch();
 
   function handleSelectInnerPointType(event: React.ChangeEvent<unknown>, value: number) {
@@ -185,6 +189,7 @@ function CustomizeQRNormal() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={otherColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -223,6 +228,7 @@ function CustomizeQRNormal() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={posColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

@@ -30,10 +30,12 @@ const colors = [
 ];
 
 function CustomizeQRLine() {
-  const { lineWidth, lineOpacity } = useSelector((state: IRootState) => {
+  const { lineWidth, lineOpacity, posColor, lineColor } = useSelector((state: IRootState) => {
     return {
       lineWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineWidth,
-      lineOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineOpacity
+      lineOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineOpacity,
+      posColor: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.posColor,
+      lineColor: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineColor
     };
   });
   const dispatch = useDispatch();
@@ -169,6 +171,7 @@ function CustomizeQRLine() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={posColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -256,6 +259,7 @@ function CustomizeQRLine() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={lineColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

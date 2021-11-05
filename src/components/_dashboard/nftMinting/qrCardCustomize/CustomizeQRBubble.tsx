@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from 'reduxStore';
 import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
@@ -17,6 +18,12 @@ const colors = [
 ];
 
 function CustomizeQRBubble() {
+  const { circleColor, posColor } = useSelector((state: IRootState) => {
+    return {
+      circleColor: state.reducerCustomizeQRCard?.otherQRProps?.qrBubble?.circleColor,
+      posColor: state.reducerCustomizeQRCard?.otherQRProps?.qrBubble?.posColor
+    };
+  });
   const dispatch = useDispatch();
 
   function handleCircleColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
@@ -57,6 +64,7 @@ function CustomizeQRBubble() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={circleColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -79,6 +87,7 @@ function CustomizeQRBubble() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={posColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

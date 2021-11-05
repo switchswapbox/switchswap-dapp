@@ -1,5 +1,6 @@
 import { Box, Pagination, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from 'reduxStore';
 import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
@@ -20,6 +21,13 @@ const colors = [
 ];
 
 function CustomizeQRFunc() {
+  const { otherColor1, otherColor2, posColor } = useSelector((state: IRootState) => {
+    return {
+      otherColor1: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc?.otherColor1,
+      otherColor2: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc?.otherColor2,
+      posColor: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc?.posColor
+    };
+  });
   const dispatch = useDispatch();
 
   function handleSelectFuncType(event: React.ChangeEvent<unknown>, value: number) {
@@ -159,6 +167,7 @@ function CustomizeQRFunc() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={otherColor1}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -181,6 +190,7 @@ function CustomizeQRFunc() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={otherColor2}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -203,6 +213,7 @@ function CustomizeQRFunc() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={posColor}
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
