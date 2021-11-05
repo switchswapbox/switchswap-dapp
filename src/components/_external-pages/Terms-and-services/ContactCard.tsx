@@ -3,11 +3,10 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
-import useLocales from '../../../../hooks/useLocales';
 
 const ContactCard = (): JSX.Element => {
   const theme = useTheme();
-  const { translate } = useLocales();
+
   return (
     <Box component={Card} boxShadow={0} border={`1px solid ${theme.palette.divider}`}>
       <Box padding={{ xs: 2, sm: 3 }}>
@@ -17,7 +16,7 @@ const ContactCard = (): JSX.Element => {
           }}
           gutterBottom
         >
-          {translate(`term.contact`)}
+          How can you contact us about this notice?
         </Typography>
         <Typography
           variant={'body2'}
@@ -26,7 +25,7 @@ const ContactCard = (): JSX.Element => {
             marginBottom: 2
           }}
         >
-          {translate(`term.contact us`)}
+          If you have any questions or concerns about the privacy policy please contact us.
         </Typography>
         <Typography variant={'subtitle2'}>hi@switchswap.io</Typography>
       </Box>

@@ -5,27 +5,27 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 // import Main from 'layouts/Main';
-import Container from './components/Container';
-import { ContactCard, Content } from './components';
-import useLocales from '../../hooks/useLocales';
+import Container from './Container';
+import ContactCard from './ContactCard';
+import Content from './Terms';
 
 const TermsOfService = (): JSX.Element => {
   const theme = useTheme();
-  const { translate } = useLocales();
+
   return (
     <Container>
       <Box boxShadow={4} borderRadius={2} sx={{ mt: 4 }}>
         <Box bgcolor={theme.palette.primary.main} borderRadius={2}>
           <Container paddingX={{ xs: 2, sm: 4 }}>
             <Typography
-              variant={'h4'}
+              variant={'h2'}
               gutterBottom
               sx={{
-                fontWeight: 700,
+                fontWeight: 500,
                 color: theme.palette.common.white
               }}
             >
-              <strong>Switchswap Disclaimer</strong>
+              Switchswap Labs <br></br>Terms & privacy policy
             </Typography>
             <Typography
               gutterBottom
@@ -33,7 +33,7 @@ const TermsOfService = (): JSX.Element => {
                 color: theme.palette.common.white
               }}
             >
-              {translate(`term.Last modified`)} <strong>04 Nov, 2021</strong>
+              <strong> Last modified: November 11, 2021</strong>
             </Typography>
           </Container>
           <Box

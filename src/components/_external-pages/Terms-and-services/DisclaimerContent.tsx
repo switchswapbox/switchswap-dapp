@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import useLocales from 'hooks/useLocales';
 
 export default function Content() {
   return (
