@@ -131,6 +131,7 @@
     "uploaded successfully": "Tải tệp thành công lên mạng Crust"
   },
   "mintingProcess": {
+    "generate": "Các bước tạo NFT",
     "learn": "Tìm hiểu",
     "step completed": "Tất cả các bước đã hoàn tất",
     "reset": "Reset",

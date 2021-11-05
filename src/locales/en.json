@@ -133,6 +133,7 @@
     "uploaded successfully": "Uploaded successfully to Crust Network"
   },
   "mintingProcess": {
+    "generate": "Generate NFT",
     "learn": "Learn",
     "step completed": "All steps completed - you're finished",
     "reset": "Reset",
