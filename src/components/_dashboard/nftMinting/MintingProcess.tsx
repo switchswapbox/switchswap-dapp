@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 // material
 import { Box, Step, Paper, Button, Stepper, StepLabel, Typography } from '@mui/material';
 
@@ -14,12 +14,10 @@ import {
   resetMintingProcessState
 } from 'reduxStore/reducerMintingProcess';
 import { IRootState } from 'reduxStore';
-
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
-import { downloadNFT, resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
-import { PATH_DASHBOARD } from 'routes/paths';
-import { Link } from 'react-router-dom';
 import useLocales from '../../../hooks/useLocales';
+import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
+import html2canvas from 'html2canvas';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
@@ -32,7 +30,8 @@ export default function MintingProcess() {
         stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
         nftMinted: state.reducerMintingProcess.nftMinted,
         nftType: state.reducerMintingProcess.nftType,
-        title: state.reducerCustomizeQRCard.title
+        title: state.reducerCustomizeQRCard.title,
+        link: state.reducerMintingProcess.link
       };
     }
   );
@@ -89,8 +88,28 @@ export default function MintingProcess() {
   };
 
   const handleDownload = () => {
-    dispatch(downloadNFT({ download: true }));
+    let nftCard = document.getElementById('nftCard') as HTMLElement;
+    nftCard.style.fontFeatureSettings = 'OCRAExtended,OCR A Extended';
+    html2canvas(nftCard, {
+      scale: 4
+    })
+      .then(function (canvas) {
+        let png = canvas.toDataURL('image/png'); // default png
+        downloadCard(png, title === '' ? 'image.png' : `${title}.png`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  const downloadCard = useCallback((href: string, name: string) => {
+    var link = document.createElement('a');
+    link.download = name;
+    link.style.opacity = '0';
+    document.body.append(link);
+    link.href = href;
+    link.click();
+  }, []);
 
   return (
     <>
@@ -188,15 +207,6 @@ export default function MintingProcess() {
                 {translate(`mintingProcess.skip`)}
               </Button>
             )}
-
-            {nftType !== 'withoutNftCard' ? (
-              <Button variant="contained" sx={{ mr: 1 }} onClick={handleDownload}>
-                {translate(`mintingProcess.download`)}
-              </Button>
-            ) : (
-              <></>
-            )}
-            <Box sx={{ flexGrow: 1 }} />
             <Button variant="contained" onClick={handleNext} disabled={stepTwoNotDone}>
               {activeStep === steps.length - 1 ? finish : next}
             </Button>
@@ -223,6 +233,14 @@ export default function MintingProcess() {
                 {translate(`mintingProcess.skip`)}
               </Button>
             )}
+            {nftType !== 'withoutNftCard' ? (
+              <Button variant="contained" sx={{ mr: 1 }} onClick={handleDownload}>
+                {translate(`mintingProcess.download`)}
+              </Button>
+            ) : (
+              <></>
+            )}
+            <Box sx={{ flexGrow: 1 }} />
             <Button
               variant="contained"
               onClick={handleReset}
