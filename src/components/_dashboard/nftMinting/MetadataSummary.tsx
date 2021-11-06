@@ -41,7 +41,7 @@ const MetadataSummary = ({ children, ...other }: MetadataSummaryProps) => {
             </Label>
             <Switch
               edge="end"
-              checked={changeQRFile}
+              checked={!changeQRFile}
               onChange={() => dispatch(changeQRCardGeneralInfo({ changeQRFile: !changeQRFile }))}
             />
           </>

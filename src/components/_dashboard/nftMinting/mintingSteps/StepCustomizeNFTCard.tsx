@@ -359,7 +359,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     } else {
       parentBoundingBox.current.style.height = 'auto';
     }
-  }, [qrStyleName, qrStyleNameAuthorRegister]);
+  }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
 
   return (
     <>

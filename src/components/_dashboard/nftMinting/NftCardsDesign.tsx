@@ -110,8 +110,7 @@ export const NftCardsDesign = () => {
         {...otherQRProps}
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qrStyleName, url, otherQRProps]);
+  }, [qrStyleName, url, otherQRProps, uploadedCid?.cid]);
 
   const createQRCodeHash = useMemo(() => {
     const { Component } = qrStyles[qrStyleNameAuthorRegister];
@@ -125,7 +124,6 @@ export const NftCardsDesign = () => {
         {...otherQRPropsAuthorRegister}
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qrStyleNameAuthorRegister, urlHash, otherQRPropsAuthorRegister, transactionHash]);
 
   const createQRCard = useMemo(() => {

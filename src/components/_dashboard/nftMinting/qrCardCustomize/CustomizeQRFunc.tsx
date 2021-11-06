@@ -136,8 +136,8 @@ function CustomizeQRFunc() {
           count={funcTypes.length}
           page={
             changeQRFile
-              ? funcTypes.indexOf(otherQRProps?.funcType as string)
-              : funcTypes.indexOf(otherQRPropsAuthorRegister?.funcType as string)
+              ? funcTypes.indexOf(otherQRProps?.funcType as string) + 1
+              : funcTypes.indexOf(otherQRPropsAuthorRegister?.funcType as string) + 1
           }
           color="primary"
           onChange={handleSelectFuncType}
@@ -159,8 +159,8 @@ function CustomizeQRFunc() {
           count={types.length}
           page={
             changeQRFile
-              ? types.indexOf(otherQRProps?.type as string)
-              : types.indexOf(otherQRPropsAuthorRegister?.type as string)
+              ? types.indexOf(otherQRProps?.type as string) + 1
+              : types.indexOf(otherQRPropsAuthorRegister?.type as string) + 1
           }
           color="primary"
           onChange={handleSelectType}
@@ -182,8 +182,8 @@ function CustomizeQRFunc() {
           count={posTypes.length}
           page={
             changeQRFile
-              ? posTypes.indexOf(otherQRProps?.posType as string)
-              : posTypes.indexOf(otherQRPropsAuthorRegister?.posType as string)
+              ? posTypes.indexOf(otherQRProps?.posType as string) + 1
+              : posTypes.indexOf(otherQRPropsAuthorRegister?.posType as string) + 1
           }
           color="primary"
           onChange={handleSelectPosType}

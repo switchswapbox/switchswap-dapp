@@ -1,30 +1,23 @@
-<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 482 482" width="512" height="512">
-	<title>logo_single-svg</title>
-	<defs>
-		<linearGradient id="grd1" gradientUnits="userSpaceOnUse"  x1="67770.001" y1="106" x2="67770.001" y2="65641.393">
-			<stop offset="0" stop-color="#5be584"  />
-			<stop offset="1" stop-color="#00ab55"  />
-		</linearGradient>
-		<linearGradient id="grd2" gradientUnits="userSpaceOnUse"  x1="4622" y1="106" x2="4622" y2="9322">
-			<stop offset="0" stop-color="#5be584"  />
-			<stop offset="1" stop-color="#00ab55"  />
-		</linearGradient>
-		<linearGradient id="grd3" gradientUnits="userSpaceOnUse"  x1="4982" y1="106" x2="4982" y2="9322">
-			<stop offset="0" stop-color="#5be584"  />
-			<stop offset="1" stop-color="#00ab55"  />
-		</linearGradient>
-	</defs>
-	<style>
-		tspan { white-space:pre }
-		.shp0 { fill: url(#grd1) } 
-		.shp1 { fill: url(#grd2) } 
-		.shp2 { fill: url(#grd3) } 
-	</style>
-	<g id="Layer">
-		<g id="Layer">
-			<path id="Layer" fill-rule="evenodd" class="shp0" d="M67.69 260.27C113.96 341.23 161.79 417.5 216.73 305.62C224.25 291.23 229.73 263.28 242 263.28L242 263.42C254.27 263.42 259.75 291.38 267.27 305.76C322.21 417.64 370.04 341.37 416.31 260.42C419.79 254.31 423.14 248.48 426 243.42C319.96 310.55 328.89 107.75 242 106.14L242 106C155.11 107.61 164.04 310.4 58 243.28C60.86 248.34 64.21 254.17 67.69 260.27" />
-			<path id="Layer" fill-rule="evenodd" class="shp1" d="M62 106C35.49 106 14 127.49 14 154C14 180.51 35.49 202 62 202C88.51 202 110 180.51 110 154C110 127.49 88.51 106 62 106Z" />
-			<path id="Layer copy" fill-rule="evenodd" class="shp2" d="M422 106C395.49 106 374 127.49 374 154C374 180.51 395.49 202 422 202C448.51 202 470 180.51 470 154C470 127.49 448.51 106 422 106Z" />
-		</g>
-	</g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 351 351" style="enable-background:new 0 0 351 351;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:url(#SVGID_2_);}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="38.6186" y1="217.5177" x2="270.6186" y2="76.1877" gradientTransform="matrix(1 0 0 -1 0 362)">
+	<stop  offset="0" style="stop-color:#00FF5B"/>
+	<stop  offset="1" style="stop-color:#0014FF"/>
+</linearGradient>
+<polygon class="st0" points="49.1,205 49.1,255 92.4,280 135.7,305 135.7,305 179,330 222.3,305 222.3,305 222.3,305 222.3,305 
+	265.6,280 308.9,255 308.9,205 265.6,180 222.3,155 222.3,155 179,130 179,180 222.3,205 222.3,205 265.6,230 222.3,255 222.3,255 
+	179,280 179,280 135.7,255 135.7,255 92.4,230 92.4,180 "/>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="83.0504" y1="290.4507" x2="315.0504" y2="149.1207" gradientTransform="matrix(1 0 0 -1 0 362)">
+	<stop  offset="0" style="stop-color:#00FF5B"/>
+	<stop  offset="1" style="stop-color:#0014FF"/>
+</linearGradient>
+<polygon class="st1" points="308.9,155 308.9,105 265.6,80 222.3,55 222.3,55 179,30 135.7,55 135.7,55 135.7,55 135.7,55 92.4,80 
+	49.1,105 49.1,155 92.4,180 135.7,205 135.7,205 179,230 179,180 135.7,155 135.7,155 92.4,130 135.7,105 135.7,105 179,80 179,80 
+	222.3,105 222.3,105 265.6,130 265.6,180 "/>
 </svg>
