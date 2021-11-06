@@ -99,15 +99,17 @@ export default function ProjectTimeline() {
   const reduceTimeLine = slice(TIMELINES, TIMELINES.length - 3);
 
   return (
-    <Block title="Project Timeline">
-      <Timeline position="alternate">
+    <Block
+      title="Project Timeline"
+      sx={{
+        '& .MuiTimelineItem-missingOppositeContent:before': {
+          display: 'none'
+        }
+      }}
+    >
+      <Timeline>
         {TIMELINES.map((item) => (
           <TimelineItem key={item.key}>
-            <TimelineOppositeContent>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {item.time}
-              </Typography>
-            </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color={item.color}>{item.icon}</TimelineDot>
               <TimelineConnector />
@@ -115,13 +117,16 @@ export default function ProjectTimeline() {
             <TimelineContent>
               <Paper
                 sx={{
-                  p: 3,
+                  p: 1,
                   bgcolor: 'grey.50012'
                 }}
               >
                 <Typography variant="subtitle2">{item.title}</Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                   {item.des}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {item.time}
                 </Typography>
               </Paper>
             </TimelineContent>
