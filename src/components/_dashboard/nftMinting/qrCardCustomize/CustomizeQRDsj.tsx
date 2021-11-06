@@ -20,7 +20,7 @@ function CustomizeqrDsj() {
     }
   );
   const dispatch = useDispatch();
-  let changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleScaleChange(event: any) {
     dispatch(

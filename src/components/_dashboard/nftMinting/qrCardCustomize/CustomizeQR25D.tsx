@@ -1,7 +1,10 @@
 import { Box, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
+import {
+  changeOtherQRProps,
+  changeOtherQRPropsAuthorRegister
+} from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const colors = [
@@ -18,22 +21,21 @@ const colors = [
 ];
 
 function CustomizeQR25() {
-  const { height, posHeight, topColor, leftColor, rightColor } = useSelector(
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
     (state: IRootState) => {
       return {
-        height: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.height,
-        posHeight: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.posHeight,
-        topColor: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.topColor,
-        leftColor: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.leftColor,
-        rightColor: state.reducerCustomizeQRCard?.otherQRProps?.qr25D?.rightColor
+        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qr25D,
+        otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qr25D,
+        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
       };
     }
   );
   const dispatch = useDispatch();
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleHeightChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qr25D: {
             height: event.target.value as number
@@ -45,7 +47,7 @@ function CustomizeQR25() {
 
   function handlePosHeightChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qr25D: {
             posHeight: event.target.value
@@ -57,7 +59,7 @@ function CustomizeQR25() {
 
   function handleSelectTopColor(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qr25D: {
             topColor: value
@@ -69,7 +71,7 @@ function CustomizeQR25() {
 
   function handleSelectLeftColor(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qr25D: {
             leftColor: value
@@ -81,7 +83,7 @@ function CustomizeQR25() {
 
   function handleSelectRightColor(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qr25D: {
             rightColor: value
@@ -107,7 +109,11 @@ function CustomizeQR25() {
         <TextField
           label="Number"
           type="number"
-          value={height as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.height as number)
+              : (otherQRPropsAuthorRegister?.height as number)
+          }
           onChange={handleHeightChange}
           InputLabelProps={{
             shrink: true
@@ -130,7 +136,11 @@ function CustomizeQR25() {
         <TextField
           label="Number"
           type="number"
-          value={posHeight as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.posHeight as number)
+              : (otherQRPropsAuthorRegister?.posHeight as number)
+          }
           onChange={handlePosHeightChange}
           InputLabelProps={{
             shrink: true
@@ -151,7 +161,11 @@ function CustomizeQR25() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
-          value={topColor}
+          value={
+            changeQRFile
+              ? (otherQRProps?.topColor as string)
+              : (otherQRPropsAuthorRegister?.topColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -174,7 +188,11 @@ function CustomizeQR25() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
-          value={leftColor}
+          value={
+            changeQRFile
+              ? (otherQRProps?.leftColor as string)
+              : (otherQRPropsAuthorRegister?.leftColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -197,7 +215,11 @@ function CustomizeQR25() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
-          value={rightColor}
+          value={
+            changeQRFile
+              ? (otherQRProps?.rightColor as string)
+              : (otherQRPropsAuthorRegister?.rightColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

@@ -36,7 +36,7 @@ function CustomizeQRNormal() {
   );
 
   const dispatch = useDispatch();
-  let changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleSelectInnerPointType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
