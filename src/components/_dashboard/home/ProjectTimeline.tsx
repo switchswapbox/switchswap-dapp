@@ -104,10 +104,11 @@ export default function ProjectTimeline() {
       sx={{
         '& .MuiTimelineItem-missingOppositeContent:before': {
           display: 'none'
-        }
+        },
+        p: { xs: 0, sm: 3 }
       }}
     >
-      <Timeline>
+      <Timeline sx={{ pr: { xs: 0, sm: 2 } }}>
         {TIMELINES.map((item) => (
           <TimelineItem key={item.key}>
             <TimelineSeparator>
