@@ -14,6 +14,7 @@ const TELEGRAM = 'https://t.me/joinchat/B7wpZLuBtLYzNDg0';
 const DISCORD = 'https://discord.gg/MRmytnkf';
 const TWITTER = 'https://twitter.com/switchswapbox';
 const IPFS_GATEWAY_FOR_FETCHING_DATA = [
+  'https://gw.crustapps.net/ipfs',
   'https://ipfs.io/ipfs',
   'https://gateway.pinata.cloud/ipfs'
 ];
