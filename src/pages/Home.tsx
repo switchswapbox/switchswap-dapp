@@ -69,12 +69,6 @@ export default function Home() {
           <Grid item xs={12}>
             <ProjectTimeline />
           </Grid>
-          {/* <Grid item xs={12} md={4}>
-            <StatisticsCard text="Locked NFT value" value={0} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <StatisticsCard text="NFT's traded volume" value={0} />
-          </Grid> */}
         </Grid>
       </Container>
     </Page>

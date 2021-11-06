@@ -1,25 +1,15 @@
-import { last, slice } from 'lodash';
 import { Icon } from '@iconify/react';
-// material
-import HotelIcon from '@mui/icons-material/Hotel';
-import RepeatIcon from '@mui/icons-material/Repeat';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import { styled } from '@mui/material/styles';
-import { Box, Grid, Paper, Container, Typography } from '@mui/material';
+
+import { Paper, Typography } from '@mui/material';
 import {
   Timeline,
   TimelineDot,
   TimelineItem,
   TimelineContent,
   TimelineSeparator,
-  TimelineConnector,
-  TimelineOppositeContent
+  TimelineConnector
 } from '@mui/lab';
-// routes
-// components
-import Page from '../../Page';
-//
+
 import { Block } from '../../Block';
 
 // ----------------------------------------------------------------------
@@ -94,20 +84,19 @@ const TIMELINES: TimelineType[] = [
 // ----------------------------------------------------------------------
 
 export default function ProjectTimeline() {
-  const lastItem = last(TIMELINES)?.key;
-
-  const reduceTimeLine = slice(TIMELINES, TIMELINES.length - 3);
-
   return (
-    <Block title="Project Timeline">
-      <Timeline position="alternate">
+    <Block
+      title="Project Timeline"
+      sx={{
+        '& .MuiTimelineItem-missingOppositeContent:before': {
+          display: 'none'
+        },
+        p: { xs: 0, sm: 3 }
+      }}
+    >
+      <Timeline sx={{ pr: { xs: 0, sm: 2 } }}>
         {TIMELINES.map((item) => (
           <TimelineItem key={item.key}>
-            <TimelineOppositeContent>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {item.time}
-              </Typography>
-            </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot color={item.color}>{item.icon}</TimelineDot>
               <TimelineConnector />
@@ -115,13 +104,16 @@ export default function ProjectTimeline() {
             <TimelineContent>
               <Paper
                 sx={{
-                  p: 3,
+                  p: 1,
                   bgcolor: 'grey.50012'
                 }}
               >
                 <Typography variant="subtitle2">{item.title}</Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                   {item.des}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {item.time}
                 </Typography>
               </Paper>
             </TimelineContent>
