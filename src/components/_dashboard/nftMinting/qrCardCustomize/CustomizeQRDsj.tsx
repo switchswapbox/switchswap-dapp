@@ -1,26 +1,30 @@
 import { Box, Pagination, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
-import ColorSinglePicker from '../ColorSinglePicker';
+import {
+  changeOtherQRPropsAuthorRegister,
+  changeOtherQRProps
+} from 'reduxStore/reducerCustomizeQRCard';
 import { QRDsjOtherPropsPosTypes } from './defautOtherQRProps';
 
 const anchorPointTypes = ['rect', 'dsj'];
 
 function CustomizeqrDsj() {
-  const { scale, crossWidth, posWidth, posType } = useSelector((state: IRootState) => {
-    return {
-      scale: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.scale,
-      crossWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.crossWidth,
-      posWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.posWidth,
-      posType: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj?.posType
-    };
-  });
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
+    (state: IRootState) => {
+      return {
+        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj,
+        otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrDsj,
+        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+      };
+    }
+  );
   const dispatch = useDispatch();
+  let changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleScaleChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrDsj: {
             scale: event.target.value
@@ -32,7 +36,7 @@ function CustomizeqrDsj() {
 
   function handleCrossWidthChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrDsj: {
             crossWidth: event.target.value
@@ -45,7 +49,7 @@ function CustomizeqrDsj() {
   function handleSelectAnchorPointType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrDsj: {
               posType: anchorPointTypes[value - 1] as QRDsjOtherPropsPosTypes
@@ -58,7 +62,7 @@ function CustomizeqrDsj() {
 
   function handlePosWidthChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrDsj: {
             posWidth: event.target.value
@@ -84,7 +88,11 @@ function CustomizeqrDsj() {
         <TextField
           label="Percent Number"
           type="number"
-          value={scale as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.scale as number)
+              : (otherQRPropsAuthorRegister?.scale as number)
+          }
           onChange={handleScaleChange}
           InputLabelProps={{
             shrink: true
@@ -107,7 +115,11 @@ function CustomizeqrDsj() {
         <TextField
           label="Percent Number"
           type="number"
-          value={crossWidth as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.crossWidth as number)
+              : (otherQRPropsAuthorRegister?.crossWidth as number)
+          }
           onChange={handleCrossWidthChange}
           InputLabelProps={{
             shrink: true
@@ -129,12 +141,17 @@ function CustomizeqrDsj() {
         </Typography>
         <Pagination
           count={anchorPointTypes.length}
+          page={
+            changeQRFile
+              ? anchorPointTypes.indexOf(otherQRProps?.posType as string) + 1
+              : anchorPointTypes.indexOf(otherQRPropsAuthorRegister?.posType as string) + 1
+          }
           color="primary"
           onChange={handleSelectAnchorPointType}
         />
       </Box>
 
-      {posType === 'dsj' ? (
+      {changeQRFile && otherQRProps?.posType === 'dsj' ? (
         <Box
           sx={{
             mb: 3,
@@ -149,7 +166,30 @@ function CustomizeqrDsj() {
           <TextField
             label="Percent Number"
             type="number"
-            value={posWidth as number}
+            value={otherQRProps?.posWidth as number}
+            onChange={handlePosWidthChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+            variant="standard"
+          />
+        </Box>
+      ) : !changeQRFile && otherQRPropsAuthorRegister?.posType === 'dsj' ? (
+        <Box
+          sx={{
+            mb: 3,
+            display: 'flex',
+            justifyContent: 'space-between',
+            pt: 2
+          }}
+        >
+          <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
+            Anchor point size
+          </Typography>
+          <TextField
+            label="Percent Number"
+            type="number"
+            value={otherQRPropsAuthorRegister?.posWidth as number}
             onChange={handlePosWidthChange}
             InputLabelProps={{
               shrink: true
