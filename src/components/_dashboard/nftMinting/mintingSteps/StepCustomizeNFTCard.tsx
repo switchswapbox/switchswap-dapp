@@ -347,17 +347,19 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   const scrollDestination = useRef() as React.MutableRefObject<HTMLDivElement>;
 
   useEffect(() => {
-    if (window.innerWidth > 1200) {
-      window.scrollTo({
-        top: scrollDestination.current.offsetTop + 200,
-        behavior: 'smooth'
-      });
-      parentBoundingBox.current.style.height = 'auto';
-      setTimeout(() => {
-        parentBoundingBox.current.style.height = `${parentBoundingBox.current.offsetHeight}px`;
-      }, 1000);
-    } else {
-      parentBoundingBox.current.style.height = 'auto';
+    if (nftType === ('simplified' || 'withAuthorReg')) {
+      if (window.innerWidth > 1200) {
+        window.scrollTo({
+          top: scrollDestination.current.offsetTop + 200,
+          behavior: 'smooth'
+        });
+        parentBoundingBox.current.style.height = 'auto';
+        setTimeout(() => {
+          parentBoundingBox.current.style.height = `${parentBoundingBox.current.offsetHeight}px`;
+        }, 1000);
+      } else {
+        parentBoundingBox.current.style.height = 'auto';
+      }
     }
   }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
 
@@ -375,7 +377,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
             />
           </Stack>
         </Grid>
-        {nftType === 'simplified' || 'withAuthorReg' ? (
+        {nftType === ('simplified' || 'withAuthorReg') ? (
           <Grid container item xs={12}>
             <Grid container item>
               <Grid
