@@ -1,7 +1,10 @@
 import { Box, Pagination, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
+import {
+  changeOtherQRProps,
+  changeOtherQRPropsAuthorRegister
+} from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const funcTypes = ['A', 'B'];
@@ -21,19 +24,24 @@ const colors = [
 ];
 
 function CustomizeQRFunc() {
-  const { otherColor1, otherColor2, posColor } = useSelector((state: IRootState) => {
-    return {
-      otherColor1: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc?.otherColor1,
-      otherColor2: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc?.otherColor2,
-      posColor: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc?.posColor
-    };
-  });
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
+    (state: IRootState) => {
+      return {
+        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc,
+        otherQRPropsAuthorRegister:
+          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrFunc,
+        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+      };
+    }
+  );
+
   const dispatch = useDispatch();
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleSelectFuncType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrFunc: {
               funcType: funcTypes[value - 1]
@@ -47,7 +55,7 @@ function CustomizeQRFunc() {
   function handleSelectType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrFunc: {
               type: types[value - 1]
@@ -61,7 +69,7 @@ function CustomizeQRFunc() {
   function handleSelectPosType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrFunc: {
               posType: posTypes[value - 1]
@@ -74,7 +82,7 @@ function CustomizeQRFunc() {
 
   function handleInnerPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrFunc: {
             otherColor1: value
@@ -89,7 +97,7 @@ function CustomizeQRFunc() {
     value: string
   ) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrFunc: {
             otherColor2: value
@@ -101,7 +109,7 @@ function CustomizeQRFunc() {
 
   function handleAnchorPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrFunc: {
             posColor: value
@@ -124,7 +132,16 @@ function CustomizeQRFunc() {
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
           Inference function
         </Typography>
-        <Pagination count={funcTypes.length} color="primary" onChange={handleSelectFuncType} />
+        <Pagination
+          count={funcTypes.length}
+          page={
+            changeQRFile
+              ? funcTypes.indexOf(otherQRProps?.funcType as string)
+              : funcTypes.indexOf(otherQRPropsAuthorRegister?.funcType as string)
+          }
+          color="primary"
+          onChange={handleSelectFuncType}
+        />
       </Box>
 
       <Box
@@ -138,7 +155,16 @@ function CustomizeQRFunc() {
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
           Inner point type
         </Typography>
-        <Pagination count={types.length} color="primary" onChange={handleSelectType} />
+        <Pagination
+          count={types.length}
+          page={
+            changeQRFile
+              ? types.indexOf(otherQRProps?.type as string)
+              : types.indexOf(otherQRPropsAuthorRegister?.type as string)
+          }
+          color="primary"
+          onChange={handleSelectType}
+        />
       </Box>
 
       <Box
@@ -152,7 +178,16 @@ function CustomizeQRFunc() {
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
           Anchor point type
         </Typography>
-        <Pagination count={posTypes.length} color="primary" onChange={handleSelectPosType} />
+        <Pagination
+          count={posTypes.length}
+          page={
+            changeQRFile
+              ? posTypes.indexOf(otherQRProps?.posType as string)
+              : posTypes.indexOf(otherQRPropsAuthorRegister?.posType as string)
+          }
+          color="primary"
+          onChange={handleSelectPosType}
+        />
       </Box>
 
       <Box
@@ -167,7 +202,11 @@ function CustomizeQRFunc() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
-          value={otherColor1}
+          value={
+            changeQRFile
+              ? (otherQRProps?.otherColor1 as string)
+              : (otherQRPropsAuthorRegister?.otherColor1 as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -190,7 +229,11 @@ function CustomizeQRFunc() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
-          value={otherColor2}
+          value={
+            changeQRFile
+              ? (otherQRProps?.otherColor2 as string)
+              : (otherQRPropsAuthorRegister?.otherColor2 as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -213,7 +256,11 @@ function CustomizeQRFunc() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
-          value={posColor}
+          value={
+            changeQRFile
+              ? (otherQRProps?.posColor as string)
+              : (otherQRPropsAuthorRegister?.posColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
