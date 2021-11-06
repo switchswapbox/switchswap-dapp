@@ -106,7 +106,11 @@ function StepUploadFile() {
         const added = await ipfs.add(reader.result as ArrayBuffer);
         dispatch(
           changeMintingProcessState({
-            uploadedCid: { cid: added.cid.toV0().toString(), size: added.size, name: files[0].name }
+            uploadedCid: {
+              cid: added.cid.toV0().toString(),
+              size: added.size / 1000,
+              name: files[0].name
+            }
           })
         );
         setFileUploading(false);

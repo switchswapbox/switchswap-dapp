@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -137,7 +137,9 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     metadataCid,
     nftCardCid,
     srcImage,
-    qrStyleName
+    qrStyleName,
+    qrStyleNameAuthorRegister,
+    changeQRFile
   } = useSelector((state: IRootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
@@ -149,12 +151,16 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       metadataCid: state.reducerMintingProcess.metadataCid,
       nftCardCid: state.reducerMintingProcess.nftCardCid,
       srcImage: state.reducerMintingProcess.srcImage,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
+      qrStyleNameAuthorRegister: state.reducerCustomizeQRCard.qrStyleNameAuthorRegister,
+      changeQRFile: state.reducerCustomizeQRCard.changeQRFile
     };
   });
   const dispatch = useDispatch();
 
-  const { CustomProps } = qrStyles[qrStyleName as qrStyleNameType];
+  const { CustomProps } = changeQRFile
+    ? qrStyles[qrStyleName as qrStyleNameType]
+    : qrStyles[qrStyleNameAuthorRegister as qrStyleNameType];
 
   function dataURLtoBlob(dataurl: string) {
     const arr = dataurl.split(',');
@@ -337,28 +343,52 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
   };
 
+  const parentBoundingBox = useRef() as React.MutableRefObject<HTMLDivElement>;
+  const scrollDestination = useRef() as React.MutableRefObject<HTMLDivElement>;
+
+  useEffect(() => {
+    if (window.innerWidth > 1200) {
+      window.scrollTo({
+        top: scrollDestination.current.offsetTop + 200,
+        behavior: 'smooth'
+      });
+      parentBoundingBox.current.style.height = 'auto';
+      setTimeout(() => {
+        parentBoundingBox.current.style.height = `${parentBoundingBox.current.offsetHeight}px`;
+      }, 1000);
+    } else {
+      parentBoundingBox.current.style.height = 'auto';
+    }
+  }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
         <Grid item xs={12} sx={{ pb: 5 }}>
           <Stack alignItems="center" justifyContent="center">
-            <Box sx={{ borderRadius: 2 }} component="img" src={srcImage} height={300} />
+            <Box
+              ref={scrollDestination}
+              sx={{ borderRadius: 2 }}
+              component="img"
+              src={srcImage}
+              height={300}
+            />
           </Stack>
         </Grid>
-        {nftType === 'simplified' ? (
+        {nftType === 'simplified' || 'withAuthorReg' ? (
           <Grid container item xs={12}>
             <Grid container item>
               <Grid
+                ref={parentBoundingBox}
                 item
                 xs={12}
                 md={12}
                 lg={7}
                 sx={{
-                  pb: { xs: 5, md: 0 },
-                  maxHeight: { xs: 'auto', lg: '500vh' }
+                  pb: { xs: 5, md: 0 }
                 }}
               >
-                <SliderSVGCard />
+                <SliderSVGCard parentBoundingBox={parentBoundingBox} />
               </Grid>
               <Grid container item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid container item>

@@ -1,6 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from 'reduxStore';
+import {
+  changeOtherQRPropsAuthorRegister,
+  changeOtherQRProps
+} from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const colors = [
@@ -17,11 +21,23 @@ const colors = [
 ];
 
 function CustomizeQRBubble() {
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
+    (state: IRootState) => {
+      return {
+        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrBubble,
+        otherQRPropsAuthorRegister:
+          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrBubble,
+        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+      };
+    }
+  );
+
   const dispatch = useDispatch();
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleCircleColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrBubble: {
             circleColor: value
@@ -33,7 +49,7 @@ function CustomizeQRBubble() {
 
   function handlePosColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrBubble: {
             posColor: value
@@ -57,6 +73,11 @@ function CustomizeQRBubble() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={
+            changeQRFile
+              ? (otherQRProps?.circleColor as string)
+              : (otherQRPropsAuthorRegister?.circleColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -79,6 +100,11 @@ function CustomizeQRBubble() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={
+            changeQRFile
+              ? (otherQRProps?.posColor as string)
+              : (otherQRPropsAuthorRegister?.posColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

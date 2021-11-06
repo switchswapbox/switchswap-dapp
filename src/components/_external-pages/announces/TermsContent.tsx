@@ -47,6 +47,44 @@ const mock = [
     title: '',
     description:
       'Additionally, when you use the Interface, you are interacting with the Ethereum blockchain, which provides transparency into your transactions. Uniswap Labs does not control and is not responsible for any information you make public on the Ethereum blockchain by taking actions through the Interface.'
+  },
+  {
+    title: '6. Prohibited Activity',
+    description:
+      'You agree not to engage in, or attempt to engage in, any of the following categories of prohibited activity in relation to your access and use of the Interface:'
+  },
+  {
+    title: '',
+    description:
+      '&copy; Intellectual Property Infringement. Activity that infringes on or violates any copyright, trademark, service mark, patent, right of publicity, right of privacy, or other proprietary or intellectual property rights under the law.'
+  },
+  {
+    title: '',
+    description: ''
+  },
+  {
+    title: '',
+    description: ''
+  },
+  {
+    title: '',
+    description: ''
+  },
+  {
+    title: '',
+    description: ''
+  },
+  {
+    title: '',
+    description: ''
+  },
+  {
+    title: '',
+    description: ''
+  },
+  {
+    title: '',
+    description: ''
   }
 ];
 

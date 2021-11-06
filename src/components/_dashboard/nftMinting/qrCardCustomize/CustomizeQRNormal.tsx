@@ -1,13 +1,12 @@
 import { Box, Pagination, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
-import ColorSinglePicker from '../ColorSinglePicker';
 import {
-  QRDsjOtherPropsPosTypes,
-  QRNormalOtherPropsPosTypes,
-  QRNormalOtherPropsTypes
-} from './defautOtherQRProps';
+  changeOtherQRProps,
+  changeOtherQRPropsAuthorRegister
+} from 'reduxStore/reducerCustomizeQRCard';
+import ColorSinglePicker from '../ColorSinglePicker';
+import { QRNormalOtherPropsPosTypes, QRNormalOtherPropsTypes } from './defautOtherQRProps';
 
 const innerPointTypes = ['rect', 'round', 'rand'];
 const anchorPointTypes = ['rect', 'round', 'planet'];
@@ -25,18 +24,24 @@ const colors = [
 ];
 
 function CustomizeQRNormal() {
-  const { innerPointSize, innerPointOpacity } = useSelector((state: IRootState) => {
-    return {
-      innerPointSize: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.size,
-      innerPointOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal?.opacity
-    };
-  });
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
+    (state: IRootState) => {
+      return {
+        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal,
+        otherQRPropsAuthorRegister:
+          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrNormal,
+        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+      };
+    }
+  );
+
   const dispatch = useDispatch();
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleSelectInnerPointType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrNormal: {
               type: innerPointTypes[value - 1] as QRNormalOtherPropsTypes
@@ -49,7 +54,7 @@ function CustomizeQRNormal() {
 
   function handleInnerPointSizeChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrNormal: {
             size: event.target.value
@@ -61,7 +66,7 @@ function CustomizeQRNormal() {
 
   function handleInnerPointOpacityChange(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrNormal: {
             opacity:
@@ -74,7 +79,7 @@ function CustomizeQRNormal() {
 
   function handleInnerPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrNormal: {
             otherColor: value
@@ -87,7 +92,7 @@ function CustomizeQRNormal() {
   function handleSelectAnchorPointType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrNormal: {
               posType: anchorPointTypes[value - 1] as QRNormalOtherPropsPosTypes
@@ -100,7 +105,7 @@ function CustomizeQRNormal() {
 
   function handleAnchorPointColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrNormal: {
             posColor: value
@@ -125,6 +130,11 @@ function CustomizeQRNormal() {
         </Typography>
         <Pagination
           count={innerPointTypes.length}
+          page={
+            changeQRFile
+              ? innerPointTypes.indexOf(otherQRProps?.type as string) + 1
+              : innerPointTypes.indexOf(otherQRPropsAuthorRegister?.type as string) + 1
+          }
           color="primary"
           onChange={handleSelectInnerPointType}
         />
@@ -143,7 +153,11 @@ function CustomizeQRNormal() {
         <TextField
           label="Number"
           type="number"
-          value={innerPointSize as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.size as number)
+              : (otherQRPropsAuthorRegister?.size as number)
+          }
           onChange={handleInnerPointSizeChange}
           InputLabelProps={{
             shrink: true
@@ -165,7 +179,11 @@ function CustomizeQRNormal() {
         <TextField
           label="Percent Number"
           type="number"
-          value={innerPointOpacity as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.opacity as number)
+              : (otherQRPropsAuthorRegister?.opacity as number)
+          }
           onChange={handleInnerPointOpacityChange}
           InputLabelProps={{
             shrink: true
@@ -185,6 +203,11 @@ function CustomizeQRNormal() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={
+            changeQRFile
+              ? (otherQRProps?.otherColor as string)
+              : (otherQRPropsAuthorRegister?.otherColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -207,6 +230,11 @@ function CustomizeQRNormal() {
         </Typography>
         <Pagination
           count={anchorPointTypes.length}
+          page={
+            changeQRFile
+              ? anchorPointTypes.indexOf(otherQRProps?.posType as string) + 1
+              : anchorPointTypes.indexOf(otherQRPropsAuthorRegister?.posType as string) + 1
+          }
           color="primary"
           onChange={handleSelectAnchorPointType}
         />
@@ -223,6 +251,11 @@ function CustomizeQRNormal() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={
+            changeQRFile
+              ? (otherQRProps?.posColor as string)
+              : (otherQRPropsAuthorRegister?.posColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

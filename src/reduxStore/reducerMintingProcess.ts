@@ -20,6 +20,7 @@ export interface MintingProcessState {
   isMinting?: boolean;
   nftMinted?: boolean;
   tokenID?: number;
+  link?: HTMLAnchorElement | null;
 }
 
 export const changeMintingProcessState = (state: MintingProcessState) => ({
@@ -32,7 +33,7 @@ export const resetMintingProcessState = () => ({
 });
 
 // init state
-const initialMintingProcessState: MintingProcessState = {
+export const initialMintingProcessState: MintingProcessState = {
   activeStep: 0,
   nftType: 'withoutNftCard',
   stepOneNotDone: true,
@@ -47,7 +48,8 @@ const initialMintingProcessState: MintingProcessState = {
   transactionHash: '',
   isMinting: false,
   nftMinted: false,
-  tokenID: 0
+  tokenID: 0,
+  link: null
 };
 
 export const reducerMintingProcess = (
