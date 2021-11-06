@@ -1,25 +1,15 @@
-import { last, slice } from 'lodash';
 import { Icon } from '@iconify/react';
-// material
-import HotelIcon from '@mui/icons-material/Hotel';
-import RepeatIcon from '@mui/icons-material/Repeat';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import { styled } from '@mui/material/styles';
-import { Box, Grid, Paper, Container, Typography } from '@mui/material';
+
+import { Paper, Typography } from '@mui/material';
 import {
   Timeline,
   TimelineDot,
   TimelineItem,
   TimelineContent,
   TimelineSeparator,
-  TimelineConnector,
-  TimelineOppositeContent
+  TimelineConnector
 } from '@mui/lab';
-// routes
-// components
-import Page from '../../Page';
-//
+
 import { Block } from '../../Block';
 
 // ----------------------------------------------------------------------
@@ -94,10 +84,6 @@ const TIMELINES: TimelineType[] = [
 // ----------------------------------------------------------------------
 
 export default function ProjectTimeline() {
-  const lastItem = last(TIMELINES)?.key;
-
-  const reduceTimeLine = slice(TIMELINES, TIMELINES.length - 3);
-
   return (
     <Block
       title="Project Timeline"
