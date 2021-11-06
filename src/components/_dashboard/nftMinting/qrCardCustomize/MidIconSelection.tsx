@@ -16,7 +16,6 @@ const MidIconSelection = () => {
       changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
     };
   });
-  console.log(iconAuthorRegister);
   const dispatch = useDispatch();
   const handleSelectMidIcon = (name: stringAndNumber) => {
     if (changeQRFile) {

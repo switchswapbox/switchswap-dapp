@@ -53,7 +53,7 @@ export const NftCardsDesign = () => {
     // eslint-disable-next-line no-lone-blocks
     {
       return state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister
-        ? state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister[qrStyleName]
+        ? state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister[qrStyleNameAuthorRegister]
         : undefined;
     }
   });

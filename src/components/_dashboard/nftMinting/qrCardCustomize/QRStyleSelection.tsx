@@ -27,10 +27,14 @@ const QRStyleSelection = () => {
   );
   const dispatch = useDispatch();
   const handleSelectQRStyle = (name: stringAndNumber) => {
-    if (qrStyleName !== name) {
-      changeQRFile
-        ? dispatch(changeQRCardGeneralInfo({ qrStyleName: name as qrStyleNameType }))
-        : dispatch(changeQRCardGeneralInfo({ qrStyleNameAuthorRegister: name as qrStyleNameType }));
+    if (changeQRFile) {
+      if (qrStyleName !== name) {
+        dispatch(changeQRCardGeneralInfo({ qrStyleName: name as qrStyleNameType }));
+      }
+    } else {
+      if (qrStyleNameAuthorRegister !== name) {
+        dispatch(changeQRCardGeneralInfo({ qrStyleNameAuthorRegister: name as qrStyleNameType }));
+      }
     }
   };
 
