@@ -89,7 +89,6 @@ export default function MintingProcess() {
 
   const handleDownload = () => {
     let nftCard = document.getElementById('nftCard') as HTMLElement;
-    nftCard.style.fontFeatureSettings = 'OCRAExtended,OCR A Extended';
     html2canvas(nftCard, {
       scale: 4
     })
