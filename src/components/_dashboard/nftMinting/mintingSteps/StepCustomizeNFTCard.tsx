@@ -137,7 +137,9 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     metadataCid,
     nftCardCid,
     srcImage,
-    qrStyleName
+    qrStyleName,
+    qrStyleNameAuthorRegister,
+    changeQRFile
   } = useSelector((state: IRootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
@@ -149,12 +151,16 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       metadataCid: state.reducerMintingProcess.metadataCid,
       nftCardCid: state.reducerMintingProcess.nftCardCid,
       srcImage: state.reducerMintingProcess.srcImage,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName
+      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
+      qrStyleNameAuthorRegister: state.reducerCustomizeQRCard.qrStyleNameAuthorRegister,
+      changeQRFile: state.reducerCustomizeQRCard.changeQRFile
     };
   });
   const dispatch = useDispatch();
 
-  const { CustomProps } = qrStyles[qrStyleName as qrStyleNameType];
+  const { CustomProps } = changeQRFile
+    ? qrStyles[qrStyleName as qrStyleNameType]
+    : qrStyles[qrStyleNameAuthorRegister as qrStyleNameType];
 
   function dataURLtoBlob(dataurl: string) {
     const arr = dataurl.split(',');
@@ -353,7 +359,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     } else {
       parentBoundingBox.current.style.height = 'auto';
     }
-  }, [qrStyleName]);
+  }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
 
   return (
     <>

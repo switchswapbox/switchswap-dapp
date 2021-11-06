@@ -14,8 +14,8 @@ export const defaultQRNormalOtherProps: QRNormalOtherProps = {
   size: 100,
   opacity: 100,
   posType: 'rect',
-  otherColor: '#000000',
-  posColor: '#000000'
+  otherColor: '#0693E3',
+  posColor: '#0693E3'
 };
 
 export type QRDsjOtherPropsPosTypes = 'rect' | 'dsj';
@@ -44,9 +44,9 @@ export interface QR25DOtherProps {
 export const defaultQR25DOtherProps: QR25DOtherProps = {
   height: 0.5,
   posHeight: 0.5,
-  topColor: '#FF7F89',
-  leftColor: '#FFD7D9',
-  rightColor: '#FFEBF3'
+  topColor: '#0693E3',
+  leftColor: '#ABB8C3',
+  rightColor: '#ABB8C3'
 };
 
 export interface QRBubbleOtherProps {
@@ -55,7 +55,7 @@ export interface QRBubbleOtherProps {
 }
 
 export const defaultQRBubbleOtherProps: QRBubbleOtherProps = {
-  circleColor: '#8ED1FC',
+  circleColor: '#0693E3',
   posColor: '#0693E3'
 };
 
@@ -72,9 +72,9 @@ export const defaultQRFuncOtherProps: QRFuncOtherProps = {
   funcType: 'A',
   type: 'rect',
   posType: 'rect',
-  otherColor1: '#000000',
-  otherColor2: '#000000',
-  posColor: '#000000'
+  otherColor1: '#0693E3',
+  otherColor2: '#0693E3',
+  posColor: '#0693E3'
 };
 
 export interface QRLineOtherProps {
@@ -90,11 +90,11 @@ export interface QRLineOtherProps {
 export const defaultQRLineOtherProps: QRLineOtherProps = {
   funcType: 'A',
   posType: 'rect',
-  posColor: '#000000',
+  posColor: '#0693E3',
   direction: 'left-right',
   lineWidth: 50,
   lineOpacity: 100,
-  lineColor: '#000000'
+  lineColor: '#0693E3'
 };
 
 export interface QRRandRectOtherProps {}

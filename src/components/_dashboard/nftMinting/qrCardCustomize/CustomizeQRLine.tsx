@@ -1,7 +1,10 @@
 import { Box, Pagination, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
-import { changeOtherQRProps } from 'reduxStore/reducerCustomizeQRCard';
+import {
+  changeOtherQRProps,
+  changeOtherQRPropsAuthorRegister
+} from 'reduxStore/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const funcTypes = ['A', 'B'];
@@ -30,18 +33,24 @@ const colors = [
 ];
 
 function CustomizeQRLine() {
-  const { lineWidth, lineOpacity } = useSelector((state: IRootState) => {
-    return {
-      lineWidth: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineWidth,
-      lineOpacity: state.reducerCustomizeQRCard?.otherQRProps?.qrLine?.lineOpacity
-    };
-  });
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
+    (state: IRootState) => {
+      return {
+        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrLine,
+        otherQRPropsAuthorRegister:
+          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrLine,
+        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+      };
+    }
+  );
+
   const dispatch = useDispatch();
+  const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleSelectFuncType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrLine: {
               funcType: funcTypes[value - 1]
@@ -55,7 +64,7 @@ function CustomizeQRLine() {
   function handleSelectPosType(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrLine: {
               posType: types[value - 1]
@@ -68,7 +77,7 @@ function CustomizeQRLine() {
 
   function handlePosColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrLine: {
             posColor: value
@@ -81,7 +90,7 @@ function CustomizeQRLine() {
   function handleSelectDirection(event: React.ChangeEvent<unknown>, value: number) {
     if (value) {
       dispatch(
-        changeOtherQRProps({
+        changeProps({
           otherQRProps: {
             qrLine: {
               direction: directions[value - 1]
@@ -94,7 +103,7 @@ function CustomizeQRLine() {
 
   function handleLineWidth(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrLine: {
             lineWidth: event.target.value
@@ -106,7 +115,7 @@ function CustomizeQRLine() {
 
   function handleLineOpacity(event: any) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrLine: {
             lineOpacity: event.target.value
@@ -117,7 +126,7 @@ function CustomizeQRLine() {
   }
   function handleLineColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     dispatch(
-      changeOtherQRProps({
+      changeProps({
         otherQRProps: {
           qrLine: {
             lineColor: value
@@ -140,7 +149,16 @@ function CustomizeQRLine() {
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
           Inference function
         </Typography>
-        <Pagination count={funcTypes.length} color="primary" onChange={handleSelectFuncType} />
+        <Pagination
+          count={funcTypes.length}
+          page={
+            changeQRFile
+              ? funcTypes.indexOf(otherQRProps?.funcType as string) + 1
+              : funcTypes.indexOf(otherQRPropsAuthorRegister?.funcType as string) + 1
+          }
+          color="primary"
+          onChange={handleSelectFuncType}
+        />
       </Box>
 
       <Box
@@ -154,7 +172,16 @@ function CustomizeQRLine() {
         <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
           Anchor point type
         </Typography>
-        <Pagination count={posTypes.length} color="primary" onChange={handleSelectPosType} />
+        <Pagination
+          count={posTypes.length}
+          page={
+            changeQRFile
+              ? posTypes.indexOf(otherQRProps?.posType as string) + 1
+              : posTypes.indexOf(otherQRPropsAuthorRegister?.posType as string) + 1
+          }
+          color="primary"
+          onChange={handleSelectPosType}
+        />
       </Box>
 
       <Box
@@ -169,6 +196,11 @@ function CustomizeQRLine() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={
+            changeQRFile
+              ? (otherQRProps?.posColor as string)
+              : (otherQRPropsAuthorRegister?.posColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,
@@ -192,6 +224,11 @@ function CustomizeQRLine() {
         </Typography>
         <Pagination
           count={directions.length}
+          page={
+            changeQRFile
+              ? directions.indexOf(otherQRProps?.direction as string) + 1
+              : directions.indexOf(otherQRPropsAuthorRegister?.direction as string) + 1
+          }
           siblingCount={0}
           color="primary"
           onChange={handleSelectDirection}
@@ -212,7 +249,11 @@ function CustomizeQRLine() {
         <TextField
           label="Number"
           type="number"
-          value={lineWidth as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.lineWidth as number)
+              : (otherQRPropsAuthorRegister?.lineWidth as number)
+          }
           onChange={handleLineWidth}
           InputLabelProps={{
             shrink: true
@@ -235,7 +276,11 @@ function CustomizeQRLine() {
         <TextField
           label="Number"
           type="number"
-          value={lineOpacity as number}
+          value={
+            changeQRFile
+              ? (otherQRProps?.lineOpacity as number)
+              : (otherQRPropsAuthorRegister?.lineOpacity as number)
+          }
           onChange={handleLineOpacity}
           InputLabelProps={{
             shrink: true
@@ -256,6 +301,11 @@ function CustomizeQRLine() {
         </Typography>
         <ColorSinglePicker
           colors={colors}
+          value={
+            changeQRFile
+              ? (otherQRProps?.lineColor as string)
+              : (otherQRPropsAuthorRegister?.lineColor as string)
+          }
           sx={{
             ...(colors.length > 5 && {
               maxWidth: 200,

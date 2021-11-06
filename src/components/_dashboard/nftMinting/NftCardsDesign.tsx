@@ -9,6 +9,7 @@ import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
+import { initialQRCard, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 
 // ----------------------------------------------------------------------
 
@@ -24,12 +25,20 @@ export const NftCardsDesign = () => {
       };
     }
   );
-  const { icon, qrStyleName } = useSelector((state: IRootState) => {
-    return {
-      icon: state.reducerCustomizeQRCard.icon,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName || 'qrNormal'
-    };
-  });
+  const { icon, iconAuthorRegister, qrStyleName, qrStyleNameAuthorRegister } = useSelector(
+    (state: IRootState) => {
+      return {
+        icon: state.reducerCustomizeQRCard.icon,
+        iconAuthorRegister: state.reducerCustomizeQRCard.iconAuthorRegister,
+        qrStyleName:
+          state.reducerCustomizeQRCard.qrStyleName ||
+          (initialQRCard.qrStyleName as qrStyleNameType),
+        qrStyleNameAuthorRegister:
+          state.reducerCustomizeQRCard.qrStyleNameAuthorRegister ||
+          (initialQRCard.qrStyleNameAuthorRegister as qrStyleNameType)
+      };
+    }
+  );
 
   const otherQRProps = useSelector((state: IRootState) => {
     // eslint-disable-next-line no-lone-blocks
@@ -39,8 +48,19 @@ export const NftCardsDesign = () => {
         : undefined;
     }
   });
+
+  const otherQRPropsAuthorRegister = useSelector((state: IRootState) => {
+    // eslint-disable-next-line no-lone-blocks
+    {
+      return state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister
+        ? state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister[qrStyleNameAuthorRegister]
+        : undefined;
+    }
+  });
+
   const SVGComponent = svgArray[layoutIndex || 0];
   const [url, setUrl] = useState('');
+  const [urlHash, setUrlHash] = useState('');
 
   useEffect(() => {
     if (icon !== '') {
@@ -60,6 +80,24 @@ export const NftCardsDesign = () => {
     }
   }, [icon]);
 
+  useEffect(() => {
+    if (iconAuthorRegister !== '') {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const base_image = new Image();
+      base_image.onload = function () {
+        canvas.width = base_image.width;
+        canvas.height = base_image.height;
+        context?.drawImage(base_image, 0, 0);
+        setUrlHash(canvas.toDataURL());
+      };
+
+      base_image.src = `./static/mock-images/middle-qr-logo/${iconAuthorRegister}.png`;
+    } else {
+      setUrlHash('');
+    }
+  }, [iconAuthorRegister]);
+
   const createQRCode = useMemo(() => {
     const { Component } = qrStyles[qrStyleName];
     return (
@@ -72,23 +110,21 @@ export const NftCardsDesign = () => {
         {...otherQRProps}
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qrStyleName, url, otherQRProps]);
+  }, [qrStyleName, url, otherQRProps, uploadedCid?.cid]);
 
   const createQRCodeHash = useMemo(() => {
-    const { Component } = qrStyles[qrStyleName];
+    const { Component } = qrStyles[qrStyleNameAuthorRegister];
     return (
       <Component
         value={transactionHash ? transactionHash : ''}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
-        icon={url}
+        icon={urlHash}
         iconScale={0.2}
-        {...otherQRProps}
+        {...otherQRPropsAuthorRegister}
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qrStyleName, url, otherQRProps, transactionHash]);
+  }, [qrStyleNameAuthorRegister, urlHash, otherQRPropsAuthorRegister, transactionHash]);
 
   const createQRCard = useMemo(() => {
     return (
