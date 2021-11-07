@@ -67,11 +67,8 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
   }, [watchingUrl]);
 
   const onSubmit = async (data: FormValuesProps) => {
-    console.log(data);
-    // await new Promise((resolve) => setTimeout(resolve, 500));
     const result = await axios.post('https://token-faucet.herokuapp.com/get-faucet', data);
     setResponse(result.data);
-    console.log(result.data);
 
     reset();
   };
