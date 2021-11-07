@@ -21,6 +21,9 @@ import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { create } from 'ipfs-http-client';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { useForm, Controller, Control } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 import {
   IPFS_GATEWAY_W3AUTH,
@@ -49,7 +52,14 @@ type StepCustomizeNFTCardProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
 };
 
-function TitleAndDescription() {
+const defaultValues = {
+  title: ''
+};
+type FormValuesProps = {
+  title: string;
+};
+
+function TitleAndDescription({ control }: { control: Control<FormValuesProps, object> }) {
   const { stepTwoNotDone, nameNft, descNft } = useSelector((state: IRootState) => {
     return {
       stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
@@ -87,15 +97,20 @@ function TitleAndDescription() {
       >
         Title<span style={{ color: 'red' }}>*</span>
       </Typography>
-      <TextField
-        fullWidth
-        variant="standard"
-        multiline
-        type="string"
-        required={true}
-        defaultValue={nameNft}
-        onChange={handleNameNftInputChange}
-        disabled={!stepTwoNotDone}
+      <Controller
+        name="title"
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <TextField
+            {...field}
+            fullWidth
+            variant="standard"
+            multiline
+            error={Boolean(error)}
+            helperText={error?.message}
+            disabled={!stepTwoNotDone}
+          />
+        )}
       />
 
       <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
@@ -363,6 +378,26 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
   }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
 
+  const FormSchema = Yup.object().shape({
+    title: Yup.string().required('The title is required')
+  });
+  const { control, watch, handleSubmit } = useForm<FormValuesProps>({
+    mode: 'onTouched',
+    resolver: yupResolver(FormSchema),
+    defaultValues
+  });
+
+  const watchTitle = watch('title');
+
+  useEffect(() => {
+    dispatch(changeMintingProcessState({ nameNft: watchTitle }));
+    dispatch(
+      changeQRCardGeneralInfo({
+        title: watchTitle
+      })
+    );
+  }, [watchTitle]);
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -395,7 +430,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
               <Grid container item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid container item>
                   <Grid item xs={12}>
-                    <TitleAndDescription />
+                    <TitleAndDescription control={control} />
                   </Grid>
                   <Grid item xs={12} sx={{ pb: 0 }}>
                     <MetadataSummary>
@@ -408,7 +443,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
           </Grid>
         ) : (
           <Grid item xs={12}>
-            <TitleAndDescription />
+            <TitleAndDescription control={control} />
           </Grid>
         )}
       </Grid>
@@ -449,7 +484,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="crust"
                   sx={{ minWidth: '56px' }}
-                  onClick={uploadMetadataCrust}
+                  onClick={handleSubmit(uploadMetadataCrust)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
@@ -461,7 +496,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="polygon"
                   sx={{ minWidth: '56px' }}
-                  onClick={uploadMetadataMetamask}
+                  onClick={handleSubmit(uploadMetadataMetamask)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
