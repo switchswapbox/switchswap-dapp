@@ -61,7 +61,7 @@ export default function UserCard({ assetAndOwner }: { assetAndOwner: AssetAndOwn
       <CardMediaStyle>
         <SvgIconStyle
           color="paper"
-          src="/static/icons/shape-avatar.svg"
+          src="./static/icons/shape-avatar.svg"
           sx={{
             width: 144,
             height: 62,
