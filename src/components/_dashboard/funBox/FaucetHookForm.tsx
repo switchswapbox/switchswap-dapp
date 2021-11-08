@@ -9,6 +9,7 @@ import { Icon } from '@iconify/react';
 import MaticFormSchema from './MaticFormSchema';
 import CruFormSchema from './CruFormSchema';
 import useLocales from '../../../hooks/useLocales';
+import { GET_FAUCET_API } from 'assets/COMMON_VARIABLES';
 
 type FormValuesProps = {
   address: string;
@@ -67,7 +68,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
   }, [watchingUrl]);
 
   const onSubmit = async (data: FormValuesProps) => {
-    const result = await axios.post('https://token-faucet.herokuapp.com/get-faucet', data);
+    const result = await axios.post(GET_FAUCET_API, data);
     setResponse(result.data);
 
     reset();
