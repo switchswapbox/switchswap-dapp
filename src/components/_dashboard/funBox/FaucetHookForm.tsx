@@ -65,7 +65,7 @@ export default function FaucetHookForm({ token, setTweetId, setResponse }: Fauce
     if (searchTweetId && searchTweetId[1]) {
       setTweetId(searchTweetId[1]);
     }
-  }, [watchingUrl]);
+  }, [watchingUrl, setTweetId]);
 
   const onSubmit = async (data: FormValuesProps) => {
     const result = await axios.post(GET_FAUCET_API, data);
