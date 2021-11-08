@@ -20,6 +20,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
 import NftCard from '../components/_dashboard/gallery/NftCard';
+import { ipfsUriToCid } from 'utils/gallery/ipfsUriToCid';
 
 export default function NftManager() {
   const theme = useTheme();
@@ -43,13 +44,6 @@ export default function NftManager() {
       setPage(value);
       navigate(`/nft-manager/${value}`);
     }
-  };
-
-  const ipfsUriToCid = (ipfsUrl: string) => {
-    const CidSearch = ipfsUrl.match(/(Qm[\w]+)/);
-    if (CidSearch) {
-      return CidSearch[1];
-    } else return null;
   };
 
   const updateListByTokenIndex = async (index: number, contract: ethers.Contract) => {

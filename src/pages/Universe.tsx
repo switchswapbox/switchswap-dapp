@@ -17,7 +17,7 @@ import { useMeasure } from 'react-use';
 import { GridSize } from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
 import NftCard from '../components/_dashboard/gallery/NftCard';
-// ----------------------------------------------------------------------
+import { ipfsUriToCid } from 'utils/gallery/ipfsUriToCid';
 
 export default function Universe() {
   const theme = useTheme();
@@ -39,13 +39,6 @@ export default function Universe() {
       setPage(value);
       navigate(`/gallery/universe/${value}`);
     }
-  };
-
-  const ipfsUriToCid = (ipfsUrl: string) => {
-    const CidSearch = ipfsUrl.match(/(Qm[\w]+)/);
-    if (CidSearch) {
-      return CidSearch[1];
-    } else return null;
   };
 
   const updateListByTokenIndex = async (index: number, contract: ethers.Contract) => {
