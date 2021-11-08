@@ -7,17 +7,13 @@ import Page from '../components/Page';
 import { contractAddress } from 'utils/contractAddress';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
-import {
-  IPFS_GATEWAY_FOR_FETCHING_DATA,
-  NUMBER_OF_NFT_IN_MANAGER_PAGE
-} from 'assets/COMMON_VARIABLES';
-import axios from 'axios';
+import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from 'assets/COMMON_VARIABLES';
 import { useTheme } from '@mui/material/styles';
 import { useMeasure } from 'react-use';
 import { GridSize } from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
 import NftCard from '../components/_dashboard/gallery/NftCard';
-import { ipfsUriToCid } from 'utils/gallery/ipfsUriToCid';
+import { getNftByPage } from 'utils/gallery/updateGallery';
 
 export default function Universe() {
   const theme = useTheme();
@@ -26,7 +22,7 @@ export default function Universe() {
 
   const { themeStretch } = useSettings();
   const [NftList, setNftList] = useState<
-    { tokenId: string; tokenURI: string; imageUrl: string; name: string; owner: string }[]
+    { tokenId: string; tokenURI: string; imageUrl: string; name: string; owner?: string }[]
   >([]);
 
   const [page, setPage] = useState(parseInt(pageUrl || '0'));
@@ -38,60 +34,6 @@ export default function Universe() {
       setLoading(true);
       setPage(value);
       navigate(`/gallery/universe/${value}`);
-    }
-  };
-
-  const updateListByTokenIndex = async (index: number, contract: ethers.Contract) => {
-    const tokenId = (await contract.tokenByIndex(index)).toString();
-    const tokenURI = await contract.tokenURI(tokenId);
-    const tokenURICid = ipfsUriToCid(tokenURI);
-    if (tokenURICid) {
-      const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
-      axios.get(tokenURIHttp).then((response) => {
-        const name = response.data.name || '';
-        const owner = contract.ownerOf(tokenId);
-        if (response.data && response.data.image) {
-          const imageCid = ipfsUriToCid(response.data.image);
-          if (imageCid) {
-            const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
-            setLoading(false);
-            setNftList((NftList) => {
-              let addingNftIndex = 0;
-              for (let nftIndex = 0; nftIndex < NftList.length; nftIndex++) {
-                if (parseInt(tokenId, 10) > parseInt(NftList[nftIndex].tokenId, 10)) {
-                  break;
-                }
-                addingNftIndex++;
-              }
-              const newNftList = [
-                ...NftList.slice(0, addingNftIndex),
-                { tokenId, tokenURI, imageUrl, name, owner },
-                ...NftList.slice(addingNftIndex)
-              ];
-              return newNftList;
-            });
-          }
-        }
-      });
-    }
-  };
-
-  const getNftByPage = async (page: number) => {
-    setNftList([]);
-
-    const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-    const contract = new ethers.Contract(contractAddress, ABI, provider);
-
-    const totalSupply = (await contract.totalSupply()).toString();
-
-    const startIndex = totalSupply - 1 - (page - 1) * NUMBER_OF_NFT_IN_MANAGER_PAGE;
-    const stopIndex =
-      startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE > -1
-        ? startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE
-        : -1;
-
-    for (let index = startIndex; index > stopIndex; index--) {
-      updateListByTokenIndex(index, contract);
     }
   };
 
@@ -109,7 +51,7 @@ export default function Universe() {
   }, []);
 
   useEffect(() => {
-    getNftByPage(page);
+    getNftByPage(page, setLoading, setNftList);
   }, [page]);
 
   const [ref, { width }] = useMeasure<HTMLDivElement>();
