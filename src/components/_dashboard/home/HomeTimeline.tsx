@@ -25,10 +25,10 @@ export default function HomeTimeline({
         '& .MuiTimelineItem-missingOppositeContent:before': {
           display: 'none'
         },
-        p: { xs: 0, sm: 3 }
+        p: { xs: 0, sm: 2 }
       }}
     >
-      <Timeline sx={{ pr: { xs: 0, sm: 2 } }}>
+      <Timeline sx={{ pr: { xs: 0, sm: 1 } }}>
         {timelines.map((item) => (
           <TimelineItem key={item.key}>
             <TimelineSeparator>
