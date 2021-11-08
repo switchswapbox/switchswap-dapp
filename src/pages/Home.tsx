@@ -15,9 +15,12 @@ import {
   Welcome,
   NftPresentation,
   StatisticsCard,
-  ProjectTimeline
+  HomeTimeline,
+  PROJECTUPDATES,
+  ROADMAP
 } from '../components/_dashboard/home';
 import useSnackbarAction from 'hooks/useSnackbarAction';
+
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
@@ -66,8 +69,11 @@ export default function Home() {
               </SvgIcon>
             </StatisticsCard>
           </Grid>
-          <Grid item xs={12}>
-            <ProjectTimeline />
+          <Grid item xs={6}>
+            <HomeTimeline title="Project Updates" timelines={PROJECTUPDATES} />
+          </Grid>
+          <Grid item xs={6}>
+            <HomeTimeline title="Roadmap" timelines={ROADMAP} />
           </Grid>
         </Grid>
       </Container>
