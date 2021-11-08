@@ -17,6 +17,7 @@ import { contractAddress } from 'utils/contractAddress';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
 import axios from 'axios';
+import { ipfsUriToCid } from 'utils/gallery/ipfsUriToCid';
 Identicons.svgPath = './static/identicons.min.svg';
 
 export type AssetAndOwnerType = {
@@ -44,13 +45,6 @@ const initAssetAndOwner: AssetAndOwnerType = {
   contentId: '',
   nftCardId: '',
   metadataId: ''
-};
-
-const ipfsUriToCid = (ipfsUrl: string) => {
-  const CidSearch = ipfsUrl.match(/(Qm[\w]+)/);
-  if (CidSearch) {
-    return CidSearch[1];
-  } else return null;
 };
 
 export default function AssetViewer() {
