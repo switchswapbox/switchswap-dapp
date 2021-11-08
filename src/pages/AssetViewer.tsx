@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react';
-
-// material
 import { Box, Container } from '@mui/material';
-
-// hooks
 import useSettings from '../hooks/useSettings';
 import { useParams } from 'react-router-dom';
-// components
 import Page from '../components/Page';
-
 import { Asset } from 'components/_dashboard/assetViewer';
-
 import Identicons from '@nimiq/identicons';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from 'assets/COMMON_VARIABLES';
 import { contractAddress } from 'utils/contractAddress';
