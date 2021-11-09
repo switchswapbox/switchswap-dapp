@@ -230,7 +230,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             fontSize: '10px'
           }}
         >
-          0x77A80028A50a7504604646EE51586A721F52f07c
+          0xa0Afb3513B99E1b099CE9F3C007eE937B04e7870
         </div>
       </foreignObject>
       <path
