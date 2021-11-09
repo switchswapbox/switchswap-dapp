@@ -7,7 +7,7 @@ const config = {
 };
 
 const middlewares = [createStateSyncMiddleware(config)];
-const store = createStore(reducer, {}, applyMiddleware(...middlewares));
+const store = createStore(reducer);
 
 initStateWithPrevTab(store);
 

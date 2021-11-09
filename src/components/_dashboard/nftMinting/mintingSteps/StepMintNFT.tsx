@@ -133,7 +133,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
             </Typography>
           </Box>
         </Grid>
-        {nftType === ('simplified' || 'withAuthorReg') ? (
+        {nftType === 'simplified' || nftType === 'withAuthorReg' ? (
           <Grid item xs={12} display="flex" justifyContent="center">
             <Stack width="50%" display="flex" alignItems="center">
               <Stack

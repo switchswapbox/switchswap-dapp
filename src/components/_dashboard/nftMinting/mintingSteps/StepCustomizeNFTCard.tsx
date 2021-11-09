@@ -362,7 +362,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   const scrollDestination = useRef() as React.MutableRefObject<HTMLDivElement>;
 
   useEffect(() => {
-    if (nftType === ('simplified' || 'withAuthorReg')) {
+    if (nftType === 'simplified' || nftType === 'withAuthorReg') {
       if (window.innerWidth > 1200) {
         window.scrollTo({
           top: scrollDestination.current.offsetTop + 200,
@@ -412,7 +412,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
             />
           </Stack>
         </Grid>
-        {nftType === ('simplified' || 'withAuthorReg') ? (
+        {nftType === 'simplified' || nftType === 'withAuthorReg' ? (
           <Grid container item xs={12}>
             <Grid container item>
               <Grid
