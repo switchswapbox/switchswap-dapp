@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo, initialQRCard } from 'reduxStore/reducerCustomizeQRCard';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
-const iconNames = ['switchswap', 'crust'];
+const iconNames = ['switchswap', 'crust', 'polygon'];
 const srcArray = iconNames.map((iconName) => {
   return `./static/icons/shared/middleIconQR/${iconName}.png`;
 });
