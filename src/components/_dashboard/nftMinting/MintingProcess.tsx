@@ -17,7 +17,7 @@ import { IRootState } from 'reduxStore';
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import useLocales from '../../../hooks/useLocales';
 import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
@@ -89,12 +89,10 @@ export default function MintingProcess() {
 
   const handleDownload = () => {
     let nftCard = document.getElementById('nftCard') as HTMLElement;
-    html2canvas(nftCard, {
-      scale: 4
-    })
-      .then(function (canvas) {
-        let png = canvas.toDataURL('image/png'); // default png
-        downloadCard(png, title === '' ? 'image.png' : `${title}.png`);
+    domtoimage
+      .toPng(nftCard)
+      .then(function (dataUrl) {
+        downloadCard(dataUrl, title === '' ? 'image.png' : `${title}.png`);
       })
       .catch((error) => {
         console.log(error);
@@ -104,7 +102,6 @@ export default function MintingProcess() {
   const downloadCard = useCallback((href: string, name: string) => {
     var link = document.createElement('a');
     link.download = name;
-    link.style.opacity = '0';
     document.body.append(link);
     link.href = href;
     link.click();
