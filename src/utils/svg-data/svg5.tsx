@@ -291,10 +291,10 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
             fillRule="evenodd"
             fill="url(#svg5_linear-gradient)"
           />
-          <text className="svg5_cls-11" transform="rotate(-90 247.67 31.91)">
+          <text className="svg5_cls-11" transform="rotate(-90) translate(-280 230)">
             {'IDENTITY'}
           </text>
-          <text className="svg5_cls-11" transform="rotate(-90 389.68 -89.36)">
+          <text className="svg5_cls-11" transform="rotate(-90) translate(-305 480)">
             {'REGISTRATION'}
           </text>
 

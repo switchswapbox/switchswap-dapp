@@ -315,10 +315,10 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
           <foreignObject x="440" y="110" width="250" height="250">
             {qrcodeHash}
           </foreignObject>
-          <text className="svg8_cls-11" transform="rotate(-90 247.67 31.91)">
+          <text className="svg8_cls-11" transform="rotate(-90) translate(-280 230)">
             {'IDENTITY'}
           </text>
-          <text className="svg8_cls-11" transform="rotate(-90 389.68 -89.36)">
+          <text className="svg8_cls-11" transform="rotate(-90) translate(-305 480)">
             {'REGISTRATION'}
           </text>
         </g>
