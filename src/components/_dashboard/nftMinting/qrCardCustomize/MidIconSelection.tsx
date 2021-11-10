@@ -4,7 +4,7 @@ import { changeQRCardGeneralInfo, initialQRCard } from 'reduxStore/reducerCustom
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 const iconNames = ['switchswap', 'crust'];
 const srcArray = iconNames.map((iconName) => {
-  return `./static/icons/shared/${iconName}.svg`;
+  return `./static/icons/shared/middleIconQR/${iconName}.png`;
 });
 
 const MidIconSelection = () => {
