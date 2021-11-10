@@ -70,40 +70,39 @@ export const PROJECTUPDATES: TimelineType[] = [
 export const ROADMAP: TimelineType[] = [
   {
     key: 5,
-    title: 'NFT as collateral',
-    des: 'Allow users to borrow asset using their NFT',
-    time: 'Q4 2022',
-    color: 'secondary',
-    icon: <Icon icon="bi:card-checklist" color="white" />
+    title: 'Swapping gaming items',
+    des: '',
+    time: 'Q2 2022',
+    color: 'info',
+    icon: <Icon icon="maki:gaming" color="white" />
   },
   {
     key: 4,
-    title: 'Minting other types of NFT',
-    des: 'Allow users to mint mp3,mp4 files as NFT',
-    time: 'Q3 2022',
-    color: 'info',
-    icon: <Icon icon="healthicons:miner-worker-outline" color="white" />
-  },
-  {
-    key: 3,
-    title: 'Crosschain bridge',
-    des: 'Allow users to trade Nfts between different network',
-    time: 'Q2 2022',
+    title: 'Support ERC1155',
+    des: '',
+    time: 'Q1 2022',
     color: 'success',
     icon: <Icon icon="whh:launch" color="white" height={16} width={16} />
   },
   {
+    key: 3,
+    title: '6k NFTs collection',
+    des: '',
+    time: 'Q1 2022',
+    icon: <Icon icon="simple-icons:redmine" color="white" height={16} width={16} />
+  },
+  {
     key: 2,
-    title: 'NFT Market place and token',
-    des: 'Switchswap release it own NFT market place and SWW token',
+    title: 'NFT Marketplace',
+    des: 'Swapping NFT platform via smart contracts',
     time: 'Q1 2022',
     color: 'warning',
-    icon: <Icon icon="ri:vip-crown-2-line" color="white" />
+    icon: <Icon icon="icon-park-outline:weixin-market" color="white" />
   },
   {
     key: 1,
     title: 'Release Switchswap Beta',
-    des: 'Minting Nft with Images on Polygon network using Crust network Storage',
+    des: 'Minting Nft with Images on Polygon network using Crust Network Storage',
     time: 'Q4 2021',
     color: 'error',
     icon: <Icon icon="fluent:people-team-16-regular" color="white" />
