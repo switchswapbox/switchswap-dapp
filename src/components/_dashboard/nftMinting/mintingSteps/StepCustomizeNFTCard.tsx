@@ -197,8 +197,17 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   function uploadNFTCardW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const nftCard = document.getElementById('nftCard') as HTMLElement;
+      let scale = 4;
       domtoimage
-        .toBlob(nftCard)
+        .toBlob(nftCard, {
+          width: nftCard.offsetWidth * scale,
+          height: nftCard.offsetHeight * scale,
+          style: {
+            transform: `scale(${scale}) translate(${
+              ((scale - 1) * nftCard.offsetWidth) / 2 / scale
+            }px, ${((scale - 1) * nftCard.offsetHeight) / 2 / scale}px)`
+          }
+        })
         .then(function (blob: Blob) {
           const ipfs = create({
             url: ipfsGateway + '/api/v0',
