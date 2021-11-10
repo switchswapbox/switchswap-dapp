@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArgsProps } from './svgArgs';
-function SvgComponent({ qrcode, title, uploadedCid, qrcodeHash, ...other }: ArgsProps) {
+function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: ArgsProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -233,31 +233,13 @@ function SvgComponent({ qrcode, title, uploadedCid, qrcodeHash, ...other }: Args
               {title === '' || undefined ? 'Your title' : title}
             </div>
           </foreignObject>
-          <foreignObject x="200" y="100" width="500" height="30">
-            <div
-              style={{
-                textAlign: 'justify',
-                textJustify: 'inter-word'
-              }}
-            >
-              <p
-                style={{
-                  textAlign: 'center',
-                  wordWrap: 'break-word',
-                  wordBreak: 'break-all',
-                  textAlignLast: 'center',
-                  fontFamily: "'Aldrich', sans-serif",
-                  fontSize: '14px'
-                }}
-              >
-                File name: {uploadedCid.name} | Size: {uploadedCid.size}Kb
-              </p>
-            </div>
-          </foreignObject>
           <foreignObject x="200" y="350" width="500" height="25">
             <div
               style={{
-                textAlign: 'justify',
+                display: 'flex',
+                width: '100%',
+                height: '100%',
+                alignItems: 'center',
                 textJustify: 'inter-word'
               }}
             >
