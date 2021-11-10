@@ -381,6 +381,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   const FormSchema = Yup.object().shape({
     title: Yup.string().required('The title is required')
   });
+
   const { control, watch, handleSubmit } = useForm<FormValuesProps>({
     mode: 'onTouched',
     resolver: yupResolver(FormSchema),

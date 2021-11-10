@@ -249,7 +249,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
           >
             <Box
               component="img"
-              src="./static/icons/shared/switchswap.jpg"
+              src="./static/icons/shared/switchswap.png"
               sx={{ height: '24px', borderRadius: '50%' }}
             />
           </ToggleButton>
