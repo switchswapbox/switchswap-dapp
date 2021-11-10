@@ -42,7 +42,7 @@ import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 
@@ -197,20 +197,16 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   function uploadNFTCardW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const nftCard = document.getElementById('nftCard') as HTMLElement;
-      html2canvas(nftCard, {
-        foreignObjectRendering: false,
-        scale: 4
-      })
-        .then(function (canvas) {
-          let pngDataUrl = canvas.toDataURL('image/png'); // default png
-          const pngBlob = dataURLtoBlob(pngDataUrl);
+      domtoimage
+        .toBlob(nftCard)
+        .then(function (blob: Blob) {
           const ipfs = create({
             url: ipfsGateway + '/api/v0',
             headers: {
               authorization: 'Basic ' + authHeader
             }
           });
-          ipfs.add(pngBlob as Blob).then((added) => {
+          ipfs.add(blob).then((added) => {
             nftCardCidTemp = added.cid.toV0().toString();
             dispatch(changeMintingProcessState({ nftCardCid: added.cid.toV0().toString() }));
             resolve({ cid: added.cid.toV0().toString(), size: added.size });
