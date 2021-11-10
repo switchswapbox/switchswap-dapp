@@ -69,12 +69,27 @@ export const PROJECTUPDATES: TimelineType[] = [
 
 export const ROADMAP: TimelineType[] = [
   {
-    key: 5,
-    title: 'Swapping gaming items',
+    key: 1,
+    title: 'Release Switchswap Beta',
+    des: 'Minting 3 types of NFT on Polygon, data hosted on Crust Network',
+    time: 'Q4 2021',
+    color: 'error',
+    icon: <Icon icon="codicon:debug-start" color="white" />
+  },
+  {
+    key: 2,
+    title: 'NFT Marketplace',
+    des: 'Swapping NFTs platform via smart contracts',
+    time: 'Q1 2022',
+    color: 'warning',
+    icon: <Icon icon="icon-park-outline:weixin-market" color="white" />
+  },
+  {
+    key: 3,
+    title: '6k NFTs collection',
     des: '',
-    time: 'Q2 2022',
-    color: 'info',
-    icon: <Icon icon="maki:gaming" color="white" />
+    time: 'Q1 2022',
+    icon: <Icon icon="simple-icons:redmine" color="white" height={16} width={16} />
   },
   {
     key: 4,
@@ -85,26 +100,11 @@ export const ROADMAP: TimelineType[] = [
     icon: <Icon icon="whh:launch" color="white" height={16} width={16} />
   },
   {
-    key: 3,
-    title: '6k NFTs collection',
+    key: 5,
+    title: 'Swapping gaming items',
     des: '',
-    time: 'Q1 2022',
-    icon: <Icon icon="simple-icons:redmine" color="white" height={16} width={16} />
-  },
-  {
-    key: 2,
-    title: 'NFT Marketplace',
-    des: 'Swapping NFT platform via smart contracts',
-    time: 'Q1 2022',
-    color: 'warning',
-    icon: <Icon icon="icon-park-outline:weixin-market" color="white" />
-  },
-  {
-    key: 1,
-    title: 'Release Switchswap Beta',
-    des: 'Minting Nft with Images on Polygon network using Crust Network Storage',
-    time: 'Q4 2021',
-    color: 'error',
-    icon: <Icon icon="fluent:people-team-16-regular" color="white" />
+    time: 'Q2 2022',
+    color: 'info',
+    icon: <Icon icon="maki:gaming" color="white" />
   }
 ];
