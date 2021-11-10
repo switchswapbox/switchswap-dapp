@@ -318,7 +318,7 @@ export default function UploadMultiFile({
                 justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
                 spacing={2}
               >
-                <Scrollbar sxRoot={{ maxWidth: '111px' }}>
+                <Scrollbar sxRoot={{ maxWidth: '165px' }}>
                   <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
                     <ToggleButton
                       value="crust"
@@ -341,6 +341,18 @@ export default function UploadMultiFile({
                       <Box
                         component="img"
                         src="./static/icons/shared/polygon.svg"
+                        sx={{ height: '24px', width: '32px' }}
+                      />
+                    </ToggleButton>
+                    <ToggleButton
+                      value="crust"
+                      sx={{ minWidth: '56px' }}
+                      onClick={onUploadFile.uploadFileCrustWithToken}
+                      disabled={!stepOneNotDone}
+                    >
+                      <Box
+                        component="img"
+                        src="./static/icons/shared/crust.svg"
                         sx={{ height: '24px', width: '32px' }}
                       />
                     </ToggleButton>
