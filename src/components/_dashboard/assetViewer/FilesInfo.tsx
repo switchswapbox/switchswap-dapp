@@ -47,6 +47,7 @@ import {
   CRUST_CHAIN_RPC,
   CRUST_CONSENSUS_DATE,
   CRUST_WALLET_WIKI,
+  IPFS_GATEWAY_FOR_FETCHING_DATA,
   METADATA_SUBSCAN_CRUST,
   RENEW_PERIOD_BLOCK_NUMBER
 } from 'assets/COMMON_VARIABLES';
@@ -226,7 +227,7 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
         <Divider />
         <MenuItem
           onClick={() => {
-            window.open(`https://ipfs.io/ipfs/${cid}`, '_blank');
+            window.open(`${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${cid}`, '_blank');
             handleClose();
           }}
         >
@@ -237,7 +238,7 @@ function MoreMenuButton({ cid, fileSize }: { cid: string; fileSize: number }) {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            navigator.clipboard.writeText(`https://ipfs.io/ipfs/${cid}`);
+            navigator.clipboard.writeText(`${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${cid}`);
             handleClose();
             onSnackbarAction('success', `Copied file's address`, 2000);
           }}
