@@ -1,15 +1,8 @@
 import { useEffect } from 'react';
-// material
-import { Container, Grid, Typography, IconButton, SvgIcon } from '@mui/material';
-
+import { Container, Grid, SvgIcon } from '@mui/material';
 import { Icon } from '@iconify/react';
-import closeFill from '@iconify/icons-eva/close-fill';
-import { useSnackbar, VariantType } from 'notistack';
-
-// hooks
 import useSettings from '../hooks/useSettings';
 import useLocales from '../hooks/useLocales';
-// components
 import Page from '../components/Page';
 import {
   Welcome,

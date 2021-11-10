@@ -59,7 +59,6 @@ function StepUploadFile() {
   const onSnackbarAction = useSnackbarAction();
   const { translate } = useLocales();
 
-  const [preview, setPreview] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [isFileUploading, setFileUploading] = useState(false);
 
@@ -228,7 +227,7 @@ function StepUploadFile() {
         /> */}
       </Box>
       <UploadMultiFile
-        showPreview={preview}
+        showPreview={false}
         files={files}
         onDrop={handleDropMultiFile}
         onRemove={handleRemove}
