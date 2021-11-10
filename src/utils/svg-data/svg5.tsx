@@ -204,7 +204,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
           />
         </clipPath>
         <style>
-          {".svg5_cls-11{font-family:'Aldrich', sans-serif;font-size:12.69px;letter-spacing:.3em}"}
+          {".svg5_cls-11{font-family:'Open Sans', sans-serif;font-size:14px;letter-spacing:.3em}"}
         </style>
       </defs>
       <g style={{ isolation: 'isolate' }}>
@@ -291,10 +291,10 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
             fillRule="evenodd"
             fill="url(#svg5_linear-gradient)"
           />
-          <text className="svg5_cls-11" transform="rotate(-90 259.67 43.91)">
+          <text className="svg5_cls-11" transform="rotate(-90 247.67 31.91)">
             {'IDENTITY'}
           </text>
-          <text className="svg5_cls-11" transform="rotate(-90 393.68 -84.36)">
+          <text className="svg5_cls-11" transform="rotate(-90 389.68 -89.36)">
             {'REGISTRATION'}
           </text>
 
