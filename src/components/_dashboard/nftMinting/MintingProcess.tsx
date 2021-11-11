@@ -179,9 +179,8 @@ export default function MintingProcess() {
             >
               <Box sx={{ p: 2, maxWidth: 280 }}>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Please select an NFT type according to your need. Choose{' '}
-                  <Typography variant="subtitle2">Without NFT Card</Typography> if you just want to
-                  play around
+                  Please select an NFT type according to your need. Choose <b>Without NFT Card</b>{' '}
+                  if you don't want to create a QR card.
                 </Typography>
               </Box>
             </Popover>

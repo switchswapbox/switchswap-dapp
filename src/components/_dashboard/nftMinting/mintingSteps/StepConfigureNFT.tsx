@@ -163,7 +163,7 @@ export default function StepConfigureNFT() {
                 </ListItemIcon>
                 <ListItemText
                   id="withoutNftCard"
-                  primary={translate(`nftMinting.card`)}
+                  primary={translate(`nftMinting.withoutCard`)}
                   sx={{ pr: 5 }}
                 />
                 <ListItemSecondaryAction>

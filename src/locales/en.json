@@ -109,7 +109,7 @@
     "blockchain": "Blockchain",
     "author": "With Author Registration",
     "simplified": "Simplified",
-    "card": "Without NFT Card",
+    "withoutCard": "Without QR Card",
     "NFT type": "NFT Type",
     "requirements and sample": "Requirements & Sample NFT",
     "extensions": "All file extensions",
