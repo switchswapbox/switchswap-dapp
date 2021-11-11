@@ -22,6 +22,9 @@ import { IRootState } from 'reduxStore';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
+import pinFileToW3Gateway from 'utils/pinFileToW3Gateway';
+import generateRandomAuthHeaderSubstrate from 'utils/substrate/generateRandomAuthHeaderSubstrate';
+import publishCidToCrust from 'utils/publishCidToCrust';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
@@ -30,6 +33,7 @@ export type FileInfoType = {
   name: string;
   cid: string;
   size: number;
+  txHash?: string;
 };
 
 export const pinW3Crust = async (authHeader: string, cid: string, name: string) => {
@@ -59,7 +63,6 @@ function StepUploadFile() {
   const onSnackbarAction = useSnackbarAction();
   const { translate } = useLocales();
 
-  const [preview, setPreview] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [isFileUploading, setFileUploading] = useState(false);
 
@@ -167,6 +170,7 @@ function StepUploadFile() {
   };
 
   const uploadFileCrust = async () => {
+    setFileUploading(true);
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
       onSnackbarAction(
@@ -214,6 +218,39 @@ function StepUploadFile() {
       });
   };
 
+  const uploadFileCrustWithToken = async () => {
+    const authHeader = generateRandomAuthHeaderSubstrate();
+
+    setFileUploading(true);
+    const uploadedFileInfo = await pinFileToW3Gateway(authHeader, files[0]);
+
+    const txHash = await publishCidToCrust(uploadedFileInfo.cid, uploadedFileInfo.size);
+
+    if (!txHash) {
+      setFileUploading(false);
+      onSnackbarAction(
+        'warning',
+        'Please install Crust Wallet',
+        null,
+        'LEARN MORE',
+        CRUST_WALLET_WIKI
+      );
+    } else {
+      dispatch(
+        changeMintingProcessState({
+          uploadedCid: {
+            cid: uploadedFileInfo.cid,
+            size: uploadedFileInfo.size,
+            name: uploadedFileInfo.name,
+            txHash
+          }
+        })
+      );
+      dispatch(changeMintingProcessState({ stepOneNotDone: false }));
+      setFileUploading(false);
+    }
+  };
+
   return (
     <>
       <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
@@ -228,11 +265,11 @@ function StepUploadFile() {
         /> */}
       </Box>
       <UploadMultiFile
-        showPreview={preview}
+        showPreview={false}
         files={files}
         onDrop={handleDropMultiFile}
         onRemove={handleRemove}
-        onUploadFile={{ uploadFileMetamask, uploadFileCrust }}
+        onUploadFile={{ uploadFileMetamask, uploadFileCrust, uploadFileCrustWithToken }}
         isFileUploading={isFileUploading}
         stepOneNotDone={stepOneNotDone as boolean}
       />

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 // material
-import { Box, Step, Paper, Button, Stepper, StepLabel, Typography } from '@mui/material';
+import { Box, Step, Paper, Button, Stepper, Popover, StepLabel, Typography } from '@mui/material';
 
 import Scrollbar from '../../Scrollbar';
 
@@ -43,7 +43,13 @@ export default function MintingProcess() {
   const { translate } = useLocales();
   const finish = translate(`mintingProcess.finish`);
   const next = translate(`mintingProcess.next`);
-
+  const [click, setCLick] = useState<HTMLButtonElement | null>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCLick(event.currentTarget);
+  };
+  const handleClose = () => {
+    setCLick(null);
+  };
   const handleNext = () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -164,9 +170,29 @@ export default function MintingProcess() {
               {translate(`mintingProcess.back`)}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button variant="contained" onClick={handleNext}>
+            <Button variant="contained" onClick={nftType === '' ? handleClick : handleNext}>
               {activeStep === steps.length - 1 ? finish : next}
             </Button>
+            <Popover
+              open={Boolean(click)}
+              anchorEl={click}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center'
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+              }}
+            >
+              <Box sx={{ p: 2, maxWidth: 280 }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Please select an NFT type according to your need. Choose <b>Without QR Card</b> if
+                  you don't want to create a QR card.
+                </Typography>
+              </Box>
+            </Popover>
           </Box>
         </>
       ) : (

@@ -21,7 +21,7 @@ import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { create } from 'ipfs-http-client';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { useForm, Controller, Control } from 'react-hook-form';
+import { useForm, Controller, Control, FieldErrors } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -278,6 +278,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       );
       return;
     }
+    setMetadataUploading(true);
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
 
     let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
@@ -305,8 +306,6 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
     const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
 
-    setMetadataUploading(true);
-
     if (nftType !== 'withoutNftCard') {
       const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
       pinW3Crust(authHeader, nftCardInfo.cid, 'nftcard');
@@ -324,6 +323,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
+        setMetadataUploading(true);
         await provider.request({ method: 'eth_requestAccounts' });
 
         const providerEthers = new ethers.providers.Web3Provider(provider);
@@ -333,8 +333,6 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
         const signature = await signer.signMessage(addr);
 
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
-
-        setMetadataUploading(true);
 
         if (nftType !== 'withoutNftCard') {
           const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
@@ -403,6 +401,10 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       })
     );
   }, [watchTitle]);
+
+  const handleSubmitError = (errors: FieldErrors<FormValuesProps>) => {
+    onSnackbarAction('error', errors.title?.message || '', 3000);
+  };
 
   return (
     <>
@@ -490,7 +492,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="crust"
                   sx={{ minWidth: '56px' }}
-                  onClick={handleSubmit(uploadMetadataCrust)}
+                  onClick={handleSubmit(uploadMetadataCrust, handleSubmitError)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
@@ -502,7 +504,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="polygon"
                   sx={{ minWidth: '56px' }}
-                  onClick={handleSubmit(uploadMetadataMetamask)}
+                  onClick={handleSubmit(uploadMetadataMetamask, handleSubmitError)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
