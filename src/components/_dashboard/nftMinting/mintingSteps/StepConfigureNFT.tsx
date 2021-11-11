@@ -24,6 +24,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import DemoNft from '../DemoNft';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
@@ -282,7 +283,7 @@ export default function StepConfigureNFT() {
                   >
                     <ListItemIcon>
                       <Tooltip TransitionComponent={Zoom} title="">
-                        <BookmarkAddedIcon />
+                        <PersonSearchIcon />
                       </Tooltip>
                     </ListItemIcon>
                     <ListItemText id="blockchain" primary="Registration of your authorship" />
