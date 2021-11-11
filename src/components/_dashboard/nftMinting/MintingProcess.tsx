@@ -95,8 +95,17 @@ export default function MintingProcess() {
 
   const handleDownload = () => {
     let nftCard = document.getElementById('nftCard') as HTMLElement;
+    let scale = 4;
     domtoimage
-      .toPng(nftCard)
+      .toPng(nftCard, {
+        width: nftCard.offsetWidth * scale,
+        height: nftCard.offsetHeight * scale,
+        style: {
+          transform: `scale(${scale}) translate(${
+            ((scale - 1) * nftCard.offsetWidth) / 2 / scale
+          }px, ${((scale - 1) * nftCard.offsetHeight) / 2 / scale}px)`
+        }
+      })
       .then(function (dataUrl) {
         downloadCard(dataUrl, title === '' ? 'image.png' : `${title}.png`);
       })
