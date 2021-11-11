@@ -1,6 +1,6 @@
 // material
 import { styled } from '@mui/material/styles';
-import { Divider, Switch, Theme } from '@mui/material';
+import { Box, Divider, Switch, Tab, Tabs, Theme } from '@mui/material';
 import Label from '../../Label';
 import React, { ReactElement, useState } from 'react';
 import { SxProps } from '@mui/system/styleFunctionSx';
@@ -36,14 +36,16 @@ const MetadataSummary = ({ children, ...other }: MetadataSummaryProps) => {
       <>
         {nftType === 'withAuthorReg' ? (
           <>
-            <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 5 }}>
-              {changeQRFile ? 'FILE QR CODE' : 'AUTHOR REGISTER'}
-            </Label>
-            <Switch
-              edge="end"
-              checked={!changeQRFile}
-              onChange={() => dispatch(changeQRCardGeneralInfo({ changeQRFile: !changeQRFile }))}
-            />
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 5 }}>
+              <Tabs
+                value={changeQRFile ? 0 : 1}
+                onChange={() => dispatch(changeQRCardGeneralInfo({ changeQRFile: !changeQRFile }))}
+                indicatorColor="secondary"
+              >
+                <Tab label="FILE QR CODE" />
+                <Tab label="AUTHOR REGISTER" />
+              </Tabs>
+            </Box>
           </>
         ) : (
           <Label variant="ghost" color="success" sx={{ textTransform: 'uppercase', mt: 5 }}>
