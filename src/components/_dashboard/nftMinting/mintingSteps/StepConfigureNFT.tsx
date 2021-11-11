@@ -52,13 +52,13 @@ export default function StepConfigureNFT() {
   const stepOneNotDone = useSelector((state: IRootState) => {
     return state.reducerMintingProcess.stepOneNotDone as boolean;
   });
-  const [toggle, setToggle] = useState(['simplified']);
+  const [toggle, setToggle] = useState(['']);
 
   const dispatch = useDispatch();
   const { translate } = useLocales();
 
   useEffect(() => {
-    dispatch(changeMintingProcessState({ nftType: 'simplified' }));
+    dispatch(changeMintingProcessState({ nftType: '' }));
   }, []);
 
   const handleToggle = (value: string) => () => {
@@ -275,6 +275,19 @@ export default function StepConfigureNFT() {
                     </ListItemIcon>
                     <ListItemText id="blockchain" primary={translate(`nftMinting.art`)} />
                   </ListItem>
+                  <ListItem
+                    sx={{
+                      display: toggle.indexOf('withAuthorReg') !== -1 ? 'flex' : 'none'
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Tooltip TransitionComponent={Zoom} title="">
+                        <BookmarkAddedIcon />
+                      </Tooltip>
+                    </ListItemIcon>
+                    <ListItemText id="blockchain" primary="Registration of your authorship" />
+                  </ListItem>
+
                   <ListItem
                     sx={{
                       display: toggle.indexOf('simplified') !== -1 ? 'flex' : 'none'
