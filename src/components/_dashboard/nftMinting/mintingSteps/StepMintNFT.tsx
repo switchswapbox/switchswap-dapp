@@ -75,12 +75,14 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
         const addr = await signer.getAddress();
         const contract = new ethers.Contract(contractAddress, ABI, providerEthers);
         const signedContract = contract.connect(signer);
+        const dataRegistrationProof =
+          uploadedCid?.txHash || '' ? `crust://${uploadedCid?.txHash}` : 'null';
         signedContract
           .mintDataNTF(
             addr,
             `ipfs://${metadataCid}`,
             `ipfs://${uploadedCid ? uploadedCid.cid : ''}`,
-            'null',
+            dataRegistrationProof,
             { gasPrice: BigNumber.from(GAS_PRICE) }
           )
           .then((tx: any) => {
