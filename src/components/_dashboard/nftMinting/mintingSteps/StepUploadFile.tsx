@@ -22,6 +22,9 @@ import { IRootState } from 'reduxStore';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
+import pinFileToW3Gateway from 'utils/pinFileToW3Gateway';
+import generateRandomAuthHeaderSubstrate from 'utils/generateRandomAuthHeaderSubstrate';
+import publishCidToCrust from 'utils/publishCidToCrust';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
@@ -214,47 +217,24 @@ function StepUploadFile() {
   };
 
   const uploadFileCrustWithToken = async () => {
-    const extensions = await web3Enable('NFT Dapp');
-    if (extensions.length === 0) {
-      onSnackbarAction(
-        'warning',
-        'Please install Crust Wallet',
-        null,
-        'LEARN MORE',
-        CRUST_WALLET_WIKI
-      );
-      return;
-    }
-    const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
+    const authHeader = generateRandomAuthHeaderSubstrate();
 
-    let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
-
-    crustAccountIndex =
-      crustAccountIndex < allAccounts.length && crustAccountIndex >= 0 ? crustAccountIndex : 0;
-
-    const account = allAccounts[crustAccountIndex];
-
-    const injector = await web3FromSource(account.meta.source);
-
-    const signRaw = injector?.signer?.signRaw;
-
-    let signature = '';
-    if (!!signRaw) {
-      // after making sure that signRaw is defined
-      // we can use it to sign our message
-      signature = (
-        await signRaw({
-          address: account.address,
-          data: stringToHex(account.address),
-          type: 'bytes'
-        })
-      ).signature;
-    }
-    const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
-
-    uploadFileW3GatewayPromise(authHeader)
+    setFileUploading(true);
+    pinFileToW3Gateway(authHeader, files[0])
       .then((uploadedFileInfo) => {
-        pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
+        dispatch(
+          changeMintingProcessState({
+            uploadedCid: {
+              cid: uploadedFileInfo.cid,
+              size: uploadedFileInfo.size,
+              name: uploadedFileInfo.name
+            }
+          })
+        );
+        setFileUploading(false);
+        dispatch(changeMintingProcessState({ stepOneNotDone: false }));
+        publishCidToCrust(uploadedFileInfo.cid, uploadedFileInfo.size);
+        // pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
       })
       .catch((error) => {
         console.log(error);

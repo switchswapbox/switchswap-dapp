@@ -2,7 +2,7 @@ import { mnemonicGenerate } from '@polkadot/util-crypto';
 import { Keyring } from '@polkadot/keyring';
 import { u8aToHex } from '@polkadot/util';
 
-const generateRandomAuthHeaderSubstrate = async () => {
+const generateRandomAuthHeaderSubstrate = () => {
   // 1.1 get the seed phrase
   const seed = mnemonicGenerate();
 

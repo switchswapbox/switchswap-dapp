@@ -345,7 +345,7 @@ export default function UploadMultiFile({
                       />
                     </ToggleButton>
                     <ToggleButton
-                      value="crust"
+                      value="crusttoken"
                       sx={{ minWidth: '56px' }}
                       onClick={onUploadFile.uploadFileCrustWithToken}
                       disabled={!stepOneNotDone}

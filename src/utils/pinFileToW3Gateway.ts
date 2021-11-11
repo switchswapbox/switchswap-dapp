@@ -26,7 +26,8 @@ function pinFileToW3Gateway(authHeader: string, file: File): Promise<any> {
       // );
       // setFileUploading(false);
       // dispatch(changeMintingProcessState({ stepOneNotDone: false }));
-      resolve({ cid: added.cid.toV0().toString(), name: file.name });
+      console.log(added);
+      resolve({ cid: added.cid.toV0().toString(), name: file.name, size: added.size });
     };
     reader.readAsArrayBuffer(file);
   });
