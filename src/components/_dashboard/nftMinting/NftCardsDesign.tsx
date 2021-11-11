@@ -1,17 +1,28 @@
-// material
+import React from 'react';
+
 import { Box, Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'reduxStore';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
-import svgArray from 'utils/svg-data';
+// import svgArray from 'utils/svg-data';
+// import svg7 from 'utils/svg-data/svg7';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
 import { initialQRCard, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 import { CRUST_EXPLORER_EXTRINSIC } from '../../../constants';
-
+const svg1 = React.lazy(() => import('utils/svg-data/svg1'));
+const svg2 = React.lazy(() => import('utils/svg-data/svg2'));
+const svg3 = React.lazy(() => import('utils/svg-data/svg3'));
+const svg4 = React.lazy(() => import('utils/svg-data/svg4'));
+const svg5 = React.lazy(() => import('utils/svg-data/svg5'));
+const svg6 = React.lazy(() => import('utils/svg-data/svg6'));
+const svg7 = React.lazy(() => import('utils/svg-data/svg7'));
+const svg8 = React.lazy(() => import('utils/svg-data/svg8'));
+const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6, svg7, svg8];
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
