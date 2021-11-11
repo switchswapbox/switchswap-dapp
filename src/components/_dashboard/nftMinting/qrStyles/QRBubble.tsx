@@ -230,7 +230,7 @@ QRBubble.defaultCSS = {
 };
 
 QRBubble.defaultProps = {
-  circleColor: '#8ED1FC',
+  circleColor: '#000000',
   posColor: '#0693E3'
 };
 

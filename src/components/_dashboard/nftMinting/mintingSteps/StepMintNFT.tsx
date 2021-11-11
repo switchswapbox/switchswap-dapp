@@ -33,6 +33,7 @@ type StepMintNFTProps = {
 
 function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
   const {
+    nftType,
     nameNft,
     descNft,
     alignment,
@@ -45,6 +46,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
     tokenID
   } = useSelector((state: IRootState) => {
     return {
+      nftType: state.reducerMintingProcess.nftType,
       nameNft: state.reducerMintingProcess.nameNft,
       descNft: state.reducerMintingProcess.descNft,
       alignment: state.reducerMintingProcess.alignment,
@@ -131,19 +133,23 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <Stack width="50%" display="flex" alignItems="center">
-            <Stack
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '80%'
-              }}
-            >
-              <NftCardsDesign />
+        {nftType === 'simplified' || nftType === 'withAuthorReg' ? (
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Stack width="50%" display="flex" alignItems="center">
+              <Stack
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '80%'
+                }}
+              >
+                <NftCardsDesign />
+              </Stack>
             </Stack>
-          </Stack>
-        </Grid>
+          </Grid>
+        ) : (
+          <></>
+        )}
       </Grid>
 
       {isMinting ? <LinearProgress color="info" sx={{ my: 3 }} /> : <Divider sx={{ my: 3 }} />}
@@ -243,7 +249,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
           >
             <Box
               component="img"
-              src="./static/icons/shared/switchswap.jpg"
+              src="./static/icons/shared/switchswap.png"
               sx={{ height: '24px', borderRadius: '50%' }}
             />
           </ToggleButton>

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 // material
-import { Box, Step, Paper, Button, Stepper, StepLabel, Typography } from '@mui/material';
+import { Box, Step, Paper, Button, Stepper, Popover, StepLabel, Typography } from '@mui/material';
 
 import Scrollbar from '../../Scrollbar';
 
@@ -17,7 +17,7 @@ import { IRootState } from 'reduxStore';
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import useLocales from '../../../hooks/useLocales';
 import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
@@ -43,7 +43,13 @@ export default function MintingProcess() {
   const { translate } = useLocales();
   const finish = translate(`mintingProcess.finish`);
   const next = translate(`mintingProcess.next`);
-
+  const [click, setCLick] = useState<HTMLButtonElement | null>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCLick(event.currentTarget);
+  };
+  const handleClose = () => {
+    setCLick(null);
+  };
   const handleNext = () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -89,12 +95,19 @@ export default function MintingProcess() {
 
   const handleDownload = () => {
     let nftCard = document.getElementById('nftCard') as HTMLElement;
-    html2canvas(nftCard, {
-      scale: 4
-    })
-      .then(function (canvas) {
-        let png = canvas.toDataURL('image/png'); // default png
-        downloadCard(png, title === '' ? 'image.png' : `${title}.png`);
+    let scale = 4;
+    domtoimage
+      .toPng(nftCard, {
+        width: nftCard.offsetWidth * scale,
+        height: nftCard.offsetHeight * scale,
+        style: {
+          transform: `scale(${scale}) translate(${
+            ((scale - 1) * nftCard.offsetWidth) / 2 / scale
+          }px, ${((scale - 1) * nftCard.offsetHeight) / 2 / scale}px)`
+        }
+      })
+      .then(function (dataUrl) {
+        downloadCard(dataUrl, title === '' ? 'image.png' : `${title}.png`);
       })
       .catch((error) => {
         console.log(error);
@@ -104,7 +117,6 @@ export default function MintingProcess() {
   const downloadCard = useCallback((href: string, name: string) => {
     var link = document.createElement('a');
     link.download = name;
-    link.style.opacity = '0';
     document.body.append(link);
     link.href = href;
     link.click();
@@ -158,9 +170,29 @@ export default function MintingProcess() {
               {translate(`mintingProcess.back`)}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button variant="contained" onClick={handleNext}>
+            <Button variant="contained" onClick={nftType === '' ? handleClick : handleNext}>
               {activeStep === steps.length - 1 ? finish : next}
             </Button>
+            <Popover
+              open={Boolean(click)}
+              anchorEl={click}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center'
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+              }}
+            >
+              <Box sx={{ p: 2, maxWidth: 280 }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Please select an NFT type according to your need. Choose <b>Without QR Card</b> if
+                  you don't want to create a QR card.
+                </Typography>
+              </Box>
+            </Popover>
           </Box>
         </>
       ) : (

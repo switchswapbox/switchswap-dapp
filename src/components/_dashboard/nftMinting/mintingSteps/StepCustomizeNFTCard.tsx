@@ -21,6 +21,9 @@ import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { create } from 'ipfs-http-client';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { useForm, Controller, Control, FieldErrors } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 import {
   IPFS_GATEWAY_W3AUTH,
@@ -39,7 +42,7 @@ import { IRootState } from 'reduxStore';
 import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 
@@ -49,7 +52,14 @@ type StepCustomizeNFTCardProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
 };
 
-function TitleAndDescription() {
+const defaultValues = {
+  title: ''
+};
+type FormValuesProps = {
+  title: string;
+};
+
+function TitleAndDescription({ control }: { control: Control<FormValuesProps, object> }) {
   const { stepTwoNotDone, nameNft, descNft } = useSelector((state: IRootState) => {
     return {
       stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
@@ -87,15 +97,20 @@ function TitleAndDescription() {
       >
         Title<span style={{ color: 'red' }}>*</span>
       </Typography>
-      <TextField
-        fullWidth
-        variant="standard"
-        multiline
-        type="string"
-        required={true}
-        defaultValue={nameNft}
-        onChange={handleNameNftInputChange}
-        disabled={!stepTwoNotDone}
+      <Controller
+        name="title"
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <TextField
+            {...field}
+            fullWidth
+            variant="standard"
+            multiline
+            error={Boolean(error)}
+            helperText={error?.message}
+            disabled={!stepTwoNotDone}
+          />
+        )}
       />
 
       <Box sx={{ mt: 5, display: 'flex', alignItems: 'center' }}>
@@ -182,20 +197,25 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   function uploadNFTCardW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
       const nftCard = document.getElementById('nftCard') as HTMLElement;
-      html2canvas(nftCard, {
-        foreignObjectRendering: false,
-        scale: 4
-      })
-        .then(function (canvas) {
-          let pngDataUrl = canvas.toDataURL('image/png'); // default png
-          const pngBlob = dataURLtoBlob(pngDataUrl);
+      let scale = 4;
+      domtoimage
+        .toBlob(nftCard, {
+          width: nftCard.offsetWidth * scale,
+          height: nftCard.offsetHeight * scale,
+          style: {
+            transform: `scale(${scale}) translate(${
+              ((scale - 1) * nftCard.offsetWidth) / 2 / scale
+            }px, ${((scale - 1) * nftCard.offsetHeight) / 2 / scale}px)`
+          }
+        })
+        .then(function (blob: Blob) {
           const ipfs = create({
             url: ipfsGateway + '/api/v0',
             headers: {
               authorization: 'Basic ' + authHeader
             }
           });
-          ipfs.add(pngBlob as Blob).then((added) => {
+          ipfs.add(blob).then((added) => {
             nftCardCidTemp = added.cid.toV0().toString();
             dispatch(changeMintingProcessState({ nftCardCid: added.cid.toV0().toString() }));
             resolve({ cid: added.cid.toV0().toString(), size: added.size });
@@ -258,6 +278,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       );
       return;
     }
+    setMetadataUploading(true);
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
 
     let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
@@ -285,8 +306,6 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
     const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
 
-    setMetadataUploading(true);
-
     if (nftType !== 'withoutNftCard') {
       const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
       pinW3Crust(authHeader, nftCardInfo.cid, 'nftcard');
@@ -304,6 +323,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
+        setMetadataUploading(true);
         await provider.request({ method: 'eth_requestAccounts' });
 
         const providerEthers = new ethers.providers.Web3Provider(provider);
@@ -313,8 +333,6 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
         const signature = await signer.signMessage(addr);
 
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
-
-        setMetadataUploading(true);
 
         if (nftType !== 'withoutNftCard') {
           const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
@@ -347,19 +365,46 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
   const scrollDestination = useRef() as React.MutableRefObject<HTMLDivElement>;
 
   useEffect(() => {
-    if (window.innerWidth > 1200) {
-      window.scrollTo({
-        top: scrollDestination.current.offsetTop + 200,
-        behavior: 'smooth'
-      });
-      parentBoundingBox.current.style.height = 'auto';
-      setTimeout(() => {
-        parentBoundingBox.current.style.height = `${parentBoundingBox.current.offsetHeight}px`;
-      }, 1000);
-    } else {
-      parentBoundingBox.current.style.height = 'auto';
+    if (nftType === 'simplified' || nftType === 'withAuthorReg') {
+      if (window.innerWidth > 1200) {
+        window.scrollTo({
+          top: scrollDestination.current.offsetTop + 200,
+          behavior: 'smooth'
+        });
+        parentBoundingBox.current.style.height = 'auto';
+        setTimeout(() => {
+          parentBoundingBox.current.style.height = `${parentBoundingBox.current.offsetHeight}px`;
+        }, 1000);
+      } else {
+        parentBoundingBox.current.style.height = 'auto';
+      }
     }
   }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
+
+  const FormSchema = Yup.object().shape({
+    title: Yup.string().required('The title is required')
+  });
+
+  const { control, watch, handleSubmit } = useForm<FormValuesProps>({
+    mode: 'onTouched',
+    resolver: yupResolver(FormSchema),
+    defaultValues
+  });
+
+  const watchTitle = watch('title');
+
+  useEffect(() => {
+    dispatch(changeMintingProcessState({ nameNft: watchTitle }));
+    dispatch(
+      changeQRCardGeneralInfo({
+        title: watchTitle
+      })
+    );
+  }, [watchTitle]);
+
+  const handleSubmitError = (errors: FieldErrors<FormValuesProps>) => {
+    onSnackbarAction('error', errors.title?.message || '', 3000);
+  };
 
   return (
     <>
@@ -375,7 +420,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
             />
           </Stack>
         </Grid>
-        {nftType === 'simplified' || 'withAuthorReg' ? (
+        {nftType === 'simplified' || nftType === 'withAuthorReg' ? (
           <Grid container item xs={12}>
             <Grid container item>
               <Grid
@@ -393,7 +438,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
               <Grid container item xs={12} md={12} lg={5} sx={{ ml: { xs: 5, md: 5, lg: 0 } }}>
                 <Grid container item>
                   <Grid item xs={12}>
-                    <TitleAndDescription />
+                    <TitleAndDescription control={control} />
                   </Grid>
                   <Grid item xs={12} sx={{ pb: 0 }}>
                     <MetadataSummary>
@@ -406,7 +451,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
           </Grid>
         ) : (
           <Grid item xs={12}>
-            <TitleAndDescription />
+            <TitleAndDescription control={control} />
           </Grid>
         )}
       </Grid>
@@ -447,7 +492,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="crust"
                   sx={{ minWidth: '56px' }}
-                  onClick={uploadMetadataCrust}
+                  onClick={handleSubmit(uploadMetadataCrust, handleSubmitError)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
@@ -459,7 +504,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="polygon"
                   sx={{ minWidth: '56px' }}
-                  onClick={uploadMetadataMetamask}
+                  onClick={handleSubmit(uploadMetadataMetamask, handleSubmitError)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box

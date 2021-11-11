@@ -1,22 +1,16 @@
 import { useEffect, useState } from 'react';
-
-// material
 import { Box, Container } from '@mui/material';
-
-// hooks
 import useSettings from '../hooks/useSettings';
 import { useParams } from 'react-router-dom';
-// components
 import Page from '../components/Page';
-
 import { Asset } from 'components/_dashboard/assetViewer';
-
 import Identicons from '@nimiq/identicons';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from 'assets/COMMON_VARIABLES';
 import { contractAddress } from 'utils/contractAddress';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
 import axios from 'axios';
+import { ipfsUriToCid } from 'utils/gallery/ipfsUriToCid';
 Identicons.svgPath = './static/identicons.min.svg';
 
 export type AssetAndOwnerType = {
@@ -44,13 +38,6 @@ const initAssetAndOwner: AssetAndOwnerType = {
   contentId: '',
   nftCardId: '',
   metadataId: ''
-};
-
-const ipfsUriToCid = (ipfsUrl: string) => {
-  const CidSearch = ipfsUrl.match(/(Qm[\w]+)/);
-  if (CidSearch) {
-    return CidSearch[1];
-  } else return null;
 };
 
 export default function AssetViewer() {

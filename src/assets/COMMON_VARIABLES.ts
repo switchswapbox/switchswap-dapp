@@ -14,6 +14,7 @@ const TELEGRAM = 'https://t.me/joinchat/B7wpZLuBtLYzNDg0';
 const DISCORD = 'https://discord.gg/MRmytnkf';
 const TWITTER = 'https://twitter.com/switchswapbox';
 const IPFS_GATEWAY_FOR_FETCHING_DATA = [
+  'https://gw.crustapps.net/ipfs',
   'https://ipfs.io/ipfs',
   'https://gateway.pinata.cloud/ipfs'
 ];
@@ -25,6 +26,7 @@ const CRUST_CONSENSUS_DATE = new Date(2021, 6, 9, 7, 50, 30);
 const CRUST_CHAIN_RPC = 'wss://rpc.crust.network';
 const METADATA_SUBSCAN_CRUST = 'https://crust.webapi.subscan.io/api/scan/metadata';
 const RENEW_PERIOD_BLOCK_NUMBER = 2592000;
+const GET_FAUCET_API = 'https://token-faucet.herokuapp.com/get-faucet';
 
 export {
   CRUST_WALLET_WIKI,
@@ -43,5 +45,6 @@ export {
   CRUST_CONSENSUS_DATE,
   CRUST_CHAIN_RPC,
   METADATA_SUBSCAN_CRUST,
-  RENEW_PERIOD_BLOCK_NUMBER
+  RENEW_PERIOD_BLOCK_NUMBER,
+  GET_FAUCET_API
 };

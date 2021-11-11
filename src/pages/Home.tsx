@@ -1,23 +1,19 @@
 import { useEffect } from 'react';
-// material
-import { Container, Grid, Typography, IconButton, SvgIcon } from '@mui/material';
-
+import { Container, Grid, SvgIcon } from '@mui/material';
 import { Icon } from '@iconify/react';
-import closeFill from '@iconify/icons-eva/close-fill';
-import { useSnackbar, VariantType } from 'notistack';
-
-// hooks
 import useSettings from '../hooks/useSettings';
 import useLocales from '../hooks/useLocales';
-// components
 import Page from '../components/Page';
 import {
   Welcome,
   NftPresentation,
   StatisticsCard,
-  ProjectTimeline
+  HomeTimeline,
+  PROJECTUPDATES,
+  ROADMAP
 } from '../components/_dashboard/home';
 import useSnackbarAction from 'hooks/useSnackbarAction';
+
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
@@ -66,8 +62,11 @@ export default function Home() {
               </SvgIcon>
             </StatisticsCard>
           </Grid>
-          <Grid item xs={12}>
-            <ProjectTimeline />
+          <Grid item xs={6}>
+            <HomeTimeline title="Project Updates" timelines={PROJECTUPDATES} />
+          </Grid>
+          <Grid item xs={6}>
+            <HomeTimeline title="Roadmap" timelines={ROADMAP} />
           </Grid>
         </Grid>
       </Container>

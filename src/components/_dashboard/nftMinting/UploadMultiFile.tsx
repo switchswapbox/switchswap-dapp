@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { alpha, Theme, styled } from '@mui/material/styles';
 import {
   Box,
-  Fab,
   List,
   Grid,
   Tooltip,
@@ -17,8 +16,6 @@ import {
   Divider,
   Stack,
   Paper,
-  ButtonBase,
-  Button,
   useMediaQuery,
   ToggleButtonGroup,
   ToggleButton,
@@ -30,22 +27,9 @@ import {
   ListItemSecondaryAction
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import AlarmIcon from '@mui/icons-material/Alarm';
+
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Scrollbar from '../../Scrollbar';
-import CheckIcon from '@mui/icons-material/Check';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
-import FormatBoldIcon from '@mui/icons-material/FormatBold';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
-import FormatItalicIcon from '@mui/icons-material/FormatItalic';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
-import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 
 import { SxProps } from '@mui/system';
 
@@ -56,7 +40,8 @@ import { MIconButton } from '../../@material-extend';
 import { varFadeInRight } from '../../animate';
 import { UploadIllustration } from '../../../assets';
 import useLocales from '../../../hooks/useLocales';
-
+import { IRootState } from 'reduxStore';
+import { useSelector } from 'react-redux';
 // ----------------------------------------------------------------------
 
 const DropZoneStyle = styled('div')(({ theme }) => ({
@@ -117,9 +102,14 @@ export default function UploadMultiFile({
   ...other
 }: UploadMultiFileProps) {
   const theme = useTheme();
-  const medium = useMediaQuery(theme.breakpoints.up('md'));
   const { translate } = useLocales();
   const hasFile = files.length > 0;
+
+  const { nftType } = useSelector((state: IRootState) => {
+    return {
+      nftType: state.reducerMintingProcess.nftType
+    };
+  });
 
   const [alignment, setAlignment] = useState<string | null>('crust');
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
@@ -318,32 +308,50 @@ export default function UploadMultiFile({
                 justifyContent={{ xs: 'flex-start', md: 'flex-end' }}
                 spacing={2}
               >
-                <Scrollbar sxRoot={{ maxWidth: '111px' }}>
+                <Scrollbar sxRoot={{ maxWidth: nftType === 'withAuthorReg' ? '56px' : '112px' }}>
                   <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment}>
-                    <ToggleButton
-                      value="crust"
-                      sx={{ minWidth: '56px' }}
-                      onClick={onUploadFile.uploadFileCrust}
-                      disabled={!stepOneNotDone}
-                    >
-                      <Box
-                        component="img"
-                        src="./static/icons/shared/crust.svg"
-                        sx={{ height: '24px', width: '32px' }}
-                      />
-                    </ToggleButton>
-                    <ToggleButton
-                      value="polygon"
-                      sx={{ minWidth: '56px' }}
-                      onClick={onUploadFile.uploadFileMetamask}
-                      disabled={!stepOneNotDone}
-                    >
-                      <Box
-                        component="img"
-                        src="./static/icons/shared/polygon.svg"
-                        sx={{ height: '24px', width: '32px' }}
-                      />
-                    </ToggleButton>
+                    {nftType === 'withAuthorReg' && (
+                      <ToggleButton
+                        value="crusttoken"
+                        sx={{ minWidth: '56px' }}
+                        onClick={onUploadFile.uploadFileCrustWithToken}
+                        disabled={!stepOneNotDone}
+                      >
+                        <Box
+                          component="img"
+                          src="./static/icons/shared/crust.svg"
+                          sx={{ height: '24px', width: '32px' }}
+                        />
+                      </ToggleButton>
+                    )}
+                    {nftType !== 'withAuthorReg' && (
+                      <>
+                        <ToggleButton
+                          value="crust"
+                          sx={{ minWidth: '56px' }}
+                          onClick={onUploadFile.uploadFileCrust}
+                          disabled={!stepOneNotDone}
+                        >
+                          <Box
+                            component="img"
+                            src="./static/icons/shared/crust.svg"
+                            sx={{ height: '24px', width: '32px' }}
+                          />
+                        </ToggleButton>
+                        <ToggleButton
+                          value="polygon"
+                          sx={{ minWidth: '56px' }}
+                          onClick={onUploadFile.uploadFileMetamask}
+                          disabled={!stepOneNotDone}
+                        >
+                          <Box
+                            component="img"
+                            src="./static/icons/shared/polygon.svg"
+                            sx={{ height: '24px', width: '32px' }}
+                          />
+                        </ToggleButton>
+                      </>
+                    )}
                     {/* <ToggleButton value="solana" sx={{ minWidth: '56px' }} disabled>
                       <Box
                         component="img"
