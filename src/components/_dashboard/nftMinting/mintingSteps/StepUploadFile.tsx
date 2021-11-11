@@ -170,6 +170,7 @@ function StepUploadFile() {
   };
 
   const uploadFileCrust = async () => {
+    setFileUploading(true);
     const extensions = await web3Enable('NFT Dapp');
     if (extensions.length === 0) {
       onSnackbarAction(

@@ -269,6 +269,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       );
       return;
     }
+    setMetadataUploading(true);
     const allAccounts: InjectedAccountWithMeta[] = await web3Accounts();
 
     let crustAccountIndex = parseInt(localStorage.getItem('selectedAccountCrustIndex') || '0', 10);
@@ -296,8 +297,6 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     }
     const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
 
-    setMetadataUploading(true);
-
     if (nftType !== 'withoutNftCard') {
       const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);
       pinW3Crust(authHeader, nftCardInfo.cid, 'nftcard');
@@ -315,6 +314,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
       });
 
       if (parseInt(chainId, 16) === 137) {
+        setMetadataUploading(true);
         await provider.request({ method: 'eth_requestAccounts' });
 
         const providerEthers = new ethers.providers.Web3Provider(provider);
@@ -324,8 +324,6 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
         const signature = await signer.signMessage(addr);
 
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
-
-        setMetadataUploading(true);
 
         if (nftType !== 'withoutNftCard') {
           const nftCardInfo = await uploadNFTCardW3GatewayPromise(authHeader);

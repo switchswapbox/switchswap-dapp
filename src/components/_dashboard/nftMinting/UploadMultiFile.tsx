@@ -102,7 +102,6 @@ export default function UploadMultiFile({
   ...other
 }: UploadMultiFileProps) {
   const theme = useTheme();
-  const medium = useMediaQuery(theme.breakpoints.up('md'));
   const { translate } = useLocales();
   const hasFile = files.length > 0;
 

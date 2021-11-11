@@ -15,17 +15,13 @@ import { CRUST_EXPLORER_EXTRINSIC } from '../../../constants';
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
-  const { layoutIndex, title, uploadedCid, activeStep, transactionHash } = useSelector(
-    (state: IRootState) => {
-      return {
-        layoutIndex: state.reducerCustomizeQRCard.layout,
-        title: state.reducerCustomizeQRCard.title,
-        uploadedCid: state.reducerMintingProcess.uploadedCid,
-        activeStep: state.reducerMintingProcess.activeStep,
-        transactionHash: state.reducerMintingProcess.transactionHash
-      };
-    }
-  );
+  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+    return {
+      layoutIndex: state.reducerCustomizeQRCard.layout,
+      title: state.reducerCustomizeQRCard.title,
+      uploadedCid: state.reducerMintingProcess.uploadedCid
+    };
+  });
   const { icon, iconAuthorRegister, qrStyleName, qrStyleNameAuthorRegister } = useSelector(
     (state: IRootState) => {
       return {
