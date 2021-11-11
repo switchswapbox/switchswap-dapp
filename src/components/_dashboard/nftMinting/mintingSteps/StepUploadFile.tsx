@@ -33,6 +33,7 @@ export type FileInfoType = {
   name: string;
   cid: string;
   size: number;
+  txHash?: string;
 };
 
 export const pinW3Crust = async (authHeader: string, cid: string, name: string) => {
@@ -220,25 +221,33 @@ function StepUploadFile() {
     const authHeader = generateRandomAuthHeaderSubstrate();
 
     setFileUploading(true);
-    pinFileToW3Gateway(authHeader, files[0])
-      .then((uploadedFileInfo) => {
-        dispatch(
-          changeMintingProcessState({
-            uploadedCid: {
-              cid: uploadedFileInfo.cid,
-              size: uploadedFileInfo.size,
-              name: uploadedFileInfo.name
-            }
-          })
-        );
-        setFileUploading(false);
-        dispatch(changeMintingProcessState({ stepOneNotDone: false }));
-        publishCidToCrust(uploadedFileInfo.cid, uploadedFileInfo.size);
-        // pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const uploadedFileInfo = await pinFileToW3Gateway(authHeader, files[0]);
+
+    const txHash = await publishCidToCrust(uploadedFileInfo.cid, uploadedFileInfo.size);
+
+    if (!txHash) {
+      setFileUploading(false);
+      onSnackbarAction(
+        'warning',
+        'Please install Crust Wallet',
+        null,
+        'LEARN MORE',
+        CRUST_WALLET_WIKI
+      );
+    } else {
+      dispatch(
+        changeMintingProcessState({
+          uploadedCid: {
+            cid: uploadedFileInfo.cid,
+            size: uploadedFileInfo.size,
+            name: uploadedFileInfo.name,
+            txHash
+          }
+        })
+      );
+      dispatch(changeMintingProcessState({ stepOneNotDone: false }));
+      setFileUploading(false);
+    }
   };
 
   return (

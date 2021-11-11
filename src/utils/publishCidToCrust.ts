@@ -27,16 +27,11 @@ const publishCidToCrust = async (cid: string, fileSize: number): Promise<any> =>
   });
   await chain.isReadyOrError;
 
-  // const transferExtrinsic = chain.tx.balances.transfer(
-  //   '5C5555yEXUcmEJ5kkcCMvdZjUo7NGJiQJMS7vZXEeoMhj3VQ',
-  //   123456
-  // );
-
   const transferExtrinsic = chain.tx.market.placeStorageOrder(cid, fileSize, 0, '');
 
   const txHash = await transferExtrinsic.signAndSend(account.address, { signer: injector.signer });
-  console.log(txHash);
-  return true;
+
+  return txHash.toString();
 };
 
 export default publishCidToCrust;

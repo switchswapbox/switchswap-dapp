@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
 import { initialQRCard, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
+import { CRUST_EXPLORER_EXTRINSIC } from '../../../constants';
 
 // ----------------------------------------------------------------------
 
@@ -116,7 +117,7 @@ export const NftCardsDesign = () => {
     const { Component } = qrStyles[qrStyleNameAuthorRegister];
     return (
       <Component
-        value={transactionHash ? transactionHash : ''}
+        value={`${CRUST_EXPLORER_EXTRINSIC}${uploadedCid?.txHash || ''}`}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
         icon={urlHash}
@@ -124,7 +125,7 @@ export const NftCardsDesign = () => {
         {...otherQRPropsAuthorRegister}
       />
     );
-  }, [qrStyleNameAuthorRegister, urlHash, otherQRPropsAuthorRegister, transactionHash]);
+  }, [qrStyleNameAuthorRegister, urlHash, otherQRPropsAuthorRegister, uploadedCid?.txHash]);
 
   const createQRCard = useMemo(() => {
     return (
