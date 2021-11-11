@@ -15,18 +15,6 @@ function pinFileToW3Gateway(authHeader: string, file: File): Promise<any> {
     reader.onerror = () => reject('file reading has failed');
     reader.onload = async () => {
       const added = await ipfs.add(reader.result as ArrayBuffer);
-      // dispatch(
-      //   changeMintingProcessState({
-      //     uploadedCid: {
-      //       cid: added.cid.toV0().toString(),
-      //       size: added.size / 1000,
-      //       name: file.name
-      //     }
-      //   })
-      // );
-      // setFileUploading(false);
-      // dispatch(changeMintingProcessState({ stepOneNotDone: false }));
-      console.log(added);
       resolve({ cid: added.cid.toV0().toString(), name: file.name, size: added.size });
     };
     reader.readAsArrayBuffer(file);
