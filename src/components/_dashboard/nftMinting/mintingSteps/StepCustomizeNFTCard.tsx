@@ -21,7 +21,7 @@ import Scrollbar from 'components/Scrollbar';
 import { Icon } from '@iconify/react';
 import { create } from 'ipfs-http-client';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
-import { useForm, Controller, Control } from 'react-hook-form';
+import { useForm, Controller, Control, FieldErrors } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -393,6 +393,10 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     );
   }, [watchTitle]);
 
+  const handleSubmitError = (errors: FieldErrors<FormValuesProps>) => {
+    onSnackbarAction('error', errors.title?.message || '', 3000);
+  };
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -479,7 +483,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="crust"
                   sx={{ minWidth: '56px' }}
-                  onClick={handleSubmit(uploadMetadataCrust)}
+                  onClick={handleSubmit(uploadMetadataCrust, handleSubmitError)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
@@ -491,7 +495,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
                 <ToggleButton
                   value="polygon"
                   sx={{ minWidth: '56px' }}
-                  onClick={handleSubmit(uploadMetadataMetamask)}
+                  onClick={handleSubmit(uploadMetadataMetamask, handleSubmitError)}
                   disabled={!stepTwoNotDone}
                 >
                   <Box
