@@ -23,7 +23,7 @@ import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 import pinFileToW3Gateway from 'utils/pinFileToW3Gateway';
-import generateRandomAuthHeaderSubstrate from 'utils/generateRandomAuthHeaderSubstrate';
+import generateRandomAuthHeaderSubstrate from 'utils/substrate/generateRandomAuthHeaderSubstrate';
 import publishCidToCrust from 'utils/publishCidToCrust';
 
 const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
