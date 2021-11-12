@@ -26,6 +26,7 @@ import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
 import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
 import { NftCardsDesign } from '../NftCardsDesign';
+import useSnackbarAction from 'hooks/useSnackbarAction';
 
 type StepMintNFTProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
@@ -60,6 +61,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
     };
   });
   const dispatch = useDispatch();
+  const onSnackbarAction = useSnackbarAction();
   const { translate } = useLocales();
   async function mintDataNTF() {
     const provider = await detectEthereumProvider();
@@ -98,7 +100,13 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
             });
           })
           .catch((error: any) => {
-            console.log(error);
+            onSnackbarAction(
+              'info',
+              "Transaction failed. Get the faucet in funbox if you don't have enough $MATIC",
+              null,
+              'GET FAUCET',
+              '#/fun-box/matic-faucet'
+            );
             dispatch(changeMintingProcessState({ isMinting: false }));
           });
       }
