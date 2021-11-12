@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Grid, SvgIcon } from '@mui/material';
 import { Icon } from '@iconify/react';
 import useSettings from '../hooks/useSettings';
@@ -13,12 +13,16 @@ import {
   ROADMAP
 } from '../components/_dashboard/home';
 import useSnackbarAction from 'hooks/useSnackbarAction';
+import { CONTRACT_ADDRESS_UNIVERSE_NFT } from '../constants';
+import connectEVMContract from 'utils/smartContractEVM/connectEVMContract';
+import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
 
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
   const { translate } = useLocales();
   const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
+  const [totalMintedNft, setTotalMintedNft] = useState(0);
   const onSnackbarAction = useSnackbarAction();
   useEffect(() => {
     if (!isWarningNotIssueToken) {
@@ -29,6 +33,10 @@ export default function Home() {
       );
       sessionStorage.setItem('notIssueToken', 'true');
     }
+    const contract = connectEVMContract(CONTRACT_ADDRESS_UNIVERSE_NFT, ABI_UNIVERSE_NFT);
+    contract.totalSupply().then((totalSupply: any) => {
+      setTotalMintedNft(parseInt(totalSupply));
+    });
   }, []);
 
   return (
@@ -42,7 +50,7 @@ export default function Home() {
             <NftPresentation />
           </Grid>
           <Grid item xs={12} md={4}>
-            <StatisticsCard text="Total Minted NFT" value={143}>
+            <StatisticsCard text="Total Minted NFT" value={totalMintedNft}>
               <SvgIcon>
                 <Icon icon="bi:card-image" width="20" height="20" />
               </SvgIcon>
