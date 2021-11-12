@@ -50,7 +50,7 @@ export default function Home() {
             <NftPresentation />
           </Grid>
           <Grid item xs={12} md={4}>
-            <StatisticsCard text="Total Minted NFT" value={totalMintedNft}>
+            <StatisticsCard text="Total Minted NFTs" value={totalMintedNft}>
               <SvgIcon>
                 <Icon icon="bi:card-image" width="20" height="20" />
               </SvgIcon>
