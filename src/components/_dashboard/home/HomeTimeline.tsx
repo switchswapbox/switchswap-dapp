@@ -26,7 +26,7 @@ export default function HomeTimeline({
         '& .MuiTimelineItem-missingOppositeContent:before': {
           display: 'none'
         },
-        p: { xs: 0, sm: 2 }
+        p: { xs: 0, md: 2 }
       }}
     >
       <Scrollbar
@@ -35,7 +35,7 @@ export default function HomeTimeline({
           '& .simplebar-content': { height: '100%', display: 'flex', flexDirection: 'column' }
         }}
       >
-        <Timeline sx={{ pr: { xs: 0, sm: 1 } }}>
+        <Timeline sx={{ pr: { xs: 0, md: 1 } }}>
           {timelines.map((item) => (
             <TimelineItem key={item.key}>
               <TimelineSeparator>

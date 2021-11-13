@@ -70,10 +70,10 @@ export default function Home() {
               </SvgIcon>
             </StatisticsCard>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <HomeTimeline title="Project Updates" timelines={PROJECTUPDATES} />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <HomeTimeline title="Roadmap" timelines={ROADMAP} />
           </Grid>
         </Grid>

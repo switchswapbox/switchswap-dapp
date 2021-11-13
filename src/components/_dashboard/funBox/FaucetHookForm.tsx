@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { Stack, TextField, Button, Divider, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { ResponseFaucetRequest } from '../../../pages/CruFaucet';
+import { ResponseFaucetRequest } from '../../../interfaces/faucet';
 import { Icon } from '@iconify/react';
 import MaticFormSchema from './MaticFormSchema';
 import CruFormSchema from './CruFormSchema';

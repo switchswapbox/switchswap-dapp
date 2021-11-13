@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-// material
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,75 +7,14 @@ import {
   Grid,
   Stack,
   Alert,
-  Button,
-  Typography
+  Button
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 
-// hooks
-import useSettings from '../hooks/useSettings';
-// components
-import Page from '../components/Page';
+import useSettings from '../../hooks/useSettings';
+import Page from '../../components/Page';
 import FaucetHookForm from 'components/_dashboard/funBox/FaucetHookForm';
 import { Tweet } from 'react-twitter-widgets';
-
-// ----------------------------------------------------------------------
-
-export interface ResponseFaucetRequest {
-  message: string;
-  statusCode: number;
-  timeLeftInSeconds: number | null;
-  txHash: string | null;
-}
-
-const CountdownStyle = styled('div')({
-  display: 'flex',
-  justifyContent: 'center'
-});
-
-const SeparatorStyle = styled(Typography)(({ theme }) => ({
-  margin: theme.spacing(0, 1),
-  [theme.breakpoints.up('sm')]: {
-    margin: theme.spacing(0, 2.5)
-  }
-}));
-
-function CountDown({ timeLeftInSeconds }: { timeLeftInSeconds: number }) {
-  const days = Math.floor(timeLeftInSeconds / (3600 * 24));
-  const hours = Math.floor((timeLeftInSeconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((timeLeftInSeconds % 3600) / 60);
-  const seconds = Math.floor(timeLeftInSeconds % 60);
-
-  return (
-    <CountdownStyle>
-      <div>
-        <Typography variant="h3">{days}</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
-      </div>
-
-      <SeparatorStyle variant="h3">:</SeparatorStyle>
-
-      <div>
-        <Typography variant="h3">{hours}</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
-      </div>
-
-      <SeparatorStyle variant="h3">:</SeparatorStyle>
-
-      <div>
-        <Typography variant="h3">{minutes}</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
-      </div>
-
-      <SeparatorStyle variant="h3">:</SeparatorStyle>
-
-      <div>
-        <Typography variant="h3">{seconds}</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
-      </div>
-    </CountdownStyle>
-  );
-}
+import { ResponseFaucetRequest } from '../../interfaces/faucet';
 
 export default function CruFaucet() {
   const { themeStretch } = useSettings();
@@ -90,17 +28,17 @@ export default function CruFaucet() {
     txHash: null
   });
 
-  const [dedicatedTimeleft, setDedicatedTimeleft] = useState(0);
+  // const [dedicatedTimeleft, setDedicatedTimeleft] = useState(0);
 
-  useEffect(() => {
-    console.log(`timeLeftInSeconds ${response.timeLeftInSeconds}`);
-    if (response.timeLeftInSeconds !== null) {
-      setDedicatedTimeleft(response.timeLeftInSeconds);
-    }
-  }, [response.timeLeftInSeconds]);
+  // useEffect(() => {
+  //   console.log(`timeLeftInSeconds ${response.timeLeftInSeconds}`);
+  //   if (response.timeLeftInSeconds !== null) {
+  //     setDedicatedTimeleft(response.timeLeftInSeconds);
+  //   }
+  // }, [response.timeLeftInSeconds]);
 
   return (
-    <Page title="Learn More">
+    <Page title="CRU Faucet">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Grid container spacing={5} justifyContent="center">
           <Grid item xs={12} sm={6}>
@@ -142,7 +80,7 @@ export default function CruFaucet() {
                   >
                     {response.message}
                   </Alert>
-                  <Stack
+                  {/* <Stack
                     justifyContent="center"
                     sx={{ display: response.statusCode === 1 ? 'flex' : 'none', mt: 1 }}
                   >
@@ -150,7 +88,7 @@ export default function CruFaucet() {
                       Try again in
                     </Typography>
                     <CountDown timeLeftInSeconds={dedicatedTimeleft} />
-                  </Stack>
+                  </Stack> */}
                 </Stack>
               </CardContent>
             </Card>
