@@ -1,31 +1,23 @@
 import { useState } from 'react';
-import { Typography, Box, Tooltip, Paper, Stack, Link } from '@mui/material';
+import { Typography, Box, Tooltip, Paper, Stack, Link, Button } from '@mui/material';
 import { BallClipRotateMultiple } from 'react-pure-loaders';
 import { Icon } from '@iconify/react';
 import { contractAddress } from 'utils/contractAddress';
 import { useTheme } from '@mui/material/styles';
-
-type NftCardProps = {
-  tokenId: string;
-  tokenURI: string;
-  imageUrl: string;
-  name: string;
-  nftContract: string;
-  owner?: string;
-};
+import type { NftCardProps } from './NftCard.type';
 
 export default function NftCard({ tokenId, imageUrl, name, nftContract }: NftCardProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   return (
     <Paper
-      elevation={2}
       sx={{
         borderRadius: 2,
-        bgcolor: 'white',
+        bgcolor: 'transparent',
         transition: 'all .2s ease-in-out',
         '&:hover': {
-          transform: `translateY(-${theme.spacing(1 / 4)})`
+          transform: `translateY(-${theme.spacing(1 / 4)})`,
+          boxShadow: (theme) => theme.shadows['4']
         }
       }}
     >
@@ -39,19 +31,26 @@ export default function NftCard({ tokenId, imageUrl, name, nftContract }: NftCar
           <BallClipRotateMultiple color={'#637381'} loading={loading} />
         </Stack>
         <Link href={`#/assets/polygon/${contractAddress}/${tokenId}`}>
-          <Box
-            component="img"
-            src={imageUrl}
-            onLoad={() => setLoading(false)}
-            sx={{
-              borderRadius: 1.5,
-              top: 0,
-              width: '100%',
-              height: '200px',
-              objectFit: 'cover',
-              display: loading ? 'none' : 'block'
-            }}
-          />
+          <Stack
+            sx={{ height: '300px' }}
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              component="img"
+              src={imageUrl}
+              onLoad={() => setLoading(false)}
+              sx={{
+                borderRadius: 1.5,
+                top: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                display: loading ? 'none' : 'block'
+              }}
+            />
+          </Stack>
         </Link>
       </Box>
 
@@ -60,13 +59,43 @@ export default function NftCard({ tokenId, imageUrl, name, nftContract }: NftCar
           <Link
             color="inherit"
             underline="none"
-            sx={{ width: '100%' }}
             href={`#/assets/polygon/${contractAddress}/${tokenId}`}
           >
             <Typography variant="subtitle2" noWrap>
               {name}
             </Typography>
           </Link>
+          <Button variant="contained" size="small">
+            BSC
+          </Button>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Link
+            color="inherit"
+            underline="none"
+            href={`#/assets/polygon/${contractAddress}/${tokenId}`}
+          >
+            <Typography variant="subtitle2" noWrap>
+              Owner
+            </Typography>
+          </Link>
+          <Typography variant="subtitle2" noWrap>
+            0x123456
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Link
+            color="inherit"
+            underline="none"
+            href={`#/assets/polygon/${contractAddress}/${tokenId}`}
+          >
+            <Typography variant="subtitle2" noWrap>
+              Creator
+            </Typography>
+          </Link>
+          <Typography variant="subtitle2" noWrap>
+            0x123456
+          </Typography>
         </Stack>
 
         <Stack direction="row" justifyContent="space-between">
