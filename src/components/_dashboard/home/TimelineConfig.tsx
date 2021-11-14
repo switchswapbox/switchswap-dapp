@@ -6,7 +6,7 @@ export type TimelineType = {
   des: string;
   time: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'error' | 'inherit' | 'grey' | 'secondary';
-  icon: JSX.Element;
+  icon?: JSX.Element | string;
 };
 
 export const PROJECTUPDATES: TimelineType[] = [
@@ -15,31 +15,32 @@ export const PROJECTUPDATES: TimelineType[] = [
     title: 'Swap NFT smart contract',
     des: '',
     time: 'December 2021',
-    icon: <Icon icon="fluent:people-swap-20-regular" color="black" />
+    color: 'primary',
+    icon: ''
   },
   {
     key: 6,
-    title: 'NFT Gallery',
-    des: 'Release NFT Gallery',
+    title: 'Release NFT Gallery',
+    des: '',
     time: 'November 2021',
     color: 'primary',
-    icon: <Icon icon="clarity:video-gallery-line" color="white" />
+    icon: ''
   },
   {
     key: 5,
-    title: 'NFT Cards',
-    des: 'Release graphic tool to design NFT cards',
+    title: 'Release graphic tool to design NFT cards',
+    des: '',
     time: 'October 2021',
     color: 'secondary',
-    icon: <Icon icon="bi:card-checklist" color="white" />
+    icon: ''
   },
   {
     key: 4,
     title: 'Minting NFT smart contract - Beta',
-    des: 'Deployed on Polygon Network',
+    des: '',
     time: 'October 2021',
     color: 'info',
-    icon: <Icon icon="healthicons:miner-worker-outline" color="white" />
+    icon: ''
   },
   {
     key: 3,
@@ -47,23 +48,23 @@ export const PROJECTUPDATES: TimelineType[] = [
     des: '',
     time: 'September 2021',
     color: 'success',
-    icon: <Icon icon="whh:launch" color="white" height={16} width={16} />
+    icon: ''
   },
   {
     key: 2,
-    title: 'DCF Member',
-    des: 'Joining Decentralized Cloud Foundation',
+    title: 'Joining Decentralized Cloud Foundation',
+    des: '',
     time: 'April 2021',
     color: 'warning',
-    icon: <Icon icon="ri:vip-crown-2-line" color="white" />
+    icon: ''
   },
   {
     key: 1,
     title: 'Team Founded',
-    des: 'Concept Design; Technologies Validation',
+    des: '',
     time: 'February 2021',
     color: 'error',
-    icon: <Icon icon="fluent:people-team-16-regular" color="white" />
+    icon: ''
   }
 ];
 
