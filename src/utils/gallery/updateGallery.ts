@@ -32,10 +32,10 @@ export const updateListByTokenIndex = async (
   const tokenURI = await contract.tokenURI(tokenId);
   const tokenURICid = ipfsUriToCid(tokenURI);
   if (tokenURICid) {
+    const owner = await contract.ownerOf(tokenId);
     const tokenURIHttp = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${tokenURICid}`;
     axios.get(tokenURIHttp).then((response) => {
       const name = response.data.name || '';
-      const owner = contract.ownerOf(tokenId);
       if (response.data && response.data.image) {
         const imageCid = ipfsUriToCid(response.data.image);
         if (imageCid) {
@@ -114,7 +114,7 @@ export const updateListByTokenIndexManager = async (
             }
             const newNftList = [
               ...NftList.slice(0, addingNftIndex),
-              { tokenId, tokenURI, imageUrl, name },
+              { tokenId, tokenURI, imageUrl, name, owner: selectedMetamaskAccount },
               ...NftList.slice(addingNftIndex)
             ];
             return newNftList;
