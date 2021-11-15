@@ -12,8 +12,7 @@ import {
   PROJECTUPDATES,
   ROADMAP
 } from '../components/_dashboard/home';
-import useSnackbarAction from 'hooks/useSnackbarAction';
-import { CONTRACT_ADDRESS_UNIVERSE_NFT } from '../constants';
+import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../constants';
 import connectEVMContract from 'utils/smartContractEVM/connectEVMContract';
 import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
 
@@ -21,19 +20,13 @@ import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
 export default function Home() {
   const { themeStretch } = useSettings();
   const { translate } = useLocales();
-  const isWarningNotIssueToken = sessionStorage.getItem('notIssueToken') || false;
   const [totalMintedNft, setTotalMintedNft] = useState(0);
-  const onSnackbarAction = useSnackbarAction();
   useEffect(() => {
-    if (!isWarningNotIssueToken) {
-      onSnackbarAction(
-        'info',
-        'Switchswap is in beta version. Many ideas are being deployed. Get back for more interesting products!',
-        15000
-      );
-      sessionStorage.setItem('notIssueToken', 'true');
-    }
-    const contract = connectEVMContract(CONTRACT_ADDRESS_UNIVERSE_NFT, ABI_UNIVERSE_NFT);
+    const contract = connectEVMContract(
+      CONTRACT_ADDRESS_UNIVERSE_NFT,
+      ABI_UNIVERSE_NFT,
+      POLYGON_RPC
+    );
     contract.totalSupply().then((totalSupply: any) => {
       setTotalMintedNft(parseInt(totalSupply));
     });
