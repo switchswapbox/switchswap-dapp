@@ -10,8 +10,8 @@ const IPFS_PINNING_SERVICE_W3AUTH = ['https://pin.crustcode.com/psa'];
 
 // Social Media
 const MEDIUM = 'https://switchswap.medium.com/';
-const TELEGRAM = 'https://t.me/joinchat/B7wpZLuBtLYzNDg0';
-const DISCORD = 'https://discord.gg/MRmytnkf';
+const TELEGRAM = 'https://t.me/switchswapbox';
+const DISCORD = 'https://discord.gg/HKMnsWCWuf';
 const TWITTER = 'https://twitter.com/switchswapbox';
 const IPFS_GATEWAY_FOR_FETCHING_DATA = [
   'https://gw.crustapps.net/ipfs',
@@ -19,7 +19,7 @@ const IPFS_GATEWAY_FOR_FETCHING_DATA = [
   'https://gateway.pinata.cloud/ipfs'
 ];
 const NUMBER_OF_NFT_IN_MANAGER_PAGE = 12;
-const GAS_PRICE = '39000000000';
+const GAS_PRICE = '36000000000';
 const POLYGON_RPC = ['https://polygon-rpc.com/'];
 
 const CRUST_CONSENSUS_DATE = new Date(2021, 6, 9, 7, 50, 30);
