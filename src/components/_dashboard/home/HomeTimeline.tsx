@@ -39,7 +39,7 @@ export default function HomeTimeline({
           {timelines.map((item) => (
             <TimelineItem key={item.key}>
               <TimelineSeparator>
-                <TimelineDot color={item.color}>{item.icon}</TimelineDot>
+                <TimelineDot variant="outlined" color={item.color}></TimelineDot>
                 <TimelineConnector />
               </TimelineSeparator>
               <TimelineContent>
@@ -50,9 +50,7 @@ export default function HomeTimeline({
                   }}
                 >
                   <Typography variant="subtitle2">{item.title}</Typography>
-                  <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                    {item.des}
-                  </Typography>
+
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {item.time}
                   </Typography>
