@@ -58,7 +58,7 @@ export default function Universe() {
   const [lgCol, setLgCol] = useState<GridSize>(4);
 
   useEffect(() => {
-    if (width > theme.breakpoints.values.lg) {
+    if (width > 1000) {
       setLgCol(3);
     } else {
       setLgCol(4);
