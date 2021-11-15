@@ -131,7 +131,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            fontFamily: 'Aldrich, sans-serif',
+            fontFamily: 'Open Sans, sans-serif',
             fontSize: '20px',
             fontWeight: 'bold'
           }}
@@ -155,7 +155,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
               wordWrap: 'break-word',
               wordBreak: 'break-all',
               textAlignLast: 'center',
-              fontFamily: 'Aldrich, sans-serif',
+              fontFamily: 'Open Sans, sans-serif',
               fontSize: '14px'
             }}
           >
@@ -171,7 +171,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            fontFamily: 'Aldrich, sans-serif',
+            fontFamily: 'Open Sans, sans-serif',
             fontSize: '10px'
           }}
         >
@@ -186,7 +186,7 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            fontFamily: 'Aldrich, sans-serif',
+            fontFamily: 'Open Sans, sans-serif',
             fontSize: '10px'
           }}
         >
