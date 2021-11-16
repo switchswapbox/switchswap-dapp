@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // material
 import { styled } from '@mui/material/styles';
 import { Typography, Button, Card, CardContent, CardProps, Popover, Box } from '@mui/material';
@@ -28,14 +29,7 @@ interface HomeWelcomeProps extends CardProps {
 }
 
 export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
-  const [click, setCLick] = useState<HTMLButtonElement | null>(null);
   const { translate } = useLocales();
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setCLick(event.currentTarget);
-  };
-  const handleClose = () => {
-    setCLick(null);
-  };
 
   return (
     <RootStyle>
@@ -55,28 +49,14 @@ export default function HomeWelcome({ displayName }: HomeWelcomeProps) {
           {translate(`generalApp.slogan`)}
         </Typography>
 
-        <Button variant="contained" onClick={handleClick}>
+        <Button
+          key="learn-more"
+          to={PATH_DASHBOARD.about.learnMore}
+          component={RouterLink}
+          variant="contained"
+        >
           {translate(`general.learnMore`)}
         </Button>
-        <Popover
-          open={Boolean(click)}
-          anchorEl={click}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
-          }}
-        >
-          <Box sx={{ p: 2, maxWidth: 280 }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {translate(`other.${'Under Development'}`)}
-            </Typography>
-          </Box>
-        </Popover>
       </CardContent>
 
       <DocIllustration
