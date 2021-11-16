@@ -5,6 +5,7 @@ export type TimelineType = {
   title: string;
   time: string;
   color?: 'primary' | 'info' | 'success' | 'warning' | 'error' | 'inherit' | 'grey' | 'secondary';
+  type: string;
 };
 
 export const PROJECTUPDATES: TimelineType[] = [
@@ -12,43 +13,50 @@ export const PROJECTUPDATES: TimelineType[] = [
     key: 7,
     title: 'Swap NFT smart contract',
     time: 'December 2021',
-    color: 'primary'
+    color: 'primary',
+    type: 'darkgreen'
   },
   {
     key: 6,
     title: 'Release NFT Gallery',
     time: 'November 2021',
-    color: 'primary'
+    color: 'primary',
+    type: 'green'
   },
   {
     key: 5,
     title: 'Release graphic tool to design NFT cards',
     time: 'October 2021',
-    color: 'secondary'
+    color: 'secondary',
+    type: 'blue'
   },
   {
     key: 4,
     title: 'Minting NFT smart contract - Beta',
     time: 'October 2021',
-    color: 'info'
+    color: 'info',
+    type: 'yellow'
   },
   {
     key: 3,
     title: 'Initial release',
     time: 'September 2021',
-    color: 'success'
+    color: 'success',
+    type: 'red'
   },
   {
     key: 2,
     title: 'Joining Decentralized Cloud Foundation',
     time: 'April 2021',
-    color: 'warning'
+    color: 'warning',
+    type: 'green'
   },
   {
     key: 1,
     title: 'Team Founded',
     time: 'February 2021',
-    color: 'error'
+    color: 'error',
+    type: 'blue'
   }
 ];
 
@@ -57,29 +65,34 @@ export const ROADMAP: TimelineType[] = [
     key: 1,
     title: 'Release Switchswap Beta, Minting 3 types of NFT',
     time: 'Q4 2021',
-    color: 'error'
+    color: 'error',
+    type: 'darkgreen'
   },
   {
     key: 2,
     title: 'NFT Marketplace',
     time: 'Q1 2022',
-    color: 'warning'
+    color: 'warning',
+    type: 'blue'
   },
   {
     key: 3,
     title: '6k NFTs collection',
-    time: 'Q1 2022'
+    time: 'Q1 2022',
+    type: 'green'
   },
   {
     key: 4,
     title: 'Support ERC1155',
     time: 'Q1 2022',
-    color: 'success'
+    color: 'success',
+    type: 'yellow'
   },
   {
     key: 5,
     title: 'Swapping gaming items',
     time: 'Q2 2022',
-    color: 'info'
+    color: 'info',
+    type: 'red'
   }
 ];
