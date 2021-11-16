@@ -233,7 +233,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Aldrich, sans-serif',
+                fontFamily: 'Open Sans, sans-serif',
                 fontSize: '22px',
                 fontWeight: 'bold',
                 color: '#c4a96c'
@@ -259,7 +259,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
                   wordWrap: 'break-word',
                   wordBreak: 'break-all',
                   textAlignLast: 'center',
-                  fontFamily: 'Aldrich, sans-serif',
+                  fontFamily: 'Open Sans, sans-serif',
                   fontSize: '14px',
                   color: '#c4a96c'
                 }}
@@ -276,7 +276,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Aldrich, sans-serif',
+                fontFamily: 'Open Sans, sans-serif',
                 fontSize: '10px',
                 color: '#c4a96c'
               }}
@@ -292,7 +292,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                fontFamily: 'Aldrich, sans-serif',
+                fontFamily: 'Open Sans, sans-serif',
                 fontSize: '10px',
                 color: '#c4a96c'
               }}
