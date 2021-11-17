@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react';
 import MaticFormSchema from './MaticFormSchema';
 import CruFormSchema from './CruFormSchema';
 import useLocales from '../../hooks/useLocales';
-import { GET_FAUCET_API } from 'assets/COMMON_VARIABLES';
+import { GET_FAUCET_API } from 'constants/COMMON_VARIABLES';
 
 type FormValuesProps = {
   address: string;

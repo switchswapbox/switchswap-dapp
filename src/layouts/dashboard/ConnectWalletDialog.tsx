@@ -31,7 +31,7 @@ import {
   METAMASK_SELECT_POLYGON_URL,
   INSTALL_METAMASK_URL,
   CRUST_WALLET_WIKI
-} from '../../assets/COMMON_VARIABLES';
+} from '../../constants/COMMON_VARIABLES';
 
 import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
 import { changeAccountWallet } from '../../redux/reducerSelectAccount';

@@ -19,7 +19,7 @@ import {
 import { Block } from 'components/Block';
 import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
-import { CRUST_WALLET_WIKI, METAMASK_SELECT_POLYGON_URL } from 'assets/COMMON_VARIABLES';
+import { CRUST_WALLET_WIKI, METAMASK_SELECT_POLYGON_URL } from 'constants/COMMON_VARIABLES';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ImageIcon from '@mui/icons-material/Image';
 import DescriptionIcon from '@mui/icons-material/Description';

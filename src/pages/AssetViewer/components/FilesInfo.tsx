@@ -49,7 +49,7 @@ import {
   IPFS_GATEWAY_FOR_FETCHING_DATA,
   METADATA_SUBSCAN_CRUST,
   RENEW_PERIOD_BLOCK_NUMBER
-} from 'assets/COMMON_VARIABLES';
+} from 'constants/COMMON_VARIABLES';
 
 type FileInfo = typeof marketTypes.types.FileInfo;
 

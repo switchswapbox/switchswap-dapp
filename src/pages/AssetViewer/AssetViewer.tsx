@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Page from '../../components/Page';
 import { Asset } from './components';
 import Identicons from '@nimiq/identicons';
-import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from '../../assets/COMMON_VARIABLES';
+import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from '../../constants/COMMON_VARIABLES';
 import { contractAddress } from '../../utils/contractAddress';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';

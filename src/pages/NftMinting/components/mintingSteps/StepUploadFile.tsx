@@ -10,7 +10,7 @@ import {
   CRUST_WALLET_WIKI,
   METAMASK_SELECT_POLYGON_URL,
   INSTALL_METAMASK_URL
-} from '../../../../assets/COMMON_VARIABLES';
+} from '../../../../constants/COMMON_VARIABLES';
 import detectEthereumProvider from '@metamask/detect-provider';
 import axios from 'axios';
 import { ethers } from 'ethers';

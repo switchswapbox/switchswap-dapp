@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { LineScalePulseOutRapid } from 'react-pure-loaders';
 import Page from '../../components/Page';
 import { contractAddress } from '../../utils/contractAddress';
-import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../assets/COMMON_VARIABLES';
+import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../constants/COMMON_VARIABLES';
 import { useMeasure } from 'react-use';
 import { GridSize } from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';

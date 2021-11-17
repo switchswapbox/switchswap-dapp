@@ -28,7 +28,7 @@ import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 
 import { shortenAddress } from '../../utils/formatAddress';
-import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../assets/COMMON_VARIABLES';
+import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../constants/COMMON_VARIABLES';
 
 import Identicons from '@nimiq/identicons';
 

@@ -11,7 +11,7 @@ import Page from '../../components/Page';
 import { ethers } from 'ethers';
 import { contractAddress } from '../../utils/contractAddress';
 
-import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../assets/COMMON_VARIABLES';
+import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../constants/COMMON_VARIABLES';
 import { useParams } from 'react-router-dom';
 import NftCard from '../../components/gallery/NftCard';
 import { getNftByPageManager } from '../../utils/gallery/updateGallery';

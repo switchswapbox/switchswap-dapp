@@ -2,7 +2,7 @@
 import { Box, Stack } from '@mui/material';
 import { useAppSelector } from '../../../redux/hook';
 import qrStyles from './qrCardCustomize';
-import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
+import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'constants/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
 import svgArray from 'pages/NftMinting/components/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';

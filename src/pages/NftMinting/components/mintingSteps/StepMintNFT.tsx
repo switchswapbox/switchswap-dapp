@@ -21,7 +21,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
-import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
+import { GAS_PRICE } from 'constants/COMMON_VARIABLES';
 import { changeMintingProcessState } from '../../../../redux/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
 import { NftCardsDesign } from '../NftCardsDesign';
