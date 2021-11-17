@@ -32,11 +32,10 @@ import {
   InputAdornment
 } from '@mui/material';
 import axios from 'axios';
-// utils
-import Label from '../../Label';
-import Scrollbar from '../../Scrollbar';
-import { MIconButton } from '../../@material-extend';
-import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import Label from '../../../components/Label';
+import Scrollbar from '../../../components/Scrollbar';
+import { MIconButton } from '../../../components/@material-extend';
+import { AssetAndOwnerType } from '../AssetViewer.types';
 
 import marketTypes from '@crustio/type-definitions/src/market';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';

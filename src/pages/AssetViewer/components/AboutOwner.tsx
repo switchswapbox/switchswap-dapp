@@ -1,13 +1,9 @@
-// material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Card, Grid, Avatar, Tooltip, Divider, Typography, IconButton } from '@mui/material';
-// utils
-// import { fShortenNumber } from '../../../../utils/formatNumber';
-// @types
-//
-import { AssetAndOwnerType } from '../../../pages/AssetViewer';
 
-import SvgIconStyle from '../../SvgIconStyle';
+import { AssetAndOwnerType } from '../AssetViewer.types';
+
+import SvgIconStyle from '../../../components/SvgIconStyle';
 import Identicons from '@nimiq/identicons';
 import { shortenAddress } from 'utils/formatAddress';
 

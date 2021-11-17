@@ -1,31 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
-import useSettings from '../hooks/useSettings';
+import useSettings from '../../hooks/useSettings';
 import { useParams } from 'react-router-dom';
-import Page from '../components/Page';
-import { Asset } from 'components/_dashboard/assetViewer';
+import Page from '../../components/Page';
+import { Asset } from './components';
 import Identicons from '@nimiq/identicons';
-import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from 'assets/COMMON_VARIABLES';
-import { contractAddress } from 'utils/contractAddress';
+import { IPFS_GATEWAY_FOR_FETCHING_DATA, POLYGON_RPC } from '../../assets/COMMON_VARIABLES';
+import { contractAddress } from '../../utils/contractAddress';
 import { ethers } from 'ethers';
 import { ABI } from 'utils/abi';
 import axios from 'axios';
-import { ipfsUriToCid } from 'utils/gallery/ipfsUriToCid';
+import { ipfsUriToCid } from '../../utils/gallery/ipfsUriToCid';
+import type { AssetAndOwnerType } from './AssetViewer.types';
+
 Identicons.svgPath = './static/identicons.min.svg';
 
-export type AssetAndOwnerType = {
-  ownerAddress: string;
-  contractAddress: string;
-  tokenId: string;
-  ownerIcon: string;
-  balance: string;
-  imageUrl: string;
-  name: string;
-  description: string;
-  contentId: string;
-  nftCardId: string;
-  metadataId: string;
-};
 const initAssetAndOwner: AssetAndOwnerType = {
   ownerAddress: '',
   contractAddress: '',

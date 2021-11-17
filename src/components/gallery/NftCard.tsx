@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Typography, Box, Tooltip, Paper, Stack, Link } from '@mui/material';
+import { Typography, Box, Paper, Stack, Link } from '@mui/material';
 import { BallClipRotateMultiple } from 'react-pure-loaders';
 import { Icon } from '@iconify/react';
 import { contractAddress } from 'utils/contractAddress';

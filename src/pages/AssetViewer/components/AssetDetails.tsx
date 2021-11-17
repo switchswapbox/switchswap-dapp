@@ -9,7 +9,7 @@ import {
   IconButton
 } from '@mui/material';
 
-import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import { AssetAndOwnerType } from '../AssetViewer.types';
 import { shortenAddress } from 'utils/formatAddress';
 import useLocales from '../../../hooks/useLocales';
 export default function AssetDetails({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {

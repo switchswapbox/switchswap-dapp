@@ -1,52 +1,14 @@
-import { Icon } from '@iconify/react';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import heartFill from '@iconify/icons-eva/heart-fill';
-import shareFill from '@iconify/icons-eva/share-fill';
-import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import messageSquareFill from '@iconify/icons-eva/message-square-fill';
-// material
-import {
-  Box,
-  Link,
-  Card,
-  Stack,
-  Checkbox,
-  Typography,
-  CardHeader,
-  IconButton,
-  FormControlLabel
-} from '@mui/material';
-// utils
+import { Box, Link, Card, Stack, Typography, CardHeader } from '@mui/material';
 import { fDate } from '../../../utils/formatTime';
-import { fShortenNumber } from '../../../utils/formatNumber';
-//
-import { MAvatar } from '../../@material-extend';
-import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import { MAvatar } from '../../../components/@material-extend';
+import { AssetAndOwnerType } from '../AssetViewer.types';
 import { shortenAddress } from 'utils/formatAddress';
 import { LineScalePulseOutRapid } from 'react-pure-loaders';
 
-// ----------------------------------------------------------------------
-
 export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOwnerType }) {
-  const commentInputRef = useRef<HTMLInputElement>(null);
-  const [isLiked, setLiked] = useState(true);
-  const [likes, setLikes] = useState(1);
   const [loading, setLoading] = useState(true);
-
-  const handleLike = () => {
-    setLiked(true);
-    setLikes((prevLikes) => prevLikes + 1);
-  };
-
-  const handleUnlike = () => {
-    setLiked(false);
-    setLikes((prevLikes) => prevLikes - 1);
-  };
-
-  const handleClickComment = () => {
-    commentInputRef.current?.focus();
-  };
 
   return (
     <Card>
@@ -63,11 +25,6 @@ export default function AssetCard({ assetAndOwner }: { assetAndOwner: AssetAndOw
             {fDate(Date.now())}
           </Typography>
         }
-        // action={
-        //   <IconButton>
-        //     <Icon icon={moreVerticalFill} width={20} height={20} />
-        //   </IconButton>
-        // }
       />
 
       <Stack spacing={3} sx={{ p: 3 }}>

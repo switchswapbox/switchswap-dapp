@@ -9,7 +9,7 @@ import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../assets/COMMON_VARIABLES';
 import { useMeasure } from 'react-use';
 import { GridSize } from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
-import NftCard from '../../components/_dashboard/gallery/NftCard';
+import NftCard from '../../components/gallery/NftCard';
 import { getNftByPage } from '../../utils/gallery/updateGallery';
 import { ABI_UNIVERSE_NFT } from '../../constants/ABI_UNIVERSE_NFT';
 import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../../constants';

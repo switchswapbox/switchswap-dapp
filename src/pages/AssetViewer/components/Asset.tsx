@@ -5,7 +5,7 @@ import AssetDetails from './AssetDetails';
 import AssetCard from './AssetCard';
 import AboutOwner from './AboutOwner';
 // import ProfileSocialInfo from './ProfileSocialInfo';
-import { AssetAndOwnerType } from '../../../pages/AssetViewer';
+import { AssetAndOwnerType } from '../AssetViewer.types';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import FilesInfo from './FilesInfo';

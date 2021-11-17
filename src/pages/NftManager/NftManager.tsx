@@ -12,16 +12,14 @@ import { ethers } from 'ethers';
 import { contractAddress } from '../../utils/contractAddress';
 
 import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../assets/COMMON_VARIABLES';
-import { useTheme } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
-import NftCard from '../../components/_dashboard/gallery/NftCard';
+import NftCard from '../../components/gallery/NftCard';
 import { getNftByPageManager } from '../../utils/gallery/updateGallery';
 import { ABI_UNIVERSE_NFT } from '../../constants/ABI_UNIVERSE_NFT';
 import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../../constants';
 import connectEVMContract from '../../utils/smartContractEVM/connectEVMContract';
 
 export default function NftManager() {
-  const theme = useTheme();
   const { pageUrl } = useParams();
   const navigate = useNavigate();
   const { themeStretch } = useSettings();
