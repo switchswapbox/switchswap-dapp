@@ -1,10 +1,9 @@
 import { Box, Pagination, TextField, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
 import {
   changeOtherQRProps,
   changeOtherQRPropsAuthorRegister
-} from 'reduxStore/reducerCustomizeQRCard';
+} from '../../../../redux/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 import { QRNormalOtherPropsPosTypes, QRNormalOtherPropsTypes } from './defautOtherQRProps';
 
@@ -24,18 +23,13 @@ const colors = [
 ];
 
 function CustomizeQRNormal() {
-  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
-    (state: IRootState) => {
-      return {
-        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal,
-        otherQRPropsAuthorRegister:
-          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrNormal,
-        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
-      };
-    }
-  );
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useAppSelector((state) => ({
+    otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrNormal,
+    otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrNormal,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+  }));
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleSelectInnerPointType(event: React.ChangeEvent<unknown>, value: number) {

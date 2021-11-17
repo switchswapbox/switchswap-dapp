@@ -9,7 +9,6 @@ import { useMeasure } from 'react-use';
 import { LineScalePulseOutRapid } from 'react-pure-loaders';
 import Page from '../components/Page';
 import { ethers } from 'ethers';
-import { ABI } from '../utils/abi';
 import { contractAddress } from '../utils/contractAddress';
 
 import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from 'assets/COMMON_VARIABLES';
@@ -17,6 +16,9 @@ import { useTheme } from '@mui/material/styles';
 import { useParams } from 'react-router-dom';
 import NftCard from '../components/_dashboard/gallery/NftCard';
 import { getNftByPageManager } from 'utils/gallery/updateGallery';
+import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
+import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../constants';
+import connectEVMContract from 'utils/smartContractEVM/connectEVMContract';
 
 export default function NftManager() {
   const theme = useTheme();
@@ -44,26 +46,29 @@ export default function NftManager() {
 
   useEffect(() => {
     getNftByPageManager(page, selectedMetamaskAccount, setLoading, setNftList);
-  }, [page]);
+  }, [page, selectedMetamaskAccount]);
 
   useEffect(() => {
     async function getPageCount() {
       if (ethers.utils.isAddress(selectedMetamaskAccount)) {
-        const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-        const contract = new ethers.Contract(contractAddress, ABI, provider);
+        const contract = connectEVMContract(
+          CONTRACT_ADDRESS_UNIVERSE_NFT,
+          ABI_UNIVERSE_NFT,
+          POLYGON_RPC
+        );
         const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
         setPageCount(Math.ceil(parseInt(NftBalance, 10) / NUMBER_OF_NFT_IN_MANAGER_PAGE));
       }
     }
     getPageCount();
-  }, []);
+  }, [selectedMetamaskAccount]);
 
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const [lgCol, setLgCol] = useState<GridSize>(4);
 
   useEffect(() => {
-    if (width > theme.breakpoints.values.lg) {
+    if (width > 1000) {
       setLgCol(3);
     } else {
       setLgCol(4);

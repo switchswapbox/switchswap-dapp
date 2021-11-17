@@ -1,10 +1,6 @@
 import { Box, Pagination, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import {
-  changeOtherQRProps,
-  changeOtherQRPropsAuthorRegister
-} from 'reduxStore/reducerCustomizeQRCard';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
+import { changeOtherQRProps, changeOtherQRPropsAuthorRegister } from 'redux/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const funcTypes = ['A', 'B'];
@@ -24,18 +20,13 @@ const colors = [
 ];
 
 function CustomizeQRFunc() {
-  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
-    (state: IRootState) => {
-      return {
-        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc,
-        otherQRPropsAuthorRegister:
-          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrFunc,
-        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
-      };
-    }
-  );
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useAppSelector((state) => ({
+    otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrFunc,
+    otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrFunc,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+  }));
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleSelectFuncType(event: React.ChangeEvent<unknown>, value: number) {

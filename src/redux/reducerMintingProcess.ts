@@ -1,5 +1,7 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from './store';
+
 import { FileInfoType } from 'components/_dashboard/nftMinting/mintingSteps/StepUploadFile';
-import { RESET_STATE } from 'reduxStore';
 
 export const CHANGE_MINTING_PROCESS_STATE = 'CHANGE_MINTING_PROCESS_STATE';
 
@@ -23,15 +25,6 @@ export interface MintingProcessState {
   link?: HTMLAnchorElement | null;
 }
 
-export const changeMintingProcessState = (state: MintingProcessState) => ({
-  type: CHANGE_MINTING_PROCESS_STATE,
-  state: state
-});
-
-export const resetMintingProcessState = () => ({
-  type: RESET_STATE
-});
-
 // init state
 export const initialMintingProcessState: MintingProcessState = {
   activeStep: 0,
@@ -52,16 +45,18 @@ export const initialMintingProcessState: MintingProcessState = {
   link: null
 };
 
-export const reducerMintingProcess = (
-  state = initialMintingProcessState,
-  action: { type: string; state: MintingProcessState }
-) => {
-  switch (action.type) {
-    case CHANGE_MINTING_PROCESS_STATE:
-      return { ...state, ...action.state };
-    case RESET_STATE:
-      return initialMintingProcessState;
-    default:
-      return state;
+const initialState = initialMintingProcessState;
+
+export const reducerMintingProcessSlice = createSlice({
+  name: 'reducerMintingProcess',
+  initialState,
+  reducers: {
+    changeMintingProcessState: (state, action) => ({ ...state, ...action.payload }),
+    resetMintingProcessState: (state) => initialMintingProcessState
   }
-};
+});
+
+export const { changeMintingProcessState, resetMintingProcessState } =
+  reducerMintingProcessSlice.actions;
+
+export default reducerMintingProcessSlice.reducer;

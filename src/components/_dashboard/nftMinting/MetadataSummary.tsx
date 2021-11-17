@@ -1,21 +1,15 @@
-// material
+import React, { ReactElement } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Divider, Switch, Tab, Tabs, Theme } from '@mui/material';
+import { Box, Divider, Tab, Tabs, Theme } from '@mui/material';
 import Label from '../../Label';
-import React, { ReactElement, useState } from 'react';
 import { SxProps } from '@mui/system/styleFunctionSx';
 import MidIconSelection from './qrCardCustomize/MidIconSelection';
 import QRStyleSelection from './qrCardCustomize/QRStyleSelection';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import { initialMintingProcessState } from 'reduxStore/reducerMintingProcess';
-import { changeQRCardGeneralInfo, initialQRCard } from 'reduxStore/reducerCustomizeQRCard';
-
-// ----------------------------------------------------------------------
+import { useAppDispatch, useAppSelector } from '../../../redux/hook';
+import { initialMintingProcessState } from '../../../redux/reducerMintingProcess';
+import { changeQRCardGeneralInfo } from '../../../redux/reducerCustomizeQRCard';
 
 const RootStyle = styled('div')(({ theme }) => ({}));
-
-// ----------------------------------------------------------------------
 
 type MetadataSummaryProps = {
   children: ReactElement;
@@ -23,14 +17,11 @@ type MetadataSummaryProps = {
 };
 
 const MetadataSummary = ({ children, ...other }: MetadataSummaryProps) => {
-  const { nftType, changeQRFile } = useSelector((state: IRootState) => {
-    return {
-      nftType: (state.reducerMintingProcess.nftType ||
-        initialMintingProcessState.nftType) as string,
-      changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
-    };
-  });
-  const dispatch = useDispatch();
+  const { nftType, changeQRFile } = useAppSelector((state) => ({
+    nftType: (state.reducerMintingProcess.nftType || initialMintingProcessState.nftType) as string,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+  }));
+  const dispatch = useAppDispatch();
   return (
     <RootStyle {...other}>
       <>

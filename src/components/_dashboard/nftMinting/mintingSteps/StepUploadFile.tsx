@@ -17,9 +17,8 @@ import { ethers } from 'ethers';
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { stringToHex } from '@polkadot/util';
-import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
+import { changeMintingProcessState } from '../../../../redux/reducerMintingProcess';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 import pinFileToW3Gateway from 'utils/pinFileToW3Gateway';
@@ -53,13 +52,11 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
 };
 
 function StepUploadFile() {
-  const { stepOneNotDone, uploadedCid } = useSelector((state: IRootState) => {
-    return {
-      stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
-      uploadedCid: state.reducerMintingProcess.uploadedCid
-    };
-  });
-  const dispatch = useDispatch();
+  const { stepOneNotDone, uploadedCid } = useAppSelector((state) => ({
+    stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+    uploadedCid: state.reducerMintingProcess.uploadedCid
+  }));
+  const dispatch = useAppDispatch();
   const onSnackbarAction = useSnackbarAction();
   const { translate } = useLocales();
 
@@ -79,6 +76,7 @@ function StepUploadFile() {
     if (files[0]) {
       loadImg();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files[0]]);
 
   const handleDropMultiFile = useCallback(

@@ -14,6 +14,9 @@ import { GridSize } from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
 import NftCard from '../components/_dashboard/gallery/NftCard';
 import { getNftByPage } from 'utils/gallery/updateGallery';
+import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
+import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../constants';
+import connectEVMContract from 'utils/smartContractEVM/connectEVMContract';
 
 export default function Universe() {
   const theme = useTheme();
@@ -39,14 +42,14 @@ export default function Universe() {
 
   useEffect(() => {
     async function getPageCount() {
-      const provider = new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/');
-      const contract = new ethers.Contract(contractAddress, ABI, provider);
-
+      const contract = connectEVMContract(
+        CONTRACT_ADDRESS_UNIVERSE_NFT,
+        ABI_UNIVERSE_NFT,
+        POLYGON_RPC
+      );
       const NftBalance = (await contract.totalSupply()).toString();
-
       setPageCount(Math.ceil(parseInt(NftBalance, 10) / NUMBER_OF_NFT_IN_MANAGER_PAGE));
     }
-
     getPageCount();
   }, []);
 
