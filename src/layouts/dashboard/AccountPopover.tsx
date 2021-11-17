@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../redux/hook';
 import messagCircleOutline from '@iconify/icons-eva/message-circle-outline';
 import externaLinkOutline from '@iconify/icons-eva/external-link-outline';
 import { Link as RouterLink } from 'react-router-dom';
@@ -11,7 +11,6 @@ import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
-import { RootState } from 'redux/store';
 import useLocales from '../../hooks/useLocales';
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
@@ -22,12 +21,10 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const { translate } = useLocales();
-  const selectedAccountAddress = useSelector((state: RootState) => {
-    return state.reducerSelectAccount.accountAddress;
-  });
-  const selectedNetworkName = useSelector((state: RootState) => {
-    return state.reducerSelectAccount.networkName;
-  });
+  const selectedAccountAddress = useAppSelector(
+    (state) => state.reducerSelectAccount.accountAddress
+  );
+  const selectedNetworkName = useAppSelector((state) => state.reducerSelectAccount.networkName);
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
   useEffect(() => {
