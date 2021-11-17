@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
   Divider,
@@ -34,13 +33,12 @@ import {
 import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-dapp';
 import { ethers } from 'ethers';
 import { stringToHex } from '@polkadot/util';
-import { VariantType } from 'notistack';
 import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import qrStyles from '../qrCardCustomize';
-import { RootState } from 'redux/store';
-import { changeQRCardGeneralInfo, qrStyleNameType } from 'redux/reducerCustomizeQRCard';
-import { changeMintingProcessState } from 'redux/reducerMintingProcess';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
+import { changeQRCardGeneralInfo, qrStyleNameType } from '../../../../redux/reducerCustomizeQRCard';
+import { changeMintingProcessState } from '../../../../redux/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
 import domtoimage from 'dom-to-image';
 import useSnackbarAction from 'hooks/useSnackbarAction';
@@ -60,23 +58,12 @@ type FormValuesProps = {
 };
 
 function TitleAndDescription({ control }: { control: Control<FormValuesProps, object> }) {
-  const { stepTwoNotDone, nameNft, descNft } = useSelector((state: RootState) => {
-    return {
-      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
-      nameNft: state.reducerMintingProcess.nameNft,
-      descNft: state.reducerMintingProcess.descNft
-    };
-  });
-  const dispatch = useDispatch();
+  const { stepTwoNotDone, descNft } = useAppSelector((state) => ({
+    stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+    descNft: state.reducerMintingProcess.descNft
+  }));
+  const dispatch = useAppDispatch();
   const { translate } = useLocales();
-  const handleNameNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeMintingProcessState({ nameNft: event.target.value }));
-    dispatch(
-      changeQRCardGeneralInfo({
-        title: event.target.value
-      })
-    );
-  };
 
   const handleDescNftInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeMintingProcessState({ descNft: event.target.value }));
@@ -155,44 +142,25 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     qrStyleName,
     qrStyleNameAuthorRegister,
     changeQRFile
-  } = useSelector((state: RootState) => {
-    return {
-      nftType: state.reducerMintingProcess.nftType,
-      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
-      nameNft: state.reducerMintingProcess.nameNft,
-      descNft: state.reducerMintingProcess.descNft,
-      alignment: state.reducerMintingProcess.alignment,
-      uploadedCid: state.reducerMintingProcess.uploadedCid,
-      metadataCid: state.reducerMintingProcess.metadataCid,
-      nftCardCid: state.reducerMintingProcess.nftCardCid,
-      srcImage: state.reducerMintingProcess.srcImage,
-      qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
-      qrStyleNameAuthorRegister: state.reducerCustomizeQRCard.qrStyleNameAuthorRegister,
-      changeQRFile: state.reducerCustomizeQRCard.changeQRFile
-    };
-  });
-  const dispatch = useDispatch();
+  } = useAppSelector((state) => ({
+    nftType: state.reducerMintingProcess.nftType,
+    stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+    nameNft: state.reducerMintingProcess.nameNft,
+    descNft: state.reducerMintingProcess.descNft,
+    alignment: state.reducerMintingProcess.alignment,
+    uploadedCid: state.reducerMintingProcess.uploadedCid,
+    metadataCid: state.reducerMintingProcess.metadataCid,
+    nftCardCid: state.reducerMintingProcess.nftCardCid,
+    srcImage: state.reducerMintingProcess.srcImage,
+    qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
+    qrStyleNameAuthorRegister: state.reducerCustomizeQRCard.qrStyleNameAuthorRegister,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile
+  }));
+  const dispatch = useAppDispatch();
 
   const { CustomProps } = changeQRFile
     ? qrStyles[qrStyleName as qrStyleNameType]
     : qrStyles[qrStyleNameAuthorRegister as qrStyleNameType];
-
-  function dataURLtoBlob(dataurl: string) {
-    const arr = dataurl.split(',');
-    const searchMime = arr[0].match(/:(.*?);/);
-    let mime = '';
-    if (searchMime && searchMime[1]) {
-      mime = searchMime[1];
-    }
-
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], { type: mime });
-  }
 
   function uploadNFTCardW3GatewayPromise(authHeader: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -379,7 +347,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
         parentBoundingBox.current.style.height = 'auto';
       }
     }
-  }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile]);
+  }, [qrStyleName, qrStyleNameAuthorRegister, changeQRFile, nftType]);
 
   const FormSchema = Yup.object().shape({
     title: Yup.string().required('The title is required')

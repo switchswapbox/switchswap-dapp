@@ -9,7 +9,6 @@ import { useMeasure } from 'react-use';
 import { LineScalePulseOutRapid } from 'react-pure-loaders';
 import Page from '../components/Page';
 import { ethers } from 'ethers';
-import { ABI } from '../utils/abi';
 import { contractAddress } from '../utils/contractAddress';
 
 import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from 'assets/COMMON_VARIABLES';

@@ -7,36 +7,34 @@ import Scrollbar from '../../Scrollbar';
 import UploadFileStep from './mintingSteps/StepUploadFile';
 import StepCustomizeNFTCard from './mintingSteps/StepCustomizeNFTCard';
 import StepMintNFT from './mintingSteps/StepMintNFT';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   changeMintingProcessState,
   MintingProcessStateAlignement,
   resetMintingProcessState
-} from 'redux/reducerMintingProcess';
-import { RootState } from 'redux/store';
+} from '../../../redux/reducerMintingProcess';
+
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import useLocales from '../../../hooks/useLocales';
 import { resetQRCardInfo } from 'redux/reducerCustomizeQRCard';
 import domtoimage from 'dom-to-image';
-// ----------------------------------------------------------------------
+import { useAppDispatch, useAppSelector } from '../../../redux/hook';
+
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 export default function MintingProcess() {
-  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted, nftType, title } = useSelector(
-    (state: RootState) => {
-      return {
-        activeStep: state.reducerMintingProcess.activeStep || 0,
-        stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
-        stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
-        nftMinted: state.reducerMintingProcess.nftMinted,
-        nftType: state.reducerMintingProcess.nftType,
-        title: state.reducerCustomizeQRCard.title,
-        link: state.reducerMintingProcess.link
-      };
-    }
+  const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted, nftType, title } = useAppSelector(
+    (state) => ({
+      activeStep: state.reducerMintingProcess.activeStep || 0,
+      stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
+      stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
+      nftMinted: state.reducerMintingProcess.nftMinted,
+      nftType: state.reducerMintingProcess.nftType,
+      title: state.reducerCustomizeQRCard.title,
+      link: state.reducerMintingProcess.link
+    })
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepOptional = (step: number) => false;
   const isStepSkipped = (step: number) => skipped.has(step);

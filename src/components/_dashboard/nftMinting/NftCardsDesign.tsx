@@ -1,7 +1,6 @@
 // material
 import { Box, Stack } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import { useAppSelector } from '../../../redux/hook';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
@@ -15,45 +14,34 @@ import { CRUST_EXPLORER_EXTRINSIC } from '../../../constants';
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
-  const { layoutIndex, title, uploadedCid } = useSelector((state: RootState) => {
-    return {
-      layoutIndex: state.reducerCustomizeQRCard.layout,
-      title: state.reducerCustomizeQRCard.title,
-      uploadedCid: state.reducerMintingProcess.uploadedCid
-    };
-  });
-  const { icon, iconAuthorRegister, qrStyleName, qrStyleNameAuthorRegister } = useSelector(
-    (state: RootState) => {
-      return {
-        icon: state.reducerCustomizeQRCard.icon,
-        iconAuthorRegister: state.reducerCustomizeQRCard.iconAuthorRegister,
-        qrStyleName:
-          state.reducerCustomizeQRCard.qrStyleName ||
-          (initialQRCard.qrStyleName as qrStyleNameType),
-        qrStyleNameAuthorRegister:
-          state.reducerCustomizeQRCard.qrStyleNameAuthorRegister ||
-          (initialQRCard.qrStyleNameAuthorRegister as qrStyleNameType)
-      };
-    }
+  const { layoutIndex, title, uploadedCid } = useAppSelector((state) => ({
+    layoutIndex: state.reducerCustomizeQRCard.layout,
+    title: state.reducerCustomizeQRCard.title,
+    uploadedCid: state.reducerMintingProcess.uploadedCid
+  }));
+  const { icon, iconAuthorRegister, qrStyleName, qrStyleNameAuthorRegister } = useAppSelector(
+    (state) => ({
+      icon: state.reducerCustomizeQRCard.icon,
+      iconAuthorRegister: state.reducerCustomizeQRCard.iconAuthorRegister,
+      qrStyleName:
+        state.reducerCustomizeQRCard.qrStyleName || (initialQRCard.qrStyleName as qrStyleNameType),
+      qrStyleNameAuthorRegister:
+        state.reducerCustomizeQRCard.qrStyleNameAuthorRegister ||
+        (initialQRCard.qrStyleNameAuthorRegister as qrStyleNameType)
+    })
   );
 
-  const otherQRProps = useSelector((state: RootState) => {
-    // eslint-disable-next-line no-lone-blocks
-    {
-      return state.reducerCustomizeQRCard?.otherQRProps
-        ? state.reducerCustomizeQRCard?.otherQRProps[qrStyleName]
-        : undefined;
-    }
-  });
+  const otherQRProps = useAppSelector((state) =>
+    state.reducerCustomizeQRCard?.otherQRProps
+      ? state.reducerCustomizeQRCard?.otherQRProps[qrStyleName]
+      : undefined
+  );
 
-  const otherQRPropsAuthorRegister = useSelector((state: RootState) => {
-    // eslint-disable-next-line no-lone-blocks
-    {
-      return state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister
-        ? state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister[qrStyleNameAuthorRegister]
-        : undefined;
-    }
-  });
+  const otherQRPropsAuthorRegister = useAppSelector((state) =>
+    state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister
+      ? state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister[qrStyleNameAuthorRegister]
+      : undefined
+  );
 
   const SVGComponent = svgArray[layoutIndex || 0];
   const [url, setUrl] = useState('');

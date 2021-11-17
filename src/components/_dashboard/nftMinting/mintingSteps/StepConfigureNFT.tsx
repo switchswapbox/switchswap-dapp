@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Grid,
   List,
@@ -26,12 +26,10 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import DemoNft from '../DemoNft';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-import { useState } from 'react';
-import { changeMintingProcessState } from 'redux/reducerMintingProcess';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
+import { changeMintingProcessState } from '../../../../redux/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
-import { changeQRCardGeneralInfo } from 'redux/reducerCustomizeQRCard';
+import { changeQRCardGeneralInfo } from '../../../../redux/reducerCustomizeQRCard';
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
   width: '100%',
@@ -50,12 +48,12 @@ const simplifiedNFT = [
 ];
 
 export default function StepConfigureNFT() {
-  const stepOneNotDone = useSelector((state: RootState) => {
-    return state.reducerMintingProcess.stepOneNotDone as boolean;
-  });
+  const stepOneNotDone = useAppSelector(
+    (state) => state.reducerMintingProcess.stepOneNotDone as boolean
+  );
   const [toggle, setToggle] = useState(['']);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { translate } = useLocales();
 
   useEffect(() => {
