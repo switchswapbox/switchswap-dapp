@@ -1,12 +1,8 @@
-// material
 import { Container, Grid } from '@mui/material';
-
-// hooks
-import useSettings from '../hooks/useSettings';
-// components
-import Page from '../components/Page';
-import { Block } from '../components/Block';
-import MintingProcess from '../components/_dashboard/nftMinting/MintingProcess';
+import useSettings from '../../hooks/useSettings';
+import Page from '../../components/Page';
+import { Block } from '../../components/Block';
+import MintingProcess from './components/MintingProcess';
 import useLocales from 'hooks/useLocales';
 export default function NftMinting() {
   const { themeStretch } = useSettings();

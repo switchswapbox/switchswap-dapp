@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 // material
 import { Box, Step, Paper, Button, Stepper, Popover, StepLabel, Typography } from '@mui/material';
 
-import Scrollbar from '../../Scrollbar';
+import Scrollbar from '../../../components/Scrollbar';
 
 import UploadFileStep from './mintingSteps/StepUploadFile';
 import StepCustomizeNFTCard from './mintingSteps/StepCustomizeNFTCard';
@@ -15,7 +15,7 @@ import {
 
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import useLocales from '../../../hooks/useLocales';
-import { resetQRCardInfo } from 'redux/reducerCustomizeQRCard';
+import { resetQRCardInfo } from '../../../redux/reducerCustomizeQRCard';
 import domtoimage from 'dom-to-image';
 import { useAppDispatch, useAppSelector } from '../../../redux/hook';
 

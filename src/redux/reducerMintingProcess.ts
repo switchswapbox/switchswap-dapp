@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from './store';
 
-import { FileInfoType } from 'components/_dashboard/nftMinting/mintingSteps/StepUploadFile';
+import { FileInfoType } from '../pages/NftMinting/components/mintingSteps/StepUploadFile';
 
 export const CHANGE_MINTING_PROCESS_STATE = 'CHANGE_MINTING_PROCESS_STATE';
 

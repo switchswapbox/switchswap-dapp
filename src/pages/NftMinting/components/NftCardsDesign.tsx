@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../redux/hook';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
-import svgArray from 'utils/svg-data';
+import svgArray from 'pages/NftMinting/components/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Divider, Tab, Tabs, Theme } from '@mui/material';
-import Label from '../../Label';
+import Label from '../../../components/Label';
 import { SxProps } from '@mui/system/styleFunctionSx';
 import MidIconSelection from './qrCardCustomize/MidIconSelection';
 import QRStyleSelection from './qrCardCustomize/QRStyleSelection';

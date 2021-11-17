@@ -27,13 +27,13 @@ import {
 import { useTheme } from '@mui/material/styles';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import Scrollbar from '../../Scrollbar';
+import Scrollbar from '../../../components/Scrollbar';
 
 import { SxProps } from '@mui/system';
 
 import { fData } from '../../../utils/formatNumber';
-import { MIconButton } from '../../@material-extend';
-import { varFadeInRight } from '../../animate';
+import { MIconButton } from '../../../components/@material-extend';
+import { varFadeInRight } from '../../../components/animate';
 import { UploadIllustration } from '../../../assets';
 import useLocales from '../../../hooks/useLocales';
 import { useAppSelector } from '../../../redux/hook';

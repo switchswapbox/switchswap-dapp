@@ -1,4 +1,4 @@
-import { FileInfoType } from 'components/_dashboard/nftMinting/mintingSteps/StepUploadFile';
+import { FileInfoType } from '../mintingSteps/StepUploadFile';
 
 export type ArgsProps = {
   qrcode: any;

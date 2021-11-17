@@ -4,7 +4,7 @@ import Slider from 'react-slick';
 import { useTheme, styled } from '@mui/material/styles';
 import { Box, Card } from '@mui/material';
 
-import { CarouselControlsPaging1 } from '../../carousel';
+import { CarouselControlsPaging1 } from '../../../components/carousel';
 
 const CarouselImgStyle = styled('img')(({ theme }) => ({
   width: '100%',
