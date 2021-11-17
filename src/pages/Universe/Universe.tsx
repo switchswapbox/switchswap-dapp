@@ -1,25 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Container, Stack, Grid, Pagination } from '@mui/material';
-import useSettings from '../hooks/useSettings';
+import useSettings from '../../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 import { LineScalePulseOutRapid } from 'react-pure-loaders';
-import Page from '../components/Page';
-import { contractAddress } from 'utils/contractAddress';
-import { ethers } from 'ethers';
-import { ABI } from 'utils/abi';
-import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from 'assets/COMMON_VARIABLES';
-import { useTheme } from '@mui/material/styles';
+import Page from '../../components/Page';
+import { contractAddress } from '../../utils/contractAddress';
+import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../assets/COMMON_VARIABLES';
 import { useMeasure } from 'react-use';
 import { GridSize } from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
-import NftCard from '../components/_dashboard/gallery/NftCard';
-import { getNftByPage } from 'utils/gallery/updateGallery';
-import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
-import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../constants';
-import connectEVMContract from 'utils/smartContractEVM/connectEVMContract';
+import NftCard from '../../components/_dashboard/gallery/NftCard';
+import { getNftByPage } from '../../utils/gallery/updateGallery';
+import { ABI_UNIVERSE_NFT } from '../../constants/ABI_UNIVERSE_NFT';
+import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../../constants';
+import connectEVMContract from '../../utils/smartContractEVM/connectEVMContract';
 
 export default function Universe() {
-  const theme = useTheme();
   const { pageUrl } = useParams();
   const navigate = useNavigate();
 
