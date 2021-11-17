@@ -4,7 +4,7 @@ import { Container, Typography } from '@mui/material';
 import useSettings from '../hooks/useSettings';
 // components
 import Page from '../components/Page';
-import ComingSoon from 'components/ComingSoon';
+import Faqs from 'components/Faqs';
 // ----------------------------------------------------------------------
 
 export default function LearnMore() {
@@ -13,7 +13,7 @@ export default function LearnMore() {
   return (
     <Page title="Learn More">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <ComingSoon />
+        <Faqs />
       </Container>
     </Page>
   );

@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
-import { FaqsHero, FaqsCategory, FaqsList, FaqsForm } from '../components/_external-pages/faqs';
+import { FaqsList, FaqsForm } from '../components/_external-pages/faqs';
 
 // ----------------------------------------------------------------------
 
@@ -19,11 +19,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 export default function Faqs() {
   return (
     <RootStyle title="Faqs | Minimal-UI">
-      <FaqsHero />
-
       <Container sx={{ mt: 15, mb: 10 }}>
-        <FaqsCategory />
-
         <Typography variant="h3" sx={{ mb: 5 }}>
           Frequently asked questions
         </Typography>
