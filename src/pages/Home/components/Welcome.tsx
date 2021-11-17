@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // material
 import { styled } from '@mui/material/styles';
-import { Typography, Button, Card, CardContent, CardProps, Popover, Box } from '@mui/material';
+import { Typography, Button, Card, CardContent, CardProps } from '@mui/material';
 import { DocIllustration } from '../../../assets';
 
 import useLocales from '../../../hooks/useLocales';

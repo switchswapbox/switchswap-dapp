@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Container, Grid, SvgIcon } from '@mui/material';
 import { Icon } from '@iconify/react';
-import useSettings from '../hooks/useSettings';
-import useLocales from '../hooks/useLocales';
-import Page from '../components/Page';
+import useSettings from '../../hooks/useSettings';
+import Page from '../../components/Page';
 import {
   Welcome,
   NftPresentation,
@@ -11,15 +10,14 @@ import {
   HomeTimeline,
   PROJECTUPDATES,
   ROADMAP
-} from '../components/_dashboard/home';
-import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../constants';
+} from './components';
+import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../../constants';
 import connectEVMContract from 'utils/smartContractEVM/connectEVMContract';
-import { ABI_UNIVERSE_NFT } from '../constants/ABI_UNIVERSE_NFT';
+import { ABI_UNIVERSE_NFT } from '../../constants/ABI_UNIVERSE_NFT';
 
 // ----------------------------------------------------------------------
 export default function Home() {
   const { themeStretch } = useSettings();
-  const { translate } = useLocales();
   const [totalMintedNft, setTotalMintedNft] = useState(0);
   useEffect(() => {
     const contract = connectEVMContract(

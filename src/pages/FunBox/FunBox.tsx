@@ -1,10 +1,10 @@
 // material
 import { Container, Grid, Typography } from '@mui/material';
 // hooks
-import useSettings from '../hooks/useSettings';
+import useSettings from '../../hooks/useSettings';
 // components
-import Page from '../components/Page';
-import ComponentCard from 'components/_dashboard/funBox/ComponentCard';
+import Page from '../../components/Page';
+import ComponentCard from './components/ComponentCard';
 // ----------------------------------------------------------------------
 
 export default function FunBox() {

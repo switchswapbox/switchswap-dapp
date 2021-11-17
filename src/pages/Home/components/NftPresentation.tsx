@@ -1,14 +1,10 @@
-import { useState } from 'react';
 import Slider from 'react-slick';
 import { Link as RouterLink } from 'react-router-dom';
-// material
 import { useTheme, styled } from '@mui/material/styles';
-import { Box, Card, Button, CardContent, Popover, Typography } from '@mui/material';
-// utils
+import { Box, Card, Button, CardContent } from '@mui/material';
 import { PATH_DASHBOARD } from '../../../routes/paths';
-import { CarouselControlsPaging1 } from '../../carousel';
+import { CarouselControlsPaging1 } from '../../../components/carousel';
 import useLocales from '../../../hooks/useLocales';
-// ----------------------------------------------------------------------
 
 const NFT = [
   { id: '1', name: 'File identity paper', image: './static/sample-nft/simplified/07.jpg' },

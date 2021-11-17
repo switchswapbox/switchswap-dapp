@@ -2,7 +2,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Link, Grid, Paper, Typography, CardActionArea } from '@mui/material';
 //
-import { varFadeInUp, MotionInView } from '../../animate';
+import { varFadeInUp, MotionInView } from '../../../components/animate';
 
 // ----------------------------------------------------------------------
 

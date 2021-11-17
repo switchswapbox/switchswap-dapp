@@ -8,7 +8,7 @@ import {
   TimelineConnector
 } from '@mui/lab';
 
-import { Block } from '../../Block';
+import { Block } from '../../../components/Block';
 import type { TimelineType } from './TimelineConfig';
 import Scrollbar from 'components/Scrollbar';
 

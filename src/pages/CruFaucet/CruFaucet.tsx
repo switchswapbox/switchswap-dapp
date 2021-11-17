@@ -12,7 +12,7 @@ import {
 
 import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
-import FaucetHookForm from 'components/_dashboard/funBox/FaucetHookForm';
+import FaucetHookForm from 'components/faucet/FaucetHookForm';
 import { Tweet } from 'react-twitter-widgets';
 import { ResponseFaucetRequest } from '../../interfaces/faucet';
 
@@ -27,15 +27,6 @@ export default function CruFaucet() {
     timeLeftInSeconds: null,
     txHash: null
   });
-
-  // const [dedicatedTimeleft, setDedicatedTimeleft] = useState(0);
-
-  // useEffect(() => {
-  //   console.log(`timeLeftInSeconds ${response.timeLeftInSeconds}`);
-  //   if (response.timeLeftInSeconds !== null) {
-  //     setDedicatedTimeleft(response.timeLeftInSeconds);
-  //   }
-  // }, [response.timeLeftInSeconds]);
 
   return (
     <Page title="CRU Faucet">
@@ -80,15 +71,6 @@ export default function CruFaucet() {
                   >
                     {response.message}
                   </Alert>
-                  {/* <Stack
-                    justifyContent="center"
-                    sx={{ display: response.statusCode === 1 ? 'flex' : 'none', mt: 1 }}
-                  >
-                    <Typography variant="h3" align="center">
-                      Try again in
-                    </Typography>
-                    <CountDown timeLeftInSeconds={dedicatedTimeleft} />
-                  </Stack> */}
                 </Stack>
               </CardContent>
             </Card>
