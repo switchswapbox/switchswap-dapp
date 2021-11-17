@@ -1,22 +1,17 @@
 import { Box, Pagination, TextField, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
 import { changeOtherQRPropsAuthorRegister, changeOtherQRProps } from 'redux/reducerCustomizeQRCard';
 import { QRDsjOtherPropsPosTypes } from './defautOtherQRProps';
 
 const anchorPointTypes = ['rect', 'dsj'];
 
 function CustomizeqrDsj() {
-  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
-    (state: RootState) => {
-      return {
-        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj,
-        otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrDsj,
-        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
-      };
-    }
-  );
-  const dispatch = useDispatch();
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useAppSelector((state) => ({
+    otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrDsj,
+    otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrDsj,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+  }));
+  const dispatch = useAppDispatch();
   const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleScaleChange(event: any) {

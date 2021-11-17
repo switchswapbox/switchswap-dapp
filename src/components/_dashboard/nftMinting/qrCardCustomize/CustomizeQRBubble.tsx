@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
 import { changeOtherQRPropsAuthorRegister, changeOtherQRProps } from 'redux/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
@@ -18,18 +17,13 @@ const colors = [
 ];
 
 function CustomizeQRBubble() {
-  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
-    (state: RootState) => {
-      return {
-        otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrBubble,
-        otherQRPropsAuthorRegister:
-          state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrBubble,
-        changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
-      };
-    }
-  );
+  const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useAppSelector((state) => ({
+    otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrBubble,
+    otherQRPropsAuthorRegister: state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister?.qrBubble,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+  }));
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const changeProps = changeQRFile ? changeOtherQRProps : changeOtherQRPropsAuthorRegister;
 
   function handleCircleColorChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {

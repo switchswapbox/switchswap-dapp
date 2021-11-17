@@ -20,10 +20,9 @@ import { contractAddress } from 'utils/contractAddress';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
-import { RootState } from 'redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
 import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
-import { changeMintingProcessState } from 'redux/reducerMintingProcess';
+import { changeMintingProcessState } from '../../../../redux/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
 import { NftCardsDesign } from '../NftCardsDesign';
 import useSnackbarAction from 'hooks/useSnackbarAction';
@@ -45,22 +44,20 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
     transactionHash,
     nftMinted,
     tokenID
-  } = useSelector((state: RootState) => {
-    return {
-      nftType: state.reducerMintingProcess.nftType,
-      nameNft: state.reducerMintingProcess.nameNft,
-      descNft: state.reducerMintingProcess.descNft,
-      alignment: state.reducerMintingProcess.alignment,
-      uploadedCid: state.reducerMintingProcess.uploadedCid,
-      metadataCid: state.reducerMintingProcess.metadataCid,
-      srcImage: state.reducerMintingProcess.srcImage,
-      transactionHash: state.reducerMintingProcess.transactionHash,
-      isMinting: state.reducerMintingProcess.isMinting,
-      nftMinted: state.reducerMintingProcess.nftMinted,
-      tokenID: state.reducerMintingProcess.tokenID
-    };
-  });
-  const dispatch = useDispatch();
+  } = useAppSelector((state) => ({
+    nftType: state.reducerMintingProcess.nftType,
+    nameNft: state.reducerMintingProcess.nameNft,
+    descNft: state.reducerMintingProcess.descNft,
+    alignment: state.reducerMintingProcess.alignment,
+    uploadedCid: state.reducerMintingProcess.uploadedCid,
+    metadataCid: state.reducerMintingProcess.metadataCid,
+    srcImage: state.reducerMintingProcess.srcImage,
+    transactionHash: state.reducerMintingProcess.transactionHash,
+    isMinting: state.reducerMintingProcess.isMinting,
+    nftMinted: state.reducerMintingProcess.nftMinted,
+    tokenID: state.reducerMintingProcess.tokenID
+  }));
+  const dispatch = useAppDispatch();
   const onSnackbarAction = useSnackbarAction();
   const { translate } = useLocales();
   async function mintDataNTF() {

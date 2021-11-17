@@ -1,6 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-import { changeQRCardGeneralInfo, initialQRCard } from 'redux/reducerCustomizeQRCard';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hook';
+import { changeQRCardGeneralInfo, initialQRCard } from '../../../../redux/reducerCustomizeQRCard';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 const iconNames = ['switchswap', 'crust', 'polygon'];
 const srcArray = iconNames.map((iconName) => {
@@ -8,15 +7,13 @@ const srcArray = iconNames.map((iconName) => {
 });
 
 const MidIconSelection = () => {
-  const { icon, iconAuthorRegister, changeQRFile } = useSelector((state: RootState) => {
-    return {
-      icon: (state.reducerCustomizeQRCard.icon || initialQRCard.icon) as string,
-      iconAuthorRegister: (state.reducerCustomizeQRCard.iconAuthorRegister ||
-        initialQRCard.iconAuthorRegister) as string,
-      changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
-    };
-  });
-  const dispatch = useDispatch();
+  const { icon, iconAuthorRegister, changeQRFile } = useAppSelector((state) => ({
+    icon: (state.reducerCustomizeQRCard.icon || initialQRCard.icon) as string,
+    iconAuthorRegister: (state.reducerCustomizeQRCard.iconAuthorRegister ||
+      initialQRCard.iconAuthorRegister) as string,
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile as boolean
+  }));
+  const dispatch = useAppDispatch();
   const handleSelectMidIcon = (name: stringAndNumber) => {
     if (changeQRFile) {
       icon !== name
