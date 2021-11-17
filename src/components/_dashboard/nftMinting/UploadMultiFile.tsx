@@ -5,7 +5,6 @@ import { useDropzone, DropzoneOptions } from 'react-dropzone';
 import fileFill from '@iconify/icons-eva/file-fill';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { motion, AnimatePresence } from 'framer-motion';
-// material
 import { alpha, Theme, styled } from '@mui/material/styles';
 import {
   Box,
@@ -16,7 +15,6 @@ import {
   Divider,
   Stack,
   Paper,
-  useMediaQuery,
   ToggleButtonGroup,
   ToggleButton,
   ListItem,
@@ -33,16 +31,12 @@ import Scrollbar from '../../Scrollbar';
 
 import { SxProps } from '@mui/system';
 
-// utils
 import { fData } from '../../../utils/formatNumber';
-//
 import { MIconButton } from '../../@material-extend';
 import { varFadeInRight } from '../../animate';
 import { UploadIllustration } from '../../../assets';
 import useLocales from '../../../hooks/useLocales';
-import { IRootState } from 'reduxStore';
-import { useSelector } from 'react-redux';
-// ----------------------------------------------------------------------
+import { useAppSelector } from '../../../redux/hook';
 
 const DropZoneStyle = styled('div')(({ theme }) => ({
   outline: 'none',
@@ -105,11 +99,9 @@ export default function UploadMultiFile({
   const { translate } = useLocales();
   const hasFile = files.length > 0;
 
-  const { nftType } = useSelector((state: IRootState) => {
-    return {
-      nftType: state.reducerMintingProcess.nftType
-    };
-  });
+  const { nftType } = useAppSelector((state) => ({
+    nftType: state.reducerMintingProcess.nftType
+  }));
 
   const [alignment, setAlignment] = useState<string | null>('crust');
   const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {

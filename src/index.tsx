@@ -22,7 +22,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 
-import store from './reduxStore/store';
+import { store } from './redux/store';
 // ----------------------------------------------------------------------
 
 ReactDOM.render(

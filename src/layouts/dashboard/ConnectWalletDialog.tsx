@@ -34,7 +34,7 @@ import {
 } from '../../assets/COMMON_VARIABLES';
 
 import { getCrustMainnetAddress, shortenAddress } from '../../utils/formatAddress';
-import { changeAccountWallet } from '../../reduxStore/reducerSelectAccount';
+import { changeAccountWallet } from '../../redux/reducerSelectAccount';
 import React from 'react';
 import useLocales from '../../hooks/useLocales';
 // ----------------------------------------------------------------------
