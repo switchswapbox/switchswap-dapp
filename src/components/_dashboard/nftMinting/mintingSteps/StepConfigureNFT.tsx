@@ -27,11 +27,11 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import DemoNft from '../DemoNft';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import { useState } from 'react';
-import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { changeMintingProcessState } from 'redux/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
-import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { changeQRCardGeneralInfo } from 'redux/reducerCustomizeQRCard';
 
 const ListWrapperStyle = styled(Paper)(({ theme }) => ({
   width: '100%',
@@ -50,7 +50,7 @@ const simplifiedNFT = [
 ];
 
 export default function StepConfigureNFT() {
-  const stepOneNotDone = useSelector((state: IRootState) => {
+  const stepOneNotDone = useSelector((state: RootState) => {
     return state.reducerMintingProcess.stepOneNotDone as boolean;
   });
   const [toggle, setToggle] = useState(['']);

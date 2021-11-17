@@ -1,7 +1,7 @@
 // material
 import { Box, Stack } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import qrStyles from './qrCardCustomize';
 import { IPFS_GATEWAY_FOR_FETCHING_DATA } from 'assets/COMMON_VARIABLES';
 import { FileInfoType } from './mintingSteps/StepUploadFile';
@@ -9,13 +9,13 @@ import svgArray from 'utils/svg-data';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import LayoutSelection from './qrCardCustomize/LayoutSelection';
 import useOffSetTopDistance from 'hooks/useOffsetTopDistance';
-import { initialQRCard, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
+import { initialQRCard, qrStyleNameType } from 'redux/reducerCustomizeQRCard';
 import { CRUST_EXPLORER_EXTRINSIC } from '../../../constants';
 
 // ----------------------------------------------------------------------
 
 export const NftCardsDesign = () => {
-  const { layoutIndex, title, uploadedCid } = useSelector((state: IRootState) => {
+  const { layoutIndex, title, uploadedCid } = useSelector((state: RootState) => {
     return {
       layoutIndex: state.reducerCustomizeQRCard.layout,
       title: state.reducerCustomizeQRCard.title,
@@ -23,7 +23,7 @@ export const NftCardsDesign = () => {
     };
   });
   const { icon, iconAuthorRegister, qrStyleName, qrStyleNameAuthorRegister } = useSelector(
-    (state: IRootState) => {
+    (state: RootState) => {
       return {
         icon: state.reducerCustomizeQRCard.icon,
         iconAuthorRegister: state.reducerCustomizeQRCard.iconAuthorRegister,
@@ -37,7 +37,7 @@ export const NftCardsDesign = () => {
     }
   );
 
-  const otherQRProps = useSelector((state: IRootState) => {
+  const otherQRProps = useSelector((state: RootState) => {
     // eslint-disable-next-line no-lone-blocks
     {
       return state.reducerCustomizeQRCard?.otherQRProps
@@ -46,7 +46,7 @@ export const NftCardsDesign = () => {
     }
   });
 
-  const otherQRPropsAuthorRegister = useSelector((state: IRootState) => {
+  const otherQRPropsAuthorRegister = useSelector((state: RootState) => {
     // eslint-disable-next-line no-lone-blocks
     {
       return state.reducerCustomizeQRCard?.otherQRPropsAuthorRegister

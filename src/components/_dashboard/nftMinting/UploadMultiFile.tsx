@@ -40,7 +40,7 @@ import { MIconButton } from '../../@material-extend';
 import { varFadeInRight } from '../../animate';
 import { UploadIllustration } from '../../../assets';
 import useLocales from '../../../hooks/useLocales';
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import { useSelector } from 'react-redux';
 // ----------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ export default function UploadMultiFile({
   const { translate } = useLocales();
   const hasFile = files.length > 0;
 
-  const { nftType } = useSelector((state: IRootState) => {
+  const { nftType } = useSelector((state: RootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType
     };

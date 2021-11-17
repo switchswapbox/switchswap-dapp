@@ -12,18 +12,18 @@ import {
   changeMintingProcessState,
   MintingProcessStateAlignement,
   resetMintingProcessState
-} from 'reduxStore/reducerMintingProcess';
-import { IRootState } from 'reduxStore';
+} from 'redux/reducerMintingProcess';
+import { RootState } from 'redux/store';
 import StepConfigureNFT from './mintingSteps/StepConfigureNFT';
 import useLocales from '../../../hooks/useLocales';
-import { resetQRCardInfo } from 'reduxStore/reducerCustomizeQRCard';
+import { resetQRCardInfo } from 'redux/reducerCustomizeQRCard';
 import domtoimage from 'dom-to-image';
 // ----------------------------------------------------------------------
 const steps = ['NFT Configuration', 'Upload File', 'Customize NFT Card', 'Mint NFT'];
 
 export default function MintingProcess() {
   const { activeStep, stepOneNotDone, stepTwoNotDone, nftMinted, nftType, title } = useSelector(
-    (state: IRootState) => {
+    (state: RootState) => {
       return {
         activeStep: state.reducerMintingProcess.activeStep || 0,
         stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,

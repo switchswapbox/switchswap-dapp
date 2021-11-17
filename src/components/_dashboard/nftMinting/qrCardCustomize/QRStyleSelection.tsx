@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import {
   changeQRCardGeneralInfo,
   initialQRCard,
   qrStyleNameType
-} from 'reduxStore/reducerCustomizeQRCard';
+} from 'redux/reducerCustomizeQRCard';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 const qrStyleNames = ['qrNormal', 'qrRandRect', 'qrDsj', 'qr25D', 'qrBubble', 'qrFunc', 'qrLine'];
 const srcArray = qrStyleNames.map((qrStyleName) => {
@@ -13,7 +13,7 @@ const srcArray = qrStyleNames.map((qrStyleName) => {
 
 const QRStyleSelection = () => {
   const { qrStyleName, changeQRFile, qrStyleNameAuthorRegister } = useSelector(
-    (state: IRootState) => {
+    (state: RootState) => {
       return {
         qrStyleName:
           state.reducerCustomizeQRCard.qrStyleName ||

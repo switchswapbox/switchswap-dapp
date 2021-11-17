@@ -20,7 +20,7 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
 import { Icon } from '@iconify/react';
 
-import { InfoAccountWallet } from '../../reduxStore/reducerSelectAccount';
+import { InfoAccountWallet } from '../../redux/reducerSelectAccount';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -33,7 +33,7 @@ import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../assets/COMMON_VARIABLE
 
 import Identicons from '@nimiq/identicons';
 
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import React from 'react';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
@@ -114,10 +114,10 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const selectedAccountAddress = useSelector((state: IRootState) => {
+  const selectedAccountAddress = useSelector((state: RootState) => {
     return state.reducerSelectAccount.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: IRootState) => {
+  const selectedNetworkName = useSelector((state: RootState) => {
     return state.reducerSelectAccount.networkName;
   });
 

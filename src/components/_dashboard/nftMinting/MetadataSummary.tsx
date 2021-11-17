@@ -7,9 +7,9 @@ import { SxProps } from '@mui/system/styleFunctionSx';
 import MidIconSelection from './qrCardCustomize/MidIconSelection';
 import QRStyleSelection from './qrCardCustomize/QRStyleSelection';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import { initialMintingProcessState } from 'reduxStore/reducerMintingProcess';
-import { changeQRCardGeneralInfo, initialQRCard } from 'reduxStore/reducerCustomizeQRCard';
+import { RootState } from 'redux/store';
+import { initialMintingProcessState } from 'redux/reducerMintingProcess';
+import { changeQRCardGeneralInfo, initialQRCard } from 'redux/reducerCustomizeQRCard';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ type MetadataSummaryProps = {
 };
 
 const MetadataSummary = ({ children, ...other }: MetadataSummaryProps) => {
-  const { nftType, changeQRFile } = useSelector((state: IRootState) => {
+  const { nftType, changeQRFile } = useSelector((state: RootState) => {
     return {
       nftType: (state.reducerMintingProcess.nftType ||
         initialMintingProcessState.nftType) as string,

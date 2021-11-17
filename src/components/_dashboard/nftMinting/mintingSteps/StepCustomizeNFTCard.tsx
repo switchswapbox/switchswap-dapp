@@ -38,9 +38,9 @@ import { VariantType } from 'notistack';
 import { pinW3Crust } from './StepUploadFile';
 import detectEthereumProvider from '@metamask/detect-provider';
 import qrStyles from '../qrCardCustomize';
-import { IRootState } from 'reduxStore';
-import { changeQRCardGeneralInfo, qrStyleNameType } from 'reduxStore/reducerCustomizeQRCard';
-import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { RootState } from 'redux/store';
+import { changeQRCardGeneralInfo, qrStyleNameType } from 'redux/reducerCustomizeQRCard';
+import { changeMintingProcessState } from 'redux/reducerMintingProcess';
 import SliderSVGCard from '../NftCardsDesign';
 import domtoimage from 'dom-to-image';
 import useSnackbarAction from 'hooks/useSnackbarAction';
@@ -60,7 +60,7 @@ type FormValuesProps = {
 };
 
 function TitleAndDescription({ control }: { control: Control<FormValuesProps, object> }) {
-  const { stepTwoNotDone, nameNft, descNft } = useSelector((state: IRootState) => {
+  const { stepTwoNotDone, nameNft, descNft } = useSelector((state: RootState) => {
     return {
       stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
       nameNft: state.reducerMintingProcess.nameNft,
@@ -155,7 +155,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     qrStyleName,
     qrStyleNameAuthorRegister,
     changeQRFile
-  } = useSelector((state: IRootState) => {
+  } = useSelector((state: RootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
       stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,

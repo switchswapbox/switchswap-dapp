@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import { changeQRCardGeneralInfo } from 'reduxStore/reducerCustomizeQRCard';
-import { initialMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { RootState } from 'redux/store';
+import { changeQRCardGeneralInfo } from 'redux/reducerCustomizeQRCard';
+import { initialMintingProcessState } from 'redux/reducerMintingProcess';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 
 const LayoutSelection = () => {
-  const { layout, nftType } = useSelector((state: IRootState) => {
+  const { layout, nftType } = useSelector((state: RootState) => {
     return {
       layout: state.reducerCustomizeQRCard.layout || 0,
       nftType: state.reducerMintingProcess.nftType || (initialMintingProcessState.nftType as string)

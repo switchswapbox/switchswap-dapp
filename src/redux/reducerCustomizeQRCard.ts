@@ -1,3 +1,5 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import {
   defaultQR25DOtherProps,
   defaultQRBubbleOtherProps,
@@ -13,7 +15,6 @@ import {
   QRNormalOtherProps,
   QRRandRectOtherProps
 } from 'components/_dashboard/nftMinting/qrCardCustomize/defautOtherQRProps';
-import { RESET_STATE } from 'reduxStore';
 
 export const CHANGE_QR_CARD_GENERAL_INFO = 'CHANGE_QR_CARD_GENERAL_INFO';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
@@ -51,29 +52,29 @@ export interface InfoQRCard {
   changeQRFile?: boolean;
 }
 
-export const changeQRCardGeneralInfo = (state: InfoQRCard) => ({
-  type: CHANGE_QR_CARD_GENERAL_INFO,
-  state: state
-});
+// export const changeQRCardGeneralInfo = (state: InfoQRCard) => ({
+//   type: CHANGE_QR_CARD_GENERAL_INFO,
+//   state: state
+// });
 
-export const changeOtherQRProps = (state: InfoQRCard) => ({
-  type: CHANGE_OTHER_QR_PROPS,
-  state: state
-});
+// export const changeOtherQRProps = (state: InfoQRCard) => ({
+//   type: CHANGE_OTHER_QR_PROPS,
+//   state: state
+// });
 
-export const changeOtherQRPropsAuthorRegister = (state: InfoQRCard) => ({
-  type: CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER,
-  state: state
-});
+// export const changeOtherQRPropsAuthorRegister = (state: InfoQRCard) => ({
+//   type: CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER,
+//   state: state
+// });
 
-export const resetQRCardInfo = () => ({
-  type: RESET_STATE
-});
+// export const resetQRCardInfo = () => ({
+//   type: RESET_STATE
+// });
 
-export const downloadNFT = (state: InfoQRCard) => ({
-  type: DOWNLOAD,
-  state: state
-});
+// export const downloadNFT = (state: InfoQRCard) => ({
+//   type: DOWNLOAD,
+//   state: state
+// });
 
 // init state
 export const initialQRCard: InfoQRCard = {
@@ -103,41 +104,50 @@ export const initialQRCard: InfoQRCard = {
   changeQRFile: true
 };
 
-export const reducerCustomizeQRCard = (
-  state = initialQRCard,
-  action: { type: string; state: InfoQRCard }
-) => {
-  switch (action.type) {
-    case CHANGE_QR_CARD_GENERAL_INFO: {
-      return { ...state, ...action.state };
-    }
-    case CHANGE_OTHER_QR_PROPS: {
-      const keys = Object.keys(action.state.otherQRProps ? action.state.otherQRProps : {});
+const initialState = initialQRCard;
+
+export const reducerCustomizeQRCardSlicer = createSlice({
+  name: 'reducerCustomizeQRCard',
+  initialState,
+  reducers: {
+    changeQRCardGeneralInfo: (state, action) => ({ ...state, ...action.payload }),
+    changeOtherQRProps: (state, action) => {
+      const keys = Object.keys(action.payload.otherQRProps ? action.payload.otherQRProps : {});
       let newState = JSON.parse(JSON.stringify(state));
       for (let key of keys) {
         newState.otherQRProps[key] = {
           ...newState.otherQRProps[key],
-          ...(action.state.otherQRProps ? action.state.otherQRProps[key as keyof OtherQRProps] : {})
+          ...(action.payload.otherQRProps
+            ? action.payload.otherQRProps[key as keyof OtherQRProps]
+            : {})
         };
       }
       return newState;
-    }
-    case CHANGE_OTHER_QR_PROPS_AUTHOR_REGISTER: {
-      const keys = Object.keys(action.state.otherQRProps ? action.state.otherQRProps : {});
+    },
+    changeOtherQRPropsAuthorRegister: (state, action) => {
+      const keys = Object.keys(action.payload.otherQRProps ? action.payload.otherQRProps : {});
       let newState = JSON.parse(JSON.stringify(state));
       for (let key of keys) {
         newState.otherQRPropsAuthorRegister[key] = {
           ...newState.otherQRPropsAuthorRegister[key],
-          ...(action.state.otherQRProps ? action.state.otherQRProps[key as keyof OtherQRProps] : {})
+          ...(action.payload.otherQRProps
+            ? action.payload.otherQRProps[key as keyof OtherQRProps]
+            : {})
         };
       }
       return newState;
-    }
-    case RESET_STATE:
-      return initialQRCard;
-    case DOWNLOAD:
-      return { ...state, ...action.state };
-    default:
-      return state;
+    },
+    resetQRCardInfo: (state) => initialQRCard,
+    downloadNFT: (state, action) => ({ ...state, ...action.payload })
   }
-};
+});
+
+export const {
+  changeQRCardGeneralInfo,
+  changeOtherQRProps,
+  changeOtherQRPropsAuthorRegister,
+  resetQRCardInfo,
+  downloadNFT
+} = reducerCustomizeQRCardSlicer.actions;
+
+export default reducerCustomizeQRCardSlicer.reducer;

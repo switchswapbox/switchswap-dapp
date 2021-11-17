@@ -1,10 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import {
-  changeOtherQRPropsAuthorRegister,
-  changeOtherQRProps
-} from 'reduxStore/reducerCustomizeQRCard';
+import { RootState } from 'redux/store';
+import { changeOtherQRPropsAuthorRegister, changeOtherQRProps } from 'redux/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const colors = [
@@ -22,7 +19,7 @@ const colors = [
 
 function CustomizeQRBubble() {
   const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
-    (state: IRootState) => {
+    (state: RootState) => {
       return {
         otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrBubble,
         otherQRPropsAuthorRegister:

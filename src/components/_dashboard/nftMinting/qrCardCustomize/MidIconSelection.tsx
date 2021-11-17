@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import { changeQRCardGeneralInfo, initialQRCard } from 'reduxStore/reducerCustomizeQRCard';
+import { RootState } from 'redux/store';
+import { changeQRCardGeneralInfo, initialQRCard } from 'redux/reducerCustomizeQRCard';
 import ToggleButtonGroupScrollbar, { stringAndNumber } from './ToggleButtonGroupScrollbar';
 const iconNames = ['switchswap', 'crust', 'polygon'];
 const srcArray = iconNames.map((iconName) => {
@@ -8,7 +8,7 @@ const srcArray = iconNames.map((iconName) => {
 });
 
 const MidIconSelection = () => {
-  const { icon, iconAuthorRegister, changeQRFile } = useSelector((state: IRootState) => {
+  const { icon, iconAuthorRegister, changeQRFile } = useSelector((state: RootState) => {
     return {
       icon: (state.reducerCustomizeQRCard.icon || initialQRCard.icon) as string,
       iconAuthorRegister: (state.reducerCustomizeQRCard.iconAuthorRegister ||

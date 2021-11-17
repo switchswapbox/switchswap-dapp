@@ -20,10 +20,10 @@ import { contractAddress } from 'utils/contractAddress';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { BigNumber, ethers } from 'ethers';
 import { ABI } from 'utils/abi';
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { GAS_PRICE } from 'assets/COMMON_VARIABLES';
-import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { changeMintingProcessState } from 'redux/reducerMintingProcess';
 import useLocales from '../../../../hooks/useLocales';
 import { NftCardsDesign } from '../NftCardsDesign';
 import useSnackbarAction from 'hooks/useSnackbarAction';
@@ -45,7 +45,7 @@ function StepMintNFT({ handleAlignment }: StepMintNFTProps) {
     transactionHash,
     nftMinted,
     tokenID
-  } = useSelector((state: IRootState) => {
+  } = useSelector((state: RootState) => {
     return {
       nftType: state.reducerMintingProcess.nftType,
       nameNft: state.reducerMintingProcess.nameNft,

@@ -1,10 +1,7 @@
 import { Box, Pagination, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import {
-  changeOtherQRProps,
-  changeOtherQRPropsAuthorRegister
-} from 'reduxStore/reducerCustomizeQRCard';
+import { RootState } from 'redux/store';
+import { changeOtherQRProps, changeOtherQRPropsAuthorRegister } from 'redux/reducerCustomizeQRCard';
 import ColorSinglePicker from '../ColorSinglePicker';
 
 const funcTypes = ['A', 'B'];
@@ -34,7 +31,7 @@ const colors = [
 
 function CustomizeQRLine() {
   const { otherQRProps, otherQRPropsAuthorRegister, changeQRFile } = useSelector(
-    (state: IRootState) => {
+    (state: RootState) => {
       return {
         otherQRProps: state.reducerCustomizeQRCard?.otherQRProps?.qrLine,
         otherQRPropsAuthorRegister:

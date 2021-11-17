@@ -11,7 +11,7 @@ import { MIconButton } from '../../components/@material-extend';
 import MenuPopover from '../../components/MenuPopover';
 
 import { shortenAddress } from '../../utils/formatAddress';
-import { IRootState } from 'reduxStore';
+import { RootState } from 'redux/store';
 import useLocales from '../../hooks/useLocales';
 import Identicons from '@nimiq/identicons';
 Identicons.svgPath = './static/identicons.min.svg';
@@ -22,10 +22,10 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const { translate } = useLocales();
-  const selectedAccountAddress = useSelector((state: IRootState) => {
+  const selectedAccountAddress = useSelector((state: RootState) => {
     return state.reducerSelectAccount.accountAddress;
   });
-  const selectedNetworkName = useSelector((state: IRootState) => {
+  const selectedNetworkName = useSelector((state: RootState) => {
     return state.reducerSelectAccount.networkName;
   });
 

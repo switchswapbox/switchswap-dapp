@@ -18,8 +18,8 @@ import { web3Accounts, web3Enable, web3FromSource } from '@polkadot/extension-da
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { stringToHex } from '@polkadot/util';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from 'reduxStore';
-import { changeMintingProcessState } from 'reduxStore/reducerMintingProcess';
+import { RootState } from 'redux/store';
+import { changeMintingProcessState } from 'redux/reducerMintingProcess';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 import pinFileToW3Gateway from 'utils/pinFileToW3Gateway';
@@ -53,7 +53,7 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
 };
 
 function StepUploadFile() {
-  const { stepOneNotDone, uploadedCid } = useSelector((state: IRootState) => {
+  const { stepOneNotDone, uploadedCid } = useSelector((state: RootState) => {
     return {
       stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
       uploadedCid: state.reducerMintingProcess.uploadedCid
