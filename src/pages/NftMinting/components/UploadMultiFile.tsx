@@ -24,7 +24,6 @@ import {
   ListItemText,
   ListItemSecondaryAction
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Scrollbar from '../../../components/Scrollbar';
@@ -95,7 +94,6 @@ export default function UploadMultiFile({
   sx,
   ...other
 }: UploadMultiFileProps) {
-  const theme = useTheme();
   const { translate } = useLocales();
   const hasFile = files.length > 0;
 
