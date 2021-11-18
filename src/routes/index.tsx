@@ -103,6 +103,3 @@ const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService')));
 const Disclaimer = Loadable(lazy(() => import('../pages/Disclaimer')));
 const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
-
-// Main
-const LandingPage = Loadable(lazy(() => import('../pages/LandingPage')));
