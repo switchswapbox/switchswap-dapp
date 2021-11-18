@@ -1,16 +1,11 @@
 import { isString } from 'lodash';
 import { useDropzone, DropzoneOptions } from 'react-dropzone';
-// material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Theme, Typography, Paper } from '@mui/material';
 import { SxProps } from '@mui/system';
-// utils
 import { fData } from '../../../utils/formatNumber';
-//
 import { UploadIllustration } from '../../../assets';
 import useLocales from '../../../hooks/useLocales';
-
-// ----------------------------------------------------------------------
 
 const DropZoneStyle = styled('div')(({ theme }) => ({
   outline: 'none',
