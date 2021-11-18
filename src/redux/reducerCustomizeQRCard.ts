@@ -14,7 +14,7 @@ import {
   QRLineOtherProps,
   QRNormalOtherProps,
   QRRandRectOtherProps
-} from 'components/_dashboard/nftMinting/qrCardCustomize/defautOtherQRProps';
+} from '../pages/NftMinting/components/qrCardCustomize/defautOtherQRProps';
 
 export const CHANGE_QR_CARD_GENERAL_INFO = 'CHANGE_QR_CARD_GENERAL_INFO';
 export const CHANGE_OTHER_QR_PROPS = 'CHANGE_OTHER_QR_PROPS';
