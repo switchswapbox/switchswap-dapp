@@ -292,7 +292,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
                 justifyContent: 'center',
                 alignItems: 'center',
                 fontFamily: 'Open Sans, sans-serif',
-                fontSize: '10px',
+                fontSize: '9px',
                 color: '#c4a96c'
               }}
             >
@@ -308,7 +308,7 @@ function SvgComponent({ qrcode, title, qrcodeHash, uploadedCid, ...other }: Args
                 justifyContent: 'center',
                 alignItems: 'center',
                 fontFamily: 'Open Sans, sans-serif',
-                fontSize: '10px',
+                fontSize: '9px',
                 color: '#c4a96c'
               }}
             >
