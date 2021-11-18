@@ -19,7 +19,7 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../assets/COMMON_VARIABLES';
+import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../constants/COMMON_VARIABLES';
 // ----------------------------------------------------------------------
 
 const SOCIALS = [
