@@ -4,9 +4,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import Container from '../components/_external-pages/announces/Container';
-import ContactCard from '../components/_external-pages/announces/ContactCard';
-import Content from '../components/_external-pages/announces/Terms';
+import Container from '../components/announces/Container';
+import ContactCard from '../components/announces/ContactCard';
+import Content from '../components/announces/Terms';
 
 const TermsOfService = (): JSX.Element => {
   const theme = useTheme();

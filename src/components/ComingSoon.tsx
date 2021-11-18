@@ -1,5 +1,5 @@
 // material
-import { Container, Typography, Box, Tooltip } from '@mui/material';
+import { Grid, Container, Typography, Box, Tooltip } from '@mui/material';
 // hooks
 import useSettings from '../hooks/useSettings';
 // components
@@ -12,17 +12,13 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../assets/COMMON_VARIABLES';
+import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../constants/COMMON_VARIABLES';
+import { FaqsHero, FaqsCategory, FaqsList, FaqsForm } from '../components/_external-pages/faqs';
 // ----------------------------------------------------------------------
-const CountdownStyle = styled('div')({
-  display: 'flex',
-  justifyContent: 'center'
-});
-
-const SeparatorStyle = styled(Typography)(({ theme }) => ({
-  margin: theme.spacing(0, 1),
-  [theme.breakpoints.up('sm')]: {
-    margin: theme.spacing(0, 2.5)
+const RootStyle = styled(Page)(({ theme }) => ({
+  paddingTop: theme.spacing(0),
+  [theme.breakpoints.up('md')]: {
+    paddingTop: theme.spacing(0)
   }
 }));
 
@@ -50,44 +46,17 @@ const SOCIALS = [
 ];
 
 export default function ComingSoon() {
-  const countdown = useCountdown(new Date('11/01/2021 21:30'));
-
   return (
-    <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
-      <Typography variant="h3" paragraph sx={{ my: 5 }}>
-        Coming Soon!
-      </Typography>
-      <Typography sx={{ color: 'text.secondary' }}>
-        We are currently working hard on this page!
-      </Typography>
+    <RootStyle title="Learn More">
+      <Container sx={{ mt: 0, mb: 0 }}>
+        <Typography variant="h3" sx={{ textAlign: 'center', mb: 5 }}>
+          Frequently asked questions
+        </Typography>
 
-      <CountdownStyle>
-        <div>
-          <Typography variant="h2">{countdown.days}</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
-        </div>
+        <FaqsList />
 
-        <SeparatorStyle variant="h2">:</SeparatorStyle>
-
-        <div>
-          <Typography variant="h2">{countdown.hours}</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
-        </div>
-
-        <SeparatorStyle variant="h2">:</SeparatorStyle>
-
-        <div>
-          <Typography variant="h2">{countdown.minutes}</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
-        </div>
-
-        <SeparatorStyle variant="h2">:</SeparatorStyle>
-
-        <div>
-          <Typography variant="h2">{countdown.seconds}</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
-        </div>
-      </CountdownStyle>
+        <FaqsForm />
+      </Container>
 
       <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
         {SOCIALS.map((social) => (
@@ -98,6 +67,6 @@ export default function ComingSoon() {
           </Tooltip>
         ))}
       </Box>
-    </Box>
+    </RootStyle>
   );
 }

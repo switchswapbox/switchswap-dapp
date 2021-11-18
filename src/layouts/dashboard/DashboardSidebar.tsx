@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../redux/hook';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { alpha, styled } from '@mui/material/styles';
@@ -20,7 +20,6 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // components
 import { Icon } from '@iconify/react';
 
-import { InfoAccountWallet } from '../../reduxStore/reducerSelectAccount';
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -29,11 +28,10 @@ import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 
 import { shortenAddress } from '../../utils/formatAddress';
-import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../assets/COMMON_VARIABLES';
+import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../constants/COMMON_VARIABLES';
 
 import Identicons from '@nimiq/identicons';
 
-import { IRootState } from 'reduxStore';
 import React from 'react';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
@@ -114,12 +112,10 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const selectedAccountAddress = useSelector((state: IRootState) => {
-    return state.reducerSelectAccount.accountAddress;
-  });
-  const selectedNetworkName = useSelector((state: IRootState) => {
-    return state.reducerSelectAccount.networkName;
-  });
+  const selectedAccountAddress = useAppSelector(
+    (state) => state.reducerSelectAccount.accountAddress
+  );
+  const selectedNetworkName = useAppSelector((state) => state.reducerSelectAccount.networkName);
 
   useEffect(() => {
     if (isOpenSidebar) {

@@ -4,7 +4,7 @@ import { ipfsUriToCid } from './ipfsUriToCid';
 import {
   IPFS_GATEWAY_FOR_FETCHING_DATA,
   NUMBER_OF_NFT_IN_MANAGER_PAGE
-} from 'assets/COMMON_VARIABLES';
+} from 'constants/COMMON_VARIABLES';
 import { contractAddress } from 'utils/contractAddress';
 import { ABI } from 'utils/abi';
 
@@ -105,12 +105,12 @@ export const updateListByTokenIndexManager = async (
           const imageUrl = `${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${imageCid}`;
           setLoading(false);
           setNftList((NftList) => {
-            let addingNftIndex = NftList.length;
-            for (let nftIndex = NftList.length; nftIndex > 0; nftIndex--) {
-              if (parseInt(tokenId, 10) > parseInt(NftList[nftIndex - 1].tokenId, 10)) {
+            let addingNftIndex = 0;
+            for (let nftIndex = 0; nftIndex < NftList.length; nftIndex++) {
+              if (parseInt(tokenId, 10) > parseInt(NftList[nftIndex].tokenId, 10)) {
                 break;
               }
-              addingNftIndex--;
+              addingNftIndex++;
             }
             const newNftList = [
               ...NftList.slice(0, addingNftIndex),
@@ -139,12 +139,13 @@ export const getNftByPageManager = async (
 
     const NftBalance = (await contract.balanceOf(selectedMetamaskAccount)).toString();
 
+    const startIndex = NftBalance - 1 - (page - 1) * NUMBER_OF_NFT_IN_MANAGER_PAGE;
     const stopIndex =
-      NUMBER_OF_NFT_IN_MANAGER_PAGE * page > parseInt(NftBalance, 10)
-        ? parseInt(NftBalance, 10)
-        : NUMBER_OF_NFT_IN_MANAGER_PAGE * page;
+      startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE > -1
+        ? startIndex - NUMBER_OF_NFT_IN_MANAGER_PAGE
+        : -1;
 
-    for (let index = NUMBER_OF_NFT_IN_MANAGER_PAGE * (page - 1); index < stopIndex; index++) {
+    for (let index = startIndex; index > stopIndex; index--) {
       updateListByTokenIndexManager(
         index,
         contract,

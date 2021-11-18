@@ -1,17 +1,12 @@
 import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
-// material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
-
-// hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
-
 import { MHidden } from '../../components/@material-extend';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import ConnectWalletDialog from './ConnectWalletDialog';
-// ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
 const COLLAPSE_WIDTH = 102;
