@@ -5,7 +5,7 @@ import useSettings from '../hooks/useSettings';
 // components
 import Page from '../components/Page';
 import Faqs from 'components/Faqs';
-import { FaqsForm } from '../components/_external-pages/faqs';
+
 import {
   DappStructure,
   NftExchange,
@@ -19,7 +19,9 @@ import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
+
 import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../constants/COMMON_VARIABLES';
+
 // ----------------------------------------------------------------------
 
 const SOCIALS = [
@@ -53,11 +55,14 @@ export default function LearnMore() {
         <Typography variant="h3" sx={{ textAlign: 'center', mb: 5 }}>
           Frequently asked questions
         </Typography>
-        <Faqs FaqsList={DappStructure} title={'Dapp infrucstructure'} />
+        <Faqs FaqsList={DappStructure} title={'Overview & Dapp infrucstructure'} />
         <Faqs FaqsList={NftExchange} title={'NFT Exchange'} />
         <Faqs FaqsList={NftMinting} title={'NFT Minting'} />
         <Faqs FaqsList={Others} title={'Others'} />
-        <FaqsForm />
+        <Typography variant="h4" sx={{ textAlign: 'center' }}>
+          Has other questions?<br></br>Please send your questions to{' '}
+          <strong>hi@swichswap.io</strong> <br></br>or
+        </Typography>
         <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
           {SOCIALS.map((social) => (
             <Tooltip key={social.name} title={social.name}>

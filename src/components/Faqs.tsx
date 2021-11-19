@@ -26,7 +26,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 export default function Faqs({ title, FaqsList }: { title: string; FaqsList: FaqsType[] }) {
   return (
     <RootStyle title="Learn More">
-      <Container sx={{ mt: 0, mb: 0 }}>
+      <Container sx={{ mt: 0, mb: 2 }}>
         <Block sx={{ '& > *': { mx: 1, my: 1 } }} title={title}>
           <MotionInView variants={varFadeIn}>
             {FaqsList.map((accordion) => (

@@ -19,7 +19,7 @@ export const DappStructure: FaqsType[] = [
   {
     key: 3,
     question: 'What is unique about Switchswap architecture?',
-    answer: `At the first period, we build a platform to create/trade D-NFT on Polygon/Crust. We use the letter "D" before NFT because most NFT in the market isn't decentralized and can be easily manipulated by its creator. On switchswap, these NFT do not depend on any factor and can't be deleted by anyone. They are also compatible with big marketplaces such as Opensea.`
+    answer: `At the first period, we build a platform to create/trade D-NFT on Polygon/Crust. We use the letter "D" before NFT because most NFT in the market isn't decentralized and can be easily manipulated by its creator. On switchswap, these NFT do not depend on any factor and can't be deleted by anyone. They are also compatible with big marketplaces such as Opensea.\nSwitchswap is literally unstopable. It is hosted on IPFS, based on blockchain domain, using decentralized storage to store NFTs (metadata/data)`
   }
 ];
 
