@@ -74,21 +74,21 @@ export const Others: FaqsType[] = [
     answer:
       'There are young and talented developers in our team, comming from many places in the world.'
   },
-  {
-    key: 2,
-    question: `What is SwitchswapLabs' fundraising history and partner?`,
-    answer:
-      'We have raised $500k from many investors, including Polygon and Crust network. Polygon and Crust are also our major partners.'
-  },
-  {
-    key: 3,
-    question: 'Will Switchswap release it own token?',
-    answer: 'We will release our token in 2022 when everything is ready.'
-  },
+  // {
+  //   key: 2,
+  //   question: `What is SwitchswapLabs' fundraising history and partner?`,
+  //   answer:
+  //     'We have raised $500k from many investors, including Polygon and Crust network. Polygon and Crust are also our major partners.'
+  // },
+  // {
+  //   key: 3,
+  //   question: 'Will Switchswap release it own token?',
+  //   answer: 'We will release our token in 2022 when everything is ready.'
+  // },
   {
     key: 4,
     question: `What is Switchswap' plan in the future?`,
     answer:
-      'NFT and metaverse is currently the hostest topic in technology, crypto world, we plan to buil our product related to these technologies.'
+      'NFT and metaverse is currently the promising topic in technology, crypto world, we plan to buil our product related to these technologies.'
   }
 ];

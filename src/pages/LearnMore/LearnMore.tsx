@@ -1,26 +1,14 @@
-// material
 import { Container, Typography, Box, Tooltip } from '@mui/material';
-// hooks
-import useSettings from '../hooks/useSettings';
-// components
-import Page from '../components/Page';
-import Faqs from 'components/Faqs';
+import useSettings from '../../hooks/useSettings';
+import Page from '../../components/Page';
+import Faqs from './components/Faqs';
 
-import {
-  DappStructure,
-  NftExchange,
-  NftMinting,
-  Others
-} from '../components/_external-pages/faqs/FaqsConfig';
+import { DappStructure, NftExchange, NftMinting, Others } from './components/FaqsConfig';
 
 import { Icon } from '@iconify/react';
-import { MIconButton } from '../components/@material-extend';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
+import { MIconButton } from '../../components/@material-extend';
 
-import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../constants/COMMON_VARIABLES';
+import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../../constants/COMMON_VARIABLES';
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +49,7 @@ export default function LearnMore() {
         <Faqs FaqsList={Others} title={'Others'} />
         <Typography variant="h4" sx={{ textAlign: 'center' }}>
           Has other questions?<br></br>Please send your questions to{' '}
-          <strong>hi@swichswap.io</strong> <br></br>or
+          <strong>hi@swichswap.io</strong>
         </Typography>
         <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
           {SOCIALS.map((social) => (
