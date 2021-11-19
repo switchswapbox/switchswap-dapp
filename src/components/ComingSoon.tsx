@@ -1,54 +1,9 @@
-import { Icon } from '@iconify/react';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-// material
+import { Typography, Box, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {
-  Box,
-  Button,
-  Tooltip,
-  Container,
-  Typography,
-  InputAdornment,
-  OutlinedInput
-} from '@mui/material';
-// hooks
 import useCountdown from '../hooks/useCountdown';
-// components
-import { MIconButton } from '../components/@material-extend';
-import Page from '../components/Page';
-import { ComingSoonIllustration } from '../assets';
-
-// ----------------------------------------------------------------------
-
-const SOCIALS = [
-  {
-    name: 'Facebook',
-    icon: <Icon icon={facebookFill} width={24} height={24} color="#1877F2" />
-  },
-  {
-    name: 'Instagram',
-    icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
-  },
-  {
-    name: 'Linkedin',
-    icon: <Icon icon={linkedinFill} width={24} height={24} color="#006097" />
-  },
-  {
-    name: 'Twitter',
-    icon: <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />
-  }
-];
-
-const RootStyle = styled(Page)(({ theme }) => ({
-  minHeight: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10)
-}));
+import { Icon } from '@iconify/react';
+import { MIconButton } from './@material-extend';
+import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../constants/COMMON_VARIABLES';
 
 const CountdownStyle = styled('div')({
   display: 'flex',
@@ -62,89 +17,78 @@ const SeparatorStyle = styled(Typography)(({ theme }) => ({
   }
 }));
 
-// ----------------------------------------------------------------------
+const SOCIALS = [
+  {
+    name: 'Discord',
+    icon: <Icon icon="bi:discord" width={24} height={24} />,
+    href: DISCORD
+  },
+  {
+    name: 'Telegram',
+    icon: <Icon icon="uim:telegram-alt" width={24} height={24} />,
+    href: TELEGRAM
+  },
+  {
+    name: 'Twitter',
+    icon: <Icon icon="akar-icons:twitter-fill" width={24} height={24} />,
+    href: TWITTER
+  },
+  {
+    name: 'Medium',
+    icon: <Icon icon="ant-design:medium-square-filled" width={24} height={24} />,
+    href: MEDIUM
+  }
+];
 
 export default function ComingSoon() {
-  const countdown = useCountdown(new Date('07/07/2022 21:30'));
+  const countdown = useCountdown(new Date('11/01/2021 21:30'));
 
   return (
-    <RootStyle title="Coming Soon | Minimal-UI">
-      <Container>
-        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
-          <Typography variant="h3" paragraph>
-            Coming Soon!
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            We are currently working hard on this page!
-          </Typography>
+    <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
+      <Typography variant="h3" paragraph sx={{ my: 5 }}>
+        Coming Soon!
+      </Typography>
+      <Typography sx={{ color: 'text.secondary' }}>
+        We are currently working hard on this page!
+      </Typography>
 
-          <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
+      <CountdownStyle>
+        <div>
+          <Typography variant="h2">{countdown.days}</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
+        </div>
 
-          <CountdownStyle>
-            <div>
-              <Typography variant="h2">{countdown.days}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
-            </div>
+        <SeparatorStyle variant="h2">:</SeparatorStyle>
 
-            <SeparatorStyle variant="h2">:</SeparatorStyle>
+        <div>
+          <Typography variant="h2">{countdown.hours}</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
+        </div>
 
-            <div>
-              <Typography variant="h2">{countdown.hours}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
-            </div>
+        <SeparatorStyle variant="h2">:</SeparatorStyle>
 
-            <SeparatorStyle variant="h2">:</SeparatorStyle>
+        <div>
+          <Typography variant="h2">{countdown.minutes}</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
+        </div>
 
-            <div>
-              <Typography variant="h2">{countdown.minutes}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
-            </div>
+        <SeparatorStyle variant="h2">:</SeparatorStyle>
 
-            <SeparatorStyle variant="h2">:</SeparatorStyle>
+        <div>
+          <Typography variant="h2">{countdown.seconds}</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
+        </div>
+      </CountdownStyle>
 
-            <div>
-              <Typography variant="h2">{countdown.seconds}</Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
-            </div>
-          </CountdownStyle>
-
-          <OutlinedInput
-            fullWidth
-            placeholder="Enter your email"
-            endAdornment={
-              <InputAdornment position="end">
-                <Button variant="contained" size="large">
-                  Notify Me
-                </Button>
-              </InputAdornment>
-            }
-            sx={{
-              my: 5,
-              pr: 0.5,
-              transition: (theme) =>
-                theme.transitions.create('box-shadow', {
-                  easing: theme.transitions.easing.easeInOut,
-                  duration: theme.transitions.duration.shorter
-                }),
-              '&.Mui-focused': {
-                boxShadow: (theme) => theme.customShadows.z8
-              },
-              '& fieldset': {
-                borderWidth: `1px !important`,
-                borderColor: (theme) => `${theme.palette.grey[500_32]} !important`
-              }
-            }}
-          />
-
-          <Box sx={{ textAlign: 'center', '& > *': { mx: 1 } }}>
-            {SOCIALS.map((social) => (
-              <Tooltip key={social.name} title={social.name}>
-                <MIconButton>{social.icon}</MIconButton>
-              </Tooltip>
-            ))}
-          </Box>
-        </Box>
-      </Container>
-    </RootStyle>
+      <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
+        {SOCIALS.map((social) => (
+          <Tooltip key={social.name} title={social.name}>
+            <MIconButton onClick={() => window.open(social.href, '_blank')}>
+              {social.icon}
+            </MIconButton>
+          </Tooltip>
+        ))}
+      </Box>
+    </Box>
   );
 }
