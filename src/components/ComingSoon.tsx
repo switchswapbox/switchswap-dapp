@@ -1,72 +1,150 @@
-// material
-import { Grid, Container, Typography, Box, Tooltip } from '@mui/material';
-// hooks
-import useSettings from '../hooks/useSettings';
-// components
-import Page from './Page';
-import { styled } from '@mui/material/styles';
-import useCountdown from '../hooks/useCountdown';
 import { Icon } from '@iconify/react';
-import { MIconButton } from './@material-extend';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { TELEGRAM, TWITTER, DISCORD, MEDIUM } from '../constants/COMMON_VARIABLES';
-import { FaqsHero, FaqsCategory, FaqsList, FaqsForm } from '../components/_external-pages/faqs';
+// material
+import { styled } from '@mui/material/styles';
+import {
+  Box,
+  Button,
+  Tooltip,
+  Container,
+  Typography,
+  InputAdornment,
+  OutlinedInput
+} from '@mui/material';
+// hooks
+import useCountdown from '../hooks/useCountdown';
+// components
+import { MIconButton } from '../components/@material-extend';
+import Page from '../components/Page';
+import { ComingSoonIllustration } from '../assets';
+
 // ----------------------------------------------------------------------
-const RootStyle = styled(Page)(({ theme }) => ({
-  paddingTop: theme.spacing(0),
-  [theme.breakpoints.up('md')]: {
-    paddingTop: theme.spacing(0)
-  }
-}));
 
 const SOCIALS = [
   {
-    name: 'Discord',
-    icon: <Icon icon="bi:discord" width={24} height={24} />,
-    href: DISCORD
+    name: 'Facebook',
+    icon: <Icon icon={facebookFill} width={24} height={24} color="#1877F2" />
   },
   {
-    name: 'Telegram',
-    icon: <Icon icon="uim:telegram-alt" width={24} height={24} />,
-    href: TELEGRAM
+    name: 'Instagram',
+    icon: <Icon icon={instagramFilled} width={24} height={24} color="#D7336D" />
+  },
+  {
+    name: 'Linkedin',
+    icon: <Icon icon={linkedinFill} width={24} height={24} color="#006097" />
   },
   {
     name: 'Twitter',
-    icon: <Icon icon="akar-icons:twitter-fill" width={24} height={24} />,
-    href: TWITTER
-  },
-  {
-    name: 'Medium',
-    icon: <Icon icon="ant-design:medium-square-filled" width={24} height={24} />,
-    href: MEDIUM
+    icon: <Icon icon={twitterFill} width={24} height={24} color="#1C9CEA" />
   }
 ];
 
+const RootStyle = styled(Page)(({ theme }) => ({
+  minHeight: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  paddingTop: theme.spacing(15),
+  paddingBottom: theme.spacing(10)
+}));
+
+const CountdownStyle = styled('div')({
+  display: 'flex',
+  justifyContent: 'center'
+});
+
+const SeparatorStyle = styled(Typography)(({ theme }) => ({
+  margin: theme.spacing(0, 1),
+  [theme.breakpoints.up('sm')]: {
+    margin: theme.spacing(0, 2.5)
+  }
+}));
+
+// ----------------------------------------------------------------------
+
 export default function ComingSoon() {
+  const countdown = useCountdown(new Date('07/07/2022 21:30'));
+
   return (
-    <RootStyle title="Learn More">
-      <Container sx={{ mt: 0, mb: 0 }}>
-        <Typography variant="h3" sx={{ textAlign: 'center', mb: 5 }}>
-          Frequently asked questions
-        </Typography>
+    <RootStyle title="Coming Soon | Minimal-UI">
+      <Container>
+        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
+          <Typography variant="h3" paragraph>
+            Coming Soon!
+          </Typography>
+          <Typography sx={{ color: 'text.secondary' }}>
+            We are currently working hard on this page!
+          </Typography>
 
-        <FaqsList />
+          <ComingSoonIllustration sx={{ my: 10, height: 240 }} />
 
-        <FaqsForm />
+          <CountdownStyle>
+            <div>
+              <Typography variant="h2">{countdown.days}</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>Days</Typography>
+            </div>
+
+            <SeparatorStyle variant="h2">:</SeparatorStyle>
+
+            <div>
+              <Typography variant="h2">{countdown.hours}</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>Hours</Typography>
+            </div>
+
+            <SeparatorStyle variant="h2">:</SeparatorStyle>
+
+            <div>
+              <Typography variant="h2">{countdown.minutes}</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>Minutes</Typography>
+            </div>
+
+            <SeparatorStyle variant="h2">:</SeparatorStyle>
+
+            <div>
+              <Typography variant="h2">{countdown.seconds}</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>Seconds</Typography>
+            </div>
+          </CountdownStyle>
+
+          <OutlinedInput
+            fullWidth
+            placeholder="Enter your email"
+            endAdornment={
+              <InputAdornment position="end">
+                <Button variant="contained" size="large">
+                  Notify Me
+                </Button>
+              </InputAdornment>
+            }
+            sx={{
+              my: 5,
+              pr: 0.5,
+              transition: (theme) =>
+                theme.transitions.create('box-shadow', {
+                  easing: theme.transitions.easing.easeInOut,
+                  duration: theme.transitions.duration.shorter
+                }),
+              '&.Mui-focused': {
+                boxShadow: (theme) => theme.customShadows.z8
+              },
+              '& fieldset': {
+                borderWidth: `1px !important`,
+                borderColor: (theme) => `${theme.palette.grey[500_32]} !important`
+              }
+            }}
+          />
+
+          <Box sx={{ textAlign: 'center', '& > *': { mx: 1 } }}>
+            {SOCIALS.map((social) => (
+              <Tooltip key={social.name} title={social.name}>
+                <MIconButton>{social.icon}</MIconButton>
+              </Tooltip>
+            ))}
+          </Box>
+        </Box>
       </Container>
-
-      <Box sx={{ textAlign: 'center', '& > *': { mx: 1, my: 5 } }}>
-        {SOCIALS.map((social) => (
-          <Tooltip key={social.name} title={social.name}>
-            <MIconButton onClick={() => window.open(social.href, '_blank')}>
-              {social.icon}
-            </MIconButton>
-          </Tooltip>
-        ))}
-      </Box>
     </RootStyle>
   );
 }
