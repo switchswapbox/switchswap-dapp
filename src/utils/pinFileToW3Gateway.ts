@@ -1,11 +1,10 @@
 import { create } from 'ipfs-http-client';
 import { IPFS_GATEWAY_W3AUTH } from '../constants';
 
-function pinFileToW3Gateway(authHeader: string, file: File): Promise<any> {
+function pinFileToW3Gateway(ipfsGateway: string, authHeader: string, file: File): Promise<any> {
   return new Promise((resolve, reject) => {
-    // setFileUploading(true);
     const ipfs = create({
-      url: IPFS_GATEWAY_W3AUTH[0] + '/api/v0',
+      url: ipfsGateway + '/api/v0',
       headers: {
         authorization: 'Basic ' + authHeader
       }

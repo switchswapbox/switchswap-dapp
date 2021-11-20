@@ -1,4 +1,5 @@
-import { Box, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Stack, SvgIcon, Typography } from '@mui/material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Icon } from '@iconify/react';
 import { useCallback, useEffect, useState } from 'react';
 import UploadMultiFile from '../UploadMultiFile';
@@ -11,6 +12,7 @@ import {
   METAMASK_SELECT_POLYGON_URL,
   INSTALL_METAMASK_URL
 } from '../../../../constants/COMMON_VARIABLES';
+import { W3_GATEWAYS } from '../../../../constants/W3_GATEWAYS';
 import detectEthereumProvider from '@metamask/detect-provider';
 import axios from 'axios';
 import { ethers } from 'ethers';
@@ -25,7 +27,7 @@ import pinFileToW3Gateway from 'utils/pinFileToW3Gateway';
 import generateRandomAuthHeaderSubstrate from 'utils/substrate/generateRandomAuthHeaderSubstrate';
 import publishCidToCrust from 'utils/publishCidToCrust';
 
-const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
+// const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 const ipfsPinningService = IPFS_PINNING_SERVICE_W3AUTH[0];
 
 export type FileInfoType = {
@@ -52,9 +54,10 @@ export const pinW3Crust = async (authHeader: string, cid: string, name: string) 
 };
 
 function StepUploadFile() {
-  const { stepOneNotDone, uploadedCid } = useAppSelector((state) => ({
+  const { stepOneNotDone, uploadedCid, ipfsGateway } = useAppSelector((state) => ({
     stepOneNotDone: state.reducerMintingProcess.stepOneNotDone,
-    uploadedCid: state.reducerMintingProcess.uploadedCid
+    uploadedCid: state.reducerMintingProcess.uploadedCid,
+    ipfsGateway: state.reducerMintingProcess.ipfsGateway
   }));
   const dispatch = useAppDispatch();
   const onSnackbarAction = useSnackbarAction();
@@ -79,6 +82,10 @@ function StepUploadFile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files[0]]);
 
+  useEffect(() => {
+    dispatch(changeMintingProcessState({ ipfsGateway: 'https://gw.crustapps.net' }));
+  }, []);
+
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
       setFiles(acceptedFiles.map((file: File) => file));
@@ -91,7 +98,7 @@ function StepUploadFile() {
     setFiles(filteredItems);
   };
 
-  function uploadFileW3GatewayPromise(authHeader: string): Promise<any> {
+  function uploadFileW3GatewayPromise(authHeader: string, ipfsGateway: string): Promise<any> {
     return new Promise((resolve, reject) => {
       setFileUploading(true);
       const ipfs = create({
@@ -115,6 +122,7 @@ function StepUploadFile() {
           })
         );
         setFileUploading(false);
+
         dispatch(changeMintingProcessState({ stepOneNotDone: false }));
         resolve({ cid: added.cid.toV0().toString(), name: files[0].name });
       };
@@ -140,7 +148,7 @@ function StepUploadFile() {
 
         const authHeader = Buffer.from(`pol-${addr}:${signature}`).toString('base64');
 
-        uploadFileW3GatewayPromise(authHeader)
+        uploadFileW3GatewayPromise(authHeader, ipfsGateway)
           .then((uploadedFileInfo) => {
             pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
           })
@@ -207,7 +215,7 @@ function StepUploadFile() {
     }
     const authHeader = Buffer.from(`sub-${account.address}:${signature}`).toString('base64');
 
-    uploadFileW3GatewayPromise(authHeader)
+    uploadFileW3GatewayPromise(authHeader, ipfsGateway)
       .then((uploadedFileInfo) => {
         pinW3Crust(authHeader, uploadedFileInfo.cid, uploadedFileInfo.name);
       })
@@ -220,7 +228,7 @@ function StepUploadFile() {
     const authHeader = generateRandomAuthHeaderSubstrate();
 
     setFileUploading(true);
-    const uploadedFileInfo = await pinFileToW3Gateway(authHeader, files[0]);
+    const uploadedFileInfo = await pinFileToW3Gateway(ipfsGateway, authHeader, files[0]);
 
     const txHash = await publishCidToCrust(uploadedFileInfo.cid, uploadedFileInfo.size);
 
@@ -249,10 +257,36 @@ function StepUploadFile() {
     }
   };
 
+  const handleSelectGateway = (event: SelectChangeEvent) => {
+    dispatch(changeMintingProcessState({ ipfsGateway: event.target.value }));
+    setFileUploading(false);
+  };
+
   return (
     <>
       <Box sx={{ display: 'flex', mt: 3, mb: 1 }}>
-        <Typography variant="h6">{translate(`nftMinting.upload file`)}</Typography>
+        <Stack direction="column" sx={{ width: '100%', mb: 2 }} spacing={3}>
+          <Typography variant="h6" display="block">
+            {translate(`nftMinting.upload file`)}
+          </Typography>
+
+          <FormControl fullWidth variant="outlined" size="small">
+            <InputLabel id="ipfsGatewayLabel">Gateway</InputLabel>
+            <Select
+              labelId="ipfsGateway"
+              id="demo-simple-select-helper"
+              value={ipfsGateway}
+              label="Gateway"
+              onChange={handleSelectGateway}
+            >
+              {W3_GATEWAYS.map((gateway) => (
+                <MenuItem key={gateway.value} value={gateway.value}>
+                  {`${gateway.text} - ${gateway.location}`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Stack>
         <Box sx={{ flexGrow: 1 }} />
         {/* <FormControlLabel
           sx={{ m: 0 }}

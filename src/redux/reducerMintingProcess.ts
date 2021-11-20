@@ -22,6 +22,7 @@ export interface MintingProcessState {
   nftMinted?: boolean;
   tokenID?: number;
   link?: HTMLAnchorElement | null;
+  ipfsGateway: string;
 }
 
 // init state
@@ -41,7 +42,8 @@ export const initialMintingProcessState: MintingProcessState = {
   isMinting: false,
   nftMinted: false,
   tokenID: 0,
-  link: null
+  link: null,
+  ipfsGateway: ''
 };
 
 const initialState = initialMintingProcessState;
