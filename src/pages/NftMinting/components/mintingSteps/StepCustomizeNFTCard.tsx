@@ -11,8 +11,12 @@ import {
   ToggleButtonGroup,
   Tooltip,
   Typography,
-  Zoom
+  Zoom,
+  FormControl,
+  InputLabel,
+  MenuItem
 } from '@mui/material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Label from 'components/Label';
 import MetadataSummary from '../MetadataSummary';
@@ -23,7 +27,7 @@ import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { useForm, Controller, Control, FieldErrors } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-
+import { W3_GATEWAYS } from '../../../../constants/W3_GATEWAYS';
 import {
   IPFS_GATEWAY_W3AUTH,
   CRUST_WALLET_WIKI,
@@ -44,7 +48,7 @@ import domtoimage from 'dom-to-image';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useLocales from '../../../../hooks/useLocales';
 
-const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
+// const ipfsGateway = IPFS_GATEWAY_W3AUTH[0];
 
 type StepCustomizeNFTCardProps = {
   handleAlignment: (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => void;
@@ -141,7 +145,8 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     srcImage,
     qrStyleName,
     qrStyleNameAuthorRegister,
-    changeQRFile
+    changeQRFile,
+    ipfsGateway
   } = useAppSelector((state) => ({
     nftType: state.reducerMintingProcess.nftType,
     stepTwoNotDone: state.reducerMintingProcess.stepTwoNotDone,
@@ -154,8 +159,10 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     srcImage: state.reducerMintingProcess.srcImage,
     qrStyleName: state.reducerCustomizeQRCard.qrStyleName,
     qrStyleNameAuthorRegister: state.reducerCustomizeQRCard.qrStyleNameAuthorRegister,
-    changeQRFile: state.reducerCustomizeQRCard.changeQRFile
+    changeQRFile: state.reducerCustomizeQRCard.changeQRFile,
+    ipfsGateway: state.reducerMintingProcess.ipfsGateway
   }));
+
   const dispatch = useAppDispatch();
 
   const { CustomProps } = changeQRFile
@@ -186,6 +193,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
           ipfs.add(blob).then((added) => {
             nftCardCidTemp = added.cid.toV0().toString();
             dispatch(changeMintingProcessState({ nftCardCid: added.cid.toV0().toString() }));
+
             resolve({ cid: added.cid.toV0().toString(), size: added.size });
           });
         })
@@ -203,12 +211,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
           authorization: 'Basic ' + authHeader
         }
       });
-      console.log(
-        `ipfs://${
-          nftType !== 'withoutNftCard' ? nftCardCidTemp : uploadedCid ? uploadedCid.cid : ''
-        }`
-      );
-      console.log(nftCardCidTemp);
+
       const metadata = {
         name: nameNft,
         description: descNft,
@@ -226,6 +229,7 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
           setMetadataUploading(false);
           dispatch(changeMintingProcessState({ stepTwoNotDone: false }));
           dispatch(changeMintingProcessState({ metadataCid: added.cid.toV0().toString() }));
+
           resolve({ cid: added.cid.toV0().toString(), size: added.size });
         })
         .catch((error) => {
@@ -374,6 +378,12 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
     onSnackbarAction('error', errors.title?.message || '', 3000);
   };
 
+  const handleSelectGateway = (event: SelectChangeEvent) => {
+    dispatch(changeMintingProcessState({ ipfsGateway: event.target.value }));
+    // setFileUploading(false);
+    setMetadataUploading(false);
+  };
+
   return (
     <>
       <Grid container sx={{ pt: 5 }}>
@@ -424,6 +434,24 @@ function StepCustomizeNFTCard({ handleAlignment }: StepCustomizeNFTCardProps) {
         )}
       </Grid>
 
+      <Box sx={{ pt: 4 }}>
+        <FormControl fullWidth variant="outlined" size="small">
+          <InputLabel id="ipfsGatewayLabel">Gateway</InputLabel>
+          <Select
+            labelId="ipfsGateway"
+            id="demo-simple-select-helper"
+            value={ipfsGateway}
+            label="Gateway"
+            onChange={handleSelectGateway}
+          >
+            {W3_GATEWAYS.map((gateway) => (
+              <MenuItem key={gateway.value} value={gateway.value}>
+                {`${gateway.text} - ${gateway.location}`}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
       {isMetadataUploading ? (
         <LinearProgress color="info" sx={{ my: 3 }} />
       ) : (

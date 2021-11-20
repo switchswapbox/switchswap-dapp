@@ -87,7 +87,7 @@ export const NftCardsDesign = () => {
     const { Component } = qrStyles[qrStyleName];
     return (
       <Component
-        value={`${IPFS_GATEWAY_FOR_FETCHING_DATA[0]}/${uploadedCid?.cid || ''}`}
+        value={`https://ipfs.io/ipfs/${uploadedCid?.cid || ''}`}
         className="my-qrcode"
         styles={{ svg: { width: '300px' } }}
         icon={url}

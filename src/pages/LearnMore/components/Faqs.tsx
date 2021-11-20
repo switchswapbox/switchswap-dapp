@@ -1,12 +1,7 @@
-// material
 import { Container, Typography } from '@mui/material';
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
-// material
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { varFadeIn, MotionInView } from '../../../components/animate/index';
-// hooks
-
-// components
 import Page from '../../../components/Page';
 import { styled } from '@mui/material/styles';
 
