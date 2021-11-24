@@ -8,7 +8,9 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
       viewBox="0 0 725 438"
       {...other}
     >
-      <image x="0" y="0" width="725" height="438" href="\static\mock-images\bg_svgs\bg_svg4.png" />
+      <foreignObject x="0" y="0" width="725" height="438">
+        <img src="\static\mock-images\bg_svgs\bg_svg4.png" alt="backgound" />
+      </foreignObject>
       <foreignObject x="50" y="100" width="300" height="300">
         {qrcode}
       </foreignObject>
@@ -65,23 +67,13 @@ function SvgComponent({ qrcode, title, uploadedCid, ...other }: ArgsProps) {
         IDENTITY
       </text>
 
-      <image
-        x="450"
-        y="85"
-        width={651}
-        height={192}
-        transform="scale(0.3)"
-        href="\static\mock-images\bg_svgs\crust-long-white.png"
-      />
+      <foreignObject x="450" y="85" width={651} height={192} transform="scale(0.3)">
+        <img src="\static\mock-images\bg_svgs\crust-long-white.png" alt="logo1" />
+      </foreignObject>
 
-      <image
-        x="1250"
-        y="90"
-        width={768}
-        height={169}
-        transform="scale(0.3)"
-        href="\static\mock-images\bg_svgs\polygon-long-white.png"
-      />
+      <foreignObject x="1250" y="90" width={768} height={169} transform="scale(0.3)">
+        <img src="\static\mock-images\bg_svgs\polygon-long-white.png" alt="logo1" />
+      </foreignObject>
     </svg>
   );
 }
