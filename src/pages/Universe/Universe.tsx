@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Container, Stack, Grid, Pagination } from '@mui/material';
-import useSettings from '../../hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 import { LineScalePulseOutRapid } from 'react-pure-loaders';
 import Page from '../../components/Page';
 import { contractAddress } from '../../utils/contractAddress';
 import { NUMBER_OF_NFT_IN_MANAGER_PAGE } from '../../constants/COMMON_VARIABLES';
-import { useMeasure } from 'react-use';
-import { GridSize } from '@mui/material/Grid';
+
 import { useParams } from 'react-router-dom';
 import NftCard from '../../components/gallery/NftCard';
 import { getNftByPage } from '../../utils/gallery/updateGallery';
@@ -19,7 +17,6 @@ export default function Universe() {
   const { pageUrl } = useParams();
   const navigate = useNavigate();
 
-  const { themeStretch } = useSettings();
   const [NftList, setNftList] = useState<
     { tokenId: string; tokenURI: string; imageUrl: string; name: string; owner?: string }[]
   >([]);
@@ -53,21 +50,10 @@ export default function Universe() {
     getNftByPage(page, setLoading, setNftList);
   }, [page]);
 
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
-  const [lgCol, setLgCol] = useState<GridSize>(4);
-
-  useEffect(() => {
-    if (width > 1000) {
-      setLgCol(3);
-    } else {
-      setLgCol(4);
-    }
-  }, [width]);
-
   return (
     <Page title="Univere Gallery">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Grid container spacing={3} ref={ref}>
+      <Container maxWidth={'lg'}>
+        <Grid container spacing={0}>
           <Stack
             direction="row"
             alignItems="center"
@@ -78,7 +64,7 @@ export default function Universe() {
           </Stack>
           {NftList.map((nft) => {
             return (
-              <Grid key={nft.tokenId} item xs={12} sm={6} md={4} lg={lgCol}>
+              <Grid key={nft.tokenId} item xs={12} sm={4} md={3}>
                 <NftCard {...nft} nftContract={contractAddress} />
               </Grid>
             );
