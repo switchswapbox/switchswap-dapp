@@ -52,12 +52,20 @@ export default function DashboardNavbar({ onOpenSidebar }: DashboardNavbarProps)
       }}
     >
       <ToolbarStyle>
-        <Box component={RouterLink} to="/" sx={{ display: 'inline-flex', pr: '25px' }}>
+        <Box
+          component={RouterLink}
+          to="/"
+          sx={{ display: 'inline-flex', pr: { xs: '5px', sm: '15px', lg: '25px' } }}
+        >
           <Logo />
         </Box>
 
         <MHidden width="xsDown">
-          <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+          <IconButton
+            onClick={onOpenSidebar}
+            onMouseEnter={onOpenSidebar}
+            sx={{ mr: 1, color: 'text.primary' }}
+          >
             <Icon icon={menu2Fill} />
           </IconButton>
         </MHidden>
