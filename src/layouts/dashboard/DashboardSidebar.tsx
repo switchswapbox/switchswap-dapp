@@ -36,16 +36,18 @@ import React from 'react';
 Identicons.svgPath = './static/identicons.min.svg';
 // ----------------------------------------------------------------------
 
+// const DRAWER_WIDTH = 280;
+// const COLLAPSE_WIDTH = 102;
 const DRAWER_WIDTH = 280;
-const COLLAPSE_WIDTH = 102;
+const COLLAPSE_WIDTH = 0;
 
 const RootStyle = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('lg')]: {
-    flexShrink: 0,
-    transition: theme.transitions.create('width', {
-      duration: theme.transitions.duration.complex
-    })
-  }
+  // [theme.breakpoints.up('lg')]: {
+  //   flexShrink: 0,
+  //   transition: theme.transitions.create('width', {
+  //     duration: theme.transitions.duration.complex
+  //   })
+  // }
 }));
 
 const AccountStyle = styled('div')(({ theme }) => ({
@@ -169,7 +171,7 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
             <Logo />
           </Box>
 
-          <MHidden width="lgDown">
+          <MHidden width="xsUp">
             {!isCollapse && (
               <IconCollapse onToggleCollapse={onToggleCollapse} collapseClick={collapseClick} />
             )}
@@ -232,15 +234,15 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
   return (
     <RootStyle
       sx={{
-        width: {
-          lg: isCollapse ? COLLAPSE_WIDTH : DRAWER_WIDTH
-        },
+        // width: {
+        //   lg: isCollapse ? COLLAPSE_WIDTH : DRAWER_WIDTH
+        // },
         ...(collapseClick && {
           position: 'absolute'
         })
       }}
     >
-      <MHidden width="lgUp">
+      <MHidden width="xsDown">
         <Drawer
           open={isOpenSidebar}
           onClose={onCloseSidebar}
@@ -252,7 +254,7 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
         </Drawer>
       </MHidden>
 
-      <MHidden width="lgDown">
+      {/* <MHidden width="lgDown">
         <Drawer
           open
           variant="persistent"
@@ -277,7 +279,7 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
         >
           {renderContent}
         </Drawer>
-      </MHidden>
+      </MHidden> */}
     </RootStyle>
   );
 };
