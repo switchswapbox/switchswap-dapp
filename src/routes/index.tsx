@@ -18,7 +18,7 @@ const Loadable = (Component: any) => (props: any) => {
       fallback={
         <LoadingScreen
           sx={{
-            ...(!isDashboard && {
+            ...(isDashboard && {
               top: 0,
               left: 0,
               width: 1,
@@ -34,6 +34,14 @@ const Loadable = (Component: any) => (props: any) => {
   );
 };
 
+const LoadWithoutSpinner = (Component: any) => (props: any) => {
+  return (
+    <Suspense fallback={<span />}>
+      <Component {...props} />
+    </Suspense>
+  );
+};
+
 export default function Router() {
   return useRoutes([
     {
@@ -41,7 +49,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/home" replace /> },
-        { path: 'home', element: <Home /> },
+        { path: 'home', element: <Homepage /> },
         {
           path: 'gallery',
           children: [
@@ -91,7 +99,6 @@ export default function Router() {
 // IMPORT COMPONENTS
 
 // Dashboard
-const Home = Loadable(lazy(() => import('../pages/Home')));
 const Universe = Loadable(lazy(() => import('../pages/Universe')));
 const NftMinting = Loadable(lazy(() => import('../pages/NftMinting')));
 const NftManager = Loadable(lazy(() => import('../pages/NftManager')));
@@ -103,3 +110,17 @@ const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const TermsOfService = Loadable(lazy(() => import('../pages/TermsOfService')));
 const Disclaimer = Loadable(lazy(() => import('../pages/Disclaimer')));
 const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
+const Homepage = LoadWithoutSpinner(lazy(() => import('../pages/Homepage')));
+
+// const Universe = lazy(() => import('../pages/Universe'));
+// const NftMinting = lazy(() => import('../pages/NftMinting'));
+// const NftManager = lazy(() => import('../pages/NftManager'));
+// const FunBox = lazy(() => import('../pages/FunBox'));
+// const CruFaucet = lazy(() => import('../pages/CruFaucet'));
+// const MaticFaucet = lazy(() => import('../pages/MaticFaucet'));
+// const LearnMore = lazy(() => import('../pages/LearnMore'));
+// const NotFound = lazy(() => import('../pages/Page404'));
+// const TermsOfService = lazy(() => import('../pages/TermsOfService'));
+// const Disclaimer = lazy(() => import('../pages/Disclaimer'));
+// const AssetViewer = lazy(() => import('../pages/AssetViewer'));
+// const Homepage from '../pages/Homepage';

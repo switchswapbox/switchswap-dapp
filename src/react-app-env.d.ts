@@ -4,3 +4,4 @@ declare module 'rehype-highlight';
 declare module '@nimiq/identicons';
 declare module '@metamask/detect-provider';
 declare module 'react-twitter-widgets';
+declare module 'react-lazy-load-image-component';
