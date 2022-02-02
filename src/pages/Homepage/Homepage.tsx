@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Container, Typography, Box, Button, Grid, Divider, Avatar } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  Grid,
+  Divider,
+  Avatar,
+  Card,
+  CardContent
+} from '@mui/material';
 import Page from '../../components/Page';
 import Typed from 'react-typed';
 import { alpha, useTheme } from '@mui/material/styles';
@@ -57,7 +67,7 @@ const mock = [
   {
     title: 'Continuous development',
     subtitle:
-      'We are supported by Crust Network to build a community oriented application to bring NFTs to everyone',
+      'We are supported by Crust Network for building a community oriented application to bring NFTs to everyone',
     icon: (
       <svg
         height={24}
@@ -75,29 +85,98 @@ const mock = [
         />
       </svg>
     )
+  },
+  {
+    title: 'Audited smart contracts',
+    subtitle: 'We provide audited smart contract templates for your NFTs collections',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        role="img"
+        width="1em"
+        height="1em"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 16 16"
+      >
+        <g fill="currentColor">
+          <path
+            fill-rule="evenodd"
+            d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"
+          />
+          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+          <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
+        </g>
+      </svg>
+    )
+  },
+  {
+    title: 'Zero commission',
+    subtitle:
+      'We do not inject the commission taker in your smart contract, use as your own smart contract.',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        role="img"
+        width="1em"
+        height="1em"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 32 32"
+      >
+        <path
+          d="M9.197 0L7.578 3.735H5.171v3.359h.921l.943 5.975H5.562L7.51 24.042l1.249-.015L10.015 32h11.891l.083-.531l1.172-7.443l1.188.015l1.943-10.973h-1.407l.937-5.975h1.011V3.734h-2.557L22.651-.001zm.704 1.073h12.057l1.025 2.375H8.868zm-3.666 3.73H25.76v1.228H6.235zm.604 9.333h18.183l-1.568 8.823l-7.536-.079l-7.511.079z"
+          fill="currentColor"
+        />
+      </svg>
+    )
+  },
+  {
+    title: 'No third-party ',
+    subtitle: 'All operations are local, you interact directly with blockchains',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        role="img"
+        width="1em"
+        height="1em"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 1024 1024"
+      >
+        <path
+          d="M709.6 210l.4-.2h.2L512 96L313.9 209.8h-.2l.7.3L151.5 304v416L512 928l360.5-208V304l-162.9-94zM482.7 843.6L339.6 761V621.4L210 547.8V372.9l272.7 157.3v313.4zM238.2 321.5l134.7-77.8l138.9 79.7l139.1-79.9l135.2 78l-273.9 158l-274-158zM814 548.3l-128.8 73.1v139.1l-143.9 83V530.4L814 373.1v175.2z"
+          fill="currentColor"
+        />
+      </svg>
+    )
   }
 ];
 
 const mockNumber = [
   {
     title: 300,
-    subtitle: 'Collection',
-    suffix: '+'
+    subtitle: 'Collections',
+    suffix: '+',
+    prefix: ''
   },
   {
     title: 45000,
-    subtitle: 'NFTs generated',
-    suffix: '+'
+    subtitle: 'NFTs ',
+    suffix: '+',
+    prefix: ''
   },
   {
     title: 8,
-    subtitle: 'Connected blockchain',
-    suffix: '+'
+    subtitle: 'Connected blockchains',
+    suffix: '',
+    prefix: ''
   },
   {
     title: 100,
-    subtitle: 'Trading volumn',
-    suffix: 'M$'
+    subtitle: 'Trading volume',
+    suffix: 'M+',
+    prefix: '$'
   }
 ];
 
@@ -191,9 +270,9 @@ export default function Homepage() {
                   variant="h3"
                   color="text.primary"
                   marginBottom={3}
-                  sx={{ fontWeight: 700, color: colors.red[400] }}
+                  sx={{ fontWeight: 700, color: '#00AB55' }}
                 >
-                  Always Free
+                  Free Forever
                 </Typography>
                 <Box
                   display="flex"
@@ -292,7 +371,6 @@ export default function Homepage() {
           <Grid item xs={12}>
             <Box display="flex" flexWrap="wrap" justifyContent={'center'} alignItems={'center'}>
               {[
-                'https://polygon.technology/brand-kit/polygon-logo.svg',
                 'https://ethereum.org/static/8ea7775026f258b32e5027fe2408c49f/57723/ethereum-logo-landscape-black.png',
                 'https://seeklogo.com/images/B/binance-smart-chain-logo-802A74A1DB-seeklogo.com.png',
                 'https://brandpalettes.com/wp-content/uploads/2021/04/fantom-02-02.png',
@@ -397,7 +475,7 @@ export default function Homepage() {
               </Box>
               <Grid container spacing={2}>
                 {mock.map((item, i) => (
-                  <Grid item xs={12} md={4} key={i}>
+                  <Grid item xs={12} sm={6} md={4} key={i}>
                     <Box width={1} height={1} data-aos={'fade-up'}>
                       <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
                         <Box
@@ -431,39 +509,197 @@ export default function Homepage() {
         </Box>
 
         <Box
-          bgcolor={'primary.main'}
+          width={1}
+          display={'flex'}
+          justifyContent={'center'}
           borderRadius={2}
-          paddingBottom={{ xs: 2, md: 0 }}
-          sx={{ minHeight: '200px', backgroundColor: '#377dff', marginTop: '50px' }}
+          paddingY={6}
+          sx={{ backgroundColor: '#377dff', marginTop: '50px' }}
         >
-          <Grid container data-aos="fade-up">
-            <Box width={1} display={'flex'} justifyContent={'center'}>
-              <Box paddingBottom={{ xs: 1, md: 0 }} display={'flex'} overflow={'auto'}>
-                {mockNumber.map((item, i) => (
-                  <Grid key={i} item xs={12} md={4}>
-                    <Typography variant="h4" color={'primary'} gutterBottom>
-                      <VisibilitySensor
-                        onChange={(isVisible) => setViewPortVisibility(isVisible)}
-                        delayedCall
-                      >
-                        <CountUp
-                          duration={2}
-                          end={viewPortEntered ? item.title : 0}
-                          start={0}
-                          suffix={item.suffix}
-                        />
-                      </VisibilitySensor>
-                    </Typography>
-                    <Typography color="text.secondary" component="p">
-                      {item.subtitle}
-                    </Typography>
-                  </Grid>
-                ))}
+          <Box paddingBottom={{ xs: 1, md: 0 }} display={'flex'} overflow={'auto'}>
+            {mockNumber.map((item, i) => (
+              <Box
+                key={i}
+                display={'flex'}
+                alignItems={'center'}
+                flexDirection={'column'}
+                flex={'0 0 auto'}
+                marginX={2}
+              >
+                <Typography variant={'h4'} sx={{ fontWeight: 700, color: 'white' }} gutterBottom>
+                  <VisibilitySensor
+                    onChange={(isVisible) => setViewPortVisibility(isVisible)}
+                    delayedCall
+                  >
+                    <CountUp
+                      duration={2}
+                      end={viewPortEntered ? item.title : 0}
+                      start={0}
+                      suffix={item.suffix}
+                      prefix={item.prefix}
+                    />
+                  </VisibilitySensor>
+                </Typography>
+                <Typography sx={{ color: 'white' }}>{item.subtitle}</Typography>
               </Box>
-            </Box>
+            ))}
+          </Box>
+        </Box>
+        <Divider sx={{ marginY: '50px' }} />
+        <Box>
+          <Box marginBottom={4}>
+            <Typography
+              sx={{
+                textTransform: 'uppercase',
+                fontWeight: 700
+              }}
+              gutterBottom
+              align={'center'}
+              variant="h3"
+              color="text.primary"
+            >
+              OUR SUPPORTERS
+            </Typography>
+          </Box>
+        </Box>
+        <Box
+          padding={{ xs: 2, sm: 4 }}
+          marginTop={5}
+          borderRadius={2}
+          bgcolor={theme.palette.mode === 'light' ? colors.amber[50] : '#DEB22F'}
+          data-aos={'fade-up'}
+        >
+          <Grid container spacing={isMd ? 4 : 2}>
+            <Grid item xs={12} md={8}>
+              <Grid container spacing={isMd ? 4 : 2}>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    '& .lazy-load-image-background.lazy-load-image-loaded': {
+                      width: '100%',
+                      height: '100%'
+                    }
+                  }}
+                >
+                  <Box
+                    component={LazyLoadImage}
+                    height={1}
+                    width={1}
+                    src={
+                      'https://techstory.in/wp-content/uploads/2021/09/612e0cc35e17602a5a6222be_Meta-Image-1200x630-1.png'
+                    }
+                    alt="..."
+                    effect="blur"
+                    borderRadius={2}
+                    maxWidth={1}
+                    maxHeight={400}
+                    sx={{
+                      objectFit: 'cover'
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box
+                display={'flex'}
+                flexDirection={'column'}
+                justifyContent={{ xs: 'flex-start', md: 'space-between' }}
+                height={1}
+              >
+                <Box>
+                  <Typography variant={'h4'} fontWeight={700} gutterBottom>
+                    Crust Network
+                  </Typography>
+                  <Typography
+                    color={theme.palette.mode === 'light' ? 'text.secondary' : 'text.primary'}
+                  >
+                    CRUST implements the incentive layer protocol for decentralized storage, it
+                    makes data unstoppable
+                  </Typography>
+                </Box>
+                <Box component={Card} marginTop={{ xs: 2 }} boxShadow={0}>
+                  <CardContent sx={{ padding: { xs: 2, sm: 4 } }}>
+                    <Box
+                      component="img"
+                      height={1}
+                      width={1}
+                      src={'https://crust.network/_nuxt/img/logo-B@3x.fdbab2d.png'}
+                      alt="..."
+                      maxWidth={80}
+                      marginBottom={2}
+                      sx={{
+                        filter: theme.palette.mode === 'dark' ? 'brightness(0) invert(0.7)' : 'none'
+                      }}
+                    />
+                    <Typography component={'p'}>
+                      “In Web3, everyone should be a creator.”
+                    </Typography>
+                    <Box marginTop={{ xs: 2, sm: 4 }}>
+                      <Typography variant={'subtitle1'} sx={{ fontWeight: 700 }}>
+                        Leo Wang
+                      </Typography>
+                      <Typography color="text.secondary">Co-founder Crust Network</Typography>
+                    </Box>
+                  </CardContent>
+                </Box>
+              </Box>
+            </Grid>
           </Grid>
         </Box>
       </Container>
+      {/* <Container maxWidth={false} sx={{ overflow: 'hidden' }} disableGutters>
+        <Box
+          position={'relative'}
+          marginTop={{ xs: 4, md: 6 }}
+          sx={{
+            backgroundColor: 'grey'
+          }}
+        >
+          <Box
+            component={'svg'}
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+            x="0px"
+            y="0px"
+            viewBox="0 0 1920 100.1"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              transform: 'translateY(-50%)',
+              zIndex: 2,
+              width: 1
+            }}
+          >
+            <path fill={'grey'} d="M0,0c0,0,934.4,93.4,1920,0v100.1H0L0,0z"></path>
+          </Box>
+          <Box>
+            <Box>
+              <Box
+                display={'flex'}
+                justifyContent={'space-between'}
+                alignItems={{ xs: 'flex-start', sm: 'center' }}
+                flexDirection={{ xs: 'column', sm: 'row' }}
+              >
+                <Box>
+                  <Typography fontWeight={700} variant={'h5'} gutterBottom>
+                    Interested in working with us?
+                  </Typography>
+                  <Typography>Hit us up and we'll get in touch with you.</Typography>
+                </Box>
+                <Box display="flex" marginTop={{ xs: 2, md: 0 }}>
+                  <Button variant="contained" color="primary" size="large">
+                    Hire us
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box> 
+      </Container>*/}
     </Page>
   );
 }
