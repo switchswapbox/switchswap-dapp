@@ -128,9 +128,9 @@ export default function DeploySmartContract() {
           Status
         </Typography>
         <Typography variant="body2">
-          You're about to create a new Safe on Ethereum and will have to confirm a transaction with
-          your currently connected wallet. The creation will cost approximately 0,06749 ETH. The
-          exact amount will be determined by your wallet
+          You're about to create a new collection on Ethereum and will have to confirm a transaction
+          with your currently connected wallet. The creation will cost approximately 0,06749 ETH.
+          The exact amount will be determined by your wallet
         </Typography>
         <Button variant="outlined" size="small" sx={{ mt: 1 }}>
           Deploy
