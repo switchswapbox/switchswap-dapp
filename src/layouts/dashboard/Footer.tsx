@@ -7,8 +7,19 @@ import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Grid, Link, Divider, Container, Typography, IconButton, Stack } from '@mui/material';
-//
+import {
+  Grid,
+  Link,
+  Divider,
+  Container,
+  Typography,
+  IconButton,
+  Stack,
+  Box,
+  Tooltip
+} from '@mui/material';
+import { MIconButton } from '../../components/@material-extend';
+import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../constants/COMMON_VARIABLES';
 import Logo from '../../components/Logo';
 
 // ----------------------------------------------------------------------
@@ -44,6 +55,7 @@ const LINKS = [
 
 const RootStyle = styled('div')(({ theme }) => ({
   position: 'relative',
+  marginTop: '50px',
   backgroundColor: theme.palette.background.default
 }));
 
@@ -69,18 +81,28 @@ export default function MainFooter() {
               Empowered by web3 technologies
             </Typography>
 
-            <Stack
-              spacing={1.5}
-              direction="row"
-              justifyContent={{ xs: 'center', md: 'flex-start' }}
-              sx={{ mt: 5, mb: { xs: 5, md: 0 } }}
-            >
-              {SOCIALS.map((social) => (
-                <IconButton key={social.name} color="primary" sx={{ p: 1 }}>
-                  <Icon icon={social.icon} width={16} height={16} />
-                </IconButton>
-              ))}
-            </Stack>
+            <Box sx={{ mt: 3, mb: { xs: 2, md: 0 } }}>
+              <Tooltip key="discord" title="Discord">
+                <MIconButton onClick={() => window.open(DISCORD, '_blank')}>
+                  <Icon icon="bi:discord" width={24} height={24} />
+                </MIconButton>
+              </Tooltip>
+              <Tooltip key="telegram" title="Telegram">
+                <MIconButton onClick={() => window.open(TELEGRAM, '_blank')}>
+                  <Icon icon="uim:telegram-alt" width={24} height={24} />
+                </MIconButton>
+              </Tooltip>
+              <Tooltip key="twitter" title="Twitter">
+                <MIconButton onClick={() => window.open(TWITTER, '_blank')}>
+                  <Icon icon="akar-icons:twitter-fill" width={24} height={24} />
+                </MIconButton>
+              </Tooltip>
+              <Tooltip key="medium" title="Medium">
+                <MIconButton onClick={() => window.open(MEDIUM, '_blank')}>
+                  <Icon icon="ant-design:medium-square-filled" width={24} height={24} />
+                </MIconButton>
+              </Tooltip>
+            </Box>
           </Grid>
 
           <Grid item xs={12} md={7}>
