@@ -1,35 +1,11 @@
 import { Icon } from '@iconify/react';
-import googleFill from '@iconify/icons-eva/google-fill';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
-// material
 import { styled } from '@mui/material/styles';
-import {
-  Grid,
-  Link,
-  Divider,
-  Container,
-  Typography,
-  IconButton,
-  Stack,
-  Box,
-  Tooltip
-} from '@mui/material';
+import { Grid, Link, Divider, Container, Typography, Stack, Box, Tooltip } from '@mui/material';
 import { MIconButton } from '../../components/@material-extend';
 import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../constants/COMMON_VARIABLES';
 import Logo from '../../components/Logo';
-
-// ----------------------------------------------------------------------
-
-const SOCIALS = [
-  { name: 'FaceBook', icon: facebookFill },
-  { name: 'Google', icon: googleFill },
-  { name: 'Linkedin', icon: linkedinFill },
-  { name: 'Twitter', icon: twitterFill }
-];
 
 const LINKS = [
   {

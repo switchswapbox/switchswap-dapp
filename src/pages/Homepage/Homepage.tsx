@@ -648,6 +648,28 @@ export default function Homepage() {
             </Grid>
           </Grid>
         </Box>
+        <Grid container spacing={4} marginTop={2}>
+          {[
+            'https://darwinia.network/static/media/logo-darwinia.11b1c002.png',
+            'https://labs.binance.com/labs/labs-h.png',
+            'https://www.pngall.com/wp-content/uploads/10/NEAR-Protocol-Crypto-Logo-PNG-File.png',
+            'https://brandpalettes.com/wp-content/uploads/2021/05/elrond-02.png',
+            'https://cdn.substack.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F8d6c8ff9-e171-4223-a4b2-1384ee7530b8_2568x643.png',
+            'https://www.kcc.io/logo/AbbreviatedLettersLogo/KuCoinCommunityChain_Green.svg'
+          ].map((item, i) => (
+            <Grid item key={i} xs={6} sm={4}>
+              <Box
+                bgcolor={'#f7faff'}
+                p={4}
+                borderRadius={2}
+                display={'flex'}
+                justifyContent={'center'}
+              >
+                <Box component="img" height={1} width={1} maxWidth={90} src={item} alt="..." />
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
       {/* <Container maxWidth={false} sx={{ overflow: 'hidden' }} disableGutters>
         <Box
