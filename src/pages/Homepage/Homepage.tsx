@@ -284,6 +284,7 @@ export default function Homepage() {
                     size="large"
                     fullWidth={isMd ? false : true}
                     sx={{ backgroundColor: '#377dff' }}
+                    href={'#/create-collection'}
                   >
                     Create collection
                   </Button>
@@ -449,8 +450,7 @@ export default function Homepage() {
                     color="primary"
                     size="large"
                     fullWidth={isMd ? false : true}
-                    href={'/'}
-                    target={'_blank'}
+                    href={'#/create-collection'}
                     sx={{ backgroundColor: '#377dff' }}
                   >
                     Create collection
