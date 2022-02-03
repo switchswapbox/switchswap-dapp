@@ -49,7 +49,14 @@ export default function MainFooter() {
         >
           <Grid item xs={12} sx={{ mb: 3 }}>
             <ScrollLink to="move_top" spy smooth>
-              <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
+              <Box
+                component="img"
+                width={1}
+                src={'https://crust.network/_nuxt/img/logo-B@3x.fdbab2d.png'}
+                alt="..."
+                maxWidth={80}
+                marginBottom={2}
+              />
             </ScrollLink>
           </Grid>
           <Grid item xs={8} md={3}>
