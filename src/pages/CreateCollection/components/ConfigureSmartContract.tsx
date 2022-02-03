@@ -1,8 +1,20 @@
-import { Typography, Box, Button, Card, Paper, Grid } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Button,
+  Card,
+  Paper,
+  Grid,
+  Divider,
+  TextField,
+  FormGroup,
+  FormControlLabel,
+  Checkbox
+} from '@mui/material';
 
 import Iconify from '../../../components/Iconify';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs2015 } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import { androidstudio } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
 
 import { useTheme } from '@mui/material/styles';
 
@@ -25,32 +37,99 @@ export default function ConfigureSmartContract() {
               border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
             }}
           >
-            Hello
+            <Typography variant="overline" sx={{ display: 'block', color: 'text.secondary' }}>
+              Settings
+            </Typography>
+            <TextField
+              id="nameSmartContract"
+              label="Name"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              id="tokenSymbol"
+              label="Token Symbol"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+            />
+            <Divider sx={{ my: 3 }} />
+            <Typography
+              variant="overline"
+              sx={{ mb: 2, display: 'block', color: 'text.secondary' }}
+            >
+              Features
+            </Typography>
+            <FormGroup>
+              <FormControlLabel control={<Checkbox defaultChecked />} label="Enumerable" />
+              <FormControlLabel control={<Checkbox />} label="Burnable" />
+            </FormGroup>
           </Paper>
         </Grid>
         <Grid item xs={12} md={8}>
           <Box
             component={SyntaxHighlighter}
             language={'javascript'}
-            style={vs2015}
+            style={androidstudio}
             padding={`${theme.spacing(2)} !important`}
             borderRadius={2}
             margin={`${theme.spacing(0)} !important`}
             bgcolor={'#21325b !important'}
           >
             {`
-> $ yarn install
-// Or
-> $ npm install
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.2;
 
-// Everything installed!
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
+contract MyToken is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
+    constructor() ERC721("MyToken", "MTK") {}
 
-> $ yarn start
-// Or
-> $ npm run start
+    function pause() public onlyOwner {
+        _pause();
+    }
 
-// LiveReload started. Opening localhost:3000
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    // The following functions are overrides required by Solidity.
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+}
         `}
           </Box>
         </Grid>

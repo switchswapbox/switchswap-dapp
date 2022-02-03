@@ -37,12 +37,12 @@ export default function CreateCollection() {
   const ACCOUNT_TABS = [
     {
       value: 'blockchain',
-      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      icon: <Iconify icon={'akar-icons:link-chain'} width={20} height={20} />,
       component: <BlockchainConnection />
     },
     {
       value: 'smart_contract',
-      icon: <Iconify icon={'ic:round-receipt'} width={20} height={20} />,
+      icon: <Iconify icon={'healthicons:i-certificate-paper-outline'} width={20} height={20} />,
       component: <ConfigureSmartContract />
     }
   ];
