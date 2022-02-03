@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { capitalCase } from 'change-case';
+
 import {
   Container,
   Typography,
@@ -7,20 +10,42 @@ import {
   Divider,
   Avatar,
   Card,
-  CardContent
+  CardContent,
+  Tabs,
+  Tab,
+  Stack,
+  Paper,
+  IconButton
 } from '@mui/material';
 
 import Page from '../../components/Page';
-
+import Iconify from '../../components/Iconify';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { alpha, useTheme } from '@mui/material/styles';
+import BlockchainConnection from './components/BlockchainConnection';
+import ConfigureSmartContract from './components/ConfigureSmartContract';
 
 export default function CreateCollection() {
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true
   });
+
+  const [currentTab, setCurrentTab] = useState('blockchain');
+
+  const ACCOUNT_TABS = [
+    {
+      value: 'blockchain',
+      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      component: <BlockchainConnection />
+    },
+    {
+      value: 'smart_contract',
+      icon: <Iconify icon={'ic:round-receipt'} width={20} height={20} />,
+      component: <ConfigureSmartContract />
+    }
+  ];
 
   return (
     <Page title="Create NFTs Collection">
@@ -104,6 +129,32 @@ export default function CreateCollection() {
             </Box>
           </Box>
         </Box>
+
+        <Box sx={{ mb: 5 }} />
+
+        <Tabs
+          value={currentTab}
+          scrollButtons="auto"
+          variant="scrollable"
+          allowScrollButtonsMobile
+          onChange={(e, value) => setCurrentTab(value)}
+        >
+          {ACCOUNT_TABS.map((tab) => (
+            <Tab
+              disableRipple
+              key={tab.value}
+              label={capitalCase(tab.value)}
+              icon={tab.icon}
+              value={tab.value}
+            />
+          ))}
+        </Tabs>
+
+        <Box sx={{ mb: 3 }} />
+        {ACCOUNT_TABS.map((tab) => {
+          const isMatched = tab.value === currentTab;
+          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+        })}
       </Container>
     </Page>
   );
