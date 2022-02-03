@@ -84,7 +84,7 @@ export default function BlockchainConnection() {
       </Paper>
 
       <Box>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-20-regular'} />}>
+        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} />}>
           Next
         </Button>
       </Box>

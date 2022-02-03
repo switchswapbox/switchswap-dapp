@@ -136,7 +136,10 @@ contract MyToken is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownabl
       </Grid>
 
       <Box>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-20-regular'} />}>
+        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} rotate={2} />}>
+          Back
+        </Button>
+        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} />}>
           Next
         </Button>
       </Box>

@@ -1,22 +1,7 @@
 import { useState } from 'react';
 import { capitalCase } from 'change-case';
 
-import {
-  Container,
-  Typography,
-  Box,
-  Button,
-  Grid,
-  Divider,
-  Avatar,
-  Card,
-  CardContent,
-  Tabs,
-  Tab,
-  Stack,
-  Paper,
-  IconButton
-} from '@mui/material';
+import { Container, Typography, Box, Button, Tabs, Tab } from '@mui/material';
 
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -25,6 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { alpha, useTheme } from '@mui/material/styles';
 import BlockchainConnection from './components/BlockchainConnection';
 import ConfigureSmartContract from './components/ConfigureSmartContract';
+import DeploySmartContract from './components/DeploySmartContract';
 
 export default function CreateCollection() {
   const theme = useTheme();
@@ -44,6 +30,11 @@ export default function CreateCollection() {
       value: 'smart_contract',
       icon: <Iconify icon={'healthicons:i-certificate-paper-outline'} width={20} height={20} />,
       component: <ConfigureSmartContract />
+    },
+    {
+      value: 'create_collection',
+      icon: <Iconify icon={'eos-icons:subscriptions-created-outlined'} width={20} height={20} />,
+      component: <DeploySmartContract />
     }
   ];
 
