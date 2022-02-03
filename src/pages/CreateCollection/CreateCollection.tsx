@@ -89,7 +89,7 @@ export default function CreateCollection() {
                 sx={{ fontWeight: 400 }}
                 align={'center'}
               >
-                With CrustNFTs, you write your smart contract for your NFTs collection and deploy it
+                With CrustNFTs, you write the smart contract for your NFTs collection and deploy it
                 on blockchain in minutes.
               </Typography>
             </Box>
