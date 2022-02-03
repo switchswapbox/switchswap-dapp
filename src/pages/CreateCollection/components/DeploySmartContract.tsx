@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Typography,
   Box,
@@ -9,14 +9,46 @@ import {
   Grid,
   Chip,
   Autocomplete,
-  TextField
+  TextField,
+  Stepper,
+  StepContent,
+  Step,
+  StepLabel,
+  CircularProgress
 } from '@mui/material';
+import { green } from '@mui/material/colors';
 
 import Iconify from '../../../components/Iconify';
 
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
 
 export default function DeploySmartContract() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const buttonSx = {
+    ...(success && {
+      bgcolor: green[500],
+      '&:hover': {
+        bgcolor: green[700]
+      }
+    })
+  };
+  const timer = useRef<number>();
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
   return (
     <Card sx={{ p: 3 }}>
       <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
@@ -132,6 +164,76 @@ export default function DeploySmartContract() {
           with your currently connected wallet. The creation will cost approximately 0,06749 ETH.
           The exact amount will be determined by your wallet
         </Typography>
+
+        <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
+          {[
+            {
+              label: 'Compile smart contract',
+              description: `Your collection is build using your own smart contract therefore it needs to be compiled in machine language.`
+            },
+            {
+              label: 'Deploying your smart contract on blockchain',
+              description:
+                'You need to make a traction on Ethereum to deploy the smart contract. This transaction will cost 0,06749 ETH for the miners fee.'
+            },
+            {
+              label: 'Verification of smart contract on Etherscan',
+              description: `The source code of your smart contract will be published on Etherscan to ensure the transparency of your smart contract.`
+            }
+          ].map((step, index) => (
+            <Step key={step.label} onClick={() => setActiveStep(index)}>
+              <StepLabel>{step.label}</StepLabel>
+              <StepContent>
+                <Typography>{step.description}</Typography>
+                <Box sx={{ my: 2 }}>
+                  <div>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box sx={{ position: 'relative' }}>
+                        <Button
+                          variant="contained"
+                          sx={buttonSx}
+                          disabled={loading}
+                          onClick={() => {
+                            if (!loading) {
+                              setSuccess(false);
+                              setLoading(true);
+                              timer.current = window.setTimeout(() => {
+                                setSuccess(true);
+                                setLoading(false);
+                                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                              }, 2000);
+                            }
+                          }}
+                        >
+                          {index === 0 ? 'Compiling' : index === 1 ? 'Deploying' : 'Verifying'}
+                        </Button>
+                        {loading && (
+                          <CircularProgress
+                            size={24}
+                            sx={{
+                              color: green[500],
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              marginTop: '-12px',
+                              marginLeft: '-12px'
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </div>
+                </Box>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === 3 && (
+          <Paper square elevation={0} sx={{ p: 3 }}>
+            <Typography>All steps completed - you&apos;re finished</Typography>
+            <Button sx={{ mt: 1, mr: 1 }}>Reset</Button>
+          </Paper>
+        )}
         <Button variant="outlined" size="small" sx={{ mt: 1 }}>
           Deploy
         </Button>
