@@ -665,7 +665,7 @@ export default function Homepage() {
                 display={'flex'}
                 justifyContent={'center'}
               >
-                <Box component="img" height={1} width={1} maxWidth={90} src={item} alt="..." />
+                <Box component="img" height={1} maxHeight={30} src={item} alt="..." />
               </Box>
             </Grid>
           ))}
