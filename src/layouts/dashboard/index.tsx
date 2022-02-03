@@ -7,6 +7,7 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 //
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import Footer from './Footer';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ const MainStyle = styled('div')(({ theme }) => ({
   overflow: 'auto',
   minHeight: '100%',
   paddingTop: APP_BAR_MOBILE + 24,
-  paddingBottom: theme.spacing(10),
+  paddingBottom: theme.spacing(4),
   [theme.breakpoints.up('lg')]: {
     paddingTop: APP_BAR_DESKTOP + 24,
     paddingLeft: theme.spacing(2),
@@ -54,6 +55,7 @@ export default function DashboardLayout() {
         }}
       >
         <Outlet />
+        <Footer />
       </MainStyle>
     </RootStyle>
   );
