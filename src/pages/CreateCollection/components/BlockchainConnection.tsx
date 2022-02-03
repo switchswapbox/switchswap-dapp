@@ -19,13 +19,14 @@ export default function BlockchainConnection() {
         }}
       >
         <Typography variant="subtitle2" display="inline">
-          Select network on which to create your collection. The app is currently pointing to{' '}
+          Select network on which you want to create your collection. The app is currently pointing
+          to{' '}
         </Typography>
 
         <Button variant="outlined" size="small" sx={{ display: 'inline', borderColor: '#454F5B' }}>
           Ethereum
         </Button>
-        <Typography variant="body2" gutterBottom sx={{ mt: 1 }}>
+        <Typography variant="body2" gutterBottom sx={{ mt: 1, wordBreak: 'break-word' }}>
           <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
             Address: &nbsp;
           </Typography>
