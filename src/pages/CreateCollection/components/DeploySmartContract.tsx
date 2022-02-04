@@ -54,13 +54,12 @@ export default function DeploySmartContract() {
       <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
         Deploy the collection on Ethereum
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} md={6}>
           <Paper
             key={'123'}
             sx={{
               p: 3,
-              mb: 3,
               width: 1,
               position: 'relative',
               border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
@@ -96,7 +95,6 @@ export default function DeploySmartContract() {
             key={'123'}
             sx={{
               p: 3,
-              mb: 3,
               width: 1,
               position: 'relative',
               border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
