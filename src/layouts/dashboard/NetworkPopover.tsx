@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react';
 // material
-import { Box, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, MenuItem, ListItemIcon, ListItemText, Typography, Button } from '@mui/material';
 // components
 import MenuPopover from '../../components/MenuPopover';
 import { MIconButton } from '../../components/@material-extend';
 import useNetworks from '../../hooks/useNetworks';
+import Scrollbar from 'components/Scrollbar';
+import Iconify from 'components/Iconify';
 // ----------------------------------------------------------------------
+const ITEM_HEIGHT = 50;
 
 export default function LanguagePopover() {
   const anchorRef = useRef(null);
@@ -14,25 +17,23 @@ export default function LanguagePopover() {
 
   return (
     <>
-      <MIconButton
+      <Box
+        component={Button}
         ref={anchorRef}
         onClick={() => setOpen(true)}
-        sx={{
-          padding: 0,
-
-          ...(open && { bgcolor: 'action.selected' })
-        }}
+        color="primary"
+        size="small"
+        marginTop={{ xs: 2, sm: 0 }}
+        marginLeft={{ sm: 2 }}
+        endIcon={<Iconify icon={'akar-icons:chevron-down'} />}
       >
-        <Box
-          component="img"
-          src={currentNetwork.icon}
-          alt={currentNetwork.label}
-          sx={{ height: '36px' }}
-        />
-      </MIconButton>
-
+        {currentNetwork.label}
+      </Box>
       <MenuPopover open={open} onClose={() => setOpen(false)} anchorEl={anchorRef.current}>
-        <Box sx={{ py: 1 }}>
+        <Typography variant="subtitle1" sx={{ p: 1.5 }}>
+          Networks <Typography component="span">({allNetworks.length})</Typography>
+        </Typography>
+        <Scrollbar sx={{ height: ITEM_HEIGHT * 6, pb: 1 }}>
           {allNetworks.map((option) => (
             <MenuItem
               key={option.value}
@@ -51,7 +52,7 @@ export default function LanguagePopover() {
               </ListItemText>
             </MenuItem>
           ))}
-        </Box>
+        </Scrollbar>
       </MenuPopover>
     </>
   );
