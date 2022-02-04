@@ -9,7 +9,8 @@ import {
   TextField,
   FormGroup,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Stack
 } from '@mui/material';
 
 import Iconify from '../../../components/Iconify';
@@ -22,16 +23,16 @@ export default function ConfigureSmartContract() {
   const theme = useTheme();
   return (
     <Card sx={{ p: 3 }}>
-      <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
-        Configuration of Smart Contract
-      </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} md={4}>
+          <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
+            Configuration of Smart Contract
+          </Typography>
           <Paper
             key={'123'}
             sx={{
               p: 3,
-              mb: 3,
+              mb: 2,
               width: 1,
               position: 'relative',
               border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
@@ -68,6 +69,12 @@ export default function ConfigureSmartContract() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={8}>
+          <Box sx={{ height: '42px' }}>
+            <Stack direction="row" justifyContent="flex-end" spacing={1}>
+              <Button variant="outlined">Copy</Button>
+              <Button variant="outlined">Download</Button>
+            </Stack>
+          </Box>
           <Box
             component={SyntaxHighlighter}
             language={'javascript'}

@@ -1,13 +1,15 @@
 import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton, Divider } from '@mui/material';
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import { MHidden } from '../../components/@material-extend';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import ConnectWalletDialog from './ConnectWalletDialog';
 import NetworkPopover from './NetworkPopover';
+import NotificationPopover from './NotificationPopover';
+
 import Logo from '../../components/Logo';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -75,9 +77,10 @@ export default function DashboardNavbar({ onOpenSidebar }: DashboardNavbarProps)
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
+          <NotificationPopover />
           <ConnectWalletDialog />
-
           <AccountPopover />
+          <Divider orientation="vertical" flexItem />
           <NetworkPopover />
         </Stack>
       </ToolbarStyle>
