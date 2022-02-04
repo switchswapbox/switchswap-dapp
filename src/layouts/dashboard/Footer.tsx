@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Link as ScrollLink } from 'react-scroll';
+import { animateScroll as scroll } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import {
@@ -62,16 +62,17 @@ export default function MainFooter() {
         >
           <Grid item xs={12} sx={{ mb: 3 }}>
             <Stack alignItems={mdUp ? 'flex-start' : 'center'}>
-              <ScrollLink to="move_top" spy smooth>
-                <Box
-                  component="img"
-                  width={1}
-                  src={'https://crust.network/_nuxt/img/logo-B@3x.fdbab2d.png'}
-                  alt="..."
-                  maxWidth={80}
-                  marginBottom={2}
-                />
-              </ScrollLink>
+              <Box
+                component="img"
+                width={1}
+                src={'https://crust.network/_nuxt/img/logo-B@3x.fdbab2d.png'}
+                alt="..."
+                maxWidth={80}
+                marginBottom={2}
+                onClick={() => {
+                  scroll.scrollToTop();
+                }}
+              />
             </Stack>
           </Grid>
           <Grid item xs={12} md={3}>
