@@ -19,7 +19,9 @@ import {
   DialogContent,
   ListItemButton,
   ListItemText,
-  Collapse
+  Collapse,
+  useMediaQuery,
+  ButtonBase
 } from '@mui/material';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -48,6 +50,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 const MaxWidthDialog = () => {
   const theme = useTheme();
+  const smUp = useMediaQuery(theme.breakpoints.up('sm'));
   const [open, setOpen] = useState(false);
   const { translate } = useLocales();
   const dispatch = useDispatch();
@@ -165,18 +168,28 @@ const MaxWidthDialog = () => {
 
   return (
     <>
-      <Button
-        color="info"
-        variant="contained"
-        onClick={handleClickOpen}
-        startIcon={
-          <SvgIcon color="action">
-            <Icon icon="fontisto:wallet" color="white" />
+      {smUp && (
+        <Button
+          color="info"
+          variant="contained"
+          onClick={handleClickOpen}
+          startIcon={
+            <SvgIcon color="action">
+              <Icon icon="fontisto:wallet" color="white" />
+            </SvgIcon>
+          }
+        >
+          {translate(`connectWallet.myWallet`)}
+        </Button>
+      )}
+
+      {!smUp && (
+        <ButtonBase onClick={handleClickOpen}>
+          <SvgIcon>
+            <Icon icon="fontisto:wallet" color="#3366FF" />
           </SvgIcon>
-        }
-      >
-        {translate(`connectWallet.myWallet`)}
-      </Button>
+        </ButtonBase>
+      )}
 
       <Dialog open={open} maxWidth="xs" onClose={handleClose}>
         <DialogTitle sx={{ pb: 1 }}>{translate(`connectWallet.management`)} </DialogTitle>

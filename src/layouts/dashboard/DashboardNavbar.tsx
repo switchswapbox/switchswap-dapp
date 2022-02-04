@@ -7,6 +7,7 @@ import { MHidden } from '../../components/@material-extend';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import ConnectWalletDialog from './ConnectWalletDialog';
+import NetworkPopover from './NetworkPopover';
 import Logo from '../../components/Logo';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -77,6 +78,7 @@ export default function DashboardNavbar({ onOpenSidebar }: DashboardNavbarProps)
           <ConnectWalletDialog />
 
           <AccountPopover />
+          <NetworkPopover />
         </Stack>
       </ToolbarStyle>
     </RootStyle>
