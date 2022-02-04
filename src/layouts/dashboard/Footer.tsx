@@ -2,7 +2,18 @@ import { Icon } from '@iconify/react';
 import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Grid, Link, Divider, Container, Typography, Stack, Box, Tooltip } from '@mui/material';
+import {
+  Grid,
+  Link,
+  Divider,
+  Container,
+  Typography,
+  Stack,
+  Box,
+  Tooltip,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 import { MIconButton } from '../../components/@material-extend';
 import { DISCORD, TWITTER, TELEGRAM, MEDIUM } from '../../constants/COMMON_VARIABLES';
 import Logo from '../../components/Logo';
@@ -38,6 +49,8 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function MainFooter() {
+  const theme = useTheme();
+  const mdUp = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <RootStyle>
       <Divider />
@@ -48,18 +61,20 @@ export default function MainFooter() {
           sx={{ textAlign: { xs: 'center', md: 'left' } }}
         >
           <Grid item xs={12} sx={{ mb: 3 }}>
-            <ScrollLink to="move_top" spy smooth>
-              <Box
-                component="img"
-                width={1}
-                src={'https://crust.network/_nuxt/img/logo-B@3x.fdbab2d.png'}
-                alt="..."
-                maxWidth={80}
-                marginBottom={2}
-              />
-            </ScrollLink>
+            <Stack alignItems={mdUp ? 'flex-start' : 'center'}>
+              <ScrollLink to="move_top" spy smooth>
+                <Box
+                  component="img"
+                  width={1}
+                  src={'https://crust.network/_nuxt/img/logo-B@3x.fdbab2d.png'}
+                  alt="..."
+                  maxWidth={80}
+                  marginBottom={2}
+                />
+              </ScrollLink>
+            </Stack>
           </Grid>
-          <Grid item xs={8} md={3}>
+          <Grid item xs={12} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
               Empowered by web3 technologies
             </Typography>
