@@ -25,7 +25,7 @@ export default function LanguagePopover() {
         size="small"
         marginTop={{ xs: 2, sm: 0 }}
         marginLeft={{ sm: 2 }}
-        endIcon={<Iconify icon={'akar-icons:chevron-down'} />}
+        endIcon={<Iconify height={12} icon={'akar-icons:chevron-down'} />}
       >
         {currentNetwork.label}
       </Box>

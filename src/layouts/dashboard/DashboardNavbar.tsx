@@ -4,9 +4,8 @@ import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton, Divider } from '@mui/material';
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import { MHidden } from '../../components/@material-extend';
-import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
-import ConnectWalletDialog from './ConnectWalletDialog';
+import ConnectWalletPopover from './ConnectWalletPopover';
 import NetworkPopover from './NetworkPopover';
 import NotificationPopover from './NotificationPopover';
 
@@ -72,14 +71,11 @@ export default function DashboardNavbar({ onOpenSidebar }: DashboardNavbarProps)
             <Icon icon={menu2Fill} />
           </IconButton>
         </MHidden>
-
         <Box sx={{ flexGrow: 1 }} />
-
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
           <NotificationPopover />
-          <ConnectWalletDialog />
-          <AccountPopover />
+          <ConnectWalletPopover />
           <Divider orientation="vertical" flexItem />
           <NetworkPopover />
         </Stack>
