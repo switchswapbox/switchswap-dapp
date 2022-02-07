@@ -19,6 +19,7 @@ export default function LanguagePopover() {
         onClick={() => setOpen(true)}
         sx={{
           padding: 0,
+          marginRight: -2,
           width: 44,
           height: 44,
           ...(open && { bgcolor: 'action.selected' })

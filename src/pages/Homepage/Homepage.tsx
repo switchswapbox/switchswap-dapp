@@ -233,7 +233,7 @@ export default function Homepage() {
                   <Typography
                     variant={'inherit'}
                     sx={{
-                      color: '#3366FF'
+                      color: '#377dff'
                     }}
                   >
                     One Stop Station
@@ -282,6 +282,7 @@ export default function Homepage() {
                   <Button
                     variant="contained"
                     size="large"
+                    color="info"
                     fullWidth={isMd ? false : true}
                     sx={{ backgroundColor: '#377dff' }}
                     href={'#/create-collection'}
@@ -447,7 +448,7 @@ export default function Homepage() {
                   <Button
                     component={'a'}
                     variant="contained"
-                    color="primary"
+                    color="info"
                     size="large"
                     fullWidth={isMd ? false : true}
                     href={'#/create-collection'}
