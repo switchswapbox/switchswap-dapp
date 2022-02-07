@@ -1,5 +1,5 @@
 {
-  "name": "@minimal/material-kit-react",
+  "name": "switchswap-dapp",
   "author": "minimals.cc",
   "version": "2.6.0",
   "homepage": ".",
@@ -11,7 +11,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx ./src",
-    "lint:fix": "eslint --fix --ext .ts,.tsx ./src"
+    "lint:fix": "eslint --fix --ext .ts,.tsx ./src",
+    "format": "prettier --write ."
   },
   "eslintConfig": {
     "extends": [
@@ -23,6 +24,10 @@
     "presets": [
       "@babel/preset-react"
     ]
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   },
   "browserslist": {
     "production": [
@@ -158,6 +163,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
+    "@arkweid/lefthook": "^0.7.7",
     "@babel/core": "^7.15.5",
     "@babel/eslint-parser": "^7.15.4",
     "@types/autosuggest-highlight": "^3.1.1",

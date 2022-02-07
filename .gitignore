@@ -26,3 +26,5 @@ yarn-error.log*
 .eslintcache
 
 .vercel
+# NPM only
+yarn.lock
