@@ -17,7 +17,7 @@ import Iconify from 'components/Iconify';
 
 import { Icon } from '@iconify/react';
 
-import { shortenAddress } from '../../utils/formatAddress';
+import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
 
 import React from 'react';
 import useLocales from '../../hooks/useLocales';
@@ -84,7 +84,7 @@ const ConnectWalletPopover = () => {
       {!smUp && !walletIsConnected && (
         <ButtonBase onClick={handleWalletModalOpen}>
           <SvgIcon>
-            <Icon icon="fontisto:wallet" color="#3366FF" />
+            <Icon icon="fontisto:wallet" color="#377dff" />
           </SvgIcon>
         </ButtonBase>
       )}
@@ -109,7 +109,10 @@ const ConnectWalletPopover = () => {
                 variant="caption"
                 sx={{ fontWeight: 700 }}
               >{`${currentNetwork.value.toLowerCase()}:`}</Typography>
-              <Typography variant="caption">{shortenAddress(selectedAccountAddress, 5)}</Typography>
+              <Typography variant="caption">
+                {smUp && shortenAddress(selectedAccountAddress, 5)}
+                {!smUp && shortenAddressHeader(selectedAccountAddress, 5)}
+              </Typography>
             </Stack>
           </Stack>
         </Box>
