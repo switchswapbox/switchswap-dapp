@@ -1,0 +1,16 @@
+# EXAMPLE USAGE
+# Refer for explanation to following link:
+# https://github.com/evilmartians/lefthook/blob/master/docs/full_guide.md
+#
+
+# pre-push:
+#   commands:
+#     tests:
+#       run: npm test -- --watchAll=false
+
+pre-commit:
+  parallel: false
+  commands:
+    eslint:
+      glob: "*.{js,jsx,ts,tsx}"
+      run: npx eslint {staged_files}
