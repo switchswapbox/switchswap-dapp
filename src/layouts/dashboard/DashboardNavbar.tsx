@@ -12,7 +12,7 @@ import NotificationPopover from './NotificationPopover';
 import Logo from '../../components/Logo';
 import { Link as RouterLink } from 'react-router-dom';
 
-const DRAWER_WIDTH = 280;
+// const DRAWER_WIDTH = 280;
 const COLLAPSE_WIDTH = 0;
 
 const APPBAR_MOBILE = 64;
