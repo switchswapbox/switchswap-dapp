@@ -1,7 +1,7 @@
 {
   "name": "switchswap-dapp",
-  "author": "minimals.cc",
-  "version": "2.6.0",
+  "author": "switchswap-team",
+  "version": "0.0.0",
   "homepage": ".",
   "private": true,
   "scripts": {
