@@ -23,7 +23,7 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 export default function MyNFT() {
-  const [currentTab, setCurrentTab] = useState('profile');
+  const [currentTab, setCurrentTab] = useState('NFTs');
 
   const handleChangeTab = (newValue: string) => {
     setCurrentTab(newValue);
@@ -52,6 +52,7 @@ export default function MyNFT() {
             </Tabs>
           </TabsWrapperStyle>
         </Card>
+        {currentTab === 'NFTs' && <Box key="NFTs">Hello</Box>}
       </Container>
     </Page>
   );
