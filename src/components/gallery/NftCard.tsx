@@ -22,7 +22,7 @@ const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 type NftCardProps = {
   tokenId: string;
-  tokenURI: string;
+  tokenURI?: string;
   imageUrl: string;
   name: string;
   nftContract: string;

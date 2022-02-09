@@ -5,7 +5,7 @@ import { Tab, Box, Card, Tabs, Container, CardHeader, CardContent } from '@mui/m
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import ProfileCover from './components/ProfileCover';
-import CarouselCenterMode from './components/CarouselCenterMode';
+import MyCollections from './components/MyCollections';
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
   zIndex: 9,
@@ -56,7 +56,7 @@ export default function MyNFT() {
         </Card>
         {currentTab === 'nfts' && (
           <Box key="nfts">
-            <CarouselCenterMode />
+            <MyCollections />
           </Box>
         )}
         {currentTab === 'activity' && <Box key="activity">Hello</Box>}
