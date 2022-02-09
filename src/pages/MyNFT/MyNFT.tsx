@@ -1,10 +1,11 @@
 import { capitalCase } from 'change-case';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Tab, Box, Card, Tabs, Container } from '@mui/material';
+import { Tab, Box, Card, Tabs, Container, CardHeader, CardContent } from '@mui/material';
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import ProfileCover from './components/ProfileCover';
+import CarouselCenterMode from './components/CarouselCenterMode';
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
   zIndex: 9,
@@ -23,7 +24,7 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 export default function MyNFT() {
-  const [currentTab, setCurrentTab] = useState('NFTs');
+  const [currentTab, setCurrentTab] = useState('nfts');
 
   const handleChangeTab = (newValue: string) => {
     setCurrentTab(newValue);
@@ -42,17 +43,23 @@ export default function MyNFT() {
           <ProfileCover />
           <TabsWrapperStyle>
             <Tabs
-              value="NFTs"
+              value={currentTab}
               scrollButtons="auto"
               variant="scrollable"
               allowScrollButtonsMobile
               onChange={(e, value) => handleChangeTab(value)}
             >
-              <Tab disableRipple key="NFTs" value="NFTs" label={capitalCase('NFTs')} />
+              <Tab disableRipple key="nfts" value="nfts" label={capitalCase('nfts')} />
+              <Tab disableRipple key="activity" value="activity" label={capitalCase('activity')} />
             </Tabs>
           </TabsWrapperStyle>
         </Card>
-        {currentTab === 'NFTs' && <Box key="NFTs">Hello</Box>}
+        {currentTab === 'nfts' && (
+          <Box key="nfts">
+            <CarouselCenterMode />
+          </Box>
+        )}
+        {currentTab === 'activity' && <Box key="activity">Hello</Box>}
       </Container>
     </Page>
   );
