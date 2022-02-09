@@ -1,9 +1,8 @@
 import { capitalCase } from 'change-case';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Tab, Box, Card, Tabs, Container, CardHeader, CardContent } from '@mui/material';
+import { Tab, Box, Card, Tabs, Container } from '@mui/material';
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
 import ProfileCover from './components/ProfileCover';
 import MyCollections from './components/MyCollections';
 
