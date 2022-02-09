@@ -48,7 +48,7 @@ export default function MyNFT() {
               allowScrollButtonsMobile
               onChange={(e, value) => handleChangeTab(value)}
             >
-              <Tab disableRipple key="nfts" value="nfts" label={capitalCase('nfts')} />
+              <Tab disableRipple key="nfts" value="nfts" label="NFTs" />
               <Tab disableRipple key="activity" value="activity" label={capitalCase('activity')} />
             </Tabs>
           </TabsWrapperStyle>
