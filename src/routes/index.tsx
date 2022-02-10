@@ -52,6 +52,7 @@ export default function Router() {
         { path: 'home', element: <Homepage /> },
         { path: 'create-collection', element: <CreateCollection /> },
         { path: 'my-nft', element: <MyNFT /> },
+        { path: 'collection-explore', element: <CollectionsExplorer /> },
         {
           path: 'gallery',
           children: [
@@ -113,6 +114,7 @@ const AssetViewer = Loadable(lazy(() => import('../pages/AssetViewer')));
 const Homepage = LoadWithoutSpinner(lazy(() => import('../pages/Homepage')));
 const CreateCollection = LoadWithoutSpinner(lazy(() => import('../pages/CreateCollection')));
 const MyNFT = LoadWithoutSpinner(lazy(() => import('../pages/MyNFT')));
+const CollectionsExplorer = LoadWithoutSpinner(lazy(() => import('../pages/CollectionsExplorer')));
 
 // const Universe = lazy(() => import('../pages/Universe'));
 // const NftMinting = lazy(() => import('../pages/NftMinting'));
