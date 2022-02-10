@@ -105,7 +105,7 @@ export default function AssetViewer() {
 
   return (
     <Page title={`Asset Viewer - ${assetAndOwner.name}`}>
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth="lg">
         <Box>
           <Asset assetAndOwner={assetAndOwner} />
         </Box>

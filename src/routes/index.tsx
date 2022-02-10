@@ -59,7 +59,6 @@ export default function Router() {
             { path: 'universe/:pageUrl', element: <Universe /> }
           ]
         },
-        { path: 'nft-minting', element: <NftMinting /> },
         { path: 'nft-manager/:pageUrl', element: <NftManager /> },
         {
           path: 'fun-box',
@@ -102,7 +101,6 @@ export default function Router() {
 
 // Dashboard
 const Universe = Loadable(lazy(() => import('../pages/Universe')));
-const NftMinting = Loadable(lazy(() => import('../pages/NftMinting')));
 const NftManager = Loadable(lazy(() => import('../pages/NftManager')));
 const FunBox = Loadable(lazy(() => import('../pages/FunBox')));
 const CruFaucet = Loadable(lazy(() => import('../pages/CruFaucet')));

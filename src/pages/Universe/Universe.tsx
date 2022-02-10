@@ -52,7 +52,7 @@ export default function Universe() {
 
   return (
     <Page title="Univere Gallery">
-      <Container maxWidth={'lg'}>
+      <Container maxWidth="lg">
         <Grid container spacing={0}>
           <Stack
             direction="row"

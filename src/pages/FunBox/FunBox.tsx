@@ -12,7 +12,7 @@ export default function FunBox() {
 
   return (
     <Page title="Fun Box">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth="lg">
         <Grid container sx={{ pb: 5 }}>
           <Grid item xs={12} sx={{ pb: 2 }}>
             <Typography variant="h5" paragraph>
