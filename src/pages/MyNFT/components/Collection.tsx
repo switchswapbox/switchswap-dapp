@@ -9,40 +9,35 @@ import NftCard from 'components/gallery/NftCard';
 const mock = [
   {
     tokenId: '1',
-    imageUrl:
-      'https://cdn.vox-cdn.com/thumbor/tGNxLvljqJFaFg8GB8IBvTVPNgk=/155x65:995x648/920x613/filters:focal(489x354:677x542):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/70264946/bored_ape_nft_accidental_.0.jpg',
+    imageUrl: 'https://public.nftstatic.com/static/nft/res/415278e5c62e4bdca1c608f967db8513.gif',
     name: 'Name#1',
     nftContract: '0x1234',
     owner: '0x1423432'
   },
   {
     tokenId: '2',
-    imageUrl:
-      'https://ichef.bbci.co.uk/news/640/cpsprodpb/DBB7/production/_122074265_hi071843849.jpg',
+    imageUrl: 'https://public.nftstatic.com/static/nft/res/5ca1d828ada44bfdbbe610b1ef5524c5.png',
+    name: 'Name#2',
+    nftContract: '0x1234',
+    owner: '0x1423432'
+  },
+  {
+    tokenId: '3',
+    imageUrl: 'https://public.nftstatic.com/static/nft/res/1451e60556704027a42ee72da6d6a11c.png',
+    name: 'Name#3',
+    nftContract: '0x1234',
+    owner: '0x1423432'
+  },
+  {
+    tokenId: '4',
+    imageUrl: 'https://public.nftstatic.com/static/nft/res/57d22e253a784219a9f3b6eaafdd2f4a.gif',
     name: 'Name#1',
     nftContract: '0x1234',
     owner: '0x1423432'
   },
   {
-    tokenId: '2',
-    imageUrl:
-      'https://ichef.bbci.co.uk/news/640/cpsprodpb/DBB7/production/_122074265_hi071843849.jpg',
-    name: 'Name#1',
-    nftContract: '0x1234',
-    owner: '0x1423432'
-  },
-  {
-    tokenId: '2',
-    imageUrl:
-      'https://ichef.bbci.co.uk/news/640/cpsprodpb/DBB7/production/_122074265_hi071843849.jpg',
-    name: 'Name#1',
-    nftContract: '0x1234',
-    owner: '0x1423432'
-  },
-  {
-    tokenId: '2',
-    imageUrl:
-      'https://ichef.bbci.co.uk/news/640/cpsprodpb/DBB7/production/_122074265_hi071843849.jpg',
+    tokenId: '5',
+    imageUrl: 'https://public.nftstatic.com/static/nft/res/a85ad35627c4468f9e8b48de2bf9ba1a.png',
     name: 'Name#1',
     nftContract: '0x1234',
     owner: '0x1423432'

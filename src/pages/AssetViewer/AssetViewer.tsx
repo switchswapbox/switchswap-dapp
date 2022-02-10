@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
-import useSettings from '../../hooks/useSettings';
 import { useParams } from 'react-router-dom';
 import Page from '../../components/Page';
 import { Asset } from './components';
@@ -30,7 +29,6 @@ const initAssetAndOwner: AssetAndOwnerType = {
 };
 
 export default function AssetViewer() {
-  const { themeStretch } = useSettings();
   let networkRPC = '';
 
   const { network, contract, tokenId } = useParams();
@@ -105,7 +103,7 @@ export default function AssetViewer() {
 
   return (
     <Page title={`Asset Viewer - ${assetAndOwner.name}`}>
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+      <Container maxWidth="lg">
         <Box>
           <Asset assetAndOwner={assetAndOwner} />
         </Box>

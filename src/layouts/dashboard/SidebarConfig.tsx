@@ -29,9 +29,8 @@ const sidebarConfig = [
         icon: ICONS.gallery,
         children: [{ title: 'Universal', path: PATH_DASHBOARD.gallery.universe }]
       },
-      { title: 'D-NFT Minting', path: PATH_DASHBOARD.app.nftMinting, icon: ICONS.nftMinting },
-      { title: 'NFT Manager', path: PATH_DASHBOARD.app.nftManager, icon: ICONS.nftManager },
-      { title: 'Funbox', path: PATH_DASHBOARD.app.funBox, icon: ICONS.funBox }
+      { title: 'My NFTs', path: PATH_DASHBOARD.app.myNFT, icon: ICONS.nftManager },
+      { title: 'Faucets', path: PATH_DASHBOARD.app.funBox, icon: ICONS.funBox }
     ]
   },
   {

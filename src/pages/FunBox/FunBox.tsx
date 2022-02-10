@@ -1,18 +1,14 @@
 // material
 import { Container, Grid, Typography } from '@mui/material';
-// hooks
-import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import ComponentCard from './components/ComponentCard';
 // ----------------------------------------------------------------------
 
 export default function FunBox() {
-  const { themeStretch } = useSettings();
-
   return (
-    <Page title="Fun Box">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
+    <Page title="Faucets">
+      <Container maxWidth="lg">
         <Grid container sx={{ pb: 5 }}>
           <Grid item xs={12} sx={{ pb: 2 }}>
             <Typography variant="h5" paragraph>
