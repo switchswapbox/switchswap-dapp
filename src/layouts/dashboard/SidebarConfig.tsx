@@ -24,10 +24,9 @@ const sidebarConfig = [
     items: [
       { title: 'Home', path: PATH_DASHBOARD.app.homepage, icon: ICONS.home },
       {
-        title: 'NFT Gallery',
-        path: PATH_DASHBOARD.gallery.root,
-        icon: ICONS.gallery,
-        children: [{ title: 'Universal', path: PATH_DASHBOARD.gallery.universe }]
+        title: 'Collections Explore',
+        path: PATH_DASHBOARD.app.collectionExplore,
+        icon: ICONS.gallery
       },
       { title: 'My NFTs', path: PATH_DASHBOARD.app.myNFT, icon: ICONS.nftManager },
       { title: 'Faucets', path: PATH_DASHBOARD.app.funBox, icon: ICONS.funBox }
