@@ -24,8 +24,8 @@ export const PATH_DASHBOARD = {
     learnMore: path(ROOTS_DASHBOARD, '/learn-more')
   },
   funbox: {
-    cruFaucet: path(ROOTS_DASHBOARD, '/funbox/cru-faucet'),
-    maticFaucet: path(ROOTS_DASHBOARD, '/funbox/matic-faucet')
+    cruFaucet: path(ROOTS_DASHBOARD, '/faucets/crust'),
+    maticFaucet: path(ROOTS_DASHBOARD, '/faucets/polygon')
   },
   download: path(ROOTS_DASHBOARD, '/download')
 };

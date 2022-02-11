@@ -16,26 +16,25 @@ import { HelmetProvider } from 'react-helmet-async';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
 import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
+import { WalletProvider } from './contexts/WalletContext';
 //
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
 
-import { store } from './redux/store';
 // ----------------------------------------------------------------------
 
 ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       <SettingsProvider>
-        <Provider store={store}>
-          <CollapseDrawerProvider>
+        <CollapseDrawerProvider>
+          <WalletProvider>
             <Router>
               <App />
             </Router>
-          </CollapseDrawerProvider>
-        </Provider>
+          </WalletProvider>
+        </CollapseDrawerProvider>
       </SettingsProvider>
     </HelmetProvider>
   </StrictMode>,

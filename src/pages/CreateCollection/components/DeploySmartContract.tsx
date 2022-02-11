@@ -92,7 +92,6 @@ export default function DeploySmartContract() {
         </Grid>
         <Grid item xs={12} md={6}>
           <Paper
-            key={'123'}
             sx={{
               p: 3,
               width: 1,
