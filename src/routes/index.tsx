@@ -63,11 +63,11 @@ export default function Router() {
         },
         { path: 'nft-manager/:pageUrl', element: <NftManager /> },
         {
-          path: 'fun-box',
+          path: 'faucets',
           children: [
-            { path: '/fun-box', element: <FunBox /> },
-            { path: '/fun-box/cru-faucet', element: <CruFaucet /> },
-            { path: '/fun-box/matic-faucet', element: <MaticFaucet /> }
+            { path: '/faucets', element: <FunBox /> },
+            { path: '/faucets/crust', element: <CruFaucet /> },
+            { path: '/faucets/polygon', element: <MaticFaucet /> }
           ]
         },
         {

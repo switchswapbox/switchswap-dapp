@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../redux/hook';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { alpha, styled } from '@mui/material/styles';
@@ -114,11 +113,6 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
     useCollapseDrawer();
 
-  const selectedAccountAddress = useAppSelector(
-    (state) => state.reducerSelectAccount.accountAddress
-  );
-  const selectedNetworkName = useAppSelector((state) => state.reducerSelectAccount.networkName);
-
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();
@@ -130,10 +124,10 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
     return (
       <>
         <Typography variant="subtitle1" noWrap>
-          {shortenAddress(selectedAccountAddress, 5)}
+          {shortenAddress('AccountAddress', 5)}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {selectedAccountAddress === '' ? 'Hello World' : selectedNetworkName}
+          {'Network Name'}
         </Typography>
       </>
     );
@@ -141,12 +135,10 @@ const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar }: DashboardSidebarPro
 
   const [uniqueIcon, setUniqueIcon] = useState<string>();
   useEffect(() => {
-    Identicons.toDataUrl(
-      selectedAccountAddress === '' ? 'Hello World' : selectedAccountAddress
-    ).then((img: string) => {
+    Identicons.toDataUrl('Account Address').then((img: string) => {
       setUniqueIcon(img);
     });
-  }, [selectedAccountAddress]);
+  }, []);
 
   const renderContent = (
     <Scrollbar
