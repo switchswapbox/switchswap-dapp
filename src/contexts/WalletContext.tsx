@@ -14,9 +14,9 @@ const initialState: WalletContextProps = {
   connectionType: 'none',
   address: '',
   network: 'ethereum',
-  onConnectionMethodChange: (connectionMethod: string) => {},
-  onAddressChange: (address: string) => {},
-  onNetworkChange: (network: string) => {}
+  onConnectionMethodChange: () => {},
+  onAddressChange: () => {},
+  onNetworkChange: () => {}
 };
 
 const WalletContext = createContext(initialState);

@@ -4,17 +4,16 @@ import { Box, MenuItem, ListItemIcon, ListItemText, Typography, Button } from '@
 // components
 import MenuPopover from '../../components/MenuPopover';
 import { MIconButton } from '../../components/@material-extend';
-import useNetworks from '../../hooks/useNetworks';
 import Scrollbar from 'components/Scrollbar';
 import Iconify from 'components/Iconify';
 import useWallet from 'hooks/useWallet';
+import BLOCKCHAIN_NETWORKS from 'constants/BLOCKCHAIN_NETWORKS';
 
 const ITEM_HEIGHT = 50;
 
 export default function LanguagePopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { handleChangeNetwork, currentNetwork, allNetworks } = useNetworks();
   const { network, onNetworkChange } = useWallet();
 
   return (
@@ -33,24 +32,24 @@ export default function LanguagePopover() {
       </Box>
       <MenuPopover open={open} onClose={() => setOpen(false)} anchorEl={anchorRef.current}>
         <Typography variant="subtitle1" sx={{ p: 1.5 }}>
-          Networks <Typography component="span">({allNetworks.length})</Typography>
+          Networks <Typography component="span">({BLOCKCHAIN_NETWORKS.length})</Typography>
         </Typography>
         <Scrollbar sx={{ height: ITEM_HEIGHT * 6, pb: 1 }}>
-          {allNetworks.map((option) => (
+          {BLOCKCHAIN_NETWORKS.map((option) => (
             <MenuItem
-              key={option.value}
-              selected={option.value === currentNetwork.value}
+              key={option.currencySymbol}
+              selected={option.currencySymbol === network}
               onClick={() => {
-                onNetworkChange(option.value);
+                onNetworkChange(option.currencySymbol);
                 setOpen(false);
               }}
               sx={{ py: 1, px: 2.5 }}
             >
               <ListItemIcon>
-                <Box component="img" alt={option.label} src={option.icon} sx={{ height: '30px' }} />
+                <Box component="img" alt={option.name} src={option.icon} sx={{ height: '30px' }} />
               </ListItemIcon>
               <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-                {option.label}
+                {option.name}
               </ListItemText>
             </MenuItem>
           ))}
