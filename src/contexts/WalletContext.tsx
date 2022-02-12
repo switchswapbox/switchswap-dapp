@@ -13,7 +13,7 @@ type WalletContextProps = {
 const initialState: WalletContextProps = {
   connectionType: 'none',
   address: '',
-  network: 'ethereum',
+  network: 'ETH',
   onConnectionMethodChange: () => {},
   onAddressChange: () => {},
   onNetworkChange: () => {}
@@ -26,7 +26,11 @@ type WalletProviderProps = {
 };
 
 function WalletProvider({ children }: WalletProviderProps) {
-  const [wallet, setWallet] = useLocalStorage('wallet', { connectionType: '', address: '' });
+  const [wallet, setWallet] = useLocalStorage('wallet', {
+    connectionType: initialState.connectionType,
+    address: initialState.address,
+    network: initialState.network
+  });
 
   const onConnectionMethodChange = (connectionMethod: string) => {
     setWallet({ ...wallet, connectionMethod });
