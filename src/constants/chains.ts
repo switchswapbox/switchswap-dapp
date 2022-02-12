@@ -1,9 +1,9 @@
-const BLOCKCHAIN_NETWORKS = [
+const PROD_CHAINS = [
   {
     name: 'Ethereum',
     currencySymbol: 'ETH',
     icon: './static/icons/networks/ethereum.svg',
-    chainId: '1',
+    chainId: 1,
     rpcUrl: '',
     blockExplorerUrl: 'https://etherscan.io/'
   },
@@ -11,7 +11,7 @@ const BLOCKCHAIN_NETWORKS = [
     name: 'Binance',
     currencySymbol: 'BNB',
     icon: './static/icons/networks/binance.svg',
-    chainId: '',
+    chainId: 56,
     rpcUrl: '',
     blockExplorerUrl: ''
   },
@@ -19,7 +19,7 @@ const BLOCKCHAIN_NETWORKS = [
     name: 'Polygon',
     currencySymbol: 'MATIC',
     icon: './static/icons/networks/polygon.svg',
-    chainId: '',
+    chainId: 137,
     rpcUrl: '',
     blockExplorerUrl: ''
   },
@@ -27,10 +27,23 @@ const BLOCKCHAIN_NETWORKS = [
     name: 'Avalanche',
     currencySymbol: 'AVAX',
     icon: './static/icons/networks/avalanche.svg',
-    chainId: '',
+    chainId: 43114,
     rpcUrl: '',
     blockExplorerUrl: ''
   }
 ];
 
-export default BLOCKCHAIN_NETWORKS;
+const TEST_CHAINS = [
+  {
+    name: 'Rinkeby',
+    currencySymbol: 'ETH',
+    icon: './static/icons/networks/ethereum.svg',
+    chainId: 4,
+    rpcUrl: '',
+    blockExplorerUrl: 'https://rinkeby.etherscan.io'
+  }
+];
+
+const staging = process.env.REACT_APP_STAGING;
+
+export const SUPPORTED_CHAINS = staging ? [...TEST_CHAINS, ...PROD_CHAINS] : PROD_CHAINS;

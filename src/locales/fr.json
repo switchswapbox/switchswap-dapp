@@ -67,6 +67,7 @@
     }
   },
   "connectWallet": {
-    "myWallet": "My Wallette"
+    "myWallet": "My Wallette",
+    "copiedAddress":"FR-Wallet address copied!"
   }
 }
