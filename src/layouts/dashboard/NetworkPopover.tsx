@@ -11,7 +11,7 @@ const ITEM_HEIGHT = 50;
 export default function LanguagePopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { network, onNetworkChange } = useWallet();
+  const { name, onChainChange } = useWallet();
 
   return (
     <>
@@ -25,7 +25,7 @@ export default function LanguagePopover() {
         marginLeft={{ sm: 2 }}
         endIcon={<Iconify height={12} icon={'akar-icons:chevron-down'} />}
       >
-        {network}
+        {name}
       </Box>
       <MenuPopover open={open} onClose={() => setOpen(false)} anchorEl={anchorRef.current}>
         <Typography variant="subtitle1" sx={{ p: 1.5 }}>
@@ -35,9 +35,9 @@ export default function LanguagePopover() {
           {SUPPORTED_CHAINS.map((chain, index) => (
             <MenuItem
               key={chain.currencySymbol + index}
-              selected={chain.currencySymbol === network}
+              selected={chain.name === name}
               onClick={() => {
-                onNetworkChange(chain.currencySymbol);
+                onChainChange(chain);
                 setOpen(false);
               }}
               sx={{ py: 1, px: 2.5 }}

@@ -36,7 +36,7 @@ const PROD_CHAINS = [
 const TEST_CHAINS = [
   {
     name: 'Rinkeby',
-    currencySymbol: 'ETH',
+    currencySymbol: 'RIN',
     icon: './static/icons/networks/ethereum.svg',
     chainId: 4,
     rpcUrl: '',

@@ -1,23 +1,30 @@
 import useLocalStorage from 'hooks/useLocalStorage';
 import { createContext, ReactNode } from 'react';
+import { Chain } from 'interfaces/chain';
 
-type WalletContextProps = {
-  connectionType: string;
-  address: string;
-  network: string;
+interface WalletContextProps extends Chain {
+  connectionMethod: string;
+  address: '';
+  isReady: boolean;
   onConnectionMethodChange: (connectionMethod: string) => void;
   onAddressChange: (address: string) => void;
-  onNetworkChange: (network: string) => void;
-};
+  onChainChange: (chain: Chain) => void;
+}
 
-const initialState: WalletContextProps = {
-  connectionType: 'none',
+const initialState = {
+  connectionMethod: 'none',
   address: '',
-  network: 'ETH',
+  name: 'Ethereum',
+  currencySymbol: 'ETH',
+  icon: './static/icons/networks/ethereum.svg',
+  chainId: 1,
+  rpcUrl: '',
+  blockExplorerUrl: 'https://etherscan.io/',
+  isReady: false,
   onConnectionMethodChange: () => {},
   onAddressChange: () => {},
-  onNetworkChange: () => {}
-};
+  onChainChange: () => {}
+} as WalletContextProps;
 
 const WalletContext = createContext(initialState);
 
@@ -27,9 +34,14 @@ type WalletProviderProps = {
 
 function WalletProvider({ children }: WalletProviderProps) {
   const [wallet, setWallet] = useLocalStorage('wallet', {
-    connectionType: initialState.connectionType,
+    connectionMethod: initialState.connectionMethod,
     address: initialState.address,
-    network: initialState.network
+    chainName: initialState.name,
+    chainCurrencySymbol: initialState.currencySymbol,
+    chainId: initialState.chainId,
+    chainRpcUrl: initialState.rpcUrl,
+    chainBlockExplorerUrl: initialState.blockExplorerUrl,
+    isReady: initialState.isReady
   });
 
   const onConnectionMethodChange = (connectionMethod: string) => {
@@ -40,13 +52,13 @@ function WalletProvider({ children }: WalletProviderProps) {
     setWallet({ ...wallet, address });
   };
 
-  const onNetworkChange = (network: string) => {
-    setWallet({ ...wallet, network });
+  const onChainChange = (chain: Chain) => {
+    setWallet({ ...wallet, ...chain });
   };
 
   return (
     <WalletContext.Provider
-      value={{ ...wallet, onConnectionMethodChange, onAddressChange, onNetworkChange }}
+      value={{ ...wallet, onConnectionMethodChange, onAddressChange, onChainChange }}
     >
       {children}
     </WalletContext.Provider>
