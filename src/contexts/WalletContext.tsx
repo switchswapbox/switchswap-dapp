@@ -36,11 +36,11 @@ function WalletProvider({ children }: WalletProviderProps) {
   const [wallet, setWallet] = useLocalStorage('wallet', {
     connectionMethod: initialState.connectionMethod,
     address: initialState.address,
-    chainName: initialState.name,
-    chainCurrencySymbol: initialState.currencySymbol,
+    name: initialState.name,
+    currencySymbol: initialState.currencySymbol,
     chainId: initialState.chainId,
-    chainRpcUrl: initialState.rpcUrl,
-    chainBlockExplorerUrl: initialState.blockExplorerUrl,
+    rpcUrl: initialState.rpcUrl,
+    blockExplorerUrl: initialState.blockExplorerUrl,
     isReady: initialState.isReady
   });
 
