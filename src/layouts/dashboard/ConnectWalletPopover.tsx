@@ -1,6 +1,6 @@
+import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { useTheme, styled } from '@mui/material/styles';
-
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Stack,
@@ -10,36 +10,82 @@ import {
   useMediaQuery,
   ButtonBase,
   IconButton,
-  Divider
+  Divider,
+  Link
 } from '@mui/material';
 import MenuPopover from '../../components/MenuPopover';
 import Iconify from 'components/Iconify';
-import useWallet from 'hooks/useWallet';
+import { ethers } from 'ethers';
 import { Icon } from '@iconify/react';
 
 import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
 
-import React from 'react';
 import useLocales from '../../hooks/useLocales';
 import Identicons from '@nimiq/identicons';
+import { initOnboard } from '../../services/blocknative';
+import { API as OnBoardAPI } from 'bnc-onboard/dist/src/interfaces';
+import { SUPPORTED_CHAINS } from '../../constants/chains';
+import { Chain } from '../../interfaces/chain';
+import useSnackbarAction from '../../hooks/useSnackbarAction';
 Identicons.svgPath = './static/identicons.min.svg';
+
+let provider;
 
 const ConnectWalletPopover = () => {
   const theme = useTheme();
+  const onSnackbarAction = useSnackbarAction();
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
   const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const { translate } = useLocales();
-  const { network } = useWallet();
-  const anchorRef = useRef(null);
   const [walletIsConnected, setWalletIsConnected] = useState(false);
   const walletInfoAnchorRef = useRef(null);
-  const selectedAccountAddress = '0x6d26C4B1239643AfA2c89e8A112d2015b3A62F';
+
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
 
-  const handleWalletModalOpen = () => {
-    // Open Wallet Modal
-    // ....
-    setWalletIsConnected(true);
+  const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
+  const [network, setNetwork] = useState<Chain>();
+  const [wallet, setWallet] = useState({});
+  const [onboard, setOnboard] = useState<OnBoardAPI>();
+
+  useEffect(() => {
+    const onboard = initOnboard({
+      address: setSelectedAccountAddress,
+      network: (networkId) => {
+        const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === networkId);
+        if (found) {
+          setNetwork(found);
+        }
+      },
+      wallet: (wallet) => {
+        if (wallet.provider) {
+          setWallet(wallet);
+
+          provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
+          if (wallet.name) {
+            window.localStorage.setItem('selectedWallet', wallet.name);
+          }
+        } else {
+          provider = null;
+          setWallet({});
+        }
+      }
+    });
+
+    setOnboard(onboard);
+  }, []);
+
+  useEffect(() => {
+    const previouslySelectedWallet = getSelectedWallet();
+
+    if (previouslySelectedWallet && onboard) {
+      onboard.walletSelect(previouslySelectedWallet);
+      setWalletIsConnected(true);
+    }
+  }, [onboard]);
+
+  const handleWalletModalOpen = async () => {
+    const selected = await onboard?.walletSelect();
+    setWalletIsConnected(selected || false);
   };
 
   const handleWalletInfoOpen = () => {
@@ -51,15 +97,28 @@ const ConnectWalletPopover = () => {
   };
 
   const handleDisconnectWallet = () => {
+    onboard?.walletReset();
     setWalletIsConnected(false);
     setOpenWalletInfo(false);
+    localStorage.removeItem('selectedWallet');
   };
 
   useEffect(() => {
-    Identicons.toDataUrl(selectedAccountAddress).then((img: string) => {
-      setUniqueIcon(img);
-    });
+    if (selectedAccountAddress) {
+      Identicons.toDataUrl(selectedAccountAddress).then((img: string) => {
+        setUniqueIcon(img);
+      });
+    }
   }, [selectedAccountAddress]);
+
+  const getSelectedWallet = () => localStorage.getItem('selectedWallet');
+
+  const handleCopyAddress = () => {
+    if (selectedAccountAddress) {
+      navigator.clipboard.writeText(selectedAccountAddress);
+      onSnackbarAction('success', translate('connectWallet.copiedAddress'), 3000);
+    }
+  };
 
   return (
     <>
@@ -100,15 +159,15 @@ const ConnectWalletPopover = () => {
         >
           <Stack direction="column">
             <Stack direction="row">
-              <Typography variant="caption">Metamask</Typography>
+              <Typography variant="caption">{getSelectedWallet()}</Typography>
             </Stack>
             <Stack direction="row" alignItems="center">
               <Typography variant="caption" sx={{ fontWeight: 700 }}>{`${(
-                network || ''
+                network?.currencySymbol || ''
               ).toLowerCase()}:`}</Typography>
               <Typography variant="caption">
-                {smUp && shortenAddress(selectedAccountAddress, 5)}
-                {!smUp && shortenAddressHeader(selectedAccountAddress, 5)}
+                {smUp && shortenAddress(selectedAccountAddress || '', 5)}
+                {!smUp && shortenAddressHeader(selectedAccountAddress || '', 5)}
               </Typography>
             </Stack>
           </Stack>
@@ -126,16 +185,31 @@ const ConnectWalletPopover = () => {
           <Box sx={{ backgroundColor: '#EAECEF', padding: 0.5, borderRadius: 0.5 }}>
             <Stack direction="row" spacing={0.5}>
               <Stack direction="row" alignItems="center">
-                <Typography variant="subtitle2">{`${(network || '').toLowerCase()}:`}</Typography>
-                <Typography variant="body2">{shortenAddress(selectedAccountAddress, 5)}</Typography>
+                <Typography variant="subtitle2">{`${(
+                  network?.currencySymbol || ''
+                ).toLowerCase()}:`}</Typography>
+                <Typography variant="body2">
+                  {shortenAddress(selectedAccountAddress || '', 5)}
+                </Typography>
               </Stack>
               <Stack direction="row">
-                <IconButton color="primary" aria-label="copy" component="span" size="small">
+                <IconButton
+                  color="primary"
+                  aria-label="copy"
+                  component="span"
+                  size="small"
+                  onClick={handleCopyAddress}
+                >
                   <Iconify icon={'akar-icons:copy'} />
                 </IconButton>
-                <IconButton color="primary" aria-label="copy" component="span" size="small">
-                  <Iconify icon={'bx:bx-link-external'} />
-                </IconButton>
+                <Link
+                  href={network?.blockExplorerUrl + '/address/' + selectedAccountAddress}
+                  target="_blank"
+                >
+                  <IconButton color="primary" aria-label="copy" component="span" size="small">
+                    <Iconify icon={'bx:bx-link-external'} />
+                  </IconButton>
+                </Link>
               </Stack>
             </Stack>
           </Box>
@@ -146,7 +220,7 @@ const ConnectWalletPopover = () => {
         <Box sx={{ mx: 2 }}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2">Wallet</Typography>
-            <Typography variant="body2">Metamask</Typography>
+            <Typography variant="body2">{getSelectedWallet()}</Typography>
           </Stack>
         </Box>
         <Divider sx={{ my: 1 }} />
@@ -154,7 +228,7 @@ const ConnectWalletPopover = () => {
         <Box sx={{ mx: 2 }}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2">Network</Typography>
-            <Typography variant="body2">Ethereum</Typography>
+            <Typography variant="body2">{network?.name}</Typography>
           </Stack>
         </Box>
         <Divider sx={{ mt: 1 }} />

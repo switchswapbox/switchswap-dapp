@@ -415,7 +415,7 @@ export default function Homepage() {
             }
           }}
         >
-          <Box position={'relative'} zIndex={2}>
+          <Box position={'relative'} zIndex={0}>
             <Box>
               <Box marginBottom={4}>
                 <Box marginBottom={2}>

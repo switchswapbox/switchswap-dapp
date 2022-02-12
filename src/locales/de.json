@@ -8,5 +8,8 @@
   },
   "landingPage": {
     "title": "Der Ausgangspunkt für Ihr nächstes Projekt"
+  },
+  "connectWallet": {
+    "copiedAddress":"DE-Wallet address copied!"
   }
 }
