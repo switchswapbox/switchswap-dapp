@@ -272,7 +272,7 @@ export default function Homepage() {
                   marginBottom={3}
                   sx={{ fontWeight: 700, color: '#00AB55' }}
                 >
-                  Free Forever
+                  Community-owned
                 </Typography>
                 <Box
                   display="flex"

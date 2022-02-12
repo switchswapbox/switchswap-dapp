@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import MenuPopover from '../../components/MenuPopover';
 import Iconify from 'components/Iconify';
-
+import useWallet from 'hooks/useWallet';
 import { Icon } from '@iconify/react';
 
 import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
@@ -22,7 +22,6 @@ import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress'
 import React from 'react';
 import useLocales from '../../hooks/useLocales';
 import Identicons from '@nimiq/identicons';
-import useNetworks from 'hooks/useNetworks';
 Identicons.svgPath = './static/identicons.min.svg';
 
 const ConnectWalletPopover = () => {
@@ -30,11 +29,10 @@ const ConnectWalletPopover = () => {
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
   const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const { translate } = useLocales();
-
+  const { network } = useWallet();
   const anchorRef = useRef(null);
   const [walletIsConnected, setWalletIsConnected] = useState(false);
   const walletInfoAnchorRef = useRef(null);
-  const { currentNetwork } = useNetworks();
   const selectedAccountAddress = '0x6d26C4B1239643AfA2c89e8A112d2015b3A62F';
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
 
@@ -108,7 +106,7 @@ const ConnectWalletPopover = () => {
               <Typography
                 variant="caption"
                 sx={{ fontWeight: 700 }}
-              >{`${currentNetwork.value.toLowerCase()}:`}</Typography>
+              >{`${network.toLowerCase()}:`}</Typography>
               <Typography variant="caption">
                 {smUp && shortenAddress(selectedAccountAddress, 5)}
                 {!smUp && shortenAddressHeader(selectedAccountAddress, 5)}
@@ -129,7 +127,7 @@ const ConnectWalletPopover = () => {
           <Box sx={{ backgroundColor: '#EAECEF', padding: 0.5, borderRadius: 0.5 }}>
             <Stack direction="row" spacing={0.5}>
               <Stack direction="row" alignItems="center">
-                <Typography variant="subtitle2">{`${currentNetwork.value.toLowerCase()}:`}</Typography>
+                <Typography variant="subtitle2">{`${network.toLowerCase()}:`}</Typography>
                 <Typography variant="body2">{shortenAddress(selectedAccountAddress, 5)}</Typography>
               </Stack>
               <Stack direction="row">
