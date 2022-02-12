@@ -103,10 +103,9 @@ const ConnectWalletPopover = () => {
               <Typography variant="caption">Metamask</Typography>
             </Stack>
             <Stack direction="row" alignItems="center">
-              <Typography
-                variant="caption"
-                sx={{ fontWeight: 700 }}
-              >{`${network.toLowerCase()}:`}</Typography>
+              <Typography variant="caption" sx={{ fontWeight: 700 }}>{`${(
+                network || ''
+              ).toLowerCase()}:`}</Typography>
               <Typography variant="caption">
                 {smUp && shortenAddress(selectedAccountAddress, 5)}
                 {!smUp && shortenAddressHeader(selectedAccountAddress, 5)}
@@ -127,7 +126,7 @@ const ConnectWalletPopover = () => {
           <Box sx={{ backgroundColor: '#EAECEF', padding: 0.5, borderRadius: 0.5 }}>
             <Stack direction="row" spacing={0.5}>
               <Stack direction="row" alignItems="center">
-                <Typography variant="subtitle2">{`${network.toLowerCase()}:`}</Typography>
+                <Typography variant="subtitle2">{`${(network || '').toLowerCase()}:`}</Typography>
                 <Typography variant="body2">{shortenAddress(selectedAccountAddress, 5)}</Typography>
               </Stack>
               <Stack direction="row">
