@@ -11,7 +11,7 @@ import NftCard from '../../components/gallery/NftCard';
 import { getNftByPage } from '../../utils/gallery/updateGallery';
 import { ABI_UNIVERSE_NFT } from '../../constants/ABI_UNIVERSE_NFT';
 import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../../constants';
-import connectEVMContract from '../../utils/smartContractEVM/connectEVMContract';
+import { connectContract } from '../../services/smartContract/evmCompatible';
 
 export default function Universe() {
   const { pageUrl } = useParams();
@@ -35,7 +35,7 @@ export default function Universe() {
 
   useEffect(() => {
     async function getPageCount() {
-      const contract = connectEVMContract(
+      const contract = connectContract(
         CONTRACT_ADDRESS_UNIVERSE_NFT,
         ABI_UNIVERSE_NFT,
         POLYGON_RPC

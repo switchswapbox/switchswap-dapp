@@ -1,5 +1,5 @@
 import { capitalCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
@@ -27,6 +27,8 @@ import { LineScalePulseOutRapid } from 'react-pure-loaders';
 import { contractAddress } from '../../utils/contractAddress';
 
 import NftCard from '../../components/gallery/NftCard';
+import { SIMPLIFIED_ERC721_ABI } from '../../constants/simplifiedERC721ABI';
+import { connectContract, getTotalSupply, getTokenURI } from 'services/smartContract/evmCompatible';
 
 const IconStyle = styled(Icon)(({ theme }) => ({
   width: 20,
@@ -107,6 +109,22 @@ export default function CollectionViewer() {
   const handleChangeTab = (newValue: string) => {
     setCurrentTab(newValue);
   };
+
+  useEffect(() => {
+    async function getPageCount() {
+      const contract = connectContract(
+        '0xa0Afb3513B99E1b099CE9F3C007eE937B04e7870',
+        SIMPLIFIED_ERC721_ABI,
+        'https://polygon-rpc.com/'
+      );
+      // const NftBalance = (await contract.totalSupply()).toString();
+      const NftBalance = await getTotalSupply(contract);
+      console.log('OUTBALANCE: ', NftBalance);
+      const tokenURI = await getTokenURI(contract, 1);
+      console.log('tokenURI: ', tokenURI);
+    }
+    getPageCount();
+  }, []);
 
   return (
     <Page title="My NFTs">

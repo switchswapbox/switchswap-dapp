@@ -17,7 +17,7 @@ import NftCard from '../../components/gallery/NftCard';
 import { getNftByPageManager } from '../../utils/gallery/updateGallery';
 import { ABI_UNIVERSE_NFT } from '../../constants/ABI_UNIVERSE_NFT';
 import { CONTRACT_ADDRESS_UNIVERSE_NFT, POLYGON_RPC } from '../../constants';
-import connectEVMContract from '../../utils/smartContractEVM/connectEVMContract';
+import { connectContract } from '../../services/smartContract/evmCompatible';
 
 export default function NftManager() {
   const { pageUrl } = useParams();
@@ -49,7 +49,7 @@ export default function NftManager() {
   useEffect(() => {
     async function getPageCount() {
       if (ethers.utils.isAddress(selectedMetamaskAccount)) {
-        const contract = connectEVMContract(
+        const contract = connectContract(
           CONTRACT_ADDRESS_UNIVERSE_NFT,
           ABI_UNIVERSE_NFT,
           POLYGON_RPC
