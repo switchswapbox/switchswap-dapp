@@ -24,6 +24,6 @@ export function parseNftUri(tokenUri: string): string {
   } else if (isIpfsUri(tokenUri)) {
     return `${IPFS_GATEWAY_FOR_FETCHING_DATA}${removeIpfsHeader(tokenUri)}`;
   } else {
-    throw new Error('Not a valid URI');
+    throw new Error('Not a valid URI: ' + tokenUri);
   }
 }
