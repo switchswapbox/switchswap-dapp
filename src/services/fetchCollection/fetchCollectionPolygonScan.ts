@@ -1,7 +1,7 @@
 import { INFTCollection } from 'interfaces/collection';
 
 const axios = require('axios');
-const apiAdress = 'https://api.polygonscan.com/api?';
+const apiPolygonScanAdress = 'https://api.polygonscan.com/api?';
 
 const addNewCollection = (contractAddress: string, finalResult: Array<INFTCollection>) => {
   let newCollection: INFTCollection = {
@@ -26,13 +26,13 @@ const fillCollection = (
   }
 };
 
-export async function getCollectionByAddress(walletaddress: string) {
+export async function getERC271CollectionByAddress(walletaddress: string) {
   let finalResult: Array<INFTCollection> = [];
   let params = {
     params: { module: 'account', action: 'tokennfttx', address: walletaddress, sort: 'desc' }
   };
 
-  await axios.get(apiAdress, params).then((returnData: any) => {
+  await axios.get(apiPolygonScanAdress, params).then((returnData: any) => {
     const listTransaction = returnData.data.result;
     for (let i = 0; i < listTransaction.length; i++) {
       let tokenId = listTransaction[i].tokenID;
