@@ -34,8 +34,7 @@ import {
 } from 'services/smartContract/evmCompatible';
 import { getDataFromTokenUri } from 'services/http';
 import { parseNftUri } from 'utils/tokenUriHandlers';
-
-const NB_NFT_PER_PAGE = 10;
+import { NB_NFT_PER_PAGE } from '../../configs/general';
 
 const IconStyle = styled(Icon)(({ theme }) => ({
   width: 20,
@@ -45,7 +44,7 @@ const IconStyle = styled(Icon)(({ theme }) => ({
   marginRight: theme.spacing(2)
 }));
 
-const emptyNftList = new Array(10).fill(null).map((_, index) => ({
+const emptyNftList = new Array(NB_NFT_PER_PAGE).fill(null).map((_, index) => ({
   key: index,
   failToLoad: false,
   tokenId: '',
