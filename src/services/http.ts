@@ -1,13 +1,15 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
+const NB_RETRY_GET_DATA_FROM_TOKEN_URI = 2;
+
 export async function getDataFromTokenUri(tokenUri: string) {
   const instance = axios.create();
-  retryIfRequestError(instance, { retry_time: 2 });
+  retryIfRequestError(instance, { retry_time: NB_RETRY_GET_DATA_FROM_TOKEN_URI });
   const response = await instance.get(tokenUri);
   if (response.status === 200) {
     return response.data;
   }
-  return 'ERROR_GETTING_DATA';
+  throw new Error('Error while fetching data from token URI');
 }
 
 const WAIT_TIME_BASE_BEFORE_RETRY = 2000;

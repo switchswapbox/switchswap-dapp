@@ -23,3 +23,8 @@ export async function getTokenURI(contract: Contract, tokenId: number): Promise<
   const tokenURI = await contract.tokenURI(tokenId);
   return tokenURI;
 }
+
+export async function getOwner(contract: Contract, tokenId: number): Promise<string> {
+  const owner = await contract.ownerOf(tokenId);
+  return owner;
+}
