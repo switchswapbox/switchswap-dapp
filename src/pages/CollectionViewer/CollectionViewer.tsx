@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
 import twitterFill from '@iconify/icons-eva/twitter-fill';
@@ -62,11 +62,13 @@ export default function CollectionViewer() {
   const [name, setName] = useState('');
   const [symbol, setSymbol] = useState('');
 
-  const contract = connectContract(
-    contractAddr || '',
-    SIMPLIFIED_ERC721_ABI,
-    'https://polygon-rpc.com/'
-  );
+  const contract = useMemo(() => {
+    return connectContract(
+      contractAddr || '',
+      SIMPLIFIED_ERC721_ABI,
+      'https://polygon-rpc.com/'
+    );
+  }, [contractAddr]);
 
   const [NftList, setNftList] = useState<
     {
@@ -92,6 +94,7 @@ export default function CollectionViewer() {
     );
     getName(contract).then((name) => setName(name));
     getSymbol(contract).then((symbol) => setSymbol(symbol));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -123,7 +126,7 @@ export default function CollectionViewer() {
               prevList[i] = { ...prevList[i], failToLoad: true };
               return [...prevList];
             });
-            console.log(`Error token ${tokenId}: ${e}`);
+            console.log(`Error token ${tokenId}: `, e);
           });
       }
     }
@@ -132,6 +135,7 @@ export default function CollectionViewer() {
       return [...emptyNftList];
     });
     getNftList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   return (
@@ -184,19 +188,19 @@ export default function CollectionViewer() {
                     https://www.linkedin.com/
                   </Link>
                 </Stack>
-                <Stack key="1" direction="row" alignItems="center">
+                <Stack key="2" direction="row" alignItems="center">
                   <IconStyle icon={twitterFill} color="#1C9CEA" />
                   <Link component="span" variant="body2" color="text.primary" noWrap>
                     https://www.linkedin.com/
                   </Link>
                 </Stack>
-                <Stack key="1" direction="row" alignItems="center">
+                <Stack key="3" direction="row" alignItems="center">
                   <IconStyle icon={instagramFilled} color="#D7336D" />
                   <Link component="span" variant="body2" color="text.primary" noWrap>
                     https://www.linkedin.com/
                   </Link>
                 </Stack>
-                <Stack key="1" direction="row" alignItems="center">
+                <Stack key="4" direction="row" alignItems="center">
                   <IconStyle icon={facebookFill} color="#1877F2" />
                   <Link component="span" variant="body2" color="text.primary" noWrap>
                     https://www.linkedin.com/
@@ -253,15 +257,12 @@ export default function CollectionViewer() {
           </Grid>
         </Grid>
         <Grid container spacing={0}>
-          {NftList.map((nft) => {
-            return (
-              !nft.failToLoad && (
-                <Grid key={nft.key} item xs={12} sm={4} md={3}>
-                  <NftCard {...nft} />
-                </Grid>
-              )
-            );
-          })}
+          {
+            NftList.filter(nft => !nft.failToLoad).map((nft) =>
+              <Grid key={nft.key + '-' + nft.tokenId} item xs={12} sm={4} md={3}>
+                <NftCard {...nft} />
+              </Grid>)
+          }
         </Grid>
         <Stack direction="row" justifyContent="center" sx={{ pt: 6 }}>
           <Pagination count={pageCount} page={page} onChange={handlePageChange} />
