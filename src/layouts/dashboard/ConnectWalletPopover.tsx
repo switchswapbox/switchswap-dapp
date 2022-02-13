@@ -106,7 +106,6 @@ const ConnectWalletPopover = () => {
     }
   }, [selectedAccountAddress]);
 
-  const getSelectedWallet = () => localStorage.getItem('selectedWallet');
 
   const handleCopyAddress = () => {
     if (selectedAccountAddress) {
@@ -154,7 +153,7 @@ const ConnectWalletPopover = () => {
         >
           <Stack direction="column">
             <Stack direction="row">
-              <Typography variant="caption">{getSelectedWallet()}</Typography>
+              <Typography variant="caption">{selectedWallet}</Typography>
             </Stack>
             <Stack direction="row" alignItems="center">
               <Typography variant="caption" sx={{ fontWeight: 700 }}>{`${(
@@ -215,7 +214,7 @@ const ConnectWalletPopover = () => {
         <Box sx={{ mx: 2 }}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2">Wallet</Typography>
-            <Typography variant="body2">{getSelectedWallet()}</Typography>
+            <Typography variant="body2">{selectedWallet}</Typography>
           </Stack>
         </Box>
         <Divider sx={{ my: 1 }} />
