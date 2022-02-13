@@ -139,7 +139,7 @@ export default function CollectionViewer() {
   }, [page]);
 
   return (
-    <Page title="My NFTs">
+    <Page title={`Collection - ${name}`}>
       <Container maxWidth="lg">
         <Box
           sx={{
@@ -159,7 +159,6 @@ export default function CollectionViewer() {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={6}>
             <Paper
-              key={'123'}
               sx={{
                 p: 3,
                 width: 1,
