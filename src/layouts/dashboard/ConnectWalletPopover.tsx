@@ -27,6 +27,7 @@ import { API as OnBoardAPI } from 'bnc-onboard/dist/src/interfaces';
 import { SUPPORTED_CHAINS } from '../../constants/chains';
 import { Chain } from '../../interfaces/chain';
 import useSnackbarAction from '../../hooks/useSnackbarAction';
+import useWallet from '../../hooks/useWallet';
 Identicons.svgPath = './static/identicons.min.svg';
 
 let provider;
@@ -41,14 +42,14 @@ const ConnectWalletPopover = () => {
   const walletInfoAnchorRef = useRef(null);
 
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
+  const { chain: selectedChain, selectedWallet, onSelectWallet, onDisconnectWallet } = useWallet();
 
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
   const [network, setNetwork] = useState<Chain>();
-  const [wallet, setWallet] = useState({});
   const [onboard, setOnboard] = useState<OnBoardAPI>();
 
   useEffect(() => {
-    const onboard = initOnboard({
+    const onboard = initOnboard(selectedChain.chainId, {
       address: setSelectedAccountAddress,
       network: (networkId) => {
         const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === networkId);
@@ -58,30 +59,24 @@ const ConnectWalletPopover = () => {
       },
       wallet: (wallet) => {
         if (wallet.provider) {
-          setWallet(wallet);
-
           provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
           if (wallet.name) {
-            window.localStorage.setItem('selectedWallet', wallet.name);
+            onSelectWallet(wallet.name);
           }
-        } else {
-          provider = null;
-          setWallet({});
         }
       }
     });
 
     setOnboard(onboard);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChain]);
 
   useEffect(() => {
-    const previouslySelectedWallet = getSelectedWallet();
-
-    if (previouslySelectedWallet && onboard) {
-      onboard.walletSelect(previouslySelectedWallet);
+    if (selectedWallet && onboard) {
+      onboard.walletSelect(selectedWallet);
       setWalletIsConnected(true);
     }
-  }, [onboard]);
+  }, [onboard, selectedWallet]);
 
   const handleWalletModalOpen = async () => {
     const selected = await onboard?.walletSelect();
@@ -100,7 +95,7 @@ const ConnectWalletPopover = () => {
     onboard?.walletReset();
     setWalletIsConnected(false);
     setOpenWalletInfo(false);
-    localStorage.removeItem('selectedWallet');
+    onDisconnectWallet();
   };
 
   useEffect(() => {

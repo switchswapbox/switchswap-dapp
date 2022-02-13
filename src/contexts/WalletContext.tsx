@@ -1,29 +1,32 @@
 import useLocalStorage from 'hooks/useLocalStorage';
 import { createContext, ReactNode } from 'react';
-import { Chain } from 'interfaces/chain';
+import { SUPPORTED_CHAINS } from '../constants/chains';
+import { Chain } from '../interfaces/chain';
 
-interface WalletContextProps extends Chain {
-  connectionMethod: string;
-  address: '';
-  isReady: boolean;
+type WalletContextProps = {
+  selectedWallet: string;
+  address: string;
+  chain: Chain;
   onConnectionMethodChange: (connectionMethod: string) => void;
   onAddressChange: (address: string) => void;
-  onChainChange: (chain: Chain) => void;
-}
+  onNetworkChange: (chain: Chain) => void;
+  onSelectWallet: (walletName: string) => void;
+  onDisconnectWallet: () => void;
+};
+
+const initialLocalStorage = {
+  selectedWallet: '',
+  address: '',
+  chain: { ...SUPPORTED_CHAINS[0] }
+};
 
 const initialState: WalletContextProps = {
-  connectionMethod: 'none',
-  address: '',
-  name: 'Ethereum',
-  currencySymbol: 'ETH',
-  icon: './static/icons/networks/ethereum.svg',
-  chainId: 1,
-  rpcUrl: '',
-  blockExplorerUrl: 'https://etherscan.io/',
-  isReady: false,
+  ...initialLocalStorage,
   onConnectionMethodChange: () => {},
   onAddressChange: () => {},
-  onChainChange: () => {}
+  onNetworkChange: () => {},
+  onSelectWallet: (walletName: string) => {},
+  onDisconnectWallet: () => {}
 };
 
 const WalletContext = createContext(initialState);
@@ -33,16 +36,11 @@ type WalletProviderProps = {
 };
 
 function WalletProvider({ children }: WalletProviderProps) {
-  const [wallet, setWallet] = useLocalStorage('wallet', {
-    connectionMethod: initialState.connectionMethod,
-    address: initialState.address,
-    name: initialState.name,
-    currencySymbol: initialState.currencySymbol,
-    chainId: initialState.chainId,
-    rpcUrl: initialState.rpcUrl,
-    blockExplorerUrl: initialState.blockExplorerUrl,
-    isReady: initialState.isReady
-  });
+  const {
+    value: wallet,
+    setValueInLocalStorage: setWallet,
+    updateValueInLocalStorage
+  } = useLocalStorage('wallet', { ...initialLocalStorage });
 
   const onConnectionMethodChange = (connectionMethod: string) => {
     setWallet({ ...wallet, connectionMethod });
@@ -52,13 +50,35 @@ function WalletProvider({ children }: WalletProviderProps) {
     setWallet({ ...wallet, address });
   };
 
-  const onChainChange = (chain: Chain) => {
-    setWallet({ ...wallet, ...chain });
+  const onNetworkChange = (chain: Chain) => {
+    if (wallet.chain.chainId !== chain.chainId) {
+      setWallet({ ...initialState, chain });
+
+      window.location.reload();
+    }
+  };
+
+  const onSelectWallet = (newWallet: string) => {
+    updateValueInLocalStorage({ selectedWallet: newWallet });
+  };
+
+  const onDisconnectWallet = () => {
+    updateValueInLocalStorage({
+      selectedWallet: '',
+      address: ''
+    });
   };
 
   return (
     <WalletContext.Provider
-      value={{ ...wallet, onConnectionMethodChange, onAddressChange, onChainChange }}
+      value={{
+        ...wallet,
+        onConnectionMethodChange,
+        onAddressChange,
+        onNetworkChange,
+        onSelectWallet,
+        onDisconnectWallet
+      }}
     >
       {children}
     </WalletContext.Provider>

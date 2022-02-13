@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// ----------------------------------------------------------------------
-
-export default function useLocalStorage<ValueType>(key: string, defaultValue: ValueType) {
+export default function useLocalStorage<ValueType>(key: string, defaultValue?: ValueType) {
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem(key);
     return storedValue === null ? defaultValue : JSON.parse(storedValue);
@@ -29,5 +27,20 @@ export default function useLocalStorage<ValueType>(key: string, defaultValue: Va
     });
   };
 
-  return [value, setValueInLocalStorage];
+  const updateValueInLocalStorage = (updateValue: Partial<ValueType>) => {
+    setValue((currentValue: any) => {
+      const result = currentValue ? { ...currentValue, ...updateValue } : { ...updateValue };
+      localStorage.setItem(key, JSON.stringify(result));
+      return result;
+    });
+  };
+
+  const removeValueInLocalStorage = () => {
+    setValue((currentValue: any) => {
+      localStorage.removeItem(key);
+      return undefined;
+    });
+  };
+
+  return { value, setValueInLocalStorage, updateValueInLocalStorage, removeValueInLocalStorage };
 }
