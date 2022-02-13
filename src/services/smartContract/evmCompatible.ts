@@ -15,16 +15,18 @@ export async function getTotalSupply(contract: Contract): Promise<number> {
   return NftBalance.toNumber();
 }
 
-export function getTokens(contract: Contract) {
-  return 0;
-}
-
 export async function getTokenURI(contract: Contract, tokenId: number): Promise<string> {
-  const tokenURI = await contract.tokenURI(tokenId);
-  return tokenURI;
+  return contract.tokenURI(tokenId);
 }
 
 export async function getOwner(contract: Contract, tokenId: number): Promise<string> {
-  const owner = await contract.ownerOf(tokenId);
-  return owner;
+  return contract.ownerOf(tokenId);
+}
+
+export async function getName(contract: Contract): Promise<string> {
+  return contract.name();
+}
+
+export async function getSymbol(contract: Contract): Promise<string> {
+  return contract.symbol();
 }

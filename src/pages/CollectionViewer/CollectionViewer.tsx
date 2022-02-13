@@ -28,7 +28,9 @@ import {
   connectContract,
   getTotalSupply,
   getTokenURI,
-  getOwner
+  getOwner,
+  getName,
+  getSymbol
 } from 'services/smartContract/evmCompatible';
 import { getDataFromTokenUri } from 'services/http';
 import { parseNftUri } from 'utils/tokenUriHandlers';
@@ -58,6 +60,8 @@ export default function CollectionViewer() {
   const navigate = useNavigate();
   const [page, setPage] = useState(parseInt(pageNb || '1'));
   const [pageCount, setPageCount] = useState(1);
+  const [name, setName] = useState('');
+  const [symbol, setSymbol] = useState('');
 
   const contract = connectContract(
     contractAddr || '',
@@ -84,11 +88,11 @@ export default function CollectionViewer() {
   };
 
   useEffect(() => {
-    async function getPageCount() {
-      const totalSupply = await getTotalSupply(contract);
-      setPageCount(Math.ceil(totalSupply / NB_NFT_PER_PAGE));
-    }
-    getPageCount();
+    getTotalSupply(contract).then((totalSupply) =>
+      setPageCount(Math.ceil(totalSupply / NB_NFT_PER_PAGE))
+    );
+    getName(contract).then((name) => setName(name));
+    getSymbol(contract).then((symbol) => setSymbol(symbol));
   }, []);
 
   useEffect(() => {
@@ -146,7 +150,7 @@ export default function CollectionViewer() {
         <Box sx={{ height: 64 }} />
         <Stack alignItems="center">
           <Typography variant="h3" sx={{ mt: 3, mb: 5 }}>
-            Collection Name
+            {name}
           </Typography>
         </Stack>
         <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -229,28 +233,18 @@ export default function CollectionViewer() {
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Name
                   </Typography>
-                  <Typography variant="subtitle2">Name</Typography>
+                  <Typography variant="subtitle2">{name}</Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Symbol
                   </Typography>
-                  <Typography variant="subtitle2">Symbol</Typography>
+                  <Typography variant="subtitle2">{symbol}</Typography>
                 </Stack>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   Features
                 </Typography>
-                <Paper
-                  key={'123'}
-                  sx={{
-                    mb: 3,
-                    p: 0.5,
-                    border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`,
-                    '& > :not(style)': {
-                      m: 0.5
-                    }
-                  }}
-                >
+                <Paper>
                   <Chip size="small" label="Burnable"></Chip>
                   <Chip size="small" label="Enumarable"></Chip>
                 </Paper>

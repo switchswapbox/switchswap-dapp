@@ -6,6 +6,7 @@ import { contractAddress } from 'utils/contractAddress';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
+import type { NftCardCollectionViewerProps } from '../CollectionViewer.types';
 
 // To be moved to its place
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -20,15 +21,7 @@ const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   borderRadius: '3px'
 }));
 
-type NftCardProps = {
-  tokenId: string;
-  tokenURI?: string;
-  imageUrl: string;
-  name: string;
-  owner?: string;
-};
-
-export default function NftCard({ tokenId, imageUrl, name, owner }: NftCardProps) {
+export default function NftCard({ tokenId, imageUrl, name, owner }: NftCardCollectionViewerProps) {
   const theme = useTheme();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -132,6 +125,24 @@ export default function NftCard({ tokenId, imageUrl, name, owner }: NftCardProps
 
           <Typography variant="body2" noWrap sx={{ fontSize: 13, maxWidth: '30%' }}>
             {owner || ''}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Link
+            color="inherit"
+            underline="none"
+            href={`#/assets/polygon/${contractAddress}/${tokenId}`}
+          >
+            <Stack direction="row" alignItems="center" spacing={0.5}>
+              <Typography variant="caption" noWrap>
+                Token ID
+              </Typography>
+            </Stack>
+          </Link>
+
+          <Typography variant="body2" noWrap sx={{ fontSize: 13, maxWidth: '30%' }}>
+            #{tokenId || ''}
           </Typography>
         </Stack>
       </Stack>
