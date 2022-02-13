@@ -36,8 +36,8 @@ export default function useLocales() {
   const langStorage = localStorage.getItem('i18nextLng');
   const currentLang = LANGS.find((_lang) => _lang.value === langStorage) || LANGS[0];
 
-  const handleChangeLanguage = (newlang: string) => {
-    i18n.changeLanguage(newlang);
+  const handleChangeLanguage = (newLang: string) => {
+    i18n.changeLanguage(newLang);
   };
 
   return {

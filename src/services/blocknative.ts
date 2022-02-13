@@ -86,8 +86,7 @@ export function initOnboard(networkId: number, subscriptions: Subscriptions) {
       { checkName: 'derivationPath' },
       { checkName: 'connect' },
       { checkName: 'accounts' },
-      { checkName: 'network' },
-      { checkName: 'balance', minimumBalance: '100000' }
+      { checkName: 'network' }
     ]
   });
 }

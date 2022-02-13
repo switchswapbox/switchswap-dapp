@@ -36,27 +36,23 @@ const ConnectWalletPopover = () => {
   const theme = useTheme();
   const onSnackbarAction = useSnackbarAction();
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
-  const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const { translate } = useLocales();
-  const [walletIsConnected, setWalletIsConnected] = useState(false);
-  const walletInfoAnchorRef = useRef(null);
 
-  const [uniqueIcon, setUniqueIcon] = useState<string>('');
   const { chain: selectedChain, selectedWallet, onSelectWallet, onDisconnectWallet } = useWallet();
 
+  const [openWalletInfo, setOpenWalletInfo] = useState(false);
+  const [walletIsConnected, setWalletIsConnected] = useState(false);
+  const walletInfoAnchorRef = useRef(null);
+  const [uniqueIcon, setUniqueIcon] = useState<string>('');
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
-  const [network, setNetwork] = useState<Chain>();
+  const [walletNetworkId, setWalletNetworkId] = useState<number>();
   const [onboard, setOnboard] = useState<OnBoardAPI>();
+  const [network, setNetwork] = useState<Chain>(selectedChain);
 
   useEffect(() => {
     const onboard = initOnboard(selectedChain.chainId, {
       address: setSelectedAccountAddress,
-      network: (networkId) => {
-        const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === networkId);
-        if (found) {
-          setNetwork(found);
-        }
-      },
+      network: setWalletNetworkId,
       wallet: (wallet) => {
         if (wallet.provider) {
           provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
@@ -72,6 +68,13 @@ const ConnectWalletPopover = () => {
   }, [selectedChain]);
 
   useEffect(() => {
+    const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === walletNetworkId);
+    if (found) {
+      setNetwork(found);
+    }
+  }, [walletNetworkId])
+
+  useEffect(() => {
     if (selectedWallet && onboard) {
       onboard.walletSelect(selectedWallet);
       setWalletIsConnected(true);
@@ -80,6 +83,16 @@ const ConnectWalletPopover = () => {
 
   const handleWalletModalOpen = async () => {
     const selected = await onboard?.walletSelect();
+    if (selected) {
+      const isOk = await onboard?.walletCheck();
+      if (!isOk) {
+        if (walletNetworkId !== network.chainId) {
+          onSnackbarAction('error', translate('connectWallet.incorrectNetwork', {
+            network: network.name
+          }), 3000);
+        }
+      }
+    }
     setWalletIsConnected(selected || false);
   };
 
