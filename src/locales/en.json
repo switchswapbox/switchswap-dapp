@@ -105,7 +105,8 @@
     "installCrust": "Install Crust Wallet!",
     "default": "Crust Wallet is selected by default",
     "close": "Close",
-    "copiedAddress":"Wallet address copied!"
+    "copiedAddress": "Wallet address copied!",
+    "incorrectNetwork": "You need to change your wallet to {{network}} network"
   },
   "nftMinting": {
     "describe-1": "This is for configure Nft",

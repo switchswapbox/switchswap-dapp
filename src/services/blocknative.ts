@@ -2,11 +2,10 @@ import Notify from 'bnc-notify';
 import Onboard from 'bnc-onboard';
 import { Subscriptions } from 'bnc-onboard/dist/src/interfaces';
 
-const networkId = 4;
 const rpcUrl = 'https://rinkeby.infura.io/v3/to-be-done';
 const dappId = process.env.BLOCKNATIVE_API_KEY;
 
-export function initOnboard(subscriptions: Subscriptions) {
+export function initOnboard(networkId: number, subscriptions: Subscriptions) {
   return Onboard({
     dappId,
     hideBranding: true,
@@ -87,13 +86,12 @@ export function initOnboard(subscriptions: Subscriptions) {
       { checkName: 'derivationPath' },
       { checkName: 'connect' },
       { checkName: 'accounts' },
-      { checkName: 'network' },
-      { checkName: 'balance', minimumBalance: '100000' }
+      { checkName: 'network' }
     ]
   });
 }
 
-export function initNotify() {
+export function initNotify(networkId: number) {
   return Notify({
     dappId,
     networkId,

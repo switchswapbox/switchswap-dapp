@@ -5,7 +5,7 @@ const PROD_CHAINS = [
     icon: './static/icons/networks/ethereum.svg',
     chainId: 1,
     rpcUrl: '',
-    blockExplorerUrl: 'https://etherscan.io/'
+    blockExplorerUrl: 'https://etherscan.io'
   },
   {
     name: 'Binance',
@@ -13,7 +13,7 @@ const PROD_CHAINS = [
     icon: './static/icons/networks/binance.svg',
     chainId: 56,
     rpcUrl: '',
-    blockExplorerUrl: ''
+    blockExplorerUrl: 'https://bscscan.com'
   },
   {
     name: 'Polygon',
@@ -21,7 +21,7 @@ const PROD_CHAINS = [
     icon: './static/icons/networks/polygon.svg',
     chainId: 137,
     rpcUrl: '',
-    blockExplorerUrl: ''
+    blockExplorerUrl: 'https://polygonscan.com'
   },
   {
     name: 'Avalanche',
@@ -29,7 +29,7 @@ const PROD_CHAINS = [
     icon: './static/icons/networks/avalanche.svg',
     chainId: 43114,
     rpcUrl: '',
-    blockExplorerUrl: ''
+    blockExplorerUrl: 'https://snowtrace.io'
   }
 ];
 

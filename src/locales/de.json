@@ -10,6 +10,7 @@
     "title": "Der Ausgangspunkt für Ihr nächstes Projekt"
   },
   "connectWallet": {
-    "copiedAddress":"DE-Wallet address copied!"
+    "copiedAddress": "DE-Wallet address copied!",
+    "incorrectNetwork": "DE-You need to change your wallet to {{network}} network"
   }
 }

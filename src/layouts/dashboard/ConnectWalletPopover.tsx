@@ -27,6 +27,7 @@ import { API as OnBoardAPI } from 'bnc-onboard/dist/src/interfaces';
 import { SUPPORTED_CHAINS } from '../../constants/chains';
 import { Chain } from '../../interfaces/chain';
 import useSnackbarAction from '../../hooks/useSnackbarAction';
+import useWallet from '../../hooks/useWallet';
 Identicons.svgPath = './static/identicons.min.svg';
 
 let provider;
@@ -35,56 +36,63 @@ const ConnectWalletPopover = () => {
   const theme = useTheme();
   const onSnackbarAction = useSnackbarAction();
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
-  const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const { translate } = useLocales();
+
+  const { chain: selectedChain, selectedWallet, onSelectWallet, onDisconnectWallet } = useWallet();
+
+  const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const [walletIsConnected, setWalletIsConnected] = useState(false);
   const walletInfoAnchorRef = useRef(null);
-
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
-
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
-  const [network, setNetwork] = useState<Chain>();
-  const [wallet, setWallet] = useState({});
+  const [walletNetworkId, setWalletNetworkId] = useState<number>();
   const [onboard, setOnboard] = useState<OnBoardAPI>();
+  const [network, setNetwork] = useState<Chain>(selectedChain);
 
   useEffect(() => {
-    const onboard = initOnboard({
+    const onboard = initOnboard(selectedChain.chainId, {
       address: setSelectedAccountAddress,
-      network: (networkId) => {
-        const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === networkId);
-        if (found) {
-          setNetwork(found);
-        }
-      },
+      network: setWalletNetworkId,
       wallet: (wallet) => {
         if (wallet.provider) {
-          setWallet(wallet);
-
           provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
           if (wallet.name) {
-            window.localStorage.setItem('selectedWallet', wallet.name);
+            onSelectWallet(wallet.name);
           }
-        } else {
-          provider = null;
-          setWallet({});
         }
       }
     });
 
     setOnboard(onboard);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedChain]);
 
   useEffect(() => {
-    const previouslySelectedWallet = getSelectedWallet();
+    const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === walletNetworkId);
+    if (found) {
+      setNetwork(found);
+    }
+  }, [walletNetworkId])
 
-    if (previouslySelectedWallet && onboard) {
-      onboard.walletSelect(previouslySelectedWallet);
+  useEffect(() => {
+    if (selectedWallet && onboard) {
+      onboard.walletSelect(selectedWallet);
       setWalletIsConnected(true);
     }
-  }, [onboard]);
+  }, [onboard, selectedWallet]);
 
   const handleWalletModalOpen = async () => {
     const selected = await onboard?.walletSelect();
+    if (selected) {
+      const isOk = await onboard?.walletCheck();
+      if (!isOk) {
+        if (walletNetworkId !== network.chainId) {
+          onSnackbarAction('error', translate('connectWallet.incorrectNetwork', {
+            network: network.name
+          }), 3000);
+        }
+      }
+    }
     setWalletIsConnected(selected || false);
   };
 
@@ -100,7 +108,7 @@ const ConnectWalletPopover = () => {
     onboard?.walletReset();
     setWalletIsConnected(false);
     setOpenWalletInfo(false);
-    localStorage.removeItem('selectedWallet');
+    onDisconnectWallet();
   };
 
   useEffect(() => {
@@ -111,7 +119,6 @@ const ConnectWalletPopover = () => {
     }
   }, [selectedAccountAddress]);
 
-  const getSelectedWallet = () => localStorage.getItem('selectedWallet');
 
   const handleCopyAddress = () => {
     if (selectedAccountAddress) {
@@ -159,7 +166,7 @@ const ConnectWalletPopover = () => {
         >
           <Stack direction="column">
             <Stack direction="row">
-              <Typography variant="caption">{getSelectedWallet()}</Typography>
+              <Typography variant="caption">{selectedWallet}</Typography>
             </Stack>
             <Stack direction="row" alignItems="center">
               <Typography variant="caption" sx={{ fontWeight: 700 }}>{`${(
@@ -220,7 +227,7 @@ const ConnectWalletPopover = () => {
         <Box sx={{ mx: 2 }}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2">Wallet</Typography>
-            <Typography variant="body2">{getSelectedWallet()}</Typography>
+            <Typography variant="body2">{selectedWallet}</Typography>
           </Stack>
         </Box>
         <Divider sx={{ my: 1 }} />

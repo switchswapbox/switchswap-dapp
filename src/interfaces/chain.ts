@@ -2,7 +2,7 @@ export interface Chain {
   name: string;
   currencySymbol: string;
   icon: string;
-  chainId: Number;
+  chainId: number;
   rpcUrl: string;
   blockExplorerUrl: string;
 }

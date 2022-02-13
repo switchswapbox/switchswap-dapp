@@ -11,7 +11,7 @@ const ITEM_HEIGHT = 50;
 export default function LanguagePopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { name, onChainChange } = useWallet();
+  const { chain: selectedChain, onNetworkChange } = useWallet();
 
   return (
     <>
@@ -25,7 +25,7 @@ export default function LanguagePopover() {
         marginLeft={{ sm: 2 }}
         endIcon={<Iconify height={12} icon={'akar-icons:chevron-down'} />}
       >
-        {name}
+        {selectedChain.currencySymbol}
       </Box>
       <MenuPopover open={open} onClose={() => setOpen(false)} anchorEl={anchorRef.current}>
         <Typography variant="subtitle1" sx={{ p: 1.5 }}>
@@ -34,10 +34,10 @@ export default function LanguagePopover() {
         <Scrollbar sx={{ height: ITEM_HEIGHT * 6, pb: 1 }}>
           {SUPPORTED_CHAINS.map((chain, index) => (
             <MenuItem
-              key={chain.currencySymbol + index}
-              selected={chain.name === name}
+              key={chain.chainId}
+              selected={chain.chainId === selectedChain.chainId}
               onClick={() => {
-                onChainChange(chain);
+                onNetworkChange(chain);
                 setOpen(false);
               }}
               sx={{ py: 1, px: 2.5 }}
