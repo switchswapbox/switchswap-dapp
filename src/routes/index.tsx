@@ -54,6 +54,7 @@ export default function Router() {
         { path: 'my-nft', element: <MyNFT /> },
         { path: 'collection-explore', element: <CollectionsExplorer /> },
         { path: 'collection-viewer', element: <CollectionViewer /> },
+        { path: 'collection/:chain/:contractAddr/:pageNb', element: <CollectionViewer /> },
         {
           path: 'gallery',
           children: [

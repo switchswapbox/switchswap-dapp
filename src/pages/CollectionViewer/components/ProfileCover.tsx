@@ -1,10 +1,6 @@
 import { styled } from '@mui/material/styles';
-import { Box, Typography } from '@mui/material';
-
 import MyAvatar from './MyAvatar';
 import Image from './Image';
-
-// ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
   '&:before': {
