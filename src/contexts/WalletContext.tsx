@@ -11,7 +11,7 @@ interface WalletContextProps extends Chain {
   onChainChange: (chain: Chain) => void;
 }
 
-const initialState = {
+const initialState: WalletContextProps = {
   connectionMethod: 'none',
   address: '',
   name: 'Ethereum',
@@ -24,7 +24,7 @@ const initialState = {
   onConnectionMethodChange: () => {},
   onAddressChange: () => {},
   onChainChange: () => {}
-} as WalletContextProps;
+};
 
 const WalletContext = createContext(initialState);
 
