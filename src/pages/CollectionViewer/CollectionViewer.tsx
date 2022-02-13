@@ -1,40 +1,26 @@
-import { useEffect, useState, useMemo } from 'react';
-import { styled } from '@mui/material/styles';
 import { Icon } from '@iconify/react';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
-import {
-  Box,
-  Paper,
-  Container,
-  Stack,
-  Grid,
-  Pagination,
-  Typography,
-  Link,
-  Chip
-} from '@mui/material';
-import Page from '../../components/Page';
-import ProfileCover from './components/ProfileCover';
-
-import NftCard from './components/NftCard';
-import { SIMPLIFIED_ERC721_ABI } from '../../constants/simplifiedERC721ABI';
+import { Box, Chip, Container, Grid, Pagination, Paper, Stack, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import Identicons from '@nimiq/identicons';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getDataFromTokenUri } from 'services/http';
 import {
   connectContract,
-  getTotalSupply,
-  getTokenURI,
-  getOwner,
   getName,
-  getSymbol
+  getOwner,
+  getSymbol,
+  getTokenURI,
+  getTotalSupply
 } from 'services/smartContract/evmCompatible';
-import { getDataFromTokenUri } from 'services/http';
+import { getRpcUrl } from 'utils/blockchainHandlers';
 import { parseNftUri } from 'utils/tokenUriHandlers';
+import Page from '../../components/Page';
 import { NB_NFT_PER_PAGE } from '../../configs/general';
+import { SIMPLIFIED_ERC721_ABI } from '../../constants/simplifiedERC721ABI';
+import NftCard from './components/NftCard';
+import ProfileCover, { ProfileCoverProps } from './components/ProfileCover';
+Identicons.svgPath = './static/identicons.min.svg';
 
 const IconStyle = styled(Icon)(({ theme }) => ({
   width: 20,
@@ -63,12 +49,8 @@ export default function CollectionViewer() {
   const [symbol, setSymbol] = useState('');
 
   const contract = useMemo(() => {
-    return connectContract(
-      contractAddr || '',
-      SIMPLIFIED_ERC721_ABI,
-      'https://polygon-rpc.com/'
-    );
-  }, [contractAddr]);
+    return connectContract(contractAddr || '', SIMPLIFIED_ERC721_ABI, getRpcUrl(chain || ''));
+  }, [contractAddr, chain]);
 
   const [NftList, setNftList] = useState<
     {
@@ -138,6 +120,17 @@ export default function CollectionViewer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  const [profileCover, setProfileCover] = useState<ProfileCoverProps>({
+    coverUrl: 'https://public.nftstatic.com/static/nft/res/d06f4b2332c740658c1f081b2b74ed4b.png',
+    avatarUrl: ''
+  });
+
+  useEffect(() => {
+    Identicons.toDataUrl(contractAddr).then((img: string) => {
+      setProfileCover((prevProfileCover) => ({ ...prevProfileCover, avatarUrl: img }));
+    });
+  }, [contractAddr]);
+  //  profileCover = { coverUrl: '', avatarUrl: '' };
   return (
     <Page title={`Collection - ${name}`}>
       <Container maxWidth="lg">
@@ -147,12 +140,12 @@ export default function CollectionViewer() {
             position: 'relative'
           }}
         >
-          <ProfileCover />
+          <ProfileCover {...profileCover} />
         </Box>
 
         <Box sx={{ height: 64 }} />
         <Stack alignItems="center">
-          <Typography variant="h3" sx={{ mt: 3, mb: 5 }}>
+          <Typography variant="h3" sx={{ mb: 3 }}>
             {name}
           </Typography>
         </Stack>
@@ -179,33 +172,6 @@ export default function CollectionViewer() {
                 Avatars. Join our squad . One of the goals of the project is to raise funds to fight
                 childhood cancer. Don't be indifferent. Community links in the profile description .
               </Typography>
-
-              <Stack spacing={2} sx={{ p: 3 }}>
-                <Stack key="1" direction="row" alignItems="center">
-                  <IconStyle icon={linkedinFill} color="#006097" />
-                  <Link component="span" variant="body2" color="text.primary" noWrap>
-                    https://www.linkedin.com/
-                  </Link>
-                </Stack>
-                <Stack key="2" direction="row" alignItems="center">
-                  <IconStyle icon={twitterFill} color="#1C9CEA" />
-                  <Link component="span" variant="body2" color="text.primary" noWrap>
-                    https://www.linkedin.com/
-                  </Link>
-                </Stack>
-                <Stack key="3" direction="row" alignItems="center">
-                  <IconStyle icon={instagramFilled} color="#D7336D" />
-                  <Link component="span" variant="body2" color="text.primary" noWrap>
-                    https://www.linkedin.com/
-                  </Link>
-                </Stack>
-                <Stack key="4" direction="row" alignItems="center">
-                  <IconStyle icon={facebookFill} color="#1877F2" />
-                  <Link component="span" variant="body2" color="text.primary" noWrap>
-                    https://www.linkedin.com/
-                  </Link>
-                </Stack>
-              </Stack>
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -256,12 +222,11 @@ export default function CollectionViewer() {
           </Grid>
         </Grid>
         <Grid container spacing={0}>
-          {
-            NftList.filter(nft => !nft.failToLoad).map((nft) =>
-              <Grid key={nft.key + '-' + nft.tokenId} item xs={12} sm={4} md={3}>
-                <NftCard {...nft} />
-              </Grid>)
-          }
+          {NftList.filter((nft) => !nft.failToLoad).map((nft) => (
+            <Grid key={nft.key + '-' + nft.tokenId} item xs={12} sm={4} md={3}>
+              <NftCard {...nft} />
+            </Grid>
+          ))}
         </Grid>
         <Stack direction="row" justifyContent="center" sx={{ pt: 6 }}>
           <Pagination count={pageCount} page={page} onChange={handlePageChange} />

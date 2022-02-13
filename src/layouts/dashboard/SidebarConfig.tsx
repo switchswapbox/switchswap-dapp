@@ -1,7 +1,7 @@
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import SvgIconStyle from '../../components/SvgIconStyle';
+import { PATH_DASHBOARD } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ const ICONS = {
   nftMinting: getIcon('ic_analytics'),
   nftManager: getIcon('ic_banking'),
   learnMore: getIcon('ic_chat'),
-  funBox: getIcon('ic_calendar')
+  faucets: getIcon('ic_calendar')
 };
 
 const sidebarConfig = [
@@ -29,7 +29,7 @@ const sidebarConfig = [
         icon: ICONS.gallery
       },
       { title: 'My NFTs', path: PATH_DASHBOARD.app.myNFT, icon: ICONS.nftManager },
-      { title: 'Faucets', path: PATH_DASHBOARD.app.funBox, icon: ICONS.funBox }
+      { title: 'Faucets', path: PATH_DASHBOARD.app.faucets, icon: ICONS.faucets }
     ]
   },
   {

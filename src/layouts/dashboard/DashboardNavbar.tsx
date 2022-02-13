@@ -1,16 +1,15 @@
-import { Icon } from '@iconify/react';
 import menu2Fill from '@iconify/icons-eva/menu-2-fill';
+import { Icon } from '@iconify/react';
+import { AppBar, Box, Divider, IconButton, Stack, Toolbar } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton, Divider } from '@mui/material';
-import useCollapseDrawer from '../../hooks/useCollapseDrawer';
+import { Link as RouterLink } from 'react-router-dom';
 import { MHidden } from '../../components/@material-extend';
-import LanguagePopover from './LanguagePopover';
+import Logo from '../../components/Logo';
+import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import ConnectWalletPopover from './ConnectWalletPopover';
+import LanguagePopover from './LanguagePopover';
 import NetworkPopover from './NetworkPopover';
 import NotificationPopover from './NotificationPopover';
-
-import Logo from '../../components/Logo';
-import { Link as RouterLink } from 'react-router-dom';
 
 // const DRAWER_WIDTH = 280;
 const COLLAPSE_WIDTH = 0;

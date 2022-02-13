@@ -20,7 +20,7 @@ const PROD_CHAINS = [
     currencySymbol: 'MATIC',
     icon: './static/icons/networks/polygon.svg',
     chainId: 137,
-    rpcUrl: '',
+    rpcUrl: 'https://polygon-rpc.com/',
     blockExplorerUrl: 'https://polygonscan.com'
   },
   {
