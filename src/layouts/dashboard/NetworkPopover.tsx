@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
-import { Box, MenuItem, ListItemIcon, ListItemText, Typography, Button } from '@mui/material';
-import MenuPopover from '../../components/MenuPopover';
-import Scrollbar from 'components/Scrollbar';
+import { Box, Button, ListItemIcon, ListItemText, MenuItem, Typography } from '@mui/material';
 import Iconify from 'components/Iconify';
+import Scrollbar from 'components/Scrollbar';
 import useWallet from 'hooks/useWallet';
+import { useRef, useState } from 'react';
+import MenuPopover from '../../components/MenuPopover';
 import { SUPPORTED_CHAINS } from '../../constants/chains';
 
 const ITEM_HEIGHT = 50;
@@ -25,7 +25,7 @@ export default function LanguagePopover() {
         marginLeft={{ sm: 2 }}
         endIcon={<Iconify height={12} icon={'akar-icons:chevron-down'} />}
       >
-        {selectedChain.currencySymbol}
+        {selectedChain?.currencySymbol || 'ETH'}
       </Box>
       <MenuPopover open={open} onClose={() => setOpen(false)} anchorEl={anchorRef.current}>
         <Typography variant="subtitle1" sx={{ p: 1.5 }}>
@@ -35,7 +35,7 @@ export default function LanguagePopover() {
           {SUPPORTED_CHAINS.map((chain, index) => (
             <MenuItem
               key={chain.chainId}
-              selected={chain.chainId === selectedChain.chainId}
+              selected={chain.chainId === (selectedChain?.chainId || 1)}
               onClick={() => {
                 onNetworkChange(chain);
                 setOpen(false);

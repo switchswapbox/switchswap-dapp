@@ -50,7 +50,7 @@ const ConnectWalletPopover = () => {
   const [network, setNetwork] = useState<Chain>(selectedChain);
 
   useEffect(() => {
-    const onboard = initOnboard(selectedChain.chainId, {
+    const onboard = initOnboard(selectedChain?.chainId || 1, {
       address: setSelectedAccountAddress,
       network: setWalletNetworkId,
       wallet: (wallet) => {
@@ -72,7 +72,7 @@ const ConnectWalletPopover = () => {
     if (found) {
       setNetwork(found);
     }
-  }, [walletNetworkId])
+  }, [walletNetworkId]);
 
   useEffect(() => {
     if (selectedWallet && onboard) {
