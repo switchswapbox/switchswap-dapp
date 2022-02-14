@@ -1,7 +1,9 @@
 import { INFTCollection } from 'interfaces/collection';
-import { API_POLYGONSCAN_URL, NB_RETRY_GET_DATA_FROM_TOKEN_URI } from 'configs/general';
-import axios from 'axios';
-import { retryIfRequestError } from 'services/http';
+import { API_POLYGONSCAN_URL, NB_RETRY_GET_DATA_FROM_API } from 'configs/general';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+
+const WAIT_TIME_BASE_BEFORE_RETRY = 2000;
+const WAIT_TIME_VARIABLE = 1000;
 
 const addNewCollection = (contractAddress: string, finalResult: Array<INFTCollection>) => {
   let newCollection: INFTCollection = {
@@ -26,9 +28,30 @@ const fillCollection = (
   }
 };
 
+const retryIfRequestError = (axiosInstance: AxiosInstance, options: any) => {
+  const maxTime = options.retry_time || 0;
+  if (!maxTime) {
+    return axiosInstance;
+  }
+  let counter = 0;
+  axiosInstance.interceptors.response.use((response) => {
+    const config = response.config as AxiosRequestConfig;
+    if (counter < maxTime && response?.status !== 200 && response.data?.status !== '1') {
+      counter++;
+      return new Promise((resolve) => {
+        const waitTime = Math.floor(
+          WAIT_TIME_BASE_BEFORE_RETRY + Math.random() * WAIT_TIME_VARIABLE
+        );
+        setTimeout(() => resolve(axiosInstance(config)), waitTime);
+      });
+    }
+    return response;
+  });
+};
+
 export async function getERC271CollectionByAddress(walletaddress: string) {
   const instance = axios.create();
-  retryIfRequestError(instance, { retry_time: NB_RETRY_GET_DATA_FROM_TOKEN_URI });
+  retryIfRequestError(instance, { retry_time: NB_RETRY_GET_DATA_FROM_API });
   let finalResult: Array<INFTCollection> = [];
   let params = {
     params: {
