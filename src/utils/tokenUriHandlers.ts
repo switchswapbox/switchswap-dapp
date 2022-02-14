@@ -19,11 +19,14 @@ export function removeIpfsHeader(ipfsUri: string) {
 const IPFS_GATEWAY_FOR_FETCHING_DATA = 'https://ipfs.io/ipfs/';
 
 export function parseNftUri(tokenUri: string): string {
+  if (!tokenUri) {
+    throw new Error('URI is empty');
+  }
+
   if (isHttpUri(tokenUri)) {
     return tokenUri;
   } else if (isIpfsUri(tokenUri)) {
     return `${IPFS_GATEWAY_FOR_FETCHING_DATA}${removeIpfsHeader(tokenUri)}`;
-  } else {
-    throw new Error('Not a valid URI: ' + tokenUri);
   }
+  throw new Error('Not a valid URI: ' + tokenUri);
 }
