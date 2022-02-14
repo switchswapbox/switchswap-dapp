@@ -80,7 +80,8 @@ const ConnectWalletPopover = () => {
 
   useEffect(() => {
     selectedAccountAddress && onAddressChange(selectedAccountAddress);
-  }, [onAddressChange, selectedAccountAddress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedAccountAddress]);
 
   useEffect(() => {
     const retrieveConnectedWallet = async () => {
