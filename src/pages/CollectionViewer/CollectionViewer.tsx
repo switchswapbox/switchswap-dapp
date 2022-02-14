@@ -70,6 +70,10 @@ export default function CollectionViewer() {
   }, []);
 
   useEffect(() => {
+    setPage(parseInt(pageNb || '1'))
+  }, [pageNb]);
+
+  useEffect(() => {
     async function getNftList() {
       for (let i = 0; i < NB_NFT_PER_PAGE; i++) {
         const tokenId = (page - 1) * NB_NFT_PER_PAGE + i + 1;
