@@ -1,33 +1,31 @@
-import React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { Icon } from '@iconify/react';
 import {
   Box,
-  Stack,
   Button,
+  ButtonBase,
+  Divider,
+  IconButton,
+  Link,
+  Stack,
   SvgIcon,
   Typography,
-  useMediaQuery,
-  ButtonBase,
-  IconButton,
-  Divider,
-  Link
+  useMediaQuery
 } from '@mui/material';
-import MenuPopover from '../../components/MenuPopover';
+import { useTheme } from '@mui/material/styles';
+import Identicons from '@nimiq/identicons';
+import { API as OnBoardAPI } from 'bnc-onboard/dist/src/interfaces';
 import Iconify from 'components/Iconify';
 import { ethers } from 'ethers';
-import { Icon } from '@iconify/react';
-
-import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
-
-import useLocales from '../../hooks/useLocales';
-import Identicons from '@nimiq/identicons';
-import { initOnboard } from '../../services/blocknative';
-import { API as OnBoardAPI } from 'bnc-onboard/dist/src/interfaces';
+import React, { useEffect, useRef, useState } from 'react';
+import MenuPopover from '../../components/MenuPopover';
 import { SUPPORTED_CHAINS } from '../../constants/chains';
-import { Chain } from '../../interfaces/chain';
+import useLocales from '../../hooks/useLocales';
 import useSnackbarAction from '../../hooks/useSnackbarAction';
 import useWallet from '../../hooks/useWallet';
+import { Chain } from '../../interfaces/chain';
+import { initOnboard } from '../../services/blocknative';
+import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
+
 Identicons.svgPath = './static/identicons.min.svg';
 
 let provider;
@@ -75,10 +73,14 @@ const ConnectWalletPopover = () => {
   }, [walletNetworkId]);
 
   useEffect(() => {
-    if (selectedWallet && onboard) {
-      onboard.walletSelect(selectedWallet);
-      setWalletIsConnected(true);
-    }
+    const retrieveConnectedWallet = async () => {
+      if (selectedWallet && onboard) {
+        await onboard.walletSelect(selectedWallet);
+        await onboard.walletCheck();
+        setWalletIsConnected(true);
+      }
+    };
+    retrieveConnectedWallet();
   }, [onboard, selectedWallet]);
 
   const handleWalletModalOpen = async () => {
@@ -87,9 +89,13 @@ const ConnectWalletPopover = () => {
       const isOk = await onboard?.walletCheck();
       if (!isOk) {
         if (walletNetworkId !== network.chainId) {
-          onSnackbarAction('error', translate('connectWallet.incorrectNetwork', {
-            network: network.name
-          }), 3000);
+          onSnackbarAction(
+            'error',
+            translate('connectWallet.incorrectNetwork', {
+              network: network.name
+            }),
+            3000
+          );
         }
       }
     }
@@ -118,7 +124,6 @@ const ConnectWalletPopover = () => {
       });
     }
   }, [selectedAccountAddress]);
-
 
   const handleCopyAddress = () => {
     if (selectedAccountAddress) {

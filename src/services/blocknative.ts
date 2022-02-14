@@ -2,7 +2,7 @@ import Notify from 'bnc-notify';
 import Onboard from 'bnc-onboard';
 import { Subscriptions } from 'bnc-onboard/dist/src/interfaces';
 
-const rpcUrl = 'https://rinkeby.infura.io/v3/to-be-done';
+const rpcUrl = `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`;
 const dappId = process.env.BLOCKNATIVE_API_KEY;
 
 export function initOnboard(networkId: number, subscriptions: Subscriptions) {
@@ -14,68 +14,68 @@ export function initOnboard(networkId: number, subscriptions: Subscriptions) {
     walletSelect: {
       wallets: [
         { walletName: 'metamask' },
-        {
-          walletName: 'trezor',
-          appUrl: 'https://reactdemo.blocknative.com',
-          email: 'aaron@blocknative.com',
-          rpcUrl
-        },
-        {
-          walletName: 'ledger',
-          rpcUrl
-        },
+        // {
+        //   walletName: 'trezor',
+        //   appUrl: 'https://reactdemo.blocknative.com',
+        //   email: 'aaron@blocknative.com',
+        //   rpcUrl
+        // },
+        // {
+        //   walletName: 'ledger',
+        //   rpcUrl
+        // },
         {
           walletName: 'walletConnect',
-          infuraKey: 'cea9deb6467748b0b81b920b005c10c1'
-        },
-        { walletName: 'cobovault', appName: 'React Demo', rpcUrl },
-        { walletName: 'keystone', appName: 'React Demo', rpcUrl },
-        { walletName: 'keepkey', rpcUrl },
-        {
-          walletName: 'lattice',
-          appName: 'Onboard Demo',
-          rpcUrl
-        },
+          infuraKey: '741c5f1257a24106934fe4105c784478'
+        }
+        // { walletName: 'cobovault', appName: 'React Demo', rpcUrl },
+        // { walletName: 'keystone', appName: 'React Demo', rpcUrl },
+        // { walletName: 'keepkey', rpcUrl },
+        // {
+        //   walletName: 'lattice',
+        //   appName: 'Onboard Demo',
+        //   rpcUrl
+        // },
 
-        // coinbase is mobile only
-        { walletName: 'coinbase' },
-        // walletLink is desktop support for Coinbase
-        { walletName: 'walletLink', rpcUrl },
+        // // coinbase is mobile only
+        // { walletName: 'coinbase' },
+        // // walletLink is desktop support for Coinbase
+        // { walletName: 'walletLink', rpcUrl },
 
-        { walletName: 'status' },
-        {
-          walletName: 'portis',
-          apiKey: 'b2b7586f-2b1e-4c30-a7fb-c2d1533b153b'
-        },
-        { walletName: 'fortmatic', apiKey: 'pk_test_886ADCAB855632AA' },
-        { walletName: 'torus' },
-        { walletName: 'trust', rpcUrl },
-        { walletName: 'opera' },
-        { walletName: 'operaTouch' },
-        { walletName: 'imToken', rpcUrl },
-        { walletName: 'meetone' },
-        { walletName: 'mykey', rpcUrl },
-        { walletName: 'wallet.io', rpcUrl },
-        { walletName: 'huobiwallet', rpcUrl },
-        { walletName: 'alphawallet', rpcUrl },
-        { walletName: 'hyperpay' },
-        { walletName: 'atoken' },
-        { walletName: 'liquality' },
-        { walletName: 'frame' },
-        { walletName: 'tokenpocket', rpcUrl },
-        { walletName: 'authereum', disableNotifications: true },
-        { walletName: 'ownbit' },
-        { walletName: 'gnosis' },
-        { walletName: 'dcent' },
-        { walletName: 'bitpie' },
-        { walletName: 'xdefi' },
-        { walletName: 'binance' },
-        { walletName: 'tp' },
-        { walletName: 'tally' },
-        { walletName: 'blockwallet' },
-        { walletName: 'mathwallet' },
-        { walletName: '1inch' },
-        { walletName: 'tokenary' }
+        // { walletName: 'status' },
+        // {
+        //   walletName: 'portis',
+        //   apiKey: 'b2b7586f-2b1e-4c30-a7fb-c2d1533b153b'
+        // },
+        // { walletName: 'fortmatic', apiKey: 'pk_test_886ADCAB855632AA' },
+        // { walletName: 'torus' },
+        // { walletName: 'trust', rpcUrl },
+        // { walletName: 'opera' },
+        // { walletName: 'operaTouch' },
+        // { walletName: 'imToken', rpcUrl },
+        // { walletName: 'meetone' },
+        // { walletName: 'mykey', rpcUrl },
+        // { walletName: 'wallet.io', rpcUrl },
+        // { walletName: 'huobiwallet', rpcUrl },
+        // { walletName: 'alphawallet', rpcUrl },
+        // { walletName: 'hyperpay' },
+        // { walletName: 'atoken' },
+        // { walletName: 'liquality' },
+        // { walletName: 'frame' },
+        // { walletName: 'tokenpocket', rpcUrl },
+        // { walletName: 'authereum', disableNotifications: true },
+        // { walletName: 'ownbit' },
+        // { walletName: 'gnosis' },
+        // { walletName: 'dcent' },
+        // { walletName: 'bitpie' },
+        // { walletName: 'xdefi' },
+        // { walletName: 'binance' },
+        // { walletName: 'tp' },
+        // { walletName: 'tally' },
+        // { walletName: 'blockwallet' },
+        // { walletName: 'mathwallet' },
+        // { walletName: '1inch' },
+        // { walletName: 'tokenary' }
         // Ronin now only works on Axie's domains and will open
         // to be used by other domains when the Ronin chain is ready"
         // Info on Ronin setup/localDev/testing https://github.com/blocknative/onboard/pull/757#issue-1071697485
