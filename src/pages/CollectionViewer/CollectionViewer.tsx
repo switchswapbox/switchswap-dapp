@@ -1,6 +1,4 @@
-import { Icon } from '@iconify/react';
 import { Box, Chip, Container, Grid, Pagination, Paper, Stack, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import Identicons from '@nimiq/identicons';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -21,14 +19,6 @@ import { SIMPLIFIED_ERC721_ABI } from '../../constants/simplifiedERC721ABI';
 import NftCard from './components/NftCard';
 import ProfileCover, { ProfileCoverProps } from './components/ProfileCover';
 Identicons.svgPath = './static/identicons.min.svg';
-
-const IconStyle = styled(Icon)(({ theme }) => ({
-  width: 20,
-  height: 20,
-  marginTop: 1,
-  flexShrink: 0,
-  marginRight: theme.spacing(2)
-}));
 
 const emptyNftList = new Array(NB_NFT_PER_PAGE).fill(null).map((_, index) => ({
   key: index,
