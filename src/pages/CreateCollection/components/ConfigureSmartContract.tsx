@@ -1,23 +1,21 @@
 import {
-  Typography,
   Box,
   Button,
   Card,
-  Paper,
-  Grid,
-  Divider,
-  TextField,
-  FormGroup,
-  FormControlLabel,
   Checkbox,
-  Stack
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
-
-import Iconify from '../../../components/Iconify';
+import { useTheme } from '@mui/material/styles';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { androidstudio } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
-
-import { useTheme } from '@mui/material/styles';
+import Iconify from '../../../components/Iconify';
 
 export default function ConfigureSmartContract() {
   const theme = useTheme();
@@ -29,7 +27,6 @@ export default function ConfigureSmartContract() {
             Configuration of Smart Contract
           </Typography>
           <Paper
-            key={'123'}
             sx={{
               p: 3,
               mb: 2,

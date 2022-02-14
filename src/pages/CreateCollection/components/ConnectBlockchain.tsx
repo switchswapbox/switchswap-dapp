@@ -1,15 +1,34 @@
-import { Typography, Box, Button, Card, Paper } from '@mui/material';
-
+import { Box, Button, Card, Paper, Typography } from '@mui/material';
+import useLocales from 'hooks/useLocales';
+import useSnackbarAction from 'hooks/useSnackbarAction';
+import useWallet from 'hooks/useWallet';
 import Iconify from '../../../components/Iconify';
 
-export default function BlockchainConnection() {
+export default function ConnectBlockchain() {
+  const { translate } = useLocales();
+  const onSnackbarAction = useSnackbarAction();
+
+  const {
+    chain: selectedChain,
+    address,
+    selectedWallet,
+    onSelectWallet,
+    onDisconnectWallet
+  } = useWallet();
+
+  const handleCopyAddress = () => {
+    if (address) {
+      navigator.clipboard.writeText(address);
+      onSnackbarAction('success', translate('connectWallet.copiedAddress'), 3000);
+    }
+  };
+
   return (
     <Card sx={{ p: 3 }}>
       <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
         Connect wallet & select network
       </Typography>
       <Paper
-        key={'123'}
         sx={{
           p: 3,
           mb: 3,
@@ -24,20 +43,20 @@ export default function BlockchainConnection() {
         </Typography>
 
         <Button variant="outlined" size="small" sx={{ display: 'inline', borderColor: '#454F5B' }}>
-          Ethereum
+          {selectedChain.name}
         </Button>
         <Typography variant="body2" gutterBottom sx={{ mt: 1, wordBreak: 'break-word' }}>
           <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
             Address: &nbsp;
           </Typography>
-          0x6d26C4B1239643AfA2c89e8A112d2015b3A62F
+          {address}
         </Typography>
         <Box sx={{ mt: 1 }}>
           <Button
             color="info"
             size="small"
             startIcon={<Iconify icon={'fluent:copy-16-regular'} />}
-            onClick={() => {}}
+            onClick={handleCopyAddress}
             sx={{ mr: 1 }}
           >
             Copy Address
@@ -46,26 +65,30 @@ export default function BlockchainConnection() {
             color="success"
             size="small"
             startIcon={<Iconify icon={'bi:journal-check'} />}
-            onClick={() => {}}
+            onClick={() => {
+              window.open(`${selectedChain.blockExplorerUrl}/address/${address}`, '_blank');
+            }}
             sx={{ mr: 1 }}
           >
-            Etherscan
+            Explorer
           </Button>
+
           <Button
             size="small"
-            startIcon={<Iconify icon={'ant-design:disconnect-outlined'} />}
-            onClick={() => {}}
-            sx={{ mr: 1 }}
+            startIcon={
+              <Iconify
+                icon={'si-glyph:arrow-change'}
+                onClick={() => {
+                  onSelectWallet('Hello');
+                }}
+              />
+            }
           >
-            Disconnect
-          </Button>
-          <Button size="small" startIcon={<Iconify icon={'si-glyph:arrow-change'} />}>
             Change blockchain
           </Button>
         </Box>
       </Paper>
       <Paper
-        key={'123'}
         sx={{
           p: 3,
           mb: 3,

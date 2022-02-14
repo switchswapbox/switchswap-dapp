@@ -7,7 +7,7 @@ type WalletContextProps = {
   selectedWallet: string;
   address: string;
   chain: Chain;
-  onConnectionMethodChange: (connectionMethod: string) => void;
+
   onAddressChange: (address: string) => void;
   onNetworkChange: (chain: Chain) => void;
   onSelectWallet: (walletName: string) => void;
@@ -22,7 +22,7 @@ const initialLocalStorage = {
 
 const initialState: WalletContextProps = {
   ...initialLocalStorage,
-  onConnectionMethodChange: () => {},
+
   onAddressChange: () => {},
   onNetworkChange: () => {},
   onSelectWallet: (walletName: string) => {},
@@ -41,10 +41,6 @@ function WalletProvider({ children }: WalletProviderProps) {
     setValueInLocalStorage: setWallet,
     updateValueInLocalStorage
   } = useLocalStorage('wallet', { ...initialLocalStorage });
-
-  const onConnectionMethodChange = (connectionMethod: string) => {
-    setWallet({ ...wallet, connectionMethod });
-  };
 
   const onAddressChange = (address: string) => {
     setWallet({ ...wallet, address });
@@ -73,7 +69,6 @@ function WalletProvider({ children }: WalletProviderProps) {
     <WalletContext.Provider
       value={{
         ...wallet,
-        onConnectionMethodChange,
         onAddressChange,
         onNetworkChange,
         onSelectWallet,

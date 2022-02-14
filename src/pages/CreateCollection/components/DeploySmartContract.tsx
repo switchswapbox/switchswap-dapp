@@ -1,23 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
 import {
-  Typography,
   Box,
   Button,
   Card,
+  Chip,
+  CircularProgress,
+  Grid,
   Paper,
   Stack,
-  Grid,
-  Chip,
-  Autocomplete,
-  TextField,
-  Stepper,
-  StepContent,
   Step,
+  StepContent,
   StepLabel,
-  CircularProgress
+  Stepper,
+  Typography
 } from '@mui/material';
 import { green } from '@mui/material/colors';
-
+import { useEffect, useRef, useState } from 'react';
 import Iconify from '../../../components/Iconify';
 
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
@@ -57,7 +54,6 @@ export default function DeploySmartContract() {
       <Grid container spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={12} md={6}>
           <Paper
-            key={'123'}
             sx={{
               p: 3,
               width: 1,
@@ -117,7 +113,6 @@ export default function DeploySmartContract() {
                 Features
               </Typography>
               <Paper
-                key={'123'}
                 sx={{
                   mb: 3,
                   p: 0.5,
@@ -144,7 +139,6 @@ export default function DeploySmartContract() {
         </Grid>
       </Grid>
       <Paper
-        key={'123'}
         sx={{
           p: 3,
           mb: 3,

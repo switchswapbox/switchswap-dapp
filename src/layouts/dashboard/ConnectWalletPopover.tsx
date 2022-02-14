@@ -36,7 +36,13 @@ const ConnectWalletPopover = () => {
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
   const { translate } = useLocales();
 
-  const { chain: selectedChain, selectedWallet, onSelectWallet, onDisconnectWallet } = useWallet();
+  const {
+    chain: selectedChain,
+    selectedWallet,
+    onAddressChange,
+    onSelectWallet,
+    onDisconnectWallet
+  } = useWallet();
 
   const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const [walletIsConnected, setWalletIsConnected] = useState(false);
@@ -71,6 +77,10 @@ const ConnectWalletPopover = () => {
       setNetwork(found);
     }
   }, [walletNetworkId]);
+
+  useEffect(() => {
+    selectedAccountAddress && onAddressChange(selectedAccountAddress);
+  }, [onAddressChange, selectedAccountAddress]);
 
   useEffect(() => {
     const retrieveConnectedWallet = async () => {

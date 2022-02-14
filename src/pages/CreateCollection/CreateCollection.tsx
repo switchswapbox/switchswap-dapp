@@ -1,15 +1,12 @@
-import { useState } from 'react';
-import { capitalCase } from 'change-case';
-
-import { Container, Typography, Box, Button, Tabs, Tab } from '@mui/material';
-
-import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
+import { Box, Button, Container, Tab, Tabs, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import BlockchainConnection from './components/BlockchainConnection';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { capitalCase } from 'change-case';
+import { useState } from 'react';
+import Iconify from '../../components/Iconify';
+import Page from '../../components/Page';
 import ConfigureSmartContract from './components/ConfigureSmartContract';
+import ConnectBlockchain from './components/ConnectBlockchain';
 import DeploySmartContract from './components/DeploySmartContract';
 
 export default function CreateCollection() {
@@ -24,7 +21,7 @@ export default function CreateCollection() {
     {
       value: 'blockchain',
       icon: <Iconify icon={'akar-icons:link-chain'} width={20} height={20} />,
-      component: <BlockchainConnection />
+      component: <ConnectBlockchain />
     },
     {
       value: 'smart_contract',
