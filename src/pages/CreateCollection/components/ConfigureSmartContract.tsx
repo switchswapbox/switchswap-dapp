@@ -16,8 +16,12 @@ import { useTheme } from '@mui/material/styles';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { androidstudio } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
 import Iconify from '../../../components/Iconify';
+import type { HandleNextBackButton } from '../CreateCollection.types';
 
-export default function ConfigureSmartContract() {
+export default function ConfigureSmartContract({
+  handleBackButtonClick,
+  handleNextButtonClick
+}: HandleNextBackButton) {
   const theme = useTheme();
   return (
     <Card sx={{ p: 3 }}>
@@ -140,10 +144,18 @@ contract MyToken is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownabl
       </Grid>
 
       <Box>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} rotate={2} />}>
+        <Button
+          onClick={handleBackButtonClick}
+          size="small"
+          startIcon={<Iconify icon={'fluent:next-28-regular'} rotate={2} />}
+        >
           Back
         </Button>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} />}>
+        <Button
+          onClick={handleNextButtonClick}
+          size="small"
+          startIcon={<Iconify icon={'fluent:next-28-regular'} />}
+        >
           Next
         </Button>
       </Box>

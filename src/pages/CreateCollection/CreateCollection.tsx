@@ -15,23 +15,39 @@ export default function CreateCollection() {
     defaultMatches: true
   });
 
-  const [currentTab, setCurrentTab] = useState('blockchain');
+  const [currentTab, setCurrentTab] = useState(0);
 
-  const ACCOUNT_TABS = [
+  const handleNextButtonClick = () => {
+    setCurrentTab(currentTab + 1);
+  };
+
+  const handleBackButtonClick = () => {
+    setCurrentTab(currentTab - 1);
+  };
+
+  const SM_CREATION_TABS = [
     {
+      key: 0,
       value: 'blockchain',
       icon: <Iconify icon={'akar-icons:link-chain'} width={20} height={20} />,
-      component: <ConnectBlockchain />
+      component: <ConnectBlockchain handleNextButtonClick={handleNextButtonClick} />
     },
     {
+      key: 1,
       value: 'smart_contract',
       icon: <Iconify icon={'healthicons:i-certificate-paper-outline'} width={20} height={20} />,
-      component: <ConfigureSmartContract />
+      component: (
+        <ConfigureSmartContract
+          handleNextButtonClick={handleNextButtonClick}
+          handleBackButtonClick={handleBackButtonClick}
+        />
+      )
     },
     {
+      key: 2,
       value: 'create_collection',
       icon: <Iconify icon={'eos-icons:subscriptions-created-outlined'} width={20} height={20} />,
-      component: <DeploySmartContract />
+      component: <DeploySmartContract handleBackButtonClick={handleBackButtonClick} />
     }
   ];
 
@@ -121,27 +137,27 @@ export default function CreateCollection() {
         <Box sx={{ mb: 5 }} />
 
         <Tabs
-          value={currentTab}
+          value={SM_CREATION_TABS[currentTab].key}
           scrollButtons="auto"
           variant="scrollable"
           allowScrollButtonsMobile
           onChange={(e, value) => setCurrentTab(value)}
         >
-          {ACCOUNT_TABS.map((tab) => (
+          {SM_CREATION_TABS.map((tab) => (
             <Tab
               disableRipple
-              key={tab.value}
+              key={tab.key}
               label={capitalCase(tab.value)}
               icon={tab.icon}
-              value={tab.value}
+              value={tab.key}
             />
           ))}
         </Tabs>
 
         <Box sx={{ mb: 3 }} />
-        {ACCOUNT_TABS.map((tab) => {
-          const isMatched = tab.value === currentTab;
-          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+        {SM_CREATION_TABS.map((tab) => {
+          const isMatched = tab.key === currentTab;
+          return isMatched && <Box key={tab.key}>{tab.component}</Box>;
         })}
       </Container>
     </Page>

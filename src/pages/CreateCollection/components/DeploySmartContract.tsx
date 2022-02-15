@@ -16,10 +16,10 @@ import {
 import { green } from '@mui/material/colors';
 import { useEffect, useRef, useState } from 'react';
 import Iconify from '../../../components/Iconify';
-
+import type { HandleNextBackButton } from '../CreateCollection.types';
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
 
-export default function DeploySmartContract() {
+export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -231,7 +231,11 @@ export default function DeploySmartContract() {
       </Paper>
 
       <Box>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} rotate={2} />}>
+        <Button
+          onClick={handleBackButtonClick}
+          size="small"
+          startIcon={<Iconify icon={'fluent:next-28-regular'} rotate={2} />}
+        >
           Back
         </Button>
       </Box>

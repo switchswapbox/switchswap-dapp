@@ -3,18 +3,13 @@ import useLocales from 'hooks/useLocales';
 import useSnackbarAction from 'hooks/useSnackbarAction';
 import useWallet from 'hooks/useWallet';
 import Iconify from '../../../components/Iconify';
+import type { HandleNextBackButton } from '../CreateCollection.types';
 
-export default function ConnectBlockchain() {
+export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextBackButton) {
   const { translate } = useLocales();
   const onSnackbarAction = useSnackbarAction();
 
-  const {
-    chain: selectedChain,
-    address,
-    selectedWallet,
-    onSelectWallet,
-    onDisconnectWallet
-  } = useWallet();
+  const { chain: selectedChain, address, selectedWallet } = useWallet();
 
   const handleCopyAddress = () => {
     if (address) {
@@ -28,86 +23,80 @@ export default function ConnectBlockchain() {
       <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
         Connect wallet & select network
       </Typography>
-      <Paper
-        sx={{
-          p: 3,
-          mb: 3,
-          width: 1,
-          position: 'relative',
-          border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
-        }}
-      >
-        <Typography variant="subtitle2" display="inline">
-          Select network on which you want to create your collection. The app is currently pointing
-          to{' '}
-        </Typography>
-
-        <Button variant="outlined" size="small" sx={{ display: 'inline', borderColor: '#454F5B' }}>
-          {selectedChain.name}
-        </Button>
-        <Typography variant="body2" gutterBottom sx={{ mt: 1, wordBreak: 'break-word' }}>
-          <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
-            Address: &nbsp;
+      {address && selectedWallet ? (
+        <Paper
+          sx={{
+            p: 3,
+            mb: 3,
+            width: 1,
+            position: 'relative',
+            border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
+          }}
+        >
+          <Typography variant="subtitle2" display="inline">
+            Select network on which you want to create your collection. The app is currently
+            pointing to{' '}
           </Typography>
-          {address}
-        </Typography>
-        <Box sx={{ mt: 1 }}>
-          <Button
-            color="info"
-            size="small"
-            startIcon={<Iconify icon={'fluent:copy-16-regular'} />}
-            onClick={handleCopyAddress}
-            sx={{ mr: 1 }}
-          >
-            Copy Address
-          </Button>
-          <Button
-            color="success"
-            size="small"
-            startIcon={<Iconify icon={'bi:journal-check'} />}
-            onClick={() => {
-              window.open(`${selectedChain.blockExplorerUrl}/address/${address}`, '_blank');
-            }}
-            sx={{ mr: 1 }}
-          >
-            Explorer
-          </Button>
 
           <Button
+            variant="outlined"
             size="small"
-            startIcon={
-              <Iconify
-                icon={'si-glyph:arrow-change'}
-                onClick={() => {
-                  onSelectWallet('Hello');
-                }}
-              />
-            }
+            sx={{ display: 'inline', borderColor: '#454F5B' }}
           >
-            Change blockchain
+            {selectedChain.name}
           </Button>
-        </Box>
-      </Paper>
-      <Paper
-        sx={{
-          p: 3,
-          mb: 3,
-          width: 1,
-          position: 'relative',
-          border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
-        }}
-      >
-        <Typography variant="subtitle2">
-          You need to connect a wallet to create a collection
-        </Typography>
-
-        <Button variant="outlined" size="small" sx={{ mt: 1 }}>
-          Connect
-        </Button>
-      </Paper>
+          <Typography variant="body2" gutterBottom sx={{ mt: 1, wordBreak: 'break-word' }}>
+            <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
+              Address: &nbsp;
+            </Typography>
+            {address}
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <Button
+              color="info"
+              size="small"
+              startIcon={<Iconify icon={'fluent:copy-16-regular'} />}
+              onClick={handleCopyAddress}
+              sx={{ mr: 1 }}
+            >
+              Copy Address
+            </Button>
+            <Button
+              color="success"
+              size="small"
+              startIcon={<Iconify icon={'bi:journal-check'} />}
+              onClick={() => {
+                window.open(`${selectedChain.blockExplorerUrl}/address/${address}`, '_blank');
+              }}
+              sx={{ mr: 1 }}
+            >
+              Explorer
+            </Button>
+          </Box>
+        </Paper>
+      ) : (
+        <Paper
+          sx={{
+            p: 3,
+            mb: 3,
+            width: 1,
+            position: 'relative',
+            border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
+          }}
+        >
+          <Typography variant="subtitle2">
+            You need to connect a wallet to create the NFTs collection
+          </Typography>
+        </Paper>
+      )}
 
       <Box>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} />}>
+        <Button
+          onClick={handleNextButtonClick}
+          disabled={!(address && selectedWallet)}
+          size="small"
+          startIcon={<Iconify icon={'fluent:next-28-regular'} />}
+        >
           Next
         </Button>
       </Box>
