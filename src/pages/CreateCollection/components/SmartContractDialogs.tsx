@@ -42,7 +42,13 @@ export default function SmartContractDialogs() {
 
   return (
     <>
-      <Button variant="contained" size="small" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        size="small"
+        onClick={handleClickOpen}
+        color="info"
+        sx={{ backgroundColor: '#377dff' }}
+      >
         View smart contract
       </Button>
 

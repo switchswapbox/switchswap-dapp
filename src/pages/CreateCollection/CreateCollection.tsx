@@ -1,7 +1,6 @@
-import { Box, Button, Container, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { capitalCase } from 'change-case';
 import { useState } from 'react';
 import Iconify from '../../components/Iconify';
 import Page from '../../components/Page';
@@ -106,11 +105,12 @@ export default function CreateCollection() {
               <Button
                 component={'a'}
                 variant="contained"
-                color="primary"
                 size="large"
                 fullWidth={isMd ? false : true}
                 href={'/'}
                 target={'_blank'}
+                color="info"
+                sx={{ backgroundColor: '#377dff' }}
               >
                 Case studies
               </Button>
@@ -136,7 +136,7 @@ export default function CreateCollection() {
 
         <Box sx={{ mb: 5 }} />
 
-        <Tabs
+        {/* <Tabs
           value={SM_CREATION_TABS[currentTab].key}
           scrollButtons="auto"
           variant="scrollable"
@@ -152,13 +152,10 @@ export default function CreateCollection() {
               value={tab.key}
             />
           ))}
-        </Tabs>
+        </Tabs> */}
 
         <Box sx={{ mb: 3 }} />
-        {SM_CREATION_TABS.map((tab) => {
-          const isMatched = tab.key === currentTab;
-          return isMatched && <Box key={tab.key}>{tab.component}</Box>;
-        })}
+        <ConnectBlockchain />
       </Container>
     </Page>
   );
