@@ -1,11 +1,8 @@
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Button, Card, Container, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useState } from 'react';
-import Iconify from '../../components/Iconify';
 import Page from '../../components/Page';
 import ConfigureSmartContract from './components/ConfigureSmartContract';
-import ConnectBlockchain from './components/ConnectBlockchain';
 import DeploySmartContract from './components/DeploySmartContract';
 
 export default function CreateCollection() {
@@ -13,42 +10,6 @@ export default function CreateCollection() {
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true
   });
-
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const handleNextButtonClick = () => {
-    setCurrentTab(currentTab + 1);
-  };
-
-  const handleBackButtonClick = () => {
-    setCurrentTab(currentTab - 1);
-  };
-
-  const SM_CREATION_TABS = [
-    {
-      key: 0,
-      value: 'blockchain',
-      icon: <Iconify icon={'akar-icons:link-chain'} width={20} height={20} />,
-      component: <ConnectBlockchain handleNextButtonClick={handleNextButtonClick} />
-    },
-    {
-      key: 1,
-      value: 'smart_contract',
-      icon: <Iconify icon={'healthicons:i-certificate-paper-outline'} width={20} height={20} />,
-      component: (
-        <ConfigureSmartContract
-          handleNextButtonClick={handleNextButtonClick}
-          handleBackButtonClick={handleBackButtonClick}
-        />
-      )
-    },
-    {
-      key: 2,
-      value: 'create_collection',
-      icon: <Iconify icon={'eos-icons:subscriptions-created-outlined'} width={20} height={20} />,
-      component: <DeploySmartContract handleBackButtonClick={handleBackButtonClick} />
-    }
-  ];
 
   return (
     <Page title="Create NFTs Collection">
@@ -136,26 +97,11 @@ export default function CreateCollection() {
 
         <Box sx={{ mb: 5 }} />
 
-        {/* <Tabs
-          value={SM_CREATION_TABS[currentTab].key}
-          scrollButtons="auto"
-          variant="scrollable"
-          allowScrollButtonsMobile
-          onChange={(e, value) => setCurrentTab(value)}
-        >
-          {SM_CREATION_TABS.map((tab) => (
-            <Tab
-              disableRipple
-              key={tab.key}
-              label={capitalCase(tab.value)}
-              icon={tab.icon}
-              value={tab.key}
-            />
-          ))}
-        </Tabs> */}
-
         <Box sx={{ mb: 3 }} />
-        <ConnectBlockchain />
+        <Card sx={{ p: 3 }}>
+          <ConfigureSmartContract />
+          <DeploySmartContract />
+        </Card>
       </Container>
     </Page>
   );

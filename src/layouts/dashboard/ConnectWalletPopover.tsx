@@ -28,7 +28,11 @@ import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress'
 
 Identicons.svgPath = './static/identicons.min.svg';
 
-let provider;
+let provider: any;
+
+export function getProvider(): any {
+  return provider;
+}
 
 const ConnectWalletPopover = () => {
   const theme = useTheme();
