@@ -1,12 +1,9 @@
-import { Suspense, lazy } from 'react';
-import { Navigate, useRoutes, useLocation } from 'react-router-dom';
-// layouts
-import MainLayout from '../layouts/main';
+import { lazy, Suspense } from 'react';
+import { Navigate, useLocation, useRoutes } from 'react-router-dom';
+import LoadingScreen from '../components/LoadingScreen';
 import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
-// components
-import LoadingScreen from '../components/LoadingScreen';
-// ----------------------------------------------------------------------
+import MainLayout from '../layouts/main';
 
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -51,6 +48,7 @@ export default function Router() {
         { element: <Navigate to="/home" replace /> },
         { path: 'home', element: <Homepage /> },
         { path: 'create-collection', element: <CreateCollection /> },
+        { path: 'mint-nft', element: <MintNft /> },
         { path: 'my-nft', element: <MyNFT /> },
         { path: 'collection-explore', element: <CollectionsExplorer /> },
         { path: 'collection-viewer', element: <CollectionViewer /> },
@@ -118,6 +116,7 @@ const CreateCollection = LoadWithoutSpinner(lazy(() => import('../pages/CreateCo
 const MyNFT = LoadWithoutSpinner(lazy(() => import('../pages/MyNFT')));
 const CollectionsExplorer = LoadWithoutSpinner(lazy(() => import('../pages/CollectionsExplorer')));
 const CollectionViewer = LoadWithoutSpinner(lazy(() => import('../pages/CollectionViewer')));
+const MintNft = LoadWithoutSpinner(lazy(() => import('../pages/MintNft')));
 // const Universe = lazy(() => import('../pages/Universe'));
 // const NftMinting = lazy(() => import('../pages/NftMinting'));
 // const NftManager = lazy(() => import('../pages/NftManager'));
