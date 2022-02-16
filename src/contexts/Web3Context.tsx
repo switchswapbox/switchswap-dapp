@@ -1,15 +1,9 @@
 import { Web3Provider } from '@ethersproject/providers';
-// export function useWeb3() {
-//   return useContext(Web3Context);
-// }
 import Onboard from 'bnc-onboard';
 import useWallet from 'hooks/useWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
 export const Web3Context = React.createContext<any>({});
-
-const rpcUrl = `https://rinkeby.infura.io/v3/741c5f1257a24106934fe4105c784478`;
-
-// const NetworkId = 4;
 
 const wallets = [
   { walletName: 'metamask' },
@@ -60,6 +54,8 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
     if (selectedWallet) {
       onSelectWallet(selectedWallet);
     }
+    // FIXME: adding onSelectWallet would cause infinite loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedWallet]);
 
   const onboard = useMemo(
@@ -106,15 +102,6 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
       .then(() => setPending(false));
   }, [previousSelectedWallet, onboard, setActive]);
 
-  const getInfoForMetamask = useCallback(() => {
-    setPending(true);
-    onboard
-      .walletSelect(previousSelectedWallet)
-      .catch(console.error)
-      .then(setActive)
-      .then(() => setPending(false));
-  }, [previousSelectedWallet, onboard, setActive]);
-
   const deactivate = useCallback(() => {
     setPending(true);
     onboard.walletReset();
@@ -132,7 +119,6 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
         provider,
         onboard,
         activate,
-        getInfoForMetamask,
         deactivate,
         pending,
         connectedChainId
