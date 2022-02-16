@@ -1,5 +1,5 @@
 // scroll bar
-import { Web3ReactProvider } from '@web3-react/core';
+import { Web3ContextProvider } from 'contexts/Web3Context';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -10,7 +10,6 @@ import 'simplebar/src/simplebar.css';
 import 'slick-carousel/slick/slick-theme.css';
 // slick-carousel
 import 'slick-carousel/slick/slick.css';
-import { getLibrary } from 'utils/web3React';
 //
 import App from './App';
 import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
@@ -24,19 +23,19 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.render(
   <StrictMode>
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <HelmetProvider>
-        <SettingsProvider>
-          <CollapseDrawerProvider>
-            <WalletProvider>
+    <WalletProvider>
+      <Web3ContextProvider>
+        <HelmetProvider>
+          <SettingsProvider>
+            <CollapseDrawerProvider>
               <Router>
                 <App />
               </Router>
-            </WalletProvider>
-          </CollapseDrawerProvider>
-        </SettingsProvider>
-      </HelmetProvider>
-    </Web3ReactProvider>
+            </CollapseDrawerProvider>
+          </SettingsProvider>
+        </HelmetProvider>
+      </Web3ContextProvider>
+    </WalletProvider>
   </StrictMode>,
   document.getElementById('root')
 );

@@ -2,7 +2,7 @@ import Notify from 'bnc-notify';
 import Onboard from 'bnc-onboard';
 import { Subscriptions } from 'bnc-onboard/dist/src/interfaces';
 
-const rpcUrl = `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`;
+const rpcUrl = `https://rinkeby.infura.io/v3/741c5f1257a24106934fe4105c784478`;
 const dappId = process.env.BLOCKNATIVE_API_KEY;
 
 export function initOnboard(networkId: number, subscriptions: Subscriptions) {

@@ -1,4 +1,4 @@
-import { TransactionReceipt, Web3Provider } from '@ethersproject/providers';
+import { TransactionReceipt } from '@ethersproject/providers';
 import {
   Box,
   Button,
@@ -12,17 +12,14 @@ import {
 } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { baseURLBin, compile, CompilerAbstract, pathToURL } from '@remix-project/remix-solidity';
-import { useWeb3React } from '@web3-react/core';
 import * as etherscanClient from 'clients/etherscan-client';
 import { TEST_CONTRACTS } from 'constants/contract';
 import { SOLIDITY_COMPILER_VERSION, SPDX_LICENSE_IDENTIFIER } from 'constants/solcEnvironments';
 import { ContractFactory } from 'ethers';
-import { getProvider } from 'layouts/dashboard/ConnectWalletPopover';
+import useWeb3 from 'hooks/useWeb3';
 import { useEffect, useRef, useState } from 'react';
 import { handleNpmImport } from 'utils/content-resolver';
 import type { HandleNextBackButton } from '../CreateCollection.types';
-const provider = getProvider();
-
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
 const CONTRACT_FILE_NAME = 'MyContract.sol';
 const CONTRACT_NAME = 'MyContract';
@@ -33,12 +30,15 @@ const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
 })();
 
 export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
+  const { active, account, library, provider, onboard } = useWeb3();
+
   const [compiling, setCompiling] = useState(false);
   const [source, setSource] = useState(TEST_CONTRACTS[0].content);
   const [compileResult, setCompileResult] = useState<CompilerAbstract>();
   const [transactionReceipt, setTransactionReceipt] = useState<TransactionReceipt>();
   const [activeStep, setActiveStep] = useState(0);
-  const { library, active, chainId } = useWeb3React<Web3Provider>();
+  //const { library, active, chainId } = useWeb3React<Web3Provider>();
+  const chainId = '4';
   const [etherscanApiKey, setEtherscanApiKey] = useState('');
   const [publishing, setPublishing] = useState(false);
   const [publishingError, setPublishingError] = useState(false);
@@ -109,7 +109,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
       const contractABI = compiledContract?.object.abi;
 
-      const signer = provider.getUncheckedSigner();
+      const signer = library.getSigner(account);
       console.log('signer: ', signer);
       const contractFactory: ContractFactory = new ContractFactory(
         contractABI,
