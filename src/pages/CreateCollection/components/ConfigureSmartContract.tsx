@@ -14,26 +14,18 @@ import {
 } from '@mui/material';
 import useLocales from 'hooks/useLocales';
 import useWallet from 'hooks/useWallet';
-import { useEffect, useRef, useState } from 'react';
+import useWeb3 from 'hooks/useWeb3';
+import { useRef, useState } from 'react';
 import Iconify from '../../../components/Iconify';
 import type { HandleNextBackButton } from '../CreateCollection.types';
 import SmartContractDialogs from './SmartContractDialogs';
-
-export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextBackButton) {
+export default function ConfigureSmartContract({ handleNextButtonClick }: HandleNextBackButton) {
   const { translate } = useLocales();
 
   const { chain: selectedChain, address, selectedWallet } = useWallet();
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const { active, account, library, provider, onboard, activate } = useWeb3();
 
   const timer = useRef<number>();
-
-  useEffect(() => {
-    if (address && selectedWallet) {
-      setIsWalletConnected(true);
-    } else {
-      setIsWalletConnected(false);
-    }
-  }, [address, selectedWallet]);
 
   const [name, setName] = useState('');
   const [symbol, setSymbol] = useState('');
@@ -42,7 +34,7 @@ export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextB
     <>
       <Typography
         variant="overline"
-        sx={{ mb: 3, display: isWalletConnected ? 'none' : 'block', color: 'text.secondary' }}
+        sx={{ mb: 3, display: active ? 'none' : 'block', color: 'text.secondary' }}
       >
         Select network & Connect wallet
       </Typography>
@@ -53,7 +45,7 @@ export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextB
           mt: 4,
           mb: 3,
           width: 1,
-          display: isWalletConnected ? 'none' : 'block',
+          display: active ? 'none' : 'block',
           border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
         }}
       >
@@ -62,7 +54,7 @@ export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextB
         </Typography>
       </Paper>
 
-      <Box sx={{ display: isWalletConnected ? 'block' : 'none' }}>
+      <Box sx={{ display: active ? 'block' : 'none' }}>
         <Grid container spacing={2} sx={{ mb: 2 }}>
           <Grid item xs={12} md={6}>
             <Paper
@@ -150,14 +142,14 @@ export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextB
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Network
                   </Typography>
-                  <Typography variant="subtitle2">Ethereum</Typography>
+                  <Typography variant="subtitle2">{'Chain'}</Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between" spacing={2}>
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     Address
                   </Typography>
                   <Typography variant="subtitle2" sx={{ wordBreak: 'break-word' }}>
-                    0x3E6b21EDDa47B7075cDd5AE5b8E6D50cBeD0d519
+                    {account}
                   </Typography>
                 </Stack>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -203,7 +195,7 @@ export default function ConnectBlockchain({ handleNextButtonClick }: HandleNextB
           <Button
             variant="outlined"
             size="large"
-            disabled={!(address && selectedWallet)}
+            disabled={!active}
             startIcon={<Iconify icon={'fluent:next-28-regular'} />}
             sx={{ px: 5 }}
           >

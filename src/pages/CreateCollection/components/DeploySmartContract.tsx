@@ -38,10 +38,10 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   const [compileResult, setCompileResult] = useState<CompilerAbstract>();
   const [transactionReceipt, setTransactionReceipt] = useState<TransactionReceipt>();
   const [activeStep, setActiveStep] = useState(0);
-  const [etherscanApiKey, setEtherscanApiKey] = useState('');
   const [publishing, setPublishing] = useState(false);
   const [publishingError, setPublishingError] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [etherscanPublishingHx, setEtherscanPublishingHx] = useState('');
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -69,11 +69,6 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
     };
   }, []);
 
-  useEffect(() => {
-    const key = localStorage.getItem(ETHERSCAN_API_SECRET_KEY);
-    setEtherscanApiKey(key || '');
-  }, []);
-
   const handleCompile = async () => {
     setCompiling(true);
     // setPublishingError(false);
@@ -98,12 +93,10 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       console.log('All contract compileResult: ', response);
       setCompileResult(response);
     } finally {
-      // setCompiling(false);
     }
   };
 
   const handleDeploy = async () => {
-    // setDeploying(true);
     try {
       await onboard.walletCheck();
       const compiledContract = compileResult?.getContract(CONTRACT_NAME);
@@ -111,7 +104,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       const contractABI = compiledContract?.object.abi;
 
       const signer = library.getSigner(account);
-      console.log('signer: ', signer);
+
       const contractFactory: ContractFactory = new ContractFactory(
         contractABI,
         contractBinary,
@@ -123,7 +116,9 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       console.log('success');
       console.log('transactionReceipt: ', txReceipt);
       setTransactionReceipt(txReceipt);
-      await handlePublishing(txReceipt, compileResult);
+      // await handlePublishing(txReceipt, compileResult);
+    } catch (e) {
+      console.log('Error', e);
     } finally {
       // setDeploying(false);
     }
@@ -133,14 +128,11 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
     txReceipt?: TransactionReceipt,
     compileResult?: CompilerAbstract
   ) => {
-    if (!etherscanApiKey) {
-      console.log('Please input etherscan api key');
-      return;
-    }
     setPublishing(true);
     try {
+      console.log('start publishing');
       const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
-        etherscanApiKey,
+        ETHERSCAN_API_SECRET_KEY,
         selectedChain.chainId + '',
         {
           address: txReceipt?.contractAddress || '',
@@ -163,21 +155,29 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       if (verifiedResponse.data.status === '1') {
         console.log('success publishing', verifiedResponse.data.result);
       }
-      setVerifying(true);
-      const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
-        etherscanApiKey,
-        selectedChain.chainId + '',
-        (verifiedResponse.data as any).result
-      );
-      setVerifying(false);
-      if (verifyStatusResponse.data.status === '1') {
-        console.log('success verifying');
-      } else {
-        console.log('error verifying');
-      }
-      console.log('verifyStatusResponse : ', verifyStatusResponse.data);
+      setEtherscanPublishingHx((verifiedResponse.data as any).result);
     } finally {
     }
+  };
+
+  // (verifiedResponse.data as any).result = etherscanPublishingHx
+  const handleGetPublishingStatus = async (etherscanPublishingHx: string) => {
+    setVerifying(true);
+    const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
+      ETHERSCAN_API_SECRET_KEY,
+      selectedChain.chainId + '',
+      etherscanPublishingHx
+    );
+    setVerifying(false);
+    if (
+      verifyStatusResponse.data.status === '1' ||
+      verifyStatusResponse.data.message === 'Already Verified'
+    ) {
+      console.log('success verifying');
+    } else {
+      console.log('error verifying');
+    }
+    console.log('verifyStatusResponse : ', verifyStatusResponse.data);
   };
 
   return (
@@ -200,6 +200,20 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       </Typography>
       <Button onClick={handleCompile}>Compile</Button>
       <Button onClick={handleDeploy}>Deploy</Button>
+      <Button
+        onClick={() => {
+          handlePublishing(transactionReceipt, compileResult);
+        }}
+      >
+        Publish
+      </Button>
+      <Button
+        onClick={() => {
+          handleGetPublishingStatus(etherscanPublishingHx);
+        }}
+      >
+        Get Publishing Status
+      </Button>
       <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
         {[
           {
