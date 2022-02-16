@@ -14,6 +14,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import Identicons from '@nimiq/identicons';
 import Iconify from 'components/Iconify';
+import { EMPTY_CHAIN, SUPPORTED_CHAINS } from 'constants/chains';
 import useWeb3 from 'hooks/useWeb3';
 import React, { useEffect, useRef, useState } from 'react';
 import MenuPopover from '../../components/MenuPopover';
@@ -32,39 +33,27 @@ const ConnectWalletPopover = () => {
 
   const { chain: selectedChain, selectedWallet } = useWallet();
 
-  const {
-    active: walletIsConnected,
-    activate,
-    account,
-    library,
-    provider,
-    networkId,
-    onboard,
-    deactivate
-  } = useWeb3();
+  const { active: walletIsConnected, activate, account, deactivate, connectedChainId } = useWeb3();
 
   const [openWalletInfo, setOpenWalletInfo] = useState(false);
   const walletInfoAnchorRef = useRef(null);
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
-  // const [onboard, setOnboard] = useState<OnBoardAPI>();
   const [network, setNetwork] = useState<Chain>(selectedChain);
 
   useEffect(() => {
-    console.log('provider', provider);
-    console.log(provider);
-    console.log('library', library);
-  }, [provider, library]);
-
-  // useEffect(() => {
-  //   const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === walletNetworkId);
-  //   if (found) {
-  //     setNetwork(found);
-  //   }
-  // }, [provider]);
+    const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === connectedChainId);
+    if (found) {
+      setNetwork(found);
+    } else {
+      setNetwork(EMPTY_CHAIN);
+    }
+  }, [connectedChainId]);
 
   useEffect(() => {
-    activate();
-  }, [activate]);
+    if (selectedWallet) {
+      activate();
+    }
+  }, [selectedWallet, activate]);
 
   const handleWalletModalOpen = async () => {
     activate();
@@ -85,11 +74,13 @@ const ConnectWalletPopover = () => {
 
   useEffect(() => {
     if (account) {
-      Identicons.toDataUrl(account).then((img: string) => {
-        setUniqueIcon(img);
-      });
+      Identicons.toDataUrl(`${network.currencySymbol.toLowerCase()}:${account}`).then(
+        (img: string) => {
+          setUniqueIcon(img);
+        }
+      );
     }
-  }, [account]);
+  }, [account, network.currencySymbol]);
 
   const handleCopyAddress = () => {
     if (account) {

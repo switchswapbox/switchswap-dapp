@@ -47,9 +47,14 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
   const [provider, setProvider] = useState<any>(undefined);
   const [pending, setPending] = useState<any>(false);
   const [selectedWallet, setSelectedWallet] = useState<null | string>(null);
-  const [connectedNetworkId, setConnectedNetworkId] = useState<any>(null);
+  const [connectedChainId, setConnectedChainId] = useState<any>(null);
 
-  const { chain, selectedWallet: previousSelectedWallet, onSelectWallet } = useWallet();
+  const {
+    chain,
+    selectedWallet: previousSelectedWallet,
+    onSelectWallet,
+    onDisconnectWallet
+  } = useWallet();
 
   useEffect(() => {
     if (selectedWallet) {
@@ -81,6 +86,10 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
           },
           address: (address) => {
             setAccount(address);
+          },
+          network: (network) => {
+            setConnectedChainId(network);
+            console.log('network', network);
           }
         }
       }),
@@ -95,13 +104,24 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
       .then((res) => res && onboard.walletCheck)
       .then(setActive)
       .then(() => setPending(false));
-  }, [onboard, setActive]);
+  }, [previousSelectedWallet, onboard, setActive]);
+
+  const getInfoForMetamask = useCallback(() => {
+    setPending(true);
+    onboard
+      .walletSelect(previousSelectedWallet)
+      .catch(console.error)
+      .then(setActive)
+      .then(() => setPending(false));
+  }, [previousSelectedWallet, onboard, setActive]);
 
   const deactivate = useCallback(() => {
     setPending(true);
     onboard.walletReset();
+    onDisconnectWallet();
     setPending(false);
-  }, [onboard, setActive]);
+    setActive(false);
+  }, [onboard, onDisconnectWallet]);
 
   return (
     <Web3Context.Provider
@@ -112,9 +132,10 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
         provider,
         onboard,
         activate,
+        getInfoForMetamask,
         deactivate,
         pending,
-        connectedNetworkId
+        connectedChainId
       }}
     >
       {children}

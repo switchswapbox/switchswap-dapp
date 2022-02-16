@@ -22,14 +22,6 @@ const PROD_CHAINS = [
     chainId: 137,
     rpcUrl: 'https://polygon-rpc.com/',
     blockExplorerUrl: 'https://polygonscan.com'
-  },
-  {
-    name: 'Avalanche',
-    currencySymbol: 'AVAX',
-    icon: './static/icons/networks/avalanche.svg',
-    chainId: 43114,
-    rpcUrl: '',
-    blockExplorerUrl: 'https://snowtrace.io'
   }
 ];
 
@@ -47,3 +39,12 @@ const TEST_CHAINS = [
 const staging = process.env.REACT_APP_STAGING;
 
 export const SUPPORTED_CHAINS = staging ? [...TEST_CHAINS, ...PROD_CHAINS] : PROD_CHAINS;
+
+export const EMPTY_CHAIN = {
+  name: 'Unknown',
+  currencySymbol: 'UNK',
+  icon: '',
+  chainId: 0,
+  rpcUrl: '',
+  blockExplorerUrl: ''
+};

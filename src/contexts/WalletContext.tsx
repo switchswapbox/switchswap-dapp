@@ -48,9 +48,7 @@ function WalletProvider({ children }: WalletProviderProps) {
 
   const onNetworkChange = (chain: Chain) => {
     if (wallet.chain?.chainId !== chain.chainId) {
-      setWallet({ ...initialState, chain });
-
-      window.location.reload();
+      setWallet({ ...wallet, chain });
     }
   };
 
