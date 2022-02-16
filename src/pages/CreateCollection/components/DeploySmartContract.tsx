@@ -109,7 +109,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
       const contractABI = compiledContract?.object.abi;
 
-      const signer = provider.getSigner();
+      const signer = provider.getUncheckedSigner();
       console.log('signer: ', signer);
       const contractFactory: ContractFactory = new ContractFactory(
         contractABI,
