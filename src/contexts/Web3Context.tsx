@@ -1,5 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers';
 import Onboard from 'bnc-onboard';
+import { API, Wallet } from 'bnc-onboard/dist/src/interfaces';
 import useWallet from 'hooks/useWallet';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -35,14 +36,14 @@ const wallets = [
 const dappId = process.env.BLOCKNATIVE_API_KEY;
 
 export function Web3ContextProvider({ children }: { children: React.ReactNode }) {
-  const [active, setActive] = useState<any>(false);
-  const [library, setLibrary] = useState<any>(undefined);
-  const [account, setAccount] = useState<any>(undefined);
-  const [provider, setProvider] = useState<any>(undefined);
-  const [pending, setPending] = useState<any>(false);
+  const [active, setActive] = useState(false);
+  const [library, setLibrary] = useState<Web3Provider | undefined>(undefined);
+  const [account, setAccount] = useState<string | undefined>(undefined);
+  const [provider, setProvider] = useState<API | undefined>(undefined);
+  const [pending, setPending] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState<null | string>(null);
-  const [connectedChainId, setConnectedChainId] = useState<any>(null);
-
+  const [connectedChainId, setConnectedChainId] = useState<number | null>(null);
+  const [dump, setDump] = useState<any>(null);
   const {
     chain,
     selectedWallet: previousSelectedWallet,
@@ -51,12 +52,15 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
   } = useWallet();
 
   useEffect(() => {
-    if (selectedWallet) {
+    if (account && provider && connectedChainId && selectedWallet) {
+      setActive(true);
       onSelectWallet(selectedWallet);
+    } else {
+      setActive(false);
     }
-    // FIXME: adding onSelectWallet would cause infinite loop
+    // FIXME: adding onSelectWallet will cause infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedWallet]);
+  }, [account, provider, connectedChainId, selectedWallet]);
 
   const onboard = useMemo(
     () =>
@@ -68,14 +72,12 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
           wallets
         },
         subscriptions: {
-          wallet: (wallet) => {
+          wallet: (wallet: Wallet) => {
             if (wallet.provider) {
-              setActive(true);
               setProvider(wallet.provider);
               setLibrary(new Web3Provider(wallet.provider));
               setSelectedWallet(wallet.name);
             } else {
-              setActive(false);
               setProvider(undefined);
               setLibrary(undefined);
             }
@@ -85,11 +87,10 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
           },
           network: (network) => {
             setConnectedChainId(network);
-            console.log('network', network);
           }
         }
       }),
-    [chain.chainId, setActive, setProvider, setLibrary, setAccount]
+    [chain.chainId, setProvider, setLibrary, setAccount]
   );
 
   const activate = useCallback(() => {
@@ -98,17 +99,23 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
       .walletSelect(previousSelectedWallet)
       .catch(console.error)
       .then((res) => res && onboard.walletCheck)
-      .then(setActive)
-      .then(() => setPending(false));
-  }, [previousSelectedWallet, onboard, setActive]);
+      // FIXME: setDump is just a workaround, do I need to set some sort of promise here to wait walletCheck to finish?
+      .then(setDump)
+      .then(() => {
+        setPending(false);
+      });
+  }, [previousSelectedWallet, onboard]);
 
   const deactivate = useCallback(() => {
     setPending(true);
     onboard.walletReset();
     onDisconnectWallet();
+    setSelectedWallet(null);
+    onSelectWallet('');
     setPending(false);
     setActive(false);
-  }, [onboard, onDisconnectWallet]);
+    setAccount(undefined);
+  }, [onboard, onDisconnectWallet, onSelectWallet]);
 
   return (
     <Web3Context.Provider

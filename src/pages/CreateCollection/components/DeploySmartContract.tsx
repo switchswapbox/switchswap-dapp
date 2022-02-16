@@ -16,6 +16,7 @@ import * as etherscanClient from 'clients/etherscan-client';
 import { TEST_CONTRACTS } from 'constants/contract';
 import { SOLIDITY_COMPILER_VERSION, SPDX_LICENSE_IDENTIFIER } from 'constants/solcEnvironments';
 import { ContractFactory } from 'ethers';
+import useWallet from 'hooks/useWallet';
 import useWeb3 from 'hooks/useWeb3';
 import { useEffect, useRef, useState } from 'react';
 import { handleNpmImport } from 'utils/content-resolver';
@@ -30,15 +31,13 @@ const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
 })();
 
 export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
-  const { active, account, library, provider, onboard } = useWeb3();
-
+  const { active, account, library, provider, onboard, activate } = useWeb3();
+  const { chain: selectedChain } = useWallet();
   const [compiling, setCompiling] = useState(false);
   const [source, setSource] = useState(TEST_CONTRACTS[0].content);
   const [compileResult, setCompileResult] = useState<CompilerAbstract>();
   const [transactionReceipt, setTransactionReceipt] = useState<TransactionReceipt>();
   const [activeStep, setActiveStep] = useState(0);
-  //const { library, active, chainId } = useWeb3React<Web3Provider>();
-  const chainId = '4';
   const [etherscanApiKey, setEtherscanApiKey] = useState('');
   const [publishing, setPublishing] = useState(false);
   const [publishingError, setPublishingError] = useState(false);
@@ -63,6 +62,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
     })
   };
   const timer = useRef<number>();
+
   useEffect(() => {
     return () => {
       clearTimeout(timer.current);
@@ -105,6 +105,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   const handleDeploy = async () => {
     // setDeploying(true);
     try {
+      await onboard.walletCheck();
       const compiledContract = compileResult?.getContract(CONTRACT_NAME);
       const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
       const contractABI = compiledContract?.object.abi;
@@ -140,7 +141,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
     try {
       const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
         etherscanApiKey,
-        chainId + '',
+        selectedChain.chainId + '',
         {
           address: txReceipt?.contractAddress || '',
           name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
@@ -165,7 +166,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       setVerifying(true);
       const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
         etherscanApiKey,
-        chainId + '',
+        selectedChain.chainId + '',
         (verifiedResponse.data as any).result
       );
       setVerifying(false);
