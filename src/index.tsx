@@ -1,26 +1,25 @@
 // scroll bar
-import 'simplebar/src/simplebar.css';
-// import i18n
-import './locales/i18n';
-// slick-carousel
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom';
+import { HelmetProvider } from 'react-helmet-async';
 // lightbox
 import 'react-image-lightbox/style.css';
-
-import ReactDOM from 'react-dom';
-import { StrictMode } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import 'simplebar/src/simplebar.css';
+import 'slick-carousel/slick/slick-theme.css';
+// slick-carousel
+import 'slick-carousel/slick/slick.css';
+import App from './App';
+import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
-import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
 import { WalletProvider } from './contexts/WalletContext';
-//
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+// custom css
+import './index.css';
+// import i18n
+import './locales/i18n';
 import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // ----------------------------------------------------------------------
 
