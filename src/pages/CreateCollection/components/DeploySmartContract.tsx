@@ -39,48 +39,55 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   const { active, account, library, provider, onboard, activate } = useWeb3();
   const { chain: selectedChain } = useWallet();
   const [source, setSource] = useState(TEST_CONTRACTS[0].content);
-  const [compileResult, setCompileResult] = useState<CompilerAbstract>();
-  const [transactionReceipt, setTransactionReceipt] = useState<TransactionReceipt>();
   const [activeStep, setActiveStep] = useState(0);
-  const [publishingError, setPublishingError] = useState(false);
-  const [etherscanPublishingHx, setEtherscanPublishingHx] = useState('');
 
   const [compiling, setCompiling] = useState(false);
   const [compilingSuccess, setCompilingSuccess] = useState(false);
+  const [compilingError, setCompilingError] = useState(false);
+
   const [deploying, setDeploying] = useState(false);
   const [deployingSuccess, setDeployingSuccess] = useState(false);
+  const [deployingError, setDeployingError] = useState(false);
+
   const [publishing, setPublishing] = useState(false);
   const [publishingSuccess, setPublishingSuccess] = useState(false);
+  const [publishingError, setPublishingError] = useState(false);
+
   const [verifying, setVerifying] = useState(false);
   const [verifyingSuccess, setVerifyingSuccess] = useState(false);
+  const [verifyingError, setVerifyingError] = useState(false);
 
   const startDeploying = async () => {
     setActiveStep((prevActiveStep) => 0);
     setCompiling(true);
-    await timeout(2000);
+    const compileResult = await handleCompile();
     setCompiling(false);
     setCompilingSuccess(true);
 
-    setActiveStep((prevActiveStep) => 1);
-    setDeploying(true);
-    await timeout(2000);
-    setDeploying(false);
-    setDeployingSuccess(true);
+    if (compileResult) {
+      setActiveStep((prevActiveStep) => 1);
+      setDeploying(true);
+      const txReceipt = await handleDeploy(compileResult);
+      setDeploying(false);
+      setDeployingSuccess(true);
 
-    setActiveStep((prevActiveStep) => 2);
-    setPublishing(true);
-    await timeout(2000);
-    setPublishing(false);
-    setPublishingSuccess(true);
+      setActiveStep((prevActiveStep) => 2);
+      setPublishing(true);
+      const etherscanPublishingHx = await handlePublishing(txReceipt, compileResult);
+      setPublishing(false);
+      setPublishingSuccess(true);
 
-    setActiveStep((prevActiveStep) => 3);
-    setVerifying(true);
-    await timeout(2000);
-    setVerifying(false);
-    setVerifyingSuccess(true);
+      if (etherscanPublishingHx) {
+        setActiveStep((prevActiveStep) => 3);
+        setVerifying(true);
+        await handleGetPublishingStatus(etherscanPublishingHx);
+        setVerifying(false);
+        setVerifyingSuccess(true);
+      }
+    }
   };
 
-  const handleCompile = async () => {
+  const handleCompile = async (): Promise<CompilerAbstract | undefined> => {
     try {
       const response = (await compile(
         {
@@ -100,14 +107,16 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       }
       console.log('success');
       console.log('All contract compileResult: ', response);
-      setCompileResult(response);
+
+      return response;
     } finally {
     }
   };
 
-  const handleDeploy = async () => {
+  const handleDeploy = async (
+    compileResult: CompilerAbstract
+  ): Promise<TransactionReceipt | undefined> => {
     try {
-      await onboard.walletCheck();
       const compiledContract = compileResult?.getContract(CONTRACT_NAME);
       const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
       const contractABI = compiledContract?.object.abi;
@@ -124,20 +133,16 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       const txReceipt = await deployingContract.deployTransaction.wait(1);
       console.log('success');
       console.log('transactionReceipt: ', txReceipt);
-      setTransactionReceipt(txReceipt);
-      // await handlePublishing(txReceipt, compileResult);
+      return txReceipt;
     } catch (e) {
       console.log('Error', e);
-    } finally {
-      // setDeploying(false);
     }
   };
 
   const handlePublishing = async (
     txReceipt?: TransactionReceipt,
     compileResult?: CompilerAbstract
-  ) => {
-    setPublishing(true);
+  ): Promise<string | undefined> => {
     try {
       console.log('start publishing');
       const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
@@ -154,7 +159,6 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
           licenseType: SPDX_LICENSE_IDENTIFIER.MIT
         }
       );
-      setPublishing(false);
       console.log('verifiedResponse: ', verifiedResponse.data);
       if (verifiedResponse.data.status === '0') {
         console.log('error publishing');
@@ -164,8 +168,9 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
       if (verifiedResponse.data.status === '1') {
         console.log('success publishing', verifiedResponse.data.result);
       }
-      setEtherscanPublishingHx((verifiedResponse.data as any).result);
-    } finally {
+      return (verifiedResponse.data as any).result;
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -223,22 +228,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
           with your currently connected wallet. The creation will cost approximately 0,06749 ETH.
           The exact amount will be determined by your wallet
         </Typography>
-        <Button onClick={handleCompile}>Compile</Button>
-        <Button onClick={handleDeploy}>Deploy</Button>
-        <Button
-          onClick={() => {
-            handlePublishing(transactionReceipt, compileResult);
-          }}
-        >
-          Publish
-        </Button>
-        <Button
-          onClick={() => {
-            handleGetPublishingStatus(etherscanPublishingHx);
-          }}
-        >
-          Get Publishing Status
-        </Button>
+
         <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
           <Step key={'key1'} onClick={() => setActiveStep(0)}>
             <StepLabel
