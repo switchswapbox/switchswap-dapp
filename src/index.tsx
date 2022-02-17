@@ -1,4 +1,5 @@
 // scroll bar
+import { Web3ContextProvider } from 'contexts/Web3Context';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -25,17 +26,19 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.render(
   <StrictMode>
-    <HelmetProvider>
-      <SettingsProvider>
-        <CollapseDrawerProvider>
-          <WalletProvider>
-            <Router>
-              <App />
-            </Router>
-          </WalletProvider>
-        </CollapseDrawerProvider>
-      </SettingsProvider>
-    </HelmetProvider>
+    <WalletProvider>
+      <Web3ContextProvider>
+        <HelmetProvider>
+          <SettingsProvider>
+            <CollapseDrawerProvider>
+              <Router>
+                <App />
+              </Router>
+            </CollapseDrawerProvider>
+          </SettingsProvider>
+        </HelmetProvider>
+      </Web3ContextProvider>
+    </WalletProvider>
   </StrictMode>,
   document.getElementById('root')
 );

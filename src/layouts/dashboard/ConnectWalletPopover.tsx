@@ -1,36 +1,29 @@
-import React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { Icon } from '@iconify/react';
 import {
   Box,
-  Stack,
   Button,
+  ButtonBase,
+  Divider,
+  IconButton,
+  Link,
+  Stack,
   SvgIcon,
   Typography,
-  useMediaQuery,
-  ButtonBase,
-  IconButton,
-  Divider,
-  Link
+  useMediaQuery
 } from '@mui/material';
-import MenuPopover from '../../components/MenuPopover';
-import Iconify from 'components/Iconify';
-import { ethers } from 'ethers';
-import { Icon } from '@iconify/react';
-
-import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
-
-import useLocales from '../../hooks/useLocales';
+import { useTheme } from '@mui/material/styles';
 import Identicons from '@nimiq/identicons';
-import { initOnboard } from '../../services/blocknative';
-import { API as OnBoardAPI } from 'bnc-onboard/dist/src/interfaces';
-import { SUPPORTED_CHAINS } from '../../constants/chains';
-import { Chain } from '../../interfaces/chain';
+import Iconify from 'components/Iconify';
+import { EMPTY_CHAIN, SUPPORTED_CHAINS } from 'constants/chains';
+import useWeb3 from 'hooks/useWeb3';
+import React, { useEffect, useRef, useState } from 'react';
+import MenuPopover from '../../components/MenuPopover';
+import useLocales from '../../hooks/useLocales';
 import useSnackbarAction from '../../hooks/useSnackbarAction';
 import useWallet from '../../hooks/useWallet';
+import { Chain } from '../../interfaces/chain';
+import { shortenAddress, shortenAddressHeader } from '../../utils/formatAddress';
 Identicons.svgPath = './static/identicons.min.svg';
-
-let provider;
 
 const ConnectWalletPopover = () => {
   const theme = useTheme();
@@ -38,62 +31,32 @@ const ConnectWalletPopover = () => {
   const smUp = useMediaQuery(theme.breakpoints.up('sm'));
   const { translate } = useLocales();
 
-  const { chain: selectedChain, selectedWallet, onSelectWallet, onDisconnectWallet } = useWallet();
+  const { chain: selectedChain, selectedWallet } = useWallet();
+
+  const { active: walletIsConnected, activate, account, deactivate, connectedChainId } = useWeb3();
 
   const [openWalletInfo, setOpenWalletInfo] = useState(false);
-  const [walletIsConnected, setWalletIsConnected] = useState(false);
   const walletInfoAnchorRef = useRef(null);
   const [uniqueIcon, setUniqueIcon] = useState<string>('');
-  const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>();
-  const [walletNetworkId, setWalletNetworkId] = useState<number>();
-  const [onboard, setOnboard] = useState<OnBoardAPI>();
   const [network, setNetwork] = useState<Chain>(selectedChain);
 
   useEffect(() => {
-    const onboard = initOnboard(selectedChain?.chainId || 1, {
-      address: setSelectedAccountAddress,
-      network: setWalletNetworkId,
-      wallet: (wallet) => {
-        if (wallet.provider) {
-          provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
-          if (wallet.name) {
-            onSelectWallet(wallet.name);
-          }
-        }
-      }
-    });
-
-    setOnboard(onboard);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedChain]);
-
-  useEffect(() => {
-    const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === walletNetworkId);
+    const found = SUPPORTED_CHAINS.find((chain) => chain.chainId === connectedChainId);
     if (found) {
       setNetwork(found);
+    } else {
+      setNetwork(EMPTY_CHAIN);
     }
-  }, [walletNetworkId]);
+  }, [connectedChainId]);
 
   useEffect(() => {
-    if (selectedWallet && onboard) {
-      onboard.walletSelect(selectedWallet);
-      setWalletIsConnected(true);
+    if (selectedWallet) {
+      activate();
     }
-  }, [onboard, selectedWallet]);
+  }, [selectedWallet, activate]);
 
   const handleWalletModalOpen = async () => {
-    const selected = await onboard?.walletSelect();
-    if (selected) {
-      const isOk = await onboard?.walletCheck();
-      if (!isOk) {
-        if (walletNetworkId !== network.chainId) {
-          onSnackbarAction('error', translate('connectWallet.incorrectNetwork', {
-            network: network.name
-          }), 3000);
-        }
-      }
-    }
-    setWalletIsConnected(selected || false);
+    activate();
   };
 
   const handleWalletInfoOpen = () => {
@@ -105,24 +68,23 @@ const ConnectWalletPopover = () => {
   };
 
   const handleDisconnectWallet = () => {
-    onboard?.walletReset();
-    setWalletIsConnected(false);
+    deactivate();
     setOpenWalletInfo(false);
-    onDisconnectWallet();
   };
 
   useEffect(() => {
-    if (selectedAccountAddress) {
-      Identicons.toDataUrl(selectedAccountAddress).then((img: string) => {
-        setUniqueIcon(img);
-      });
+    if (account) {
+      Identicons.toDataUrl(`${network.currencySymbol.toLowerCase()}:${account}`).then(
+        (img: string) => {
+          setUniqueIcon(img);
+        }
+      );
     }
-  }, [selectedAccountAddress]);
-
+  }, [account, network.currencySymbol]);
 
   const handleCopyAddress = () => {
-    if (selectedAccountAddress) {
-      navigator.clipboard.writeText(selectedAccountAddress);
+    if (account) {
+      navigator.clipboard.writeText(account);
       onSnackbarAction('success', translate('connectWallet.copiedAddress'), 3000);
     }
   };
@@ -173,8 +135,8 @@ const ConnectWalletPopover = () => {
                 network?.currencySymbol || ''
               ).toLowerCase()}:`}</Typography>
               <Typography variant="caption">
-                {smUp && shortenAddress(selectedAccountAddress || '', 5)}
-                {!smUp && shortenAddressHeader(selectedAccountAddress || '', 5)}
+                {smUp && shortenAddress(account || '', 5)}
+                {!smUp && shortenAddressHeader(account || '', 5)}
               </Typography>
             </Stack>
           </Stack>
@@ -195,9 +157,7 @@ const ConnectWalletPopover = () => {
                 <Typography variant="subtitle2">{`${(
                   network?.currencySymbol || ''
                 ).toLowerCase()}:`}</Typography>
-                <Typography variant="body2">
-                  {shortenAddress(selectedAccountAddress || '', 5)}
-                </Typography>
+                <Typography variant="body2">{shortenAddress(account || '', 5)}</Typography>
               </Stack>
               <Stack direction="row">
                 <IconButton
@@ -209,10 +169,7 @@ const ConnectWalletPopover = () => {
                 >
                   <Iconify icon={'akar-icons:copy'} />
                 </IconButton>
-                <Link
-                  href={network?.blockExplorerUrl + '/address/' + selectedAccountAddress}
-                  target="_blank"
-                >
+                <Link href={network?.blockExplorerUrl + '/address/' + account} target="_blank">
                   <IconButton color="primary" aria-label="copy" component="span" size="small">
                     <Iconify icon={'bx:bx-link-external'} />
                   </IconButton>

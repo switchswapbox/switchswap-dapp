@@ -1,150 +1,217 @@
-import { useState, useRef, useEffect } from 'react';
+import { TransactionReceipt } from '@ethersproject/providers';
 import {
-  Typography,
   Box,
   Button,
-  Card,
   Paper,
-  Stack,
-  Grid,
-  Chip,
-  Autocomplete,
-  TextField,
-  Stepper,
-  StepContent,
   Step,
+  StepContent,
   StepLabel,
-  CircularProgress
+  Stepper,
+  Typography
 } from '@mui/material';
-import { green } from '@mui/material/colors';
-
-import Iconify from '../../../components/Iconify';
-
+import { baseURLBin, compile, CompilerAbstract, pathToURL } from '@remix-project/remix-solidity';
+import * as etherscanClient from 'clients/etherscan-client';
+import { TEST_CONTRACTS } from 'constants/contract';
+import { SOLIDITY_COMPILER_VERSION, SPDX_LICENSE_IDENTIFIER } from 'constants/solcEnvironments';
+import { ContractFactory } from 'ethers';
+import useWallet from 'hooks/useWallet';
+import useWeb3 from 'hooks/useWeb3';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { handleNpmImport } from 'utils/content-resolver';
+import type { HandleNextBackButton } from '../CreateCollection.types';
+import { DoingIcon, SuccessIcon } from './StepperIcons';
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
+const CONTRACT_FILE_NAME = 'MyContract.sol';
+const CONTRACT_NAME = 'MyContract';
+const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
 
-export default function DeploySmartContract() {
+const timeout = (ms: any) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+(function initSupportedSolcVersion() {
+  (pathToURL as any)['soljson-v0.8.11+commit.d7f03943.js'] = baseURLBin;
+})();
+
+export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
+  const { watch, handleSubmit } = useFormContext();
+  const { active, account, library, provider, onboard, activate } = useWeb3();
+  const { chain: selectedChain } = useWallet();
+  const [source, setSource] = useState(TEST_CONTRACTS[0].content);
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
+  const [compiling, setCompiling] = useState(false);
+  const [compilingSuccess, setCompilingSuccess] = useState(false);
+  const [compilingError, setCompilingError] = useState(false);
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  const [deploying, setDeploying] = useState(false);
+  const [deployingSuccess, setDeployingSuccess] = useState(false);
+  const [deployingError, setDeployingError] = useState(false);
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const buttonSx = {
-    ...(success && {
-      bgcolor: green[500],
-      '&:hover': {
-        bgcolor: green[700]
+  const [publishing, setPublishing] = useState(false);
+  const [publishingSuccess, setPublishingSuccess] = useState(false);
+  const [publishingError, setPublishingError] = useState(false);
+
+  const [verifying, setVerifying] = useState(false);
+  const [verifyingSuccess, setVerifyingSuccess] = useState(false);
+  const [verifyingError, setVerifyingError] = useState(false);
+
+  const startDeploying = async () => {
+    setActiveStep((prevActiveStep) => 0);
+    setCompiling(true);
+    const compileResult = await handleCompile();
+    setCompiling(false);
+    setCompilingSuccess(true);
+
+    if (compileResult) {
+      setActiveStep((prevActiveStep) => 1);
+      setDeploying(true);
+      const txReceipt = await handleDeploy(compileResult);
+      setDeploying(false);
+      setDeployingSuccess(true);
+
+      setActiveStep((prevActiveStep) => 2);
+      setPublishing(true);
+      const etherscanPublishingHx = await handlePublishing(txReceipt, compileResult);
+      setPublishing(false);
+      setPublishingSuccess(true);
+
+      if (etherscanPublishingHx) {
+        setActiveStep((prevActiveStep) => 3);
+        setVerifying(true);
+        await handleGetPublishingStatus(etherscanPublishingHx);
+        setVerifying(false);
+        setVerifyingSuccess(true);
       }
-    })
+    }
   };
-  const timer = useRef<number>();
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
+
+  const handleCompile = async (): Promise<CompilerAbstract | undefined> => {
+    try {
+      const response = (await compile(
+        {
+          [CONTRACT_FILE_NAME]: {
+            content: source
+          }
+        },
+        {
+          version: SOLIDITY_COMPILER_VERSION
+        },
+        handleNpmImport
+      )) as CompilerAbstract;
+
+      if (response.data.errors) {
+        console.log('error');
+        return;
+      }
+      console.log('success');
+      console.log('All contract compileResult: ', response);
+
+      return response;
+    } finally {
+    }
+  };
+
+  const handleDeploy = async (
+    compileResult: CompilerAbstract
+  ): Promise<TransactionReceipt | undefined> => {
+    try {
+      const compiledContract = compileResult?.getContract(CONTRACT_NAME);
+      const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
+      const contractABI = compiledContract?.object.abi;
+
+      const signer = library.getSigner(account);
+
+      const contractFactory: ContractFactory = new ContractFactory(
+        contractABI,
+        contractBinary,
+        signer
+      );
+
+      const deployingContract = await contractFactory.deploy();
+      const txReceipt = await deployingContract.deployTransaction.wait(1);
+      console.log('success');
+      console.log('transactionReceipt: ', txReceipt);
+      return txReceipt;
+    } catch (e) {
+      console.log('Error', e);
+    }
+  };
+
+  const handlePublishing = async (
+    txReceipt?: TransactionReceipt,
+    compileResult?: CompilerAbstract
+  ): Promise<string | undefined> => {
+    try {
+      console.log('start publishing');
+      const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
+        ETHERSCAN_API_SECRET_KEY,
+        selectedChain.chainId + '',
+        {
+          address: txReceipt?.contractAddress || '',
+          name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
+          sourceCode: JSON.stringify({
+            sources: compileResult?.source.sources,
+            language: 'Solidity'
+          }),
+          compilerversion: 'v' + SOLIDITY_COMPILER_VERSION,
+          licenseType: SPDX_LICENSE_IDENTIFIER.MIT
+        }
+      );
+      console.log('verifiedResponse: ', verifiedResponse.data);
+      if (verifiedResponse.data.status === '0') {
+        console.log('error publishing');
+        setPublishingError(true);
+        return;
+      }
+      if (verifiedResponse.data.status === '1') {
+        console.log('success publishing', verifiedResponse.data.result);
+      }
+      return (verifiedResponse.data as any).result;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // (verifiedResponse.data as any).result = etherscanPublishingHx
+  const handleGetPublishingStatus = async (etherscanPublishingHx: string) => {
+    setVerifying(true);
+    const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
+      ETHERSCAN_API_SECRET_KEY,
+      selectedChain.chainId + '',
+      etherscanPublishingHx
+    );
+    setVerifying(false);
+    if (
+      verifyStatusResponse.data.status === '1' ||
+      verifyStatusResponse.data.message === 'Already Verified'
+    ) {
+      console.log('success verifying');
+    } else {
+      console.log('error verifying');
+    }
+    console.log('verifyStatusResponse : ', verifyStatusResponse.data);
+  };
+
   return (
-    <Card sx={{ p: 3 }}>
-      <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
-        Deploy the collection on Ethereum
-      </Typography>
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={12} md={6}>
-          <Paper
-            key={'123'}
-            sx={{
-              p: 3,
-              width: 1,
-              position: 'relative',
-              border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
-            }}
-          >
-            <Typography
-              variant="overline"
-              sx={{ mb: 3, display: 'block', color: 'text.secondary' }}
-            >
-              Preview Blockchain
-            </Typography>
+    <>
+      <Box sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          size="large"
+          disabled={!active}
+          color="info"
+          sx={{ backgroundColor: '#377dff', px: 5, mb: 5 }}
+          onClick={() => {
+            startDeploying();
+          }}
+        >
+          Deploy
+        </Button>
+      </Box>
 
-            <Stack spacing={2}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Network
-                </Typography>
-                <Typography variant="subtitle2">Ethereum</Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Wallet Address
-                </Typography>
-                <Typography variant="subtitle2" sx={{ wordBreak: 'break-word' }}>
-                  0x6d26C4B1239643AfA2c89e8A112d2015b3A62F
-                </Typography>
-              </Stack>
-            </Stack>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 3,
-              width: 1,
-              position: 'relative',
-              border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
-            }}
-          >
-            <Typography
-              variant="overline"
-              sx={{ mb: 3, display: 'block', color: 'text.secondary' }}
-            >
-              Preview Collection
-            </Typography>
-
-            <Stack spacing={2}>
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Standard
-                </Typography>
-                <Typography variant="subtitle2">ERC721</Typography>
-              </Stack>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Features
-              </Typography>
-              <Paper
-                key={'123'}
-                sx={{
-                  mb: 3,
-                  p: 0.5,
-                  border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`,
-                  '& > :not(style)': {
-                    m: 0.5
-                  }
-                }}
-              >
-                <Chip size="small" label="Burnable"></Chip>
-                <Chip size="small" label="Enumarable"></Chip>
-                <Chip size="small" label="Burnable"></Chip>
-                <Chip size="small" label="Enumarable"></Chip>
-                <Chip size="small" label="Burnable"></Chip>
-                <Chip size="small" label="Enumarable"></Chip>
-                <Chip size="small" label="Burnable"></Chip>
-                <Chip size="small" label="Enumarable"></Chip>
-                <Chip size="small" label="Burnable"></Chip>
-                <Chip size="small" label="Enumarable"></Chip>
-              </Paper>
-              <Stack direction="row" justifyContent="space-between"></Stack>
-            </Stack>
-          </Paper>
-        </Grid>
-      </Grid>
       <Paper
-        key={'123'}
         sx={{
           p: 3,
           mb: 3,
@@ -163,84 +230,59 @@ export default function DeploySmartContract() {
         </Typography>
 
         <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
-          {[
-            {
-              label: 'Compile smart contract',
-              description: `Your collection is build using your own smart contract therefore it needs to be compiled in machine language.`
-            },
-            {
-              label: 'Deploying your smart contract on blockchain',
-              description:
-                'You need to make a traction on Ethereum to deploy the smart contract. This transaction will cost 0,06749 ETH for the miners fee.'
-            },
-            {
-              label: 'Verification of smart contract on Etherscan',
-              description: `The source code of your smart contract will be published on Etherscan to ensure the transparency of your smart contract.`
-            }
-          ].map((step, index) => (
-            <Step key={step.label} onClick={() => setActiveStep(index)}>
-              <StepLabel>{step.label}</StepLabel>
-              <StepContent>
-                <Typography>{step.description}</Typography>
-                <Box sx={{ my: 2 }}>
-                  <div>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Box sx={{ position: 'relative' }}>
-                        <Button
-                          variant="contained"
-                          sx={buttonSx}
-                          disabled={loading}
-                          onClick={() => {
-                            if (!loading) {
-                              setSuccess(false);
-                              setLoading(true);
-                              timer.current = window.setTimeout(() => {
-                                setSuccess(true);
-                                setLoading(false);
-                                setActiveStep((prevActiveStep) => prevActiveStep + 1);
-                              }, 2000);
-                            }
-                          }}
-                        >
-                          {index === 0 ? 'Compiling' : index === 1 ? 'Deploying' : 'Verifying'}
-                        </Button>
-                        {loading && (
-                          <CircularProgress
-                            size={24}
-                            sx={{
-                              color: green[500],
-                              position: 'absolute',
-                              top: '50%',
-                              left: '50%',
-                              marginTop: '-12px',
-                              marginLeft: '-12px'
-                            }}
-                          />
-                        )}
-                      </Box>
-                    </Box>
-                  </div>
-                </Box>
-              </StepContent>
-            </Step>
-          ))}
+          <Step key={'key1'} onClick={() => setActiveStep(0)}>
+            <StepLabel
+              StepIconComponent={compiling ? DoingIcon : compilingSuccess ? SuccessIcon : undefined}
+            >
+              Compile smart contract
+            </StepLabel>
+            <StepContent>
+              <Typography>
+                Your collection is build using your own smart contract therefore it needs to be
+                compiled in machine language.
+              </Typography>
+            </StepContent>
+          </Step>
+          <Step key={'key2'} onClick={() => setActiveStep(1)}>
+            <StepLabel
+              StepIconComponent={deploying ? DoingIcon : deployingSuccess ? SuccessIcon : undefined}
+            >
+              Deploy smart contract
+            </StepLabel>
+            <StepContent>
+              <Typography>
+                You need to make a traction on Ethereum to deploy the smart contract. This
+                transaction will cost 0,06749 ETH for the miners fee.
+              </Typography>
+            </StepContent>
+          </Step>
+          <Step key={'key3'} onClick={() => setActiveStep(2)}>
+            <StepLabel
+              StepIconComponent={
+                publishing ? DoingIcon : publishingSuccess ? SuccessIcon : undefined
+              }
+            >
+              Publish smart contract contract on Etherscan
+            </StepLabel>
+            <StepContent>
+              <Typography>
+                The source code of your smart contract will be published on Etherscan to ensure the
+                transparency of your smart contract.
+              </Typography>
+            </StepContent>
+          </Step>
+          <Step key={'key4'} onClick={() => setActiveStep(3)}>
+            <StepLabel
+              StepIconComponent={verifying ? DoingIcon : verifyingSuccess ? SuccessIcon : undefined}
+            >
+              Verify status on Etherscan
+            </StepLabel>
+            <StepContent>
+              <Typography>Waiting for the verification to be treated by Etherscan</Typography>
+            </StepContent>
+          </Step>
         </Stepper>
-        {activeStep === 3 && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Button sx={{ mt: 1, mr: 1 }}>Reset</Button>
-          </Paper>
-        )}
-        <Button variant="outlined" size="small" sx={{ mt: 1 }}>
-          Deploy
-        </Button>
       </Paper>
-
-      <Box>
-        <Button size="small" startIcon={<Iconify icon={'fluent:next-28-regular'} rotate={2} />}>
-          Back
-        </Button>
-      </Box>
-    </Card>
+    </>
   );
 }
