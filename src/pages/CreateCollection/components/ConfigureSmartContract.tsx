@@ -16,11 +16,14 @@ import useLocales from 'hooks/useLocales';
 import useWallet from 'hooks/useWallet';
 import useWeb3 from 'hooks/useWeb3';
 import { useRef, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import Iconify from '../../../components/Iconify';
 import type { HandleNextBackButton } from '../CreateCollection.types';
 import SmartContractDialogs from './SmartContractDialogs';
+
 export default function ConfigureSmartContract({ handleNextButtonClick }: HandleNextBackButton) {
   const { translate } = useLocales();
+  const { handleSubmit, control, setValue, getValues } = useFormContext();
 
   const { chain: selectedChain, address, selectedWallet } = useWallet();
   const { active, account, library, provider, onboard, activate } = useWeb3();
@@ -69,27 +72,27 @@ export default function ConfigureSmartContract({ handleNextButtonClick }: Handle
               <Typography variant="overline" sx={{ display: 'block', color: 'text.secondary' }}>
                 Settings
               </Typography>
-              <TextField
-                id="nameSmartContract"
-                label="Name"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
+              <Controller
+                control={control}
+                name="name"
+                render={({ field }) => (
+                  <TextField {...field} label="Name" variant="outlined" fullWidth margin="normal" />
+                )}
               />
-              <TextField
-                id="tokenSymbol"
-                label="Token Symbol"
-                value={symbol}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                onChange={(e) => {
-                  setSymbol(e.target.value.toUpperCase());
-                }}
+              <Controller
+                control={control}
+                name="symbol"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Token Symbol"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                  />
+                )}
               />
+
               <Divider sx={{ my: 3 }} />
               <Typography
                 variant="overline"

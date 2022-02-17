@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import { Stack, TextField, Button, Divider, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { ResponseFaucetRequest } from '../../interfaces/faucet';
 import { Icon } from '@iconify/react';
-import MaticFormSchema from './MaticFormSchema';
-import CruFormSchema from './CruFormSchema';
-import useLocales from '../../hooks/useLocales';
+import { LoadingButton } from '@mui/lab';
+import { Button, Divider, Stack, TextField, Typography } from '@mui/material';
+import axios from 'axios';
 import { GET_FAUCET_API } from 'constants/COMMON_VARIABLES';
+import React, { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import useLocales from '../../hooks/useLocales';
+import { ResponseFaucetRequest } from '../../interfaces/faucet';
+import CruFormSchema from './CruFormSchema';
+import MaticFormSchema from './MaticFormSchema';
 
 type FormValuesProps = {
   address: string;
