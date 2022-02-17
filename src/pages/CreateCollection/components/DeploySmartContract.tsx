@@ -19,6 +19,7 @@ import { ContractFactory } from 'ethers';
 import useWallet from 'hooks/useWallet';
 import useWeb3 from 'hooks/useWeb3';
 import { useEffect, useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { handleNpmImport } from 'utils/content-resolver';
 import type { HandleNextBackButton } from '../CreateCollection.types';
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
@@ -31,6 +32,7 @@ const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
 })();
 
 export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
+  const { watch } = useFormContext();
   const { active, account, library, provider, onboard, activate } = useWeb3();
   const { chain: selectedChain } = useWallet();
   const [compiling, setCompiling] = useState(false);
@@ -50,6 +52,8 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const symbol = watch('symbol');
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);

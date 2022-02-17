@@ -14,7 +14,9 @@ type FormSmartContractConfig = {
 
 const FormSmartContractSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
-  symbol: Yup.string().required('Symbol is required')
+  symbol: Yup.string()
+    .required('Symbol is required')
+    .transform((value) => value.toUpperCase())
 });
 
 export default function CreateCollection() {
