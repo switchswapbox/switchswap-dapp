@@ -2,7 +2,6 @@ import { TransactionReceipt } from '@ethersproject/providers';
 import {
   Box,
   Button,
-  CircularProgress,
   Paper,
   Step,
   StepContent,
@@ -22,28 +21,39 @@ import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { handleNpmImport } from 'utils/content-resolver';
 import type { HandleNextBackButton } from '../CreateCollection.types';
+import { DoingIcon, SuccessIcon } from './StepperIcons';
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
 const CONTRACT_FILE_NAME = 'MyContract.sol';
 const CONTRACT_NAME = 'MyContract';
 const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
+
+const timeout = (ms: any) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 (function initSupportedSolcVersion() {
   (pathToURL as any)['soljson-v0.8.11+commit.d7f03943.js'] = baseURLBin;
 })();
 
 export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
-  const { watch } = useFormContext();
+  const { watch, handleSubmit } = useFormContext();
   const { active, account, library, provider, onboard, activate } = useWeb3();
   const { chain: selectedChain } = useWallet();
-  const [compiling, setCompiling] = useState(false);
   const [source, setSource] = useState(TEST_CONTRACTS[0].content);
   const [compileResult, setCompileResult] = useState<CompilerAbstract>();
   const [transactionReceipt, setTransactionReceipt] = useState<TransactionReceipt>();
   const [activeStep, setActiveStep] = useState(0);
-  const [publishing, setPublishing] = useState(false);
   const [publishingError, setPublishingError] = useState(false);
-  const [verifying, setVerifying] = useState(false);
   const [etherscanPublishingHx, setEtherscanPublishingHx] = useState('');
+
+  const [compiling, setCompiling] = useState(false);
+  const [compilingSuccess, setCompilingSuccess] = useState(false);
+  const [deploying, setDeploying] = useState(false);
+  const [deployingSuccess, setDeployingSuccess] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [publishingSuccess, setPublishingSuccess] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [verifyingSuccess, setVerifyingSuccess] = useState(false);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -53,7 +63,26 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const symbol = watch('symbol');
+  const startDeploying = async () => {
+    setCompiling(true);
+    await timeout(2000);
+    setCompiling(false);
+    handleNext();
+
+    setDeploying(true);
+    await timeout(2000);
+    setDeploying(false);
+    handleNext();
+
+    setPublishing(true);
+    await timeout(2000);
+    setPublishing(false);
+    handleNext();
+
+    setVerifying(true);
+    await timeout(2000);
+    setVerifying(false);
+  };
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -185,108 +214,109 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   };
 
   return (
-    <Paper
-      sx={{
-        p: 3,
-        mb: 3,
-        width: 1,
-        position: 'relative',
-        border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
-      }}
-    >
-      <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
-        Status
-      </Typography>
-      <Typography variant="body2">
-        You're about to create a new collection on Ethereum and will have to confirm a transaction
-        with your currently connected wallet. The creation will cost approximately 0,06749 ETH. The
-        exact amount will be determined by your wallet
-      </Typography>
-      <Button onClick={handleCompile}>Compile</Button>
-      <Button onClick={handleDeploy}>Deploy</Button>
-      <Button
-        onClick={() => {
-          handlePublishing(transactionReceipt, compileResult);
+    <>
+      <Box sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          size="large"
+          disabled={!active}
+          color="info"
+          sx={{ backgroundColor: '#377dff', px: 5, mb: 5 }}
+          onClick={() => {
+            startDeploying();
+          }}
+        >
+          Deploy
+        </Button>
+      </Box>
+
+      <Paper
+        sx={{
+          p: 3,
+          mb: 3,
+          width: 1,
+          position: 'relative',
+          border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
         }}
       >
-        Publish
-      </Button>
-      <Button
-        onClick={() => {
-          handleGetPublishingStatus(etherscanPublishingHx);
-        }}
-      >
-        Get Publishing Status
-      </Button>
-      <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
-        {[
-          {
-            label: 'Compile smart contract',
-            description: `Your collection is build using your own smart contract therefore it needs to be compiled in machine language.`
-          },
-          {
-            label: 'Deploying your smart contract on blockchain',
-            description:
-              'You need to make a traction on Ethereum to deploy the smart contract. This transaction will cost 0,06749 ETH for the miners fee.'
-          },
-          {
-            label: 'Verification of smart contract on Etherscan',
-            description: `The source code of your smart contract will be published on Etherscan to ensure the transparency of your smart contract.`
-          }
-        ].map((step, index) => (
-          <Step key={step.label} onClick={() => setActiveStep(index)}>
-            <StepLabel>{step.label}</StepLabel>
+        <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
+          Status
+        </Typography>
+        <Typography variant="body2">
+          You're about to create a new collection on Ethereum and will have to confirm a transaction
+          with your currently connected wallet. The creation will cost approximately 0,06749 ETH.
+          The exact amount will be determined by your wallet
+        </Typography>
+        <Button onClick={handleCompile}>Compile</Button>
+        <Button onClick={handleDeploy}>Deploy</Button>
+        <Button
+          onClick={() => {
+            handlePublishing(transactionReceipt, compileResult);
+          }}
+        >
+          Publish
+        </Button>
+        <Button
+          onClick={() => {
+            handleGetPublishingStatus(etherscanPublishingHx);
+          }}
+        >
+          Get Publishing Status
+        </Button>
+        <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
+          <Step key={'key1'} onClick={() => setActiveStep(0)}>
+            <StepLabel
+              StepIconComponent={verifying ? DoingIcon : verifyingSuccess ? SuccessIcon : undefined}
+            >
+              Compile smart contract
+            </StepLabel>
             <StepContent>
-              <Typography>{step.description}</Typography>
-              <Box sx={{ my: 2 }}>
-                <div>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ position: 'relative' }}>
-                      <Button
-                        variant="contained"
-                        sx={buttonSx}
-                        disabled={loading}
-                        onClick={() => {
-                          if (!loading) {
-                            setSuccess(false);
-                            setLoading(true);
-                            timer.current = window.setTimeout(() => {
-                              setSuccess(true);
-                              setLoading(false);
-                              setActiveStep((prevActiveStep) => prevActiveStep + 1);
-                            }, 2000);
-                          }
-                        }}
-                      >
-                        {index === 0 ? 'Compiling' : index === 1 ? 'Deploying' : 'Verifying'}
-                      </Button>
-                      {loading && (
-                        <CircularProgress
-                          size={24}
-                          sx={{
-                            color: green[500],
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            marginTop: '-12px',
-                            marginLeft: '-12px'
-                          }}
-                        />
-                      )}
-                    </Box>
-                  </Box>
-                </div>
-              </Box>
+              <Typography>
+                Your collection is build using your own smart contract therefore it needs to be
+                compiled in machine language.
+              </Typography>
             </StepContent>
           </Step>
-        ))}
-      </Stepper>
-      {activeStep === 3 && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button sx={{ mt: 1, mr: 1 }}>Reset</Button>
-        </Paper>
-      )}
-    </Paper>
+          <Step key={'key2'} onClick={() => setActiveStep(1)}>
+            <StepLabel
+              StepIconComponent={deploying ? DoingIcon : deployingSuccess ? SuccessIcon : undefined}
+            >
+              Deploy smart contract
+            </StepLabel>
+            <StepContent>
+              <Typography>
+                You need to make a traction on Ethereum to deploy the smart contract. This
+                transaction will cost 0,06749 ETH for the miners fee.
+              </Typography>
+            </StepContent>
+          </Step>
+          <Step key={'key3'} onClick={() => setActiveStep(2)}>
+            <StepLabel
+              StepIconComponent={
+                publishing ? DoingIcon : publishingSuccess ? SuccessIcon : undefined
+              }
+            >
+              Publish smart contract contract on Etherscan
+            </StepLabel>
+            <StepContent>
+              <Typography>
+                The source code of your smart contract will be published on Etherscan to ensure the
+                transparency of your smart contract.
+              </Typography>
+            </StepContent>
+          </Step>
+          <Step key={'key4'} onClick={() => setActiveStep(3)}>
+            <StepLabel
+              StepIconComponent={verifying ? DoingIcon : verifyingSuccess ? SuccessIcon : undefined}
+            >
+              Verify status on Etherscan
+            </StepLabel>
+            <StepContent>
+              <Typography>Waiting for the verification to be treated by Etherscan</Typography>
+            </StepContent>
+          </Step>
+        </Stepper>
+      </Paper>
+    </>
   );
 }

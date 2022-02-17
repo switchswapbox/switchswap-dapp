@@ -16,7 +16,6 @@ import useLocales from 'hooks/useLocales';
 import useWeb3 from 'hooks/useWeb3';
 import { useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import Iconify from '../../../components/Iconify';
 import type { HandleNextBackButton } from '../CreateCollection.types';
 import SmartContractDialogs from './SmartContractDialogs';
 
@@ -204,18 +203,6 @@ export default function ConfigureSmartContract({ handleNextButtonClick }: Handle
             label="I agree with the smart contract provided by Crustnft"
           />
         </Stack>
-
-        <Box sx={{ mt: 2 }}>
-          <Button
-            variant="outlined"
-            size="large"
-            disabled={!active}
-            startIcon={<Iconify icon={'fluent:next-28-regular'} />}
-            sx={{ px: 5 }}
-          >
-            Deploy
-          </Button>
-        </Box>
       </Box>
     </>
   );
