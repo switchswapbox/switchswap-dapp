@@ -1,4 +1,3 @@
-import { JsonRpcSigner, TransactionReceipt } from '@ethersproject/providers';
 import {
   Box,
   Button,
@@ -9,32 +8,27 @@ import {
   Stepper,
   Typography
 } from '@mui/material';
-import { baseURLBin, compile, CompilerAbstract, pathToURL } from '@remix-project/remix-solidity';
-import * as etherscanClient from 'clients/etherscan-client';
 import { TEST_CONTRACTS } from 'constants/contract';
-import { SOLIDITY_COMPILER_VERSION, SPDX_LICENSE_IDENTIFIER } from 'constants/solcEnvironments';
-import { ContractFactory } from 'ethers';
 import useWallet from 'hooks/useWallet';
 import useWeb3 from 'hooks/useWeb3';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { handleNpmImport } from 'utils/content-resolver';
+import {
+  compileSmartContract,
+  deploySmartContract,
+  getPublishingStatus,
+  publishSmartContract
+} from 'services/createSmartContract/evmCompatible/';
 import { DoingIcon, ErrorIcon, SuccessIcon } from './StepperIcons';
-const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
-const CONTRACT_FILE_NAME = 'MyContract.sol';
-const CONTRACT_NAME = 'MyContract';
-const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
-
-(function initSupportedSolcVersion() {
-  (pathToURL as any)['soljson-v0.8.11+commit.d7f03943.js'] = baseURLBin;
-})();
 
 export default function DeploySmartContract() {
   const { watch, handleSubmit } = useFormContext();
-  const { active, account, library, provider, onboard, activate } = useWeb3();
+  const { active, account, library, onboard } = useWeb3();
   const { chain: selectedChain } = useWallet();
-  const [source, setSource] = useState(TEST_CONTRACTS[0].content);
   const [activeStep, setActiveStep] = useState(0);
+  const source = TEST_CONTRACTS[0].content;
+
+  const [startedCreation, setStartedCreation] = useState(false);
 
   const [compiling, setCompiling] = useState(false);
   const [compilingSuccess, setCompilingSuccess] = useState(false);
@@ -52,28 +46,30 @@ export default function DeploySmartContract() {
   const [verifyingSuccess, setVerifyingSuccess] = useState(false);
   const [verifyingError, setVerifyingError] = useState(false);
 
-  const startDeploying = async () => {
-    // Compile the contract
+  const createCollection = async () => {
+    setStartedCreation(true);
+
     setActiveStep((prevActiveStep) => 0);
     setCompiling(true);
-    const compileResult = await handleCompile(source);
+    const compileResult = await compileSmartContract(source);
     setCompiling(false);
 
     if (compileResult) {
       setCompilingSuccess(true);
       await onboard?.walletCheck();
+      console.log('library', library);
       const signer = library?.getSigner(account);
 
       setActiveStep((prevActiveStep) => 1);
       setDeploying(true);
       if (signer) {
-        const txReceipt = await handleDeploy(compileResult, signer);
+        const txReceipt = await deploySmartContract(compileResult, signer);
         setDeploying(false);
         if (txReceipt) {
           setDeployingSuccess(true);
           setActiveStep((prevActiveStep) => 2);
           setPublishing(true);
-          const etherscanPublishingHx = await handlePublishing(
+          const etherscanPublishingHx = await publishSmartContract(
             selectedChain.chainId,
             txReceipt,
             compileResult
@@ -84,7 +80,7 @@ export default function DeploySmartContract() {
             setPublishingSuccess(true);
             setActiveStep((prevActiveStep) => 3);
             setVerifying(true);
-            const publishingStatus = await handleGetPublishingStatus(
+            const publishingStatus = await getPublishingStatus(
               etherscanPublishingHx,
               selectedChain.chainId
             );
@@ -107,114 +103,6 @@ export default function DeploySmartContract() {
     }
   };
 
-  const handleCompile = async (source: string): Promise<CompilerAbstract | undefined> => {
-    try {
-      const response = (await compile(
-        {
-          [CONTRACT_FILE_NAME]: {
-            content: source
-          }
-        },
-        {
-          version: SOLIDITY_COMPILER_VERSION
-        },
-        handleNpmImport
-      )) as CompilerAbstract;
-      if (response.data.errors) {
-        console.log('error');
-        return;
-      }
-      console.log('success');
-      console.log('All contract compileResult: ', response);
-      return response;
-    } catch (e) {
-      console.log('Error compiling contract: ', e);
-    }
-  };
-
-  const handleDeploy = async (
-    compileResult: CompilerAbstract,
-    signer: JsonRpcSigner
-  ): Promise<TransactionReceipt | undefined> => {
-    try {
-      const compiledContract = compileResult?.getContract(CONTRACT_NAME);
-      const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
-      const contractABI = compiledContract?.object.abi;
-
-      const contractFactory: ContractFactory = new ContractFactory(
-        contractABI,
-        contractBinary,
-        signer
-      );
-
-      const deployingContract = await contractFactory.deploy();
-      const txReceipt = await deployingContract.deployTransaction.wait(1);
-      console.log('success');
-      console.log('transactionReceipt: ', txReceipt);
-      return txReceipt;
-    } catch (e) {
-      console.log('Error on deploying', e);
-    }
-  };
-
-  const handlePublishing = async (
-    chainId: number,
-    txReceipt?: TransactionReceipt,
-    compileResult?: CompilerAbstract
-  ): Promise<string | undefined> => {
-    try {
-      const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
-        ETHERSCAN_API_SECRET_KEY,
-        chainId + '',
-        {
-          address: txReceipt?.contractAddress || '',
-          name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
-          sourceCode: JSON.stringify({
-            sources: compileResult?.source.sources,
-            language: 'Solidity'
-          }),
-          compilerversion: 'v' + SOLIDITY_COMPILER_VERSION,
-          licenseType: SPDX_LICENSE_IDENTIFIER.MIT
-        }
-      );
-      console.log('verifiedResponse: ', verifiedResponse.data);
-      if (verifiedResponse.data.status === '0') {
-        console.log('error publishing');
-        return;
-      }
-      if (verifiedResponse.data.status === '1') {
-        console.log('success publishing', verifiedResponse.data.result);
-      }
-      // return etherscan publishing hash
-      return (verifiedResponse.data as any).result;
-    } catch (e) {
-      console.log('Error on publishing', e);
-    }
-  };
-
-  const handleGetPublishingStatus = async (etherscanPublishingHx: string, chainId: number) => {
-    try {
-      const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
-        ETHERSCAN_API_SECRET_KEY,
-        chainId + '',
-        etherscanPublishingHx
-      );
-      if (
-        verifyStatusResponse.data.status === '1' ||
-        verifyStatusResponse.data.message === 'Already Verified'
-      ) {
-        console.log('success verifying');
-      } else {
-        console.log('error verifying');
-        return;
-      }
-      console.log('verifyStatusResponse : ', verifyStatusResponse.data);
-      return verifyStatusResponse.data;
-    } catch (e) {
-      console.log('Error on verifying', e);
-    }
-  };
-
   return (
     <>
       <Box sx={{ mt: 2 }}>
@@ -223,10 +111,12 @@ export default function DeploySmartContract() {
           size="large"
           disabled={!active}
           color="info"
-          sx={{ backgroundColor: '#377dff', px: 5, mb: 5 }}
-          onClick={() => {
-            startDeploying();
+          sx={{
+            backgroundColor: '#377dff',
+            px: 5,
+            display: startedCreation ? 'none' : 'block'
           }}
+          onClick={handleSubmit(createCollection)}
         >
           Deploy
         </Button>
@@ -238,7 +128,8 @@ export default function DeploySmartContract() {
           mb: 3,
           width: 1,
           position: 'relative',
-          border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
+          border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`,
+          display: startedCreation ? 'block' : 'none'
         }}
       >
         <Typography variant="overline" sx={{ mb: 3, display: 'block', color: 'text.secondary' }}>
