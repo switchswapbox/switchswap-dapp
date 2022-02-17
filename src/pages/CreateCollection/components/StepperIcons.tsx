@@ -28,7 +28,6 @@ const SuccessIconRoot = styled('div')<{ ownerState: { active?: boolean } }>(
 
 export function SuccessIcon(props: StepIconProps) {
   const { active, className } = props;
-
   return (
     <SuccessIconRoot ownerState={{ active }} className={className}>
       <Iconify icon="bi:check-circle" />
@@ -38,7 +37,6 @@ export function SuccessIcon(props: StepIconProps) {
 
 export function DoingIcon(props: StepIconProps) {
   const { active, className } = props;
-
   return (
     <SuccessIconRoot ownerState={{ active }} className={className}>
       <CircularProgress
@@ -47,6 +45,15 @@ export function DoingIcon(props: StepIconProps) {
           color: '#377dff'
         }}
       />
+    </SuccessIconRoot>
+  );
+}
+
+export function ErrorIcon(props: StepIconProps) {
+  const { active, className } = props;
+  return (
+    <SuccessIconRoot ownerState={{ active }} className={className}>
+      <Iconify icon="codicon:error" sx={{ color: '#FF4842' }} />
     </SuccessIconRoot>
   );
 }
