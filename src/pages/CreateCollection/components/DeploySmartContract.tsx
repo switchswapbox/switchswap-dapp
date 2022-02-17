@@ -19,7 +19,7 @@ import useWeb3 from 'hooks/useWeb3';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { handleNpmImport } from 'utils/content-resolver';
-import { DoingIcon, SuccessIcon } from './StepperIcons';
+import { DoingIcon, ErrorIcon, SuccessIcon } from './StepperIcons';
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
 const CONTRACT_FILE_NAME = 'MyContract.sol';
 const CONTRACT_NAME = 'MyContract';
@@ -53,129 +53,166 @@ export default function DeploySmartContract() {
   const [verifyingError, setVerifyingError] = useState(false);
 
   const startDeploying = async () => {
-    try {
-      setActiveStep((prevActiveStep) => 0);
-      setCompiling(true);
-      const compileResult = await handleCompile(source);
-      setCompiling(false);
+    // Compile the contract
+    setActiveStep((prevActiveStep) => 0);
+    setCompiling(true);
+    const compileResult = await handleCompile(source);
+    setCompiling(false);
+
+    if (compileResult) {
       setCompilingSuccess(true);
-      if (compileResult) {
-        setActiveStep((prevActiveStep) => 1);
-        setDeploying(true);
-        const signer = library?.getSigner(account);
-        if (signer) {
-          const txReceipt = await handleDeploy(compileResult, signer);
-          setDeploying(false);
+      await onboard?.walletCheck();
+      const signer = library?.getSigner(account);
+
+      setActiveStep((prevActiveStep) => 1);
+      setDeploying(true);
+      if (signer) {
+        const txReceipt = await handleDeploy(compileResult, signer);
+        setDeploying(false);
+        if (txReceipt) {
           setDeployingSuccess(true);
           setActiveStep((prevActiveStep) => 2);
           setPublishing(true);
-          const etherscanPublishingHx = await handlePublishing(txReceipt, compileResult);
+          const etherscanPublishingHx = await handlePublishing(
+            selectedChain.chainId,
+            txReceipt,
+            compileResult
+          );
           setPublishing(false);
-          setPublishingSuccess(true);
 
           if (etherscanPublishingHx) {
+            setPublishingSuccess(true);
             setActiveStep((prevActiveStep) => 3);
             setVerifying(true);
-            await handleGetPublishingStatus(etherscanPublishingHx);
+            const publishingStatus = await handleGetPublishingStatus(
+              etherscanPublishingHx,
+              selectedChain.chainId
+            );
             setVerifying(false);
-            setVerifyingSuccess(true);
+
+            if (publishingStatus) {
+              setVerifyingSuccess(true);
+            } else {
+              setVerifyingError(true);
+            }
+          } else {
+            setPublishingError(true);
           }
+        } else {
+          setDeployingError(true);
         }
       }
-    } catch (e) {
-      console.log('error', e);
+    } else {
+      setCompilingError(true);
     }
   };
 
   const handleCompile = async (source: string): Promise<CompilerAbstract | undefined> => {
-    const response = (await compile(
-      {
-        [CONTRACT_FILE_NAME]: {
-          content: source
-        }
-      },
-      {
-        version: SOLIDITY_COMPILER_VERSION
-      },
-      handleNpmImport
-    )) as CompilerAbstract;
-    if (response.data.errors) {
-      console.log('error');
-      return;
+    try {
+      const response = (await compile(
+        {
+          [CONTRACT_FILE_NAME]: {
+            content: source
+          }
+        },
+        {
+          version: SOLIDITY_COMPILER_VERSION
+        },
+        handleNpmImport
+      )) as CompilerAbstract;
+      if (response.data.errors) {
+        console.log('error');
+        return;
+      }
+      console.log('success');
+      console.log('All contract compileResult: ', response);
+      return response;
+    } catch (e) {
+      console.log('Error compiling contract: ', e);
     }
-    console.log('success');
-    console.log('All contract compileResult: ', response);
-    return response;
   };
 
   const handleDeploy = async (
     compileResult: CompilerAbstract,
     signer: JsonRpcSigner
-  ): Promise<TransactionReceipt> => {
-    const compiledContract = compileResult?.getContract(CONTRACT_NAME);
-    const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
-    const contractABI = compiledContract?.object.abi;
+  ): Promise<TransactionReceipt | undefined> => {
+    try {
+      const compiledContract = compileResult?.getContract(CONTRACT_NAME);
+      const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
+      const contractABI = compiledContract?.object.abi;
 
-    const contractFactory: ContractFactory = new ContractFactory(
-      contractABI,
-      contractBinary,
-      signer
-    );
+      const contractFactory: ContractFactory = new ContractFactory(
+        contractABI,
+        contractBinary,
+        signer
+      );
 
-    const deployingContract = await contractFactory.deploy();
-    const txReceipt = await deployingContract.deployTransaction.wait(1);
-    console.log('success');
-    console.log('transactionReceipt: ', txReceipt);
-    return txReceipt;
+      const deployingContract = await contractFactory.deploy();
+      const txReceipt = await deployingContract.deployTransaction.wait(1);
+      console.log('success');
+      console.log('transactionReceipt: ', txReceipt);
+      return txReceipt;
+    } catch (e) {
+      console.log('Error on deploying', e);
+    }
   };
 
   const handlePublishing = async (
+    chainId: number,
     txReceipt?: TransactionReceipt,
     compileResult?: CompilerAbstract
   ): Promise<string | undefined> => {
-    console.log('start publishing');
-    const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
-      ETHERSCAN_API_SECRET_KEY,
-      selectedChain.chainId + '',
-      {
-        address: txReceipt?.contractAddress || '',
-        name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
-        sourceCode: JSON.stringify({
-          sources: compileResult?.source.sources,
-          language: 'Solidity'
-        }),
-        compilerversion: 'v' + SOLIDITY_COMPILER_VERSION,
-        licenseType: SPDX_LICENSE_IDENTIFIER.MIT
+    try {
+      const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
+        ETHERSCAN_API_SECRET_KEY,
+        chainId + '',
+        {
+          address: txReceipt?.contractAddress || '',
+          name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
+          sourceCode: JSON.stringify({
+            sources: compileResult?.source.sources,
+            language: 'Solidity'
+          }),
+          compilerversion: 'v' + SOLIDITY_COMPILER_VERSION,
+          licenseType: SPDX_LICENSE_IDENTIFIER.MIT
+        }
+      );
+      console.log('verifiedResponse: ', verifiedResponse.data);
+      if (verifiedResponse.data.status === '0') {
+        console.log('error publishing');
+        return;
       }
-    );
-    console.log('verifiedResponse: ', verifiedResponse.data);
-    if (verifiedResponse.data.status === '0') {
-      console.log('error publishing');
-      setPublishingError(true);
-      return;
+      if (verifiedResponse.data.status === '1') {
+        console.log('success publishing', verifiedResponse.data.result);
+      }
+      // return etherscan publishing hash
+      return (verifiedResponse.data as any).result;
+    } catch (e) {
+      console.log('Error on publishing', e);
     }
-    if (verifiedResponse.data.status === '1') {
-      console.log('success publishing', verifiedResponse.data.result);
-    }
-    // return etherscan publishing hash
-    return (verifiedResponse.data as any).result;
   };
 
-  const handleGetPublishingStatus = async (etherscanPublishingHx: string) => {
-    const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
-      ETHERSCAN_API_SECRET_KEY,
-      selectedChain.chainId + '',
-      etherscanPublishingHx
-    );
-    if (
-      verifyStatusResponse.data.status === '1' ||
-      verifyStatusResponse.data.message === 'Already Verified'
-    ) {
-      console.log('success verifying');
-    } else {
-      console.log('error verifying');
+  const handleGetPublishingStatus = async (etherscanPublishingHx: string, chainId: number) => {
+    try {
+      const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
+        ETHERSCAN_API_SECRET_KEY,
+        chainId + '',
+        etherscanPublishingHx
+      );
+      if (
+        verifyStatusResponse.data.status === '1' ||
+        verifyStatusResponse.data.message === 'Already Verified'
+      ) {
+        console.log('success verifying');
+      } else {
+        console.log('error verifying');
+        return;
+      }
+      console.log('verifyStatusResponse : ', verifyStatusResponse.data);
+      return verifyStatusResponse.data;
+    } catch (e) {
+      console.log('Error on verifying', e);
     }
-    console.log('verifyStatusResponse : ', verifyStatusResponse.data);
   };
 
   return (
@@ -216,7 +253,15 @@ export default function DeploySmartContract() {
         <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
           <Step key={'key1'} onClick={() => setActiveStep(0)}>
             <StepLabel
-              StepIconComponent={compiling ? DoingIcon : compilingSuccess ? SuccessIcon : undefined}
+              StepIconComponent={
+                compiling
+                  ? DoingIcon
+                  : compilingSuccess
+                  ? SuccessIcon
+                  : compilingError
+                  ? ErrorIcon
+                  : undefined
+              }
             >
               Compile smart contract
             </StepLabel>
@@ -229,7 +274,15 @@ export default function DeploySmartContract() {
           </Step>
           <Step key={'key2'} onClick={() => setActiveStep(1)}>
             <StepLabel
-              StepIconComponent={deploying ? DoingIcon : deployingSuccess ? SuccessIcon : undefined}
+              StepIconComponent={
+                deploying
+                  ? DoingIcon
+                  : deployingSuccess
+                  ? SuccessIcon
+                  : deployingError
+                  ? ErrorIcon
+                  : undefined
+              }
             >
               Deploy smart contract
             </StepLabel>
@@ -243,21 +296,35 @@ export default function DeploySmartContract() {
           <Step key={'key3'} onClick={() => setActiveStep(2)}>
             <StepLabel
               StepIconComponent={
-                publishing ? DoingIcon : publishingSuccess ? SuccessIcon : undefined
+                publishing
+                  ? DoingIcon
+                  : publishingSuccess
+                  ? SuccessIcon
+                  : publishingError
+                  ? ErrorIcon
+                  : undefined
               }
             >
               Publish smart contract contract on Etherscan
             </StepLabel>
             <StepContent>
               <Typography>
-                The source code of your smart contract will be published on Etherscan to ensure the
-                transparency of your smart contract.
+                The source code of your smart contract will be published on Etherscan to ensure its
+                transparency.
               </Typography>
             </StepContent>
           </Step>
           <Step key={'key4'} onClick={() => setActiveStep(3)}>
             <StepLabel
-              StepIconComponent={verifying ? DoingIcon : verifyingSuccess ? SuccessIcon : undefined}
+              StepIconComponent={
+                verifying
+                  ? DoingIcon
+                  : verifyingSuccess
+                  ? SuccessIcon
+                  : verifyingError
+                  ? ErrorIcon
+                  : undefined
+              }
             >
               Verify status on Etherscan
             </StepLabel>
