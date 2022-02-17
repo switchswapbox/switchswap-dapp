@@ -75,7 +75,6 @@ export default function ConfigureSmartContract({ handleNextButtonClick }: Handle
               <Controller
                 control={control}
                 name="name"
-                rules={{ required: 'Name is required' }}
                 render={({ field, fieldState: { error } }) => (
                   <TextField
                     {...field}
@@ -91,7 +90,6 @@ export default function ConfigureSmartContract({ handleNextButtonClick }: Handle
               <Controller
                 control={control}
                 name="symbol"
-                rules={{ required: 'Symbol is required' }}
                 render={({ field, fieldState: { error } }) => (
                   <TextField
                     {...field}
