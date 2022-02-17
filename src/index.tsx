@@ -10,16 +10,19 @@ import 'simplebar/src/simplebar.css';
 import 'slick-carousel/slick/slick-theme.css';
 // slick-carousel
 import 'slick-carousel/slick/slick.css';
-//
 import App from './App';
 import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
 // contexts
 import { SettingsProvider } from './contexts/SettingsContext';
 import { WalletProvider } from './contexts/WalletContext';
+// custom css
+import './index.css';
 // import i18n
 import './locales/i18n';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
+// ----------------------------------------------------------------------
 
 ReactDOM.render(
   <StrictMode>
