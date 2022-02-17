@@ -9,7 +9,6 @@ import {
   Stepper,
   Typography
 } from '@mui/material';
-import { green } from '@mui/material/colors';
 import { baseURLBin, compile, CompilerAbstract, pathToURL } from '@remix-project/remix-solidity';
 import * as etherscanClient from 'clients/etherscan-client';
 import { TEST_CONTRACTS } from 'constants/contract';
@@ -17,7 +16,7 @@ import { SOLIDITY_COMPILER_VERSION, SPDX_LICENSE_IDENTIFIER } from 'constants/so
 import { ContractFactory } from 'ethers';
 import useWallet from 'hooks/useWallet';
 import useWeb3 from 'hooks/useWeb3';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { handleNpmImport } from 'utils/content-resolver';
 import type { HandleNextBackButton } from '../CreateCollection.types';
@@ -55,56 +54,33 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   const [verifying, setVerifying] = useState(false);
   const [verifyingSuccess, setVerifyingSuccess] = useState(false);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
   const startDeploying = async () => {
+    setActiveStep((prevActiveStep) => 0);
     setCompiling(true);
     await timeout(2000);
     setCompiling(false);
-    handleNext();
+    setCompilingSuccess(true);
 
+    setActiveStep((prevActiveStep) => 1);
     setDeploying(true);
     await timeout(2000);
     setDeploying(false);
-    handleNext();
+    setDeployingSuccess(true);
 
+    setActiveStep((prevActiveStep) => 2);
     setPublishing(true);
     await timeout(2000);
     setPublishing(false);
-    handleNext();
+    setPublishingSuccess(true);
 
+    setActiveStep((prevActiveStep) => 3);
     setVerifying(true);
     await timeout(2000);
     setVerifying(false);
+    setVerifyingSuccess(true);
   };
-
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const buttonSx = {
-    ...(success && {
-      bgcolor: green[500],
-      '&:hover': {
-        bgcolor: green[700]
-      }
-    })
-  };
-  const timer = useRef<number>();
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
 
   const handleCompile = async () => {
-    setCompiling(true);
-    // setPublishingError(false);
     try {
       const response = (await compile(
         {
@@ -266,7 +242,7 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
         <Stepper activeStep={activeStep} orientation="vertical" nonLinear>
           <Step key={'key1'} onClick={() => setActiveStep(0)}>
             <StepLabel
-              StepIconComponent={verifying ? DoingIcon : verifyingSuccess ? SuccessIcon : undefined}
+              StepIconComponent={compiling ? DoingIcon : compilingSuccess ? SuccessIcon : undefined}
             >
               Compile smart contract
             </StepLabel>
