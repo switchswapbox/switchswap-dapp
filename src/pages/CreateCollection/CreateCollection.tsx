@@ -11,7 +11,7 @@ type FormSmartContractConfig = {
 };
 
 export default function CreateCollection() {
-  const method = useForm<FormSmartContractConfig>();
+  const method = useForm<FormSmartContractConfig>({ mode: 'onTouched' });
   return (
     <Page title="Create NFTs Collection">
       <Container maxWidth={'lg'}>

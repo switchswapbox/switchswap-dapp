@@ -75,20 +75,32 @@ export default function ConfigureSmartContract({ handleNextButtonClick }: Handle
               <Controller
                 control={control}
                 name="name"
-                render={({ field }) => (
-                  <TextField {...field} label="Name" variant="outlined" fullWidth margin="normal" />
+                rules={{ required: 'Name is required' }}
+                render={({ field, fieldState: { error } }) => (
+                  <TextField
+                    {...field}
+                    label="Name"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={Boolean(error)}
+                    helperText={error?.message}
+                  />
                 )}
               />
               <Controller
                 control={control}
                 name="symbol"
-                render={({ field }) => (
+                rules={{ required: 'Symbol is required' }}
+                render={({ field, fieldState: { error } }) => (
                   <TextField
                     {...field}
                     label="Token Symbol"
                     variant="outlined"
                     fullWidth
                     margin="normal"
+                    error={Boolean(error)}
+                    helperText={error?.message}
                   />
                 )}
               />
