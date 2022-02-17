@@ -1,4 +1,4 @@
-import { TransactionReceipt } from '@ethersproject/providers';
+import { JsonRpcSigner, TransactionReceipt } from '@ethersproject/providers';
 import {
   Box,
   Button,
@@ -19,22 +19,17 @@ import useWeb3 from 'hooks/useWeb3';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { handleNpmImport } from 'utils/content-resolver';
-import type { HandleNextBackButton } from '../CreateCollection.types';
 import { DoingIcon, SuccessIcon } from './StepperIcons';
 const ERC721Features = [{ title: 'Burnable' }, { title: 'Enumarable' }, { title: 'Pausable' }];
 const CONTRACT_FILE_NAME = 'MyContract.sol';
 const CONTRACT_NAME = 'MyContract';
 const ETHERSCAN_API_SECRET_KEY = 'G1UDIXWQ3YZRNQJ6CVVNYZQF1AAHD1JGTK';
 
-const timeout = (ms: any) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 (function initSupportedSolcVersion() {
   (pathToURL as any)['soljson-v0.8.11+commit.d7f03943.js'] = baseURLBin;
 })();
 
-export default function DeploySmartContract({ handleBackButtonClick }: HandleNextBackButton) {
+export default function DeploySmartContract() {
   const { watch, handleSubmit } = useFormContext();
   const { active, account, library, provider, onboard, activate } = useWeb3();
   const { chain: selectedChain } = useWallet();
@@ -58,131 +53,120 @@ export default function DeploySmartContract({ handleBackButtonClick }: HandleNex
   const [verifyingError, setVerifyingError] = useState(false);
 
   const startDeploying = async () => {
-    setActiveStep((prevActiveStep) => 0);
-    setCompiling(true);
-    const compileResult = await handleCompile();
-    setCompiling(false);
-    setCompilingSuccess(true);
+    try {
+      setActiveStep((prevActiveStep) => 0);
+      setCompiling(true);
+      const compileResult = await handleCompile(source);
+      setCompiling(false);
+      setCompilingSuccess(true);
+      if (compileResult) {
+        setActiveStep((prevActiveStep) => 1);
+        setDeploying(true);
+        const signer = library?.getSigner(account);
+        if (signer) {
+          const txReceipt = await handleDeploy(compileResult, signer);
+          setDeploying(false);
+          setDeployingSuccess(true);
+          setActiveStep((prevActiveStep) => 2);
+          setPublishing(true);
+          const etherscanPublishingHx = await handlePublishing(txReceipt, compileResult);
+          setPublishing(false);
+          setPublishingSuccess(true);
 
-    if (compileResult) {
-      setActiveStep((prevActiveStep) => 1);
-      setDeploying(true);
-      const txReceipt = await handleDeploy(compileResult);
-      setDeploying(false);
-      setDeployingSuccess(true);
-
-      setActiveStep((prevActiveStep) => 2);
-      setPublishing(true);
-      const etherscanPublishingHx = await handlePublishing(txReceipt, compileResult);
-      setPublishing(false);
-      setPublishingSuccess(true);
-
-      if (etherscanPublishingHx) {
-        setActiveStep((prevActiveStep) => 3);
-        setVerifying(true);
-        await handleGetPublishingStatus(etherscanPublishingHx);
-        setVerifying(false);
-        setVerifyingSuccess(true);
+          if (etherscanPublishingHx) {
+            setActiveStep((prevActiveStep) => 3);
+            setVerifying(true);
+            await handleGetPublishingStatus(etherscanPublishingHx);
+            setVerifying(false);
+            setVerifyingSuccess(true);
+          }
+        }
       }
+    } catch (e) {
+      console.log('error', e);
     }
   };
 
-  const handleCompile = async (): Promise<CompilerAbstract | undefined> => {
-    try {
-      const response = (await compile(
-        {
-          [CONTRACT_FILE_NAME]: {
-            content: source
-          }
-        },
-        {
-          version: SOLIDITY_COMPILER_VERSION
-        },
-        handleNpmImport
-      )) as CompilerAbstract;
-
-      if (response.data.errors) {
-        console.log('error');
-        return;
-      }
-      console.log('success');
-      console.log('All contract compileResult: ', response);
-
-      return response;
-    } finally {
+  const handleCompile = async (source: string): Promise<CompilerAbstract | undefined> => {
+    const response = (await compile(
+      {
+        [CONTRACT_FILE_NAME]: {
+          content: source
+        }
+      },
+      {
+        version: SOLIDITY_COMPILER_VERSION
+      },
+      handleNpmImport
+    )) as CompilerAbstract;
+    if (response.data.errors) {
+      console.log('error');
+      return;
     }
+    console.log('success');
+    console.log('All contract compileResult: ', response);
+    return response;
   };
 
   const handleDeploy = async (
-    compileResult: CompilerAbstract
-  ): Promise<TransactionReceipt | undefined> => {
-    try {
-      const compiledContract = compileResult?.getContract(CONTRACT_NAME);
-      const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
-      const contractABI = compiledContract?.object.abi;
+    compileResult: CompilerAbstract,
+    signer: JsonRpcSigner
+  ): Promise<TransactionReceipt> => {
+    const compiledContract = compileResult?.getContract(CONTRACT_NAME);
+    const contractBinary = '0x' + compiledContract?.object.evm.bytecode.object;
+    const contractABI = compiledContract?.object.abi;
 
-      const signer = library.getSigner(account);
+    const contractFactory: ContractFactory = new ContractFactory(
+      contractABI,
+      contractBinary,
+      signer
+    );
 
-      const contractFactory: ContractFactory = new ContractFactory(
-        contractABI,
-        contractBinary,
-        signer
-      );
-
-      const deployingContract = await contractFactory.deploy();
-      const txReceipt = await deployingContract.deployTransaction.wait(1);
-      console.log('success');
-      console.log('transactionReceipt: ', txReceipt);
-      return txReceipt;
-    } catch (e) {
-      console.log('Error', e);
-    }
+    const deployingContract = await contractFactory.deploy();
+    const txReceipt = await deployingContract.deployTransaction.wait(1);
+    console.log('success');
+    console.log('transactionReceipt: ', txReceipt);
+    return txReceipt;
   };
 
   const handlePublishing = async (
     txReceipt?: TransactionReceipt,
     compileResult?: CompilerAbstract
   ): Promise<string | undefined> => {
-    try {
-      console.log('start publishing');
-      const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
-        ETHERSCAN_API_SECRET_KEY,
-        selectedChain.chainId + '',
-        {
-          address: txReceipt?.contractAddress || '',
-          name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
-          sourceCode: JSON.stringify({
-            sources: compileResult?.source.sources,
-            language: 'Solidity'
-          }),
-          compilerversion: 'v' + SOLIDITY_COMPILER_VERSION,
-          licenseType: SPDX_LICENSE_IDENTIFIER.MIT
-        }
-      );
-      console.log('verifiedResponse: ', verifiedResponse.data);
-      if (verifiedResponse.data.status === '0') {
-        console.log('error publishing');
-        setPublishingError(true);
-        return;
+    console.log('start publishing');
+    const verifiedResponse = await etherscanClient.verifyAndPublicContractSourceCode(
+      ETHERSCAN_API_SECRET_KEY,
+      selectedChain.chainId + '',
+      {
+        address: txReceipt?.contractAddress || '',
+        name: CONTRACT_FILE_NAME + ':' + CONTRACT_NAME,
+        sourceCode: JSON.stringify({
+          sources: compileResult?.source.sources,
+          language: 'Solidity'
+        }),
+        compilerversion: 'v' + SOLIDITY_COMPILER_VERSION,
+        licenseType: SPDX_LICENSE_IDENTIFIER.MIT
       }
-      if (verifiedResponse.data.status === '1') {
-        console.log('success publishing', verifiedResponse.data.result);
-      }
-      return (verifiedResponse.data as any).result;
-    } catch (e) {
-      console.log(e);
+    );
+    console.log('verifiedResponse: ', verifiedResponse.data);
+    if (verifiedResponse.data.status === '0') {
+      console.log('error publishing');
+      setPublishingError(true);
+      return;
     }
+    if (verifiedResponse.data.status === '1') {
+      console.log('success publishing', verifiedResponse.data.result);
+    }
+    // return etherscan publishing hash
+    return (verifiedResponse.data as any).result;
   };
 
-  // (verifiedResponse.data as any).result = etherscanPublishingHx
   const handleGetPublishingStatus = async (etherscanPublishingHx: string) => {
-    setVerifying(true);
     const verifyStatusResponse = await etherscanClient.codeVerificationStatus(
       ETHERSCAN_API_SECRET_KEY,
       selectedChain.chainId + '',
       etherscanPublishingHx
     );
-    setVerifying(false);
     if (
       verifyStatusResponse.data.status === '1' ||
       verifyStatusResponse.data.message === 'Already Verified'

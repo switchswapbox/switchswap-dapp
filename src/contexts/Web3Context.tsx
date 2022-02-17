@@ -2,9 +2,33 @@ import { Web3Provider } from '@ethersproject/providers';
 import Onboard from 'bnc-onboard';
 import { API, Wallet } from 'bnc-onboard/dist/src/interfaces';
 import useWallet from 'hooks/useWallet';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 
-export const Web3Context = React.createContext<any>({});
+type Web3ContextProps = {
+  active: boolean;
+  library: Web3Provider | undefined;
+  account: string | undefined;
+  provider: API | undefined;
+  onboard: API | undefined;
+  activate: () => void;
+  deactivate: () => void;
+  pending: boolean;
+  connectedChainId: number | null;
+};
+
+const initialContext: Web3ContextProps = {
+  active: false,
+  library: undefined,
+  account: undefined,
+  provider: undefined,
+  onboard: undefined,
+  activate: () => {},
+  deactivate: () => {},
+  pending: false,
+  connectedChainId: null
+};
+
+export const Web3Context = createContext(initialContext);
 
 const wallets = [
   { walletName: 'metamask' },
