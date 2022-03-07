@@ -58,6 +58,8 @@
     "@testing-library/user-event": "^13.2.1",
     "@turf/bbox": "^6.5.0",
     "@types/react-syntax-highlighter": "^13.5.2",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "amazon-cognito-identity-js": "^5.1.0",
     "apexcharts": "^3.28.3",
     "autosuggest-highlight": "^3.1.1",
@@ -141,9 +143,7 @@
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0",
     "worker-loader": "^3.0.8",
-    "yup": "^0.32.9",
-    "@web3-react/core": "^6.1.9",
-    "@web3-react/injected-connector": "^6.0.7"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.7",
