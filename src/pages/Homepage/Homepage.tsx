@@ -1,23 +1,16 @@
-import { useState } from 'react';
 import {
-  Container,
-  Typography,
-  Box,
-  Button,
-  Grid,
-  Divider,
-  Avatar,
-  Card,
-  CardContent
+  Avatar, Box,
+  Button, Card,
+  CardContent, colors, Container, Divider, Grid, Typography
 } from '@mui/material';
-import Page from '../../components/Page';
-import Typed from 'react-typed';
 import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { colors } from '@mui/material';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import VisibilitySensor from 'react-visibility-sensor';
+import { useState } from 'react';
 import CountUp from 'react-countup';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Typed from 'react-typed';
+import VisibilitySensor from 'react-visibility-sensor';
+import Page from '../../components/Page';
 
 const mock = [
   {
@@ -377,7 +370,6 @@ export default function Homepage() {
                 'https://seeklogo.com/images/B/binance-smart-chain-logo-802A74A1DB-seeklogo.com.png',
                 'https://brandpalettes.com/wp-content/uploads/2021/04/fantom-02-02.png',
                 'https://assets.website-files.com/6059b554e81c705f9dd2dd32/6100222344a9783fbdf5a4f2_Group%203004.svg',
-                'https://mms.businesswire.com/media/20211015005350/en/916803/5/KuCoin_Community_Chain_Green.jpg'
               ].map((item, i) => (
                 <Box maxWidth={90} marginTop={2} marginRight={4} key={i}>
                   <Box
@@ -651,12 +643,9 @@ export default function Homepage() {
         </Box>
         <Grid container spacing={4} marginTop={2}>
           {[
-            'https://darwinia.network/static/media/logo-darwinia.11b1c002.png',
-            'https://labs.binance.com/labs/labs-h.png',
             'https://www.pngall.com/wp-content/uploads/10/NEAR-Protocol-Crypto-Logo-PNG-File.png',
             'https://brandpalettes.com/wp-content/uploads/2021/05/elrond-02.png',
             'https://cdn.substack.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F8d6c8ff9-e171-4223-a4b2-1384ee7530b8_2568x643.png',
-            'https://www.kcc.io/logo/AbbreviatedLettersLogo/KuCoinCommunityChain_Green.svg'
           ].map((item, i) => (
             <Grid item key={i} xs={6} sm={4}>
               <Box

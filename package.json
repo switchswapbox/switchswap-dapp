@@ -5,7 +5,7 @@
   "homepage": ".",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "start": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "buildDev": "CI=false GENERATE_SOURCEMAP=false REACT_APP_STAGING=true react-scripts build",
     "build": "CI=false GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
